@@ -1,0 +1,23 @@
+<% _.each(messages, function(message){ %>
+  <li id="<%=message.listItemID()%>"> 
+    <a href="<%=message.route()%>" class="listItemLink">
+      <div class="msg-list-images">
+        <% if (message.get("msgHasAttachments") == '1') { %>
+        <div class="msg-attachments"></div>
+        <% } %>
+        <% if (message.get("msgFlagged") == '1') { %>
+        <div class="msg-flagged"></div>
+        <% } %>
+        <% if (message.get("msgForwarded") == '1') { %>
+        <div class="msg-forwarded"></div>
+        <% } %>
+        <div class="clear"></div>
+      </div>
+      <% if (message.get("msgSeen") == '0') { %>
+        <div class="msg-unread"></div>
+      <% } %>
+      <h3 class="ellipsis20"><%= message.get("msgSubject") %></h3>
+      <span class="ellipsis14"><%= message.get("msgFrom").mailAddress %></span>
+    </a>
+  </li>
+<% }); %>

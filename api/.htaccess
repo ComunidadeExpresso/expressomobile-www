@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteRule ^dispatch.php$ - [QSA,L]
+
+	RewriteCond %{DOCUMENT_ROOT} !-d
+	RewriteRule ^(.*)$ /api/rest/dispatch.php?resource=$1 [QSA,L]
+
+	RewriteRule ^(.*)$ dispatch.php?resource=$1 [QSA,L]
+</IfModule>

@@ -1,0 +1,39 @@
+<% _.each(messages, function(message){ %>
+<div class="white-block detail-box pad-2">
+                
+          <div class="head">
+            <div class="msg-list-images">
+              <% if (message.get("msgHasAttachments") == '1') { %>
+              <div class="msg-attachments"></div>
+              <% } %>
+              <% if (message.get("msgFlagged") == '1') { %>
+              <div class="msg-flagged"></div>
+              <% } %>
+              <% if (message.get("msgForwarded") == '1') { %>
+              <div class="msg-forwarded"></div>
+              <% } %>
+              <div class="clear"></div>
+            </div>
+          <p>
+             <%= message.get("msgSubject") %>
+          </p>
+            De:
+            <span class="badge badge-info">
+             <%= message.get("msgFrom").mailAddress %>
+          </span>
+          </div>
+          
+          <p class="desc">
+             Para: <span class="badge">Mauricio Luiz Viani</span><span class="badge">Rafael Gobara</span>
+             <br>
+             Cc: <span class="badge">Anderson Tadayuki</span><span class="badge">Fernando Porto</span>
+          </p>
+          
+          <div class="comments">23/07/2013 as 20:00
+          <p style="float: right; font-size: 14px; margin-right: 10px;">Mostrar mais detalhes...</p></div>
+          
+          <div class="clear"></div>
+        
+        </div>
+<p><%= message.get("msgBody") %></p>
+<% }); %>
