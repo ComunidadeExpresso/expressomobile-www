@@ -7,7 +7,8 @@ define([
   'views/login/LoginView',
   'views/home/HomeView',
   'views/mail/DetailMessageView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView) {
+  'views/settings/SettingsListView',
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView,SettingsListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -15,7 +16,10 @@ define([
 
       'Home' : 'homeView',
       'Login' : 'loginView',
-      'Mail/Messages/:folderID/:msgID' : 'detailMessageView',
+      'Mail/Folders/*folderID' : 'openFolderView',
+      'Mail/Messages/:msgID/*folderID' : 'detailMessageView',
+      'Settings' : 'settingsListView',
+      'Settings/:secondViewName' : 'settingsListView',
       '*actions': 'defaultAction'
 
     },
@@ -31,9 +35,15 @@ define([
 
     app_router.on('route:homeView', function (actions) {
      
-       // We have no matching route, lets display the home page 
         var homeView = new HomeView();
         homeView.render();
+    });
+
+    app_router.on('route:openFolderView', function (PfolderID) {
+  
+      var homeView = new HomeView({folderID: PfolderID});
+      homeView.loadMessagesInFolder(PfolderID,'');
+
     });
 
     app_router.on('route:loginView', function (actions) {
@@ -59,7 +69,7 @@ define([
 
     });
 
-    app_router.on('route:detailMessageView', function (folderID,msgID) {
+    app_router.on('route:detailMessageView', function (msgID,folderID) {
 
       var detailMessageView = new DetailMessageView();
       detailMessageView.folderID = folderID;
@@ -69,24 +79,16 @@ define([
   
     });
 
-    /*
+    app_router.on('route:settingsListView', function (secondViewName) {
 
-    var new_conf = Shared.api.conf();
-    //console.log(new_conf);
+      var settingsListView = new SettingsListView();
+      settingsListView.secondViewName = secondViewName;
+      settingsListView.render();
 
-    $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
-      
-        //var new_conf = Shared.api.conf();
-        console.log(new_conf);
-        //options.url = new_conf.url;
-        options.type = new_conf.type;
-        options.id = new_conf.id;
-        options.data = new_conf.data;
-        options.url = "http://localhost:8888/expresso-www" + new_conf.url + options.url;
-
-        console.log(options);
+      Shared.menuView.selectMenu(5);
+  
     });
- */
+
 /* 
     $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
       options.url = "http://localhost:8888/expresso-www/" + options.url;

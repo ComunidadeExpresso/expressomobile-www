@@ -48,7 +48,7 @@ define([
 
     
     route: function() {
-      return '/Mail/Messages/' + this.get("folderID") + "/" + this.get("msgID");
+      return '/Mail/Messages/' + this.get("msgID") + "/" + this.get("folderID");
     },
 
     listItemID: function() {

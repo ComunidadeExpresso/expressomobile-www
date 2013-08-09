@@ -18,7 +18,7 @@ define([
 
 		var _data = {};
 
-		var _phoneGap = false;
+		var _phoneGap = true;
 
 		this.id = function(value) {
 			if(value == undefined) return _id;
@@ -36,6 +36,7 @@ define([
 		this.crossdomain = function(value) {
 			if(value == undefined) return _crossdomain;
 			_crossdomain = String(value);
+			return this;
 		};
 
 		this.context = function(value) {
@@ -47,6 +48,12 @@ define([
 		this.auth = function(value) {
 			if(value == undefined) return _auth;
 			_auth = String(value);
+			return this;
+		};
+
+		this.phoneGap = function(value) {
+			if(value == undefined) return _phoneGap;
+			_phoneGap = value;
 			return this;
 		};
 

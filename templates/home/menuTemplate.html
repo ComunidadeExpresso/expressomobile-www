@@ -1,58 +1,70 @@
-<div id="personalInfo">
-  <img id="userPicture" src="" />
-  <div class="personalData">
-    <span id="userName" class="name"></span>
-    <span id="userEmail" class="email"></span>
-    <div id="quota">
-      <div class="bar"> 
-        <span>29% (29.6 MB/100.0 MB)</span>
-        <div class="usedQuota"></div>
+<div id="scrollerMenu" class="container">
+
+  <div id="personalInfo">
+    <img id="userPicture" src="" />
+    <div class="personalData">
+      <span id="userName" class="name"></span>
+      <span id="userEmail" class="email"></span>
+      <div id="quota">
+        <div class="bar"> 
+          <div class="usedQuota" style="width: 29%;"></div>
+          <span>29% (29.6 MB/100.0 MB)</span>
+        </div>
       </div>
     </div>
   </div>
+
+  <dl>
+
+    <dt>Menu</dt>
+    <dd>
+      <ul id="mainMenu">
+        <li class="inbox">
+          <a href="/Home" class="menuLink">
+            <img src="./imgs/icon-email-72.png" />
+            <span>Caixa de Entrada</span>
+          </a>
+        </li>
+        <li class="calendar">
+          <a href="#" class="menuLink">
+            <img src="./imgs/icon-agenda-72.png" />
+            <span>Agenda</span>
+          </a>
+        </li>
+        <li class="contacts">
+          <a href="#" class="menuLink">
+            <img src="./imgs/icon-catalogo-geral-72.png" />
+            <span>Contatos</span>
+          </a>
+        </li>
+        <li class="chat">
+          <a href="#" class="menuLink">
+            <img src="./imgs/icon-catalogo-geral-72.png" />
+            <span>Bate-papo</span>
+          </a>
+        </li>
+        <li class="settings">
+          <a href="/Settings" class="menuLink">
+            <img src="./imgs/icon-settings-72.png" />
+            <span>Preferências</span>
+          </a>
+        </li>
+        <li class="logout">
+          <a href="/Logout">
+            <img src="./imgs/icon-logout-72.png" />
+            <span>Sair</span>
+          </a>
+        </li>
+      </ul>
+    </dd>
+
+    <dt>Minhas Pastas</dt>
+    <dd>
+      <ul id="myFolders">
+        
+      </ul>
+    </dd>
+    
+  </dl>
+
 </div>
-
-<h3>Menu</h3>
-<ul id="mainMenu">
-  <li class="selected">
-    <a href="#">
-      <img src="/imgs/icon-email-72.png" />
-      <span>Caixa de Entrada</span>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <img src="/imgs/icon-agenda-72.png" />
-      <span>Agenda</span>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <img src="/imgs/icon-catalogo-geral-72.png" />
-      <span>Contatos</span>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <img src="/imgs/icon-catalogo-geral-72.png" />
-      <span>Bate-papo</span>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <img src="/imgs/icon-settings-72.png" />
-      <span>Preferencias</span>
-    </a>
-  </li>
-  <li>
-    <a href="#">
-      <img src="/imgs/icon-logout-72.png" />
-      <span>Sair</span>
-    </a>
-  </li>
-</ul>
-
-<h3>Minhas Pastas</h3>
-<ul>
-
-</ul>

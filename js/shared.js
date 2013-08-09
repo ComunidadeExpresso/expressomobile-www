@@ -14,7 +14,7 @@ define([
   Shared.scroll = null;
   Shared.scrollMenu = null;
 
-  Shared.settings.resultsPerPage = 30;
+  Shared.settings.resultsPerPage = 10;
 
   Shared.api = expressoAPI;
 
@@ -29,6 +29,14 @@ define([
       Shared.scrollMenu.refresh();
     }
   };
+
+  Shared.isSmartPhone = function() {
+    var retVal = false;
+    if ($('body').hasClass('smartphone')) {
+      retVal = true;
+    }
+    return retVal;
+  }
 
   Shared.deviceType = function(smartphone) {
     if (smartphone)
@@ -56,16 +64,22 @@ define([
       height    : '50',
       tolerance : 0,
     });
-    $(".ellipsis").dotdotdot({
-      ellipsis  : '... ',
-      wrap    : 'word',
-      height    : '20',
-      tolerance : 0,
-    });
   };
 
+  //AMBIENTE DE DEMONSTRAÇÃO SEM O PHONEGAP
   Shared.api.context("/api/").crossdomain("http://demo.expressolivre.org/api/rest");
-  //Shared.api.context("/api/").crossdomain("http://api.expresso.pr.gov.br");
+
+  //AMBIENTE DE DEMONSTRAÇÃO COM O PHONEGAP
+  Shared.api.context("http://demo.expressolivre.org/api/rest").crossdomain("http://demo.expressolivre.org/api/rest").phoneGap(true);
+
+  // SEM USAR PHONEGAP
+  //Shared.api.context("/api/").crossdomain("http://api.expresso.pr.gov.br").phoneGap(false);
+  
+
+  //USANDO PHONEGAP
+  //Shared.api.context("http://api.expresso.pr.gov.br/").crossdomain("http://api.expresso.pr.gov.br").phoneGap(true);
+  
+
   Shared.api.id(0);
   Shared.api.debug(false);
 
@@ -75,7 +89,7 @@ define([
 
     var profile = JSON.parse(decodeURIComponent(Shared.api.read_cookie("profile")));
 
-    //Shared.profile = profile;
+    Shared.profile = profile;
 
     Shared.api.auth(authCookie);
     

@@ -5,8 +5,9 @@ define([
   'shared',
   'models/mail/MessagesModel',
   'collections/mail/MessagesCollection',
-  'text!templates/login/loginTemplate.html'
-], function($, _, Backbone, Shared, MessagesModel, MessagesCollection, loginTemplate){
+  'text!templates/login/loginTemplate.html',
+  'views/home/LoadingView',
+], function($, _, Backbone, Shared, MessagesModel, MessagesCollection, loginTemplate,LoadingView){
 
   var LoginView = Backbone.View.extend({
     el: $("#mainAppPageContent"),
@@ -20,6 +21,9 @@ define([
       'click #btn-login' : 'loginUser'
     },
     loginUser: function(ev) {
+
+      var loadingView = new LoadingView({ el: $("#loadingLogin") });
+      loadingView.render();
 
       Shared.api
       .resource('Login')

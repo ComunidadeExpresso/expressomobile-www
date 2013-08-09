@@ -6,8 +6,9 @@ define([
   'jquery_dotdotdot',
   'backbone',
   'shared',
+  'views/mail/FoldersMenuListView',
   'text!templates/home/menuTemplate.html'
-], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, menuTemplate){
+], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, FoldersMenuListView, menuTemplate){
 
   var MenuView = Backbone.View.extend({
     el: $("#scrollerMenu"),
@@ -16,27 +17,61 @@ define([
 
     render: function(){
 
+      //UPDATE PROFILE
+      var profile = JSON.parse(decodeURIComponent(Shared.api.read_cookie("profile")));
+      Shared.profile = profile;
+
       var data = {
-        profile: Shared.profile,
+        user: Shared.profile,
         _: _ 
       };
 
-      console.log(data);
-      
       var compiledTemplate = _.template( menuTemplate, data );
 
       this.$el.html(compiledTemplate);
 
-      this.loaded();
+      var foldersMenuListView = new FoldersMenuListView();
+      foldersMenuListView.render();
+
+    },
+
+    selectMenu: function (index) {
+      $('#mainMenu li').each(function() { 
+        $(this).removeClass( 'selected' ); 
+      });
+
+      if (index == 1) {
+         $('#mainMenu li.inbox').addClass("selected"); 
+      }
+
+      if (index == 2) {
+         $('#mainMenu li.calendar').addClass("selected"); 
+      }
+
+      if (index == 3) {
+         $('#mainMenu li.contacts').addClass("selected"); 
+      }
+
+      if (index == 4) {
+         $('#mainMenu li.chat').addClass("selected"); 
+      }
+
+      if (index == 5) {
+         $('#mainMenu li.settings').addClass("selected"); 
+      }
+
+      if (index == 6) {
+         $('#mainMenu li.logout').addClass("selected"); 
+      }
+
+      this.closeMenu();
 
     },
 
     toggleMenu: function () {
       if (this.menuOpen) {
-        console.log('closeMenu');
         this.closeMenu();
       } else {
-        console.log('openMenu');
         this.openMenu();
       }
     },
@@ -56,6 +91,10 @@ define([
 
       $('#menu').addClass('expanded').css('width', width);
       $('#page').css('margin-left', width);
+
+      this.loaded();
+
+      Shared.scrollerRefresh();
     },
 
     closeMenu: function()
@@ -67,7 +106,7 @@ define([
 
     loaded: function () 
     {
-      scrollMenu = new iScroll('menu');
+      Shared.scrollMenu = new iScroll('menu');
     }
 
   });

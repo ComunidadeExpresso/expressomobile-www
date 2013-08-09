@@ -1,0 +1,30 @@
+<% _.each(folders, function(folder){ %>
+	<% if (folder.get("folderParentID") == "") { %>
+	<li>
+		<a href="<%=folder.route()%>" name="<%=folder.route()%>" data-toggle="collapse" data-target="#menu" class="listFolderItemLink">
+		<% if (folder.get("folderType") == 0) { %>
+			<img class="ui-li-icon" src="./imgs/folder-inbox.png" class="ui-li-icon">
+		<% } %>
+		<% if (folder.get("folderType") == 4) { %>
+			<img class="ui-li-icon" src="./imgs/folder-drafts.png" class="ui-li-icon">
+		<% } %>
+		<% if (folder.get("folderType") == 1) { %>
+			<img class="ui-li-icon" src="./imgs/folder-sent.png" class="ui-li-icon">
+		<% } %>
+		<% if (folder.get("folderType") == 2) { %>
+			<img class="ui-li-icon" src="./imgs/folder-blue.png" class="ui-li-icon">
+		<% } %>
+		<% if (folder.get("folderType") == 3) { %>
+			<img class="ui-li-icon" src="./imgs/folder-trash-full.png" class="ui-li-icon">
+		<% } %>
+		<% if (folder.get("folderType") == 5) { %>
+			<img class="ui-li-icon" src="./imgs/folder-blue.png" class="ui-li-icon">
+		<% } %>
+		<% if (folder.get("folderType") == 6) { %>
+			<img class="ui-li-icon" src="./imgs/folder-shared.png" class="ui-li-icon">
+		<% } %>
+		<span><%=folder.get("folderName")%><% if (folder.get("qtdUnreadMessages") != 0) { %><strong class="badge badge-info"><%=folder.get("qtdUnreadMessages")%></strong><% } %></span>
+		</a>
+	</li>
+	<% } %> 
+<% }); %>

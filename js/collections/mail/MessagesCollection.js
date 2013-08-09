@@ -44,9 +44,12 @@ define([
         this.currentFolder = PfolderID;
         this.currentSearch = Psearch;
 
+        var pageToSearch = null;
+
         if (!Ppage) {
-           var pageToSearch = that.currentPage;
+          pageToSearch = that.currentPage;
         } else {
+          pageToSearch = Ppage;
           this.currentPage = 1;
         }
 

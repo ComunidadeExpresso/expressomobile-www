@@ -4,12 +4,13 @@ define([
   'backbone',
   'shared',
   'collections/mail/MessagesCollection',
-  'text!templates/mail/detailMessageTemplate.html'
-], function($, _, Backbone, Shared,MessagesCollection, detailMessageTemplate){
+  'text!templates/mail/detailMessageTemplate.html',
+  'views/home/LoadingView'
+], function($, _, Backbone, Shared,MessagesCollection, detailMessageTemplate, LoadingView){
 
   var DetailMessageView = Backbone.View.extend({
 
-    el: $("#scrollerDetail"),
+    el: $("#contentDetail"),
     folderID: 'INBOX',
     msgID: '',
     search: '',
@@ -21,7 +22,17 @@ define([
 
       var that = this;
 
+      var elementID = "#contentDetail";
+
+      if (Shared.isSmartPhone()) {
+        elementID = "#content";
+      }
+
       if (this.msgID) {
+
+        var loadingView = new LoadingView({ el: $(elementID) });
+        loadingView.render();
+
         var messagesData = new MessagesCollection();
 
         messagesData.getMessagesInFolder(this.folderID,this.msgID,this.search,this.page).done(function(data){
@@ -33,7 +44,7 @@ define([
 
           var compiledTemplate = _.template( detailMessageTemplate, data );
 
-          $("#scrollerDetail").html( compiledTemplate ); 
+          $(elementID).html( compiledTemplate ); 
 
           that.loaded();
 

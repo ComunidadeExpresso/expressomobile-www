@@ -3,23 +3,26 @@ define([
   'underscore',
   'backbone',
   'shared',
-  'text!templates/mail/messagesTemplate.html'
-], function($, _, Backbone, Shared, messagesTemplate){
+  'text!templates/mail/messagesListItemsTemplate.html'
+], function($, _, Backbone, Shared, messagesListItemsTemplate){
 
-  var MessagesView = Backbone.View.extend({
+  var MessagesListItemsView = Backbone.View.extend({
 
-    render: function(){
+    render: function(nextPage){
 
       var that = this;
 
       var data = {
         messages: this.collection.models,
-        _: _ ,
-        Shared: that.Shared
+        _: _ 
       };
 
-      var compiledTemplate = _.template( messagesTemplate, data );
-      $("#scrollerList").html( compiledTemplate ); 
+      var compiledTemplate = _.template( messagesListItemsTemplate, data );
+      if (nextPage) {
+        $("#scrollerList").append( compiledTemplate );
+      } else {
+        $("#scrollerList").html( compiledTemplate );
+      }
 
     },
 
@@ -41,14 +44,12 @@ define([
 
       parent.addClass("selected");
 
-//      console.log(e);
-
       Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
 
     }
 
   });
 
-  return MessagesView;
+  return MessagesListItemsView;
   
 });
