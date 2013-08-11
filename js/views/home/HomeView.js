@@ -19,6 +19,7 @@ define([
     folderID: 'INBOX',
     search: '',
     page: '1',
+    profile: null,
 
     menuView: null,
     menuOpen: false,
@@ -45,9 +46,9 @@ define([
       this.$el.html(homeTemplate);
 
       var that = this;
-
       
       this.menuView = new MenuView( { el : $("#scrollerMenu") });
+      this.menuView.profile = this.profile;
       this.menuView.render();
      
       this.menuView.selectMenu(1);
@@ -65,6 +66,7 @@ define([
 
     events: {
       "click #menuButton": "toggleMenu",
+      "click #contextMenuButton": "toggleContextMenu",
       "click .listFolderItemLink": "selectFolderItem",
       "click .menuLink": "selectMenuItem"
     },
@@ -81,6 +83,10 @@ define([
 
     toggleMenu: function() {
       this.menuView.toggleMenu();
+    },
+
+    toggleContextMenu: function() {
+      this.menuView.context.toggleMenu();
     },
 
     refreshWindow: function() {

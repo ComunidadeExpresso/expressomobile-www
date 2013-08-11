@@ -33,7 +33,11 @@ define([
 
       var doneFunction = function() { 
         console.log('HasDone'); 
-       // that.selectFirstMessage(); 
+
+        if (!Shared.isSmartPhone()) {
+           that.selectFirstMessage(); 
+        }
+
         that.loaded(); 
       };
 
@@ -50,7 +54,8 @@ define([
     selectFirstMessage: function() {
 
       //ROTEIA PARA CARREGAR A PRIMEIRA MENSAGEM DA LISTA.
-      var firstMessage = this.collection.models[0];
+      var firstMessage = this.collection[0];
+      $("#" + firstMessage.listItemID()).addClass("selected");
       Shared.router.navigate(firstMessage.route(),{trigger: true});
     },
 
@@ -165,12 +170,14 @@ define([
           if (pullDownEl.className.match('flip')) 
           {
             pullDownEl.className = 'loading';
+            //pullDownEl.querySelector('.pullDownIcon').style = 'width: 0px; height; 0px;';
             pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Carregando...';
             that.pullDownAction(); 
           }
           else if (pullUpEl.className.match('flip')) 
           {
             pullUpEl.className = 'loading';
+            //pullUpEl.querySelector('.pullDownIcon').style = 'width: 0px; height; 0px;';
             pullUpEl.querySelector('.pullUpLabel').innerHTML = 'Carregando...';
             that.pullUpAction(); 
           }

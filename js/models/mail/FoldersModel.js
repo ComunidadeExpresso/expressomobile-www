@@ -4,7 +4,7 @@ define([
   'shared'
 ], function(_, Backbone, Shared) {
   
-  var MessagesModel = Backbone.Model.extend({
+  var FoldersModel = Backbone.Model.extend({
 
   	// Default attributes for the message.
     defaults: {
@@ -40,6 +40,6 @@ define([
 
   });
 
-  return MessagesModel;
+  return FoldersModel;
 
 });

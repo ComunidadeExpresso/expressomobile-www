@@ -1,0 +1,5 @@
+<ul>
+	<% _.each(menuItems, function(menuItem){ %>
+	<li><a href="<%=menuItem.get("route")%>" title="<%=menuItem.get("title")%>"><%=menuItem.get("title")%></a></li>
+	<% }); %>
+</ul>

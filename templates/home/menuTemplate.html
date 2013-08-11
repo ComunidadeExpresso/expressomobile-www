@@ -3,13 +3,15 @@
   <div id="personalInfo">
     <img id="userPicture" src="" />
     <div class="personalData">
-      <span id="userName" class="name"></span>
-      <span id="userEmail" class="email"></span>
+      <span id="userName" class="name"><% if (!_.isNull(user.contactFullName)) { %><%=user.contactFullName%><% } %></span>
+      <span id="userEmail" class="email"><% if (!_.isNull(user.contactMails[0])) { %><%=user.contactMails[0]%><% } %></span>
       <div id="quota">
+        
         <div class="bar"> 
-          <div class="usedQuota" style="width: 29%;"></div>
-          <span>29% (29.6 MB/100.0 MB)</span>
+          <div id="usedQuota" class="usedQuota" style="width: 0%;"></div>
+          <span id="textQuota">Sem Quota</span>
         </div>
+
       </div>
     </div>
   </div>
@@ -20,39 +22,39 @@
     <dd>
       <ul id="mainMenu">
         <li class="inbox">
-          <a href="/Home" class="menuLink">
-            <img src="./imgs/icon-email-72.png" />
+          <a href="/Mail/Folders/INBOX" class="menuLink">
             <span>Caixa de Entrada</span>
+            <div class="icon icon-email"></div>
           </a>
         </li>
         <li class="calendar">
-          <a href="#" class="menuLink">
-            <img src="./imgs/icon-agenda-72.png" />
+          <a href="/Calendar" class="menuLink">
             <span>Agenda</span>
+            <div class="icon icon-agenda"></div>
           </a>
         </li>
         <li class="contacts">
-          <a href="#" class="menuLink">
-            <img src="./imgs/icon-catalogo-geral-72.png" />
+          <a href="/Contacts" class="menuLink">
             <span>Contatos</span>
+            <div class="icon icon-contacts"></div>
           </a>
         </li>
         <li class="chat">
-          <a href="#" class="menuLink">
-            <img src="./imgs/icon-catalogo-geral-72.png" />
+          <a href="/Chat" class="menuLink">
             <span>Bate-papo</span>
+            <div class="icon icon-jabber"></div>
           </a>
         </li>
         <li class="settings">
           <a href="/Settings" class="menuLink">
-            <img src="./imgs/icon-settings-72.png" />
             <span>Preferências</span>
+            <div class="icon icon-settings"></div>
           </a>
         </li>
         <li class="logout">
           <a href="/Logout">
-            <img src="./imgs/icon-logout-72.png" />
             <span>Sair</span>
+            <div class="icon icon-logout"></div>
           </a>
         </li>
       </ul>

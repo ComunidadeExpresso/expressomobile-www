@@ -52,7 +52,7 @@ define([
     },
 
     listItemID: function() {
-      return 'Mail_Message_ListItem_' + this.get("folderID") + "_" + this.get("msgID");
+      return 'Mail_Message_ListItem_' + this.get("folderID").replace("/","_") + "_" + this.get("msgID");
     }
     
 	  // getByID: function(PfolderID,PmsgID) {

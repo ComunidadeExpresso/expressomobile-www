@@ -14,7 +14,7 @@ define([
   Shared.scroll = null;
   Shared.scrollMenu = null;
 
-  Shared.settings.resultsPerPage = 10;
+  Shared.settings.resultsPerPage = 30;
 
   Shared.api = expressoAPI;
 
@@ -67,10 +67,10 @@ define([
   };
 
   //AMBIENTE DE DEMONSTRAÇÃO SEM O PHONEGAP
-  Shared.api.context("/api/").crossdomain("http://demo.expressolivre.org/api/rest");
+  Shared.api.context("/api/").crossdomain("http://demo.expressolivre.org/api/rest").phoneGap(false);
 
   //AMBIENTE DE DEMONSTRAÇÃO COM O PHONEGAP
-  Shared.api.context("http://demo.expressolivre.org/api/rest").crossdomain("http://demo.expressolivre.org/api/rest").phoneGap(true);
+  //Shared.api.context("http://demo.expressolivre.org/api/rest").crossdomain("http://demo.expressolivre.org/api/rest").phoneGap(true);
 
   // SEM USAR PHONEGAP
   //Shared.api.context("/api/").crossdomain("http://api.expresso.pr.gov.br").phoneGap(false);
@@ -85,7 +85,7 @@ define([
 
   var authCookie = Shared.api.readCookie("auth");
 
-  if (authCookie != null) {
+  if ((authCookie != null) && (authCookie != "")) {
 
     var profile = JSON.parse(decodeURIComponent(Shared.api.read_cookie("profile")));
 
@@ -93,6 +93,14 @@ define([
 
     Shared.api.auth(authCookie);
     
+  }
+
+  window.onunload = function(){
+    if (Shared.api.auth()) { 
+      window.location.href = "/Home";
+    } else {
+      window.location.href = "/Login";
+    }
   }
 
   //Shared.router is created in App.js

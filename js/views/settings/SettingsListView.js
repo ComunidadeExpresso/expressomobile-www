@@ -10,7 +10,8 @@ define([
   'views/settings/SettingsMailSignatureListView',
   'views/settings/SettingsResultsPerPageListView',
   'views/settings/SettingsSupportListView',
-], function($, _, Backbone, Shared, settingsListTemplate,SettingsAboutListView,SettingsChangePasswordListView,SettingsCreditsListView,SettingsMailSignatureListView,SettingsResultsPerPageListView,SettingsSupportListView){
+  'views/home/LoadingView',
+], function($, _, Backbone, Shared, settingsListTemplate,SettingsAboutListView,SettingsChangePasswordListView,SettingsCreditsListView,SettingsMailSignatureListView,SettingsResultsPerPageListView,SettingsSupportListView,LoadingView){
 
   var SettingsListView = Backbone.View.extend({
 
@@ -23,12 +24,16 @@ define([
       var primaryElementID = "#content";
       var detailElementID = "#contentDetail";
 
+      $(detailElementID).html("");
+
       if (Shared.isSmartPhone()) {
         detailElementID = "#content";
       }
-
+      
       if (this.secondViewName != null) {
-        console.log(this.secondViewName);
+        var loadingView = new LoadingView({ el: $(detailElementID) });
+        loadingView.render();
+
         if (this.secondViewName == "Support") {
            var secondView = new SettingsSupportListView({ el: $(detailElementID) });
            secondView.render();
@@ -58,8 +63,13 @@ define([
           _: _ 
         };
 
+        var loadingView = new LoadingView({ el: $(primaryElementID) });
+        loadingView.render();
+
         var compiledTemplate = _.template( settingsListTemplate, newData );
         $(primaryElementID).html( compiledTemplate ); 
+
+        Shared.menuView.context.hideMenu();
       }
 
       this.loaded();

@@ -5,8 +5,9 @@ define([
   'shared',
   'collections/mail/MessagesCollection',
   'text!templates/mail/detailMessageTemplate.html',
-  'views/home/LoadingView'
-], function($, _, Backbone, Shared,MessagesCollection, detailMessageTemplate, LoadingView){
+  'views/home/LoadingView',
+  'collections/home/ContextMenuCollection',
+], function($, _, Backbone, Shared,MessagesCollection, detailMessageTemplate, LoadingView,ContextMenuCollection){
 
   var DetailMessageView = Backbone.View.extend({
 
@@ -39,12 +40,18 @@ define([
 
           var data = {
             messages: data.models,
-            _: _ 
+            _: _ ,
+            $: $
           };
 
           var compiledTemplate = _.template( detailMessageTemplate, data );
 
           $(elementID).html( compiledTemplate ); 
+
+          var contextMenu = new ContextMenuCollection();
+          Shared.menuView.context.collection = contextMenu.getDetailMessageMenu(that.folderID,that.msgID);
+          Shared.menuView.context.render();
+          
 
           that.loaded();
 

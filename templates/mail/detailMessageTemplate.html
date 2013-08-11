@@ -28,8 +28,8 @@
                  <% if (message.get("msgTo")) {  %>
                   <% _.each(message.get("msgTo"), function(msgRecipient){ %>
                     <span class="badge">
-                    <% if (msgRecipient.fullName != '') { %> 
-                      <%=msgRecipient.fullName%>
+                    <% if ($.trim(msgRecipient.fullName) != '') { %> 
+                      <%=$.trim(msgRecipient.fullName)%>
                     <% } else { %>
                       <%=msgRecipient.mailAddress%>
                     <% } %>
@@ -40,8 +40,8 @@
                   <br>Cc:
                   <% _.each(message.get("msgCc"), function(msgRecipientCc){ %>
                     <span class="badge">
-                    <% if (msgRecipientCc.fullName != '') { %> 
-                      <%=msgRecipientCc.fullName%>
+                    <% if ($.trim(msgRecipientCc.fullName) != '') { %> 
+                      <%=$.trim(msgRecipientCc.fullName)%>
                     <% } else { %>
                       <%=msgRecipientCc.mailAddress%>
                     <% } %>
@@ -52,8 +52,8 @@
                   <br>Cc:
                   <% _.each(message.get("msgBcc"), function(msgRecipientBcc){ %>
                     <span class="badge">
-                    <% if (msgRecipientBcc.fullName != '') { %> 
-                      <%=msgRecipientBcc.fullName%>
+                    <% if ($.trim(msgRecipientBcc.fullName) != '') { %> 
+                      <%=$.trim(msgRecipientBcc.fullName)%>
                     <% } else { %>
                       <%=msgRecipientBcc.mailAddress%>
                     <% } %>

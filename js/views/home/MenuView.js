@@ -7,22 +7,33 @@ define([
   'backbone',
   'shared',
   'views/mail/FoldersMenuListView',
-  'text!templates/home/menuTemplate.html'
-], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, FoldersMenuListView, menuTemplate){
+  'text!templates/home/menuTemplate.html',
+  'views/home/ContextMenuView',
+], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, FoldersMenuListView, menuTemplate,ContextMenuView){
 
   var MenuView = Backbone.View.extend({
     el: $("#scrollerMenu"),
 
     menuOpen: false,
+    profile: null,
+    context: null,
+
+    initialize:function() {
+      this.context = new ContextMenuView();
+    },
 
     render: function(){
 
-      //UPDATE PROFILE
-      var profile = JSON.parse(decodeURIComponent(Shared.api.read_cookie("profile")));
-      Shared.profile = profile;
+      if (_.isNull(this.profile)) {
+        //UPDATE PROFILE
+        //GERALMENTE O PROFILE É ENVIAOD PELO MENU-VIEW PORÉM SE O USUÁRIO REALIZAR O RELOAD DA PÁGINA
+        //ENTÃO SERÁ NECESSÁRIO RECARREGÁ-LO DE UM COOKIE.
+        this.profile = JSON.parse(decodeURIComponent(Shared.api.read_cookie("profile")));
+        Shared.profile = this.profile;
+      }
 
       var data = {
-        user: Shared.profile,
+        user: this.profile,
         _: _ 
       };
 
@@ -30,9 +41,56 @@ define([
 
       this.$el.html(compiledTemplate);
 
+
+      Shared.api
+      .resource('Catalog/ContactPicture')
+      .params({contactID:this.profile.contactID,contactType:'2'})
+      .done(function(result){
+        $("#userPicture").attr("src","data:image/gif;base64," + result.contacts[0].contactImagePicture);
+      })
+      .execute();
+
+      this.context = new ContextMenuView();
+
       var foldersMenuListView = new FoldersMenuListView();
       foldersMenuListView.render();
 
+    },
+
+    setQuota: function (used,total) {
+
+      var percent = (used * 100 /  total).toFixed(0);
+
+      $("#usedQuota").width(percent + "%");
+      $("#textQuota").html(percent + "% (" + this.bytesToSize(used,0) + " / " + this.bytesToSize(total,0) + ")"  );
+
+    },
+
+    bytesToSize: function(bytes, precision)
+    {  
+        var kilobyte = 1024;
+        var megabyte = kilobyte * 1024;
+        var gigabyte = megabyte * 1024;
+        var terabyte = gigabyte * 1024;
+       
+        if ((bytes >= 0) && (bytes < kilobyte)) {
+            return bytes + ' B';
+     
+        } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
+            return (bytes / kilobyte).toFixed(precision) + ' KB';
+     
+        } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
+            return (bytes / megabyte).toFixed(precision) + ' MB';
+     
+        } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
+            return (bytes / gigabyte).toFixed(precision) + ' GB';
+     
+        } else if (bytes >= terabyte) {
+            return (bytes / terabyte).toFixed(precision) + ' TB';
+     
+        } else {
+            return bytes + ' B';
+        }
     },
 
     selectMenu: function (index) {
@@ -92,7 +150,9 @@ define([
       $('#menu').addClass('expanded').css('width', width);
       $('#page').css('margin-left', width);
 
-      this.loaded();
+      if (Shared.scrollMenu == null) {
+        this.loaded();
+      }
 
       Shared.scrollerRefresh();
     },
@@ -106,6 +166,11 @@ define([
 
     loaded: function () 
     {
+      if (Shared.scrollMenu != null) {
+        Shared.scrollMenu.destroy();
+        Shared.scrollMenu = null;
+      }
+
       Shared.scrollMenu = new iScroll('menu');
     }
 

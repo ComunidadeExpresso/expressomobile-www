@@ -45,6 +45,8 @@ define([
 
         $("#myFolders").html( compiledTemplate ); 
 
+        Shared.menuView.setQuota(data.diskSizeUsed,data.diskSizeLimit);
+
         /*
         if (doneCallBack) {
           console.log('doneCallback');

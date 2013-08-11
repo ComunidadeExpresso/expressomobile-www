@@ -9,6 +9,10 @@ define([
       
       model: FoldersModel,
 
+      diskSizeUsed: 0,
+      diskSizeLimit: 0,
+      diskSizePercent: 0,
+
       _data: {},
 
       done: function (value) {
@@ -27,6 +31,10 @@ define([
       initialize : function(models, options) {
         this.api = Shared.api;
         this.model = FoldersModel;
+
+        this.diskSizeUsed = 0;
+        this.diskSizeLimit = 0;
+        this.diskSizePercent = 0;
 
       },
 
@@ -55,6 +63,10 @@ define([
             that.add(currentModel);
 
           }
+
+          that.diskSizeUsed = result.diskSizeUsed;
+          that.diskSizeLimit = result.diskSizeLimit;
+          that.diskSizePercent = result.diskSizePercent;
 
           if (that._data.done) { 
             that._data.done(that); 

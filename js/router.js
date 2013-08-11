@@ -8,7 +8,10 @@ define([
   'views/home/HomeView',
   'views/mail/DetailMessageView',
   'views/settings/SettingsListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView,SettingsListView) {
+  'views/contacts/ContactsListView',
+  'views/calendar/CalendarListView',
+  'views/chat/ChatListView',
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView,SettingsListView,ContactsListView,CalendarListView,ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -18,8 +21,16 @@ define([
       'Login' : 'loginView',
       'Mail/Folders/*folderID' : 'openFolderView',
       'Mail/Messages/:msgID/*folderID' : 'detailMessageView',
+      'Contacts' : 'contactsListView',
+      'Contacts/:secondViewName' : 'contactsListView',
+      'Calendar' : 'calendarListView',
+      'Calendar/:secondViewName' : 'calendarListView',
+      'Chat' : 'chatListView',
+      'Chat/:secondViewName' : 'chatListView',
       'Settings' : 'settingsListView',
       'Settings/:secondViewName' : 'settingsListView',
+      'Logout' : 'logoutView',
+      'ContextMenu' : 'contextMenuView',
       '*actions': 'defaultAction'
 
     },
@@ -42,7 +53,14 @@ define([
     app_router.on('route:openFolderView', function (PfolderID) {
   
       var homeView = new HomeView({folderID: PfolderID});
+      Shared.menuView.closeMenu();
       homeView.loadMessagesInFolder(PfolderID,'');
+
+      if (PfolderID == 'INBOX') {
+        Shared.menuView.selectMenu(1);
+      } else {
+        Shared.menuView.selectMenu(0);
+      }
 
     });
 
@@ -50,6 +68,13 @@ define([
 
        var loginView = new LoginView();
        loginView.render();
+  
+    });
+
+    app_router.on('route:logoutView', function (actions) {
+
+      var loginView = new LoginView();
+      loginView.logoutUser();
   
     });
 
@@ -76,6 +101,8 @@ define([
       detailMessageView.msgID = msgID;
 
       detailMessageView.render();
+
+      Shared.menuView.closeMenu();
   
     });
 
@@ -88,6 +115,43 @@ define([
       Shared.menuView.selectMenu(5);
   
     });
+
+    app_router.on('route:contactsListView', function (secondViewName) {
+
+      var contactsListView = new ContactsListView();
+      contactsListView.secondViewName = secondViewName;
+      contactsListView.render();
+
+      Shared.menuView.selectMenu(3);
+  
+    });
+
+    app_router.on('route:calendarListView', function (secondViewName) {
+
+      var calendarListView = new CalendarListView();
+      calendarListView.secondViewName = secondViewName;
+      calendarListView.render();
+
+      Shared.menuView.selectMenu(2);
+  
+    });
+
+    app_router.on('route:chatListView', function (secondViewName) {
+
+      var chatListView = new ChatListView();
+      chatListView.secondViewName = secondViewName;
+      chatListView.render();
+
+      Shared.menuView.selectMenu(4);
+  
+    });
+
+    app_router.on('route:contextMenuView', function () {
+
+      Shared.menuView.context.toggleMenu();
+  
+    });
+
 
 /* 
     $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {

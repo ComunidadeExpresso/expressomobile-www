@@ -42,6 +42,10 @@ define([
 
       var parent = $(e.target).parent();
 
+      if (parent.hasClass("listItemLink")) {
+        parent = parent.parent();
+      }
+
       parent.addClass("selected");
 
       Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
