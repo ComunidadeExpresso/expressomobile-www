@@ -5,11 +5,14 @@ define([
   'backbone',
   'expressoAPI',
   'expressoIM',
+  //'collections/home/ExpressoCollection'
 ], function($, _, Backbone,expressoAPI,expressoIM) {
   
   var Shared = {};
 
   Shared.settings = {};
+
+  Shared.timeoutDelay = 1000;
 
   Shared.scrollDetail = null;
   Shared.scroll = null;
@@ -19,6 +22,8 @@ define([
 
   Shared.im = expressoIM;
   Shared.api = expressoAPI;
+
+  //Shared.Expresso = ExpressoCollection;
 
   Shared.im_url = "http://im.pr.gov.br:5280/http-bind";
   Shared.im_domain = "im.pr.gov.br";
@@ -75,39 +80,38 @@ define([
       tolerance : 0,
     });
   };
-
-  //AMBIENTE DE DEMONSTRAÇÃO SEM O PHONEGAP
-  Shared.api.context("/api/").crossdomain("http://demo.expressolivre.org/api/rest").phoneGap(false);
-
-  //AMBIENTE DE DEMONSTRAÇÃO COM O PHONEGAP
-  //Shared.api.context("http://demo.expressolivre.org/api/rest").crossdomain("http://demo.expressolivre.org/api/rest").phoneGap(true);
-
-  // SEM USAR PHONEGAP
-  //Shared.api.context("/api/").crossdomain("http://api.expresso.pr.gov.br").phoneGap(false);
   
-
-  //USANDO PHONEGAP
-  //Shared.api.context("http://api.expresso.pr.gov.br/").crossdomain("http://api.expresso.pr.gov.br").phoneGap(true);
-  
-
   Shared.api.id(0);
   Shared.api.debug(false);
 
-  var authCookie = Shared.api.readCookie("auth");
+  var expressoValue = Shared.api.getLocalStorageValue("expresso");
 
-  if ((authCookie != null) && (authCookie != "")) {
+  if (expressoValue != null) {
 
-    var profile = JSON.parse(decodeURIComponent(Shared.api.read_cookie("profile")));
+    var authValue = expressoValue.auth;
 
-    Shared.profile = profile;
+    if ((authValue != null) && (authValue != "")) {
 
-    Shared.api.auth(authCookie);
-    
+      var profile = expressoValue.profile;
+
+      Shared.profile = profile;
+
+      Shared.api.auth(authValue);
+      
+    }
+
   }
 
   window.onunload = function(){
-    if (Shared.api.auth() != "") { 
-      window.location.href = "/Home";
+
+    var expressoValue = Shared.api.getLocalStorageValue("expresso");
+
+    if (expressoValue != null) {
+      if (expressoValue.auth != "") { 
+        window.location.href = "/Home";
+      } else {
+        window.location.href = "/Login";
+      } 
     } else {
       window.location.href = "/Login";
     }

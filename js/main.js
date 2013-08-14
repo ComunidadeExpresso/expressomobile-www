@@ -4,11 +4,13 @@
 // Require.js allows us to configure shortcut alias
 // Their usage will become more apparent futher along in the tutorial.
 require.config({
+  urlArgs: "bust=" + (new Date()).getTime(),
   paths: {
     jquery: 'libs/jquery/jquery-min',
     underscore: 'libs/underscore/underscore-min',
     iscroll: 'libs/iscroll/src/iscroll',
     backbone: 'libs/backbone/backbone-min',
+    localstorage: 'libs/Backbone.localStorage/backbone.localstorage',
     expressoAPI: 'libs/expresso/expressoAPI',
     expressoIM: 'libs/expresso/expressoIM',
     jquery_touchwipe: 'libs/jquery.touchwipe/jquery.touchwipe.min',

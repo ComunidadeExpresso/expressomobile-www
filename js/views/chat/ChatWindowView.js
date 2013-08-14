@@ -5,7 +5,8 @@ define([
   'shared',
   'text!templates/chat/chatWindowTemplate.html',
   'text!templates/chat/chatWindowMessagesTemplate.html',
-], function($, _, Backbone, Shared, chatWindowTemplate,chatWindowMessagesTemplate){
+  'views/home/LoadingView',
+], function($, _, Backbone, Shared, chatWindowTemplate,chatWindowMessagesTemplate,LoadingView){
 
   var ChatWindowView = Backbone.View.extend({
 
@@ -29,10 +30,9 @@ define([
       var onComposingFunction = function (message) { 
         //if (message.from == that.currentContact.jid) {
           if (message.state == "composing") {
-            $("#chatUserName").html(ThisContact.name + " (está escrevendo...)");//  removeClass("hidden");
+            $("#chatUserName").html(ThisContact.name + " (está escrevendo...)");
           } else {
             $("#chatUserName").html(ThisContact.name);
-            //$("#chatUserName").addClass("hidden");
           }          
         //}
       };
@@ -53,14 +53,14 @@ define([
       this.renderMessages();
 
       this.loaded();
-
-      Shared.scrollDetail.scrollToElement(document.getElementById("last_message"),200);
-
+      
       var top = $('.top').outerHeight(true);
       var chat = $('.chatArea').outerHeight(true) == null ? 0 : $('.chatArea').outerHeight(true);
       
       $('body').height($(window).height() - top);
       $('#wrapperDetail').css('top', top + chat);
+
+      this.scrollToLastMessage();
 
     },
 
@@ -73,6 +73,8 @@ define([
         console.log("sendMessage");
         Shared.im.sendMessage(this.currentContact.jid,$('#msgToSend').val());
         $('#msgToSend').val("");
+        $('#msgToSend').blur();
+        $('#msgToSend').focus();
       }
     },
 
@@ -89,17 +91,26 @@ define([
         _: _ 
       };
 
+      console.log(data);
+
       var compiledMessagesTemplate = _.template( chatWindowMessagesTemplate, data );
       $("#scrollerDetail").html( compiledMessagesTemplate );
 
-
-      Shared.scrollDetail.refresh();
-      Shared.scrollDetail.scrollToElement(document.getElementById("last_message"),200);
+      this.scrollToLastMessage();
 
     },
 
+    scrollToLastMessage: function() {
+      if (Shared.scrollDetail != null) {
+        Shared.scrollDetail.refresh();
+        Shared.scrollDetail.scrollToElement(document.getElementById("last_message"),200);
+      }
+    },
+
     loaded: function() {
-      Shared.scrollDetail = new iScroll('wrapperDetail');
+      if (Shared.scrollDetail == null) {
+        Shared.scrollDetail = new iScroll('wrapperDetail');
+      }
     }
 
     

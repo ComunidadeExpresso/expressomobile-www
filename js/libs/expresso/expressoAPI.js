@@ -120,6 +120,19 @@ define([
 		    return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? (result[1]) : null;
 		}
 
+		this.setLocalStorageValue = function(c_name,value) {
+			window.localStorage.setItem(c_name, JSON.stringify(value));
+		}
+
+		this.getLocalStorageValue =  function(name) {  
+		  
+			var value = window.localStorage.getItem(name);
+			if (value) {
+				return JSON.parse(value);
+			}
+
+		}
+
 		this.readCookie =  function(name) {  
 		  
 			var value = window.localStorage.getItem(name);
@@ -127,7 +140,7 @@ define([
 				return value;
 			}
 
-		    var cookiename = name + "=";  
+	/*	    var cookiename = name + "=";  
 		  
 		    var ca = document.cookie.split(';');  
 		  
@@ -142,7 +155,7 @@ define([
 		  
 		    }  
 		  
-		    return '';  
+		    return '';   */
 		}
 
 		this.options = function(value) {

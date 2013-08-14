@@ -9,13 +9,15 @@ define([
   'views/home/LoadingView',
   'views/home/HomeView',
   'expressoIM',
-], function($, _, Backbone, Shared, MessagesModel, MessagesCollection, loginTemplate,LoadingView,HomeView,expressoIM){
+  'collections/home/ExpressoCollection',
+], function($, _, Backbone, Shared, MessagesModel, MessagesCollection, loginTemplate,LoadingView,HomeView,expressoIM,ExpressoCollection){
 
   var LoginView = Backbone.View.extend({
     el: $("#mainAppPageContent"),
 
     render: function(){
 
+     
       this.$el.html(loginTemplate);
 
     },
@@ -29,6 +31,18 @@ define([
       var userName = $("#username").val();
       var passwd = $("#password").val();
 
+      var serverURL = $("#serverURL").val();
+
+      var isPhoneGap = $("#isPhoneGap").is(':checked');
+
+      Shared.api.phoneGap(isPhoneGap);
+
+      if (isPhoneGap) {
+        Shared.api.context(serverURL).crossdomain(serverURL);
+      } else {
+        Shared.api.context("/api/").crossdomain(serverURL);
+      }
+
       var loadingView = new LoadingView({ el: $("#loadingLogin") });
       loadingView.render();
 
@@ -38,13 +52,17 @@ define([
       .params({user:userName,password:passwd})
       .done(function(result){
 
-        Shared.api.setCookie("auth",Shared.api.auth());
-        Shared.api.setCookie("profile",JSON.stringify(result.profile[0]));
+        var expressoValues = {
+          auth: Shared.api.auth(), 
+          "profile":result.profile[0],
+          username: userName, 
+          password: passwd,
+          phoneGap: isPhoneGap,
+          serverAPI: serverURL
+        };
 
-        // Shared.im
-        // .username(userName)
-        // .password(passwd)
-        // .connect();
+        //Shared.api.setLocalStorageValue("auth",Shared.api.auth());
+        Shared.api.setLocalStorageValue("expresso",expressoValues);
 
         var homeView = new HomeView();
         homeView.profile = result.profile[0];
@@ -77,10 +95,13 @@ define([
       .resource('Logout')
       .done(function(result){
 
-        Shared.api.setCookie("auth","");
-        Shared.api.setCookie("profile","");
+        var expressoValues = {auth: "", "profile":""};
 
-        Shared.router.navigate('Login',{trigger: true});
+        Shared.api.setLocalStorageValue("expresso",expressoValues);
+
+        //window.location.href = 'Login';
+
+        Shared.router.navigate('Login',true);
                 
         return false;
       })

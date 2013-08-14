@@ -195,17 +195,17 @@ define([
 			if (status == "online") {
 				console.log("Status: online");
 				_online_contacts = this.pushIfNotExist(_online_contacts,Pid);
-				console.log(_online_contacts);
+				//console.log(_online_contacts);
 			}
 			if (status == "offline") {
 				_offline_contacts = this.pushIfNotExist(_offline_contacts,Pid);
 				console.log("Status: offline");
-				console.log(_offline_contacts);
+				//console.log(_offline_contacts);
 			}
 			if (status == "away") {
 				_away_contacts = this.pushIfNotExist(_away_contacts,Pid);
 				console.log("Status: offline");
-				console.log(_away_contacts);
+				//console.log(_away_contacts);
 			}
 		};
 
@@ -221,8 +221,8 @@ define([
 
 			_messages[Pid] = [];
 
-			console.log("CONTACTS");
-			console.log(_contacts);
+			//console.log("CONTACTS");
+			//console.log(_contacts);
 		};
 
 
@@ -319,7 +319,7 @@ define([
 	   				onRoster: function( roster)
 	   				{  			
 	   					console.log("onRoster");
-	   					console.log(roster);
+	   					//console.log(roster);
 
 	   					var _rosterJid = roster.jid;
 						_rosterJid = _rosterJid.match(/^[\w\W][^\/]+[^\/]/g)[0]; 

@@ -6,7 +6,8 @@ define([
   'text!templates/chat/chatListTemplate.html',
   'views/chat/ChatListItemsView',
   'views/chat/ChatWindowView',
-], function($, _, Backbone, Shared, chatListTemplate,ChatListItemsView,ChatWindowView){
+  'views/home/LoadingView',
+], function($, _, Backbone, Shared, chatListTemplate,ChatListItemsView,ChatWindowView,LoadingView){
 
   var ChatListView = Backbone.View.extend({
 
@@ -28,22 +29,40 @@ define([
       if (this.secondViewName != null) {
         //console.log(this.secondViewName);
 
-        var chatWindowView = new ChatWindowView({ el: $(detailElementID) });
-        chatWindowView.chatID = this.secondViewName;
-        chatWindowView.render();
+        var loadingView = new LoadingView({ el: $(detailElementID) });
+        loadingView.render();
+
+        setTimeout(function() {
+
+          var chatWindowView = new ChatWindowView({ el: $(detailElementID) });
+          chatWindowView.chatID = that.secondViewName;
+          chatWindowView.render();
+
+        },Shared.timeoutDelay);
         
       } else { 
-        var newData = {
-          _: _ 
-        };
 
-        var compiledTemplate = _.template( chatListTemplate, newData );
-        $(primaryElementID).html( compiledTemplate ); 
 
-        var chatListView = new ChatListItemsView();
-        chatListView.render();
+        var loadingView = new LoadingView({ el: $(primaryElementID) });
+        loadingView.render();
 
-        this.loaded();
+        setTimeout(function() {
+
+          var newData = {
+            _: _ 
+          };
+
+          var compiledTemplate = _.template( chatListTemplate, newData );
+          $(primaryElementID).html( compiledTemplate ); 
+
+          var chatListView = new ChatListItemsView();
+          chatListView.render();
+
+          that.loaded();
+
+        },Shared.timeoutDelay);
+
+        
 
       }
 

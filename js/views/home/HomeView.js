@@ -46,6 +46,30 @@ define([
       this.$el.html(homeTemplate);
 
       var that = this;
+
+
+      var expressoValue = Shared.api.getLocalStorageValue("expresso");
+
+      if (expressoValue != null) {
+
+        var userName = expressoValue.username;
+        var passwd = expressoValue.password;
+
+        Shared.im
+        .username(userName)
+        .password(passwd)
+        .connect();
+
+        Shared.api.phoneGap(expressoValue.phoneGap);
+
+        if (expressoValue.phoneGap) {
+          Shared.api.context(expressoValue.serverAPI).crossdomain(expressoValue.serverAPI);
+        } else {
+          Shared.api.context("/api/").crossdomain(expressoValue.serverAPI);
+        }
+
+      }
+
       
       this.menuView = new MenuView( { el : $("#scrollerMenu") });
       this.menuView.profile = this.profile;
