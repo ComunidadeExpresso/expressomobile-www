@@ -4,7 +4,8 @@ define([
   'underscore',
   'backbone',
   'expressoAPI',
-], function($, _, Backbone,expressoAPI) {
+  'expressoIM',
+], function($, _, Backbone,expressoAPI,expressoIM) {
   
   var Shared = {};
 
@@ -16,7 +17,13 @@ define([
 
   Shared.settings.resultsPerPage = 30;
 
+  Shared.im = expressoIM;
   Shared.api = expressoAPI;
+
+  Shared.im_url = "http://im.pr.gov.br:5280/http-bind";
+  Shared.im_domain = "im.pr.gov.br";
+
+  Shared.im.resource("NEW_RESOURCE").url(Shared.im_url).domain(Shared.im_domain);
 
   Shared.scrollerRefresh = function () {
     if (Shared.scrollDetail) {
@@ -39,10 +46,13 @@ define([
   }
 
   Shared.deviceType = function(smartphone) {
-    if (smartphone)
+    if (smartphone) {
       $('body').addClass('smartphone');
-    else 
+      $('#pageHeader').addClass('smartphone');
+    } else { 
       $('body').removeAttr('class');
+      $('#pageHeader').removeClass('smartphone');
+    }
   };
 
   Shared.refreshDotDotDot = function() {
@@ -96,7 +106,7 @@ define([
   }
 
   window.onunload = function(){
-    if (Shared.api.auth()) { 
+    if (Shared.api.auth() != "") { 
       window.location.href = "/Home";
     } else {
       window.location.href = "/Login";

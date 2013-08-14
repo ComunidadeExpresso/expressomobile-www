@@ -13,6 +13,7 @@ body #page { position: relative; height: 100%; width: 100%; background-color: #F
 body.smartphone #page.menuExpanded { margin-left: auto; }*/
 
 body #page .top { position: absolute; height: 53px; width: 100%; top: -53px; background: url("../imgs/logo_expresso_small.png") no-repeat scroll center center #F1F1F1; border-bottom: 1px solid #E5E5E5; }
+body #page .smartphone { position: absolute; height: 53px; width: 100%; top: -53px; background: url("../imgs/icon-logo-top.png") no-repeat scroll center center #F1F1F1; border-bottom: 1px solid #E5E5E5; }
 body #page .top .topButtons li { float: left; }
 body #page .top .topButtons li a { height: 53px; width: 53px; display: block; color: transparent; text-shadow: none; font: 0px/0 a; }
 	.topButtons .menu { background: url("../imgs/menu.png") no-repeat scroll 0 0 transparent; }
@@ -51,9 +52,7 @@ body #page .main #content .searchArea { margin: 5px; }
 body #page .main #content .searchArea input { width: 93%; border-radius: 15px 15px 15px 15px; min-height: 35px; background-color: #FFFFFF; border: 1px solid #CCCCCC; padding: 0 3%; }
 body #page .main #content .searchArea input:focus { border: 1px solid #0088CC; }
 
-body #page .main #contentDetail .chatTextField { margin: 5px; }
-body #page .main #contentDetail .chatTextField input { width: 93%; border-radius: 15px 15px 15px 15px; min-height: 35px; background-color: #FFFFFF; border: 1px solid #CCCCCC; padding: 0 3%; }
-body #page .main #contentDetail .chatTextField input:focus { border: 1px solid #0088CC; }
+
 
 /** Menu **/
 body #menu { width: 50%; height: 100%; position: absolute; margin-top: -53px; background: url("../imgs/bg.png"); display: none; }
@@ -550,9 +549,5 @@ body form { font-size: 16px; padding: 15px; }
   background: url("../imgs/logo_cia_celepar.png") no-repeat scroll center center;
   background-size: 150px 65px;
 }
-
-
-
-
 
 

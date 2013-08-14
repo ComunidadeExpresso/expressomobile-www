@@ -4,7 +4,9 @@ define([
   'backbone',
   'shared',
   'text!templates/chat/chatListTemplate.html',
-], function($, _, Backbone, Shared, chatListTemplate){
+  'views/chat/ChatListItemsView',
+  'views/chat/ChatWindowView',
+], function($, _, Backbone, Shared, chatListTemplate,ChatListItemsView,ChatWindowView){
 
   var ChatListView = Backbone.View.extend({
 
@@ -24,15 +26,12 @@ define([
       $(detailElementID).html("");
 
       if (this.secondViewName != null) {
-        console.log(this.secondViewName);
-        if (this.secondViewName == "Personal") {
-           //var secondView = new SettingsSupportListView({ el: $(detailElementID) });
-           //secondView.render();
-        }
-        if (this.secondViewName == "General") {
-           //var secondView = new SettingsAboutListView({ el: $(detailElementID) });
-           //secondView.render();
-        }
+        //console.log(this.secondViewName);
+
+        var chatWindowView = new ChatWindowView({ el: $(detailElementID) });
+        chatWindowView.chatID = this.secondViewName;
+        chatWindowView.render();
+        
       } else { 
         var newData = {
           _: _ 
@@ -40,9 +39,37 @@ define([
 
         var compiledTemplate = _.template( chatListTemplate, newData );
         $(primaryElementID).html( compiledTemplate ); 
+
+        var chatListView = new ChatListItemsView();
+        chatListView.render();
+
+        this.loaded();
+
       }
 
-      this.loaded();
+    },
+
+    events: {
+      "click .listItemLink": "selectListItem"
+    },
+
+    selectListItem: function(e){
+
+      e.preventDefault();
+
+      $('#scrollerList li').each(function() { 
+          $(this).removeClass( 'selected' ); 
+      }); 
+
+      var parent = $(e.target).parent();
+
+      if (parent.hasClass("listItemLink")) {
+        parent = parent.parent();
+      }
+
+      parent.addClass("selected");
+
+      //Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
 
     },
 

@@ -68,7 +68,28 @@ define([
       "click #menuButton": "toggleMenu",
       "click #contextMenuButton": "toggleContextMenu",
       "click .listFolderItemLink": "selectFolderItem",
-      "click .menuLink": "selectMenuItem"
+      "click .menuLink": "selectMenuItem",
+      "click .listItemLink": "selectListItem"
+    },
+
+    selectListItem: function(e){
+
+      e.preventDefault();
+
+      $('#scrollerList li').each(function() { 
+          $(this).removeClass( 'selected' ); 
+      }); 
+
+      var parent = $(e.target).parent();
+
+      if (parent.hasClass("listItemLink")) {
+        parent = parent.parent();
+      }
+
+      parent.addClass("selected");
+
+      Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
+
     },
 
     selectMenuItem: function(e){
@@ -93,6 +114,7 @@ define([
       //alert('refreshWindow()');
       var top = $('.top').outerHeight(true);
       var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
+      var chat = $('.chatArea').outerHeight(true) == null ? 0 : $('.chatArea').outerHeight(true);
       
       // Verify screen width to define device type
       //deviceType($(window).width() < 720);
@@ -103,6 +125,7 @@ define([
 
       $('body').height($(window).height() - top);
       $('#wrapper').css('top', top + search);
+      $('#wrapperDetail').css('top', top + chat);
 
       Shared.scrollerRefresh();
       Shared.refreshDotDotDot();

@@ -10,8 +10,10 @@ require.config({
     iscroll: 'libs/iscroll/src/iscroll',
     backbone: 'libs/backbone/backbone-min',
     expressoAPI: 'libs/expresso/expressoAPI',
+    expressoIM: 'libs/expresso/expressoIM',
     jquery_touchwipe: 'libs/jquery.touchwipe/jquery.touchwipe.min',
     jquery_dotdotdot: 'libs/jquery.dotdotdot/jquery.dotdotdot.min',
+    jquery_xmpp: 'libs/jquery.xmpp/jquery.xmpp',
     templates: '../templates'
   }
 

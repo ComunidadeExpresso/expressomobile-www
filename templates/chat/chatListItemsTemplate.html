@@ -1,0 +1,56 @@
+<% if (contacts['online'].length) { %>
+<dt>Online</dt>
+<% } %>
+<ul>
+<% _.each(contacts['online'], function(contact){ %>
+  <li id="<%=contact.id%>"> 
+    <a href="/Chat/<%=contact.id%>" class="listItemLink">
+      <div class="chat-online"></div>
+      <h3 class="ellipsis20"><%= contact.name %></h3>
+      <span class="ellipsis14"><%= contact.jid %></span>
+    </a>
+  </li>
+<% }); %>
+</ul>
+<% if (contacts['busy'].length) { %>
+<dt>Ocupado</dt>
+<ul>
+<% } %>
+<% _.each(contacts['busy'], function(contact){ %>
+  <li id="<%=contact.id%>"> 
+    <a href="/Chat/<%=contact.id%>" class="listItemLink">
+      <div class="chat-busy"></div>
+      <h3 class="ellipsis20"><%= contact.name %></h3>
+      <span class="ellipsis14"><%= contact.jid %></span>
+    </a>
+  </li>
+<% }); %>
+</ul>
+<% if (contacts['away'].length) { %>
+<dt>Ausente</dt>
+<% } %>
+<ul>
+<% _.each(contacts['away'], function(contact){ %>
+  <li id="<%=contact.id%>"> 
+    <a href="/Chat/<%=contact.id%>" class="listItemLink">
+      <div class="chat-away"></div>
+      <h3 class="ellipsis20"><%= contact.name %></h3>
+      <span class="ellipsis14"><%= contact.jid %></span>
+    </a>
+  </li>
+<% }); %>
+</ul>
+<% if (contacts['offline'].length) { %>
+<dt>Offline</dt>
+<ul>
+<% } %>
+<% _.each(contacts['offline'], function(contact){ %>
+  <li id="<%=contact.id%>"> 
+    <a href="/Chat/<%=contact.id%>" class="listItemLink">
+      <div class="chat-offline"></div>
+      <h3 class="ellipsis20"><%= contact.name %></h3>
+      <span class="ellipsis14"><%= contact.jid %></span>
+    </a>
+  </li>
+<% }); %>
+</ul>

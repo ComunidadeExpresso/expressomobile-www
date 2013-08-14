@@ -8,7 +8,8 @@ define([
   'text!templates/login/loginTemplate.html',
   'views/home/LoadingView',
   'views/home/HomeView',
-], function($, _, Backbone, Shared, MessagesModel, MessagesCollection, loginTemplate,LoadingView,HomeView){
+  'expressoIM',
+], function($, _, Backbone, Shared, MessagesModel, MessagesCollection, loginTemplate,LoadingView,HomeView,expressoIM){
 
   var LoginView = Backbone.View.extend({
     el: $("#mainAppPageContent"),
@@ -31,6 +32,7 @@ define([
       var loadingView = new LoadingView({ el: $("#loadingLogin") });
       loadingView.render();
 
+    
       Shared.api
       .resource('Login')
       .params({user:userName,password:passwd})
@@ -38,6 +40,11 @@ define([
 
         Shared.api.setCookie("auth",Shared.api.auth());
         Shared.api.setCookie("profile",JSON.stringify(result.profile[0]));
+
+        // Shared.im
+        // .username(userName)
+        // .password(passwd)
+        // .connect();
 
         var homeView = new HomeView();
         homeView.profile = result.profile[0];
@@ -55,6 +62,8 @@ define([
         return false;
       })
       .execute();
+
+
 
       return false;
     },
