@@ -17,6 +17,8 @@ define([
 
       var that = this;
 
+     
+
       var primaryElementID = "#content";
       var detailElementID = "#contentDetail";
 
@@ -32,7 +34,14 @@ define([
         var loadingView = new LoadingView({ el: $(detailElementID) });
         loadingView.render();
 
+        if (Shared.detailView != null) {
+          Shared.detailView.undelegateEvents();
+        }
+
         setTimeout(function() {
+
+          that.setChatBadge(that.secondViewName,0);
+          Shared.im.setAsSeenAllMessagesFromContact(that.secondViewName);
 
           var chatWindowView = new ChatWindowView({ el: $(detailElementID) });
           chatWindowView.chatID = that.secondViewName;
@@ -42,9 +51,41 @@ define([
         
       } else { 
 
+        Shared.im.clearListeners();
+
+        var that = this;
+        var onMessageFunction = function (message) { 
+
+          var contact = Shared.im.getContactsByID(message.id);
+          that.setChatBadge(message.id,contact.qtdUnread);
+        };
+
+        var onPresenceFunction = function (message) { 
+          console.log("onPresenceFunction");
+          that.renderContactList();
+        };
+
+        Shared.im.addOnMessageListener(onMessageFunction);
+        Shared.im.addOnPresenceListener(onPresenceFunction);
+
+
+        this.renderContactList();
+
+      }
+
+    },
+
+    renderContactList: function() {
+
+        var primaryElementID = "#content";
+
+        var that = this;
 
         var loadingView = new LoadingView({ el: $(primaryElementID) });
         loadingView.render();
+
+        //Shared.menuView.setChatBadge(0);
+        //Shared.im.qtdUnreadMessages(0);
 
         setTimeout(function() {
 
@@ -60,36 +101,9 @@ define([
 
           that.loaded();
 
+          Shared.setCurrentView(1,that);
+
         },Shared.timeoutDelay);
-
-        
-
-      }
-
-    },
-
-    events: {
-      "click .listItemLink": "selectListItem"
-    },
-
-    selectListItem: function(e){
-
-      e.preventDefault();
-
-      $('#scrollerList li').each(function() { 
-          $(this).removeClass( 'selected' ); 
-      }); 
-
-      var parent = $(e.target).parent();
-
-      if (parent.hasClass("listItemLink")) {
-        parent = parent.parent();
-      }
-
-      parent.addClass("selected");
-
-      //Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
-
     },
 
     initialize: function() {
@@ -98,11 +112,23 @@ define([
 
     loaded: function () 
     {
-
       var that = this;
       Shared.scroll = new iScroll('wrapper');
+    },
 
+    setChatBadge: function(contactID,value) 
+    {
+      var elID = "#" + contactID + "_badge";
+      if (value > 0) {
+        $(elID).removeClass("hidden");
+        $(elID).html(value);
+      } else {
+        $(elID).addClass("hidden");
+        $(elID).html(value);
+      }
     }
+
+
   });
 
   return ChatListView;

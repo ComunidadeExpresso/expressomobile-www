@@ -47,8 +47,6 @@ define([
 
         }
 
-        //this.profile = JSON.parse(decodeURIComponent(Shared.api.read_cookie("profile")));
-        //Shared.profile = this.profile;
       }
 
       var data = {
@@ -181,6 +179,7 @@ define([
       this.menuOpen = false;
       $('#menu').removeClass('expanded').removeAttr('style');
       $('#page').removeAttr('style');
+      $('#page').css('margin-left', '0');
     },
 
     loaded: function () 
@@ -191,6 +190,17 @@ define([
       }
 
       Shared.scrollMenu = new iScroll('menu');
+    },
+
+    setChatBadge: function(value) 
+    {
+      if (value > 0) {
+        $("#badge_chat").removeClass("hidden");
+        $("#badge_chat").html(value);
+      } else {
+        $("#badge_chat").addClass("hidden");
+        $("#badge_chat").html(value);
+      }
     }
 
   });

@@ -1,5 +1,5 @@
 <h2 id="chatUserName">
-	<% if (contact.name != '') { %><%=contact.name%><% } else { %><%=contact.jid%><% } %>
+	<% if ($.trim(contact.name) != '') { %><%=contact.name%><% } else { %><%=contact.jid%><% } %>
 </h2>
 <div class="chatArea">
 	<input id='msgToSend' type="text" class="chatTextField" value="" placeholder="Mensagem:"  onKeyPress=""/>

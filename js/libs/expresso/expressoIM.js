@@ -33,9 +33,15 @@ define([
 
 		var _groups = [];
 
-		var _onMessageDelegate = '';
+		var _onMessageDelegate = [];
 
-		var _onComposingDelegate = '';
+		var _onComposingDelegate = [];
+
+		var _onPresenceDelegate = [];
+
+		var _onErrorDelegate = [];
+
+		var _qtdUnreadMessages = 0;
 
 		this.resource = function(value) {
 			if(value == undefined) return _resource;
@@ -61,16 +67,37 @@ define([
 			}
 		};
 
+		this.clearListeners = function() {
+			_onMessageDelegate = [];
+			_onComposingDelegate = [];
+			_onPresenceDelegate = [];
+			_onErrorDelegate = [];
+		};
 
-		this.setOnMessageFunction = function(value) {
-			if(value == undefined) return _onMessageDelegate;
-			_onMessageDelegate = value;
+
+		this.executeListenersFromArray = function(_array,params) {
+			for (var i in _array) {
+				_array[i](params);
+			}
+		};
+
+		this.addOnMessageListener = function(value) {
+			_onMessageDelegate.push(value);
 			return this;
 		};
 
-		this.setOnComposingFunction = function(value) {
-			if(value == undefined) return _onComposingDelegate;
-			_onComposingDelegate = value;
+		this.addOnPresenceListener = function(value) {
+			_onPresenceDelegate.push(value);
+			return this;
+		};
+
+		this.addOnErrorListener = function(value) {
+			_onErrorDelegate.push(value);
+			return this;
+		};
+
+		this.addOnComposingListener = function(value) {
+			_onComposingDelegate.push(value);
 			return this;
 		};
 
@@ -169,28 +196,25 @@ define([
 			return _messages[id];
 		};
 
-		// this.removeFromArray = function(arr,id) {
-		// 	var new_arr = {};
-		// 	var newI = 0;
-		// 	for (var i in arr) {
-		// 		if (arr[i] != id) {
-		// 			new_arr[newI] = id;
-		// 			newI = newI+1;
-		// 		}
-		// 	}
-		// 	alert(new_arr);
-		// 	return new_arr;
-		// };
+		this.removeFromArray = function(arr,id) {
+			var new_arr = [];
+			for (var i in arr) {
+				if (arr[i] != id) {
+					new_arr.push(arr[i]);
+				}
+			}
+			return new_arr;
+		};
 
 		this.setContactStatus = function(Pid,status) {
 
-			//console.log("setContactStatus");
-			//console.log(Pid);
-			//_online_contacts = this.removeFromArray(_online_contacts,Pid);
+			console.log("setContactStatus");
+			console.log(Pid);
+			_online_contacts = this.removeFromArray(_online_contacts,Pid);
 
-			//_offline_contacts = this.removeFromArray(_offline_contacts,Pid);
+			_offline_contacts = this.removeFromArray(_offline_contacts,Pid);
 
-			//_away_contacts = this.removeFromArray(_away_contacts,Pid);
+			_away_contacts = this.removeFromArray(_away_contacts,Pid);
 
 			if (status == "online") {
 				console.log("Status: online");
@@ -215,14 +239,13 @@ define([
 				jid: Pjid,
 				name: Pname,
 				group: Pgroup,
+				qtdUnread: 0,
 			};
 
 			_contacts.push(contact);
 
 			_messages[Pid] = [];
 
-			//console.log("CONTACTS");
-			//console.log(_contacts);
 		};
 
 
@@ -232,11 +255,46 @@ define([
 				jid: Pjid,
 				body: Pbody,
 				date: Pdate,
+				seen: false,
 			};
 
 			_messages[Pid].push(message);
 
 			return message;
+		};
+
+		this.getQtdUnreadMessagesFromContact = function(Pid) {
+			return _contacts[Pid].qtdUnread;
+		};
+
+		this.setAsSeenAllMessagesFromContact = function(Pid) {
+			var qtd = 0;
+			for (var i in _messages[Pid]) {
+				_messages[Pid][i].seen = true;
+			}
+			for (var x=0; x < _contacts.length; x++) {
+				if (_contacts[x].id == Pid) {
+					_contacts[x].qtdUnread = 0;
+				}
+			}
+		};
+
+		this.updateQtdUnreadMessagesToContact = function(Pid) {
+			console.log("updateQtdUnreadMessagesToContact");
+			var qtd = 0;
+			if (_messages[Pid] != null) {
+				for (var i in _messages[Pid]) {
+					if (_messages[Pid][i].seen == false) {
+						qtd = qtd + 1;
+					}
+				}
+			}
+			for (var x=0; x < _contacts.length; x++) {
+				if (_contacts[x].id == Pid) {
+					_contacts[x].qtdUnread = qtd;
+				}
+			}
+			return qtd;
 		};
 
 		this.debug = function(value) {
@@ -245,19 +303,33 @@ define([
 			return this;
 		};
 
+		this.qtdUnreadMessages = function(value) {
+			if(value == undefined) return _qtdUnreadMessages;
+			_qtdUnreadMessages = value;
+			return this;
+		};
+
+
 		this.sendMessage = function(msgTo,message) {
 
-			//if ($.trim(message) != )
+			if ($.trim(message) != "") {
 
-			$.xmpp.sendMessage({body: message, to:msgTo, resource:"Chat", otherAttr:"value"},"<error>An error has ocurred</error>");
+				console.log(msgTo);
 
-			msgTo= msgTo.match(/^[\w\W][^\/]+[^\/]/g)[0];
-			//var jid = message.from.split("/");
-			var id = MD5.hexdigest(msgTo);
+				$.xmpp.sendMessage({body: message, to:msgTo, resource:"Chat", otherAttr:"value"},"<error>An error has ocurred</error>");
 
-			var new_message = this.addMessage(id,"me",message,new Date());
-			this.onMessage(new_message);
+				msgTo= msgTo.match(/^[\w\W][^\/]+[^\/]/g)[0];
+				//var jid = message.from.split("/");
+				var id = MD5.hexdigest(msgTo);
+
+				var new_message = this.addMessage(id,"me",message,new Date());
+
+				this.executeListenersFromArray(_onMessageDelegate,new_message);
+
+			}
+
 		};
+
 
 
 		this.connect = function() {
@@ -273,7 +345,7 @@ define([
 					onConnect: function(eas){
 						console.log("onConnect");
 						$.xmpp.getRoster();
-						$.xmpp.setPresence("online");
+						$.xmpp.setPresence(null);
 					},
 					onIq: function(iq){
 						console.log("onIq");
@@ -287,11 +359,18 @@ define([
 
 						var new_message = that.addMessage(id,jid[0],message.body,new Date());
 
-						that.onMessage(new_message);
+						that.qtdUnreadMessages( that.qtdUnreadMessages() + 1 );
+
+						that.updateQtdUnreadMessagesToContact(id);
+
+						that.executeListenersFromArray(_onMessageDelegate,new_message);
+
+						//that.onMessage(new_message);
 
 					},
 					onPresence: function(presence){
 						console.log("onPresence");
+						console.log(presence);
 
 						presence.from = presence.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
 						var md5_contact = MD5.hexdigest(presence.from);
@@ -302,7 +381,11 @@ define([
 							(presence['show'] === "away" ? "away" : 
 							"online"))) : "online";
 
+						var presence = { id: md5_contact, status: statusClass};
+
 						that.setContactStatus(md5_contact,statusClass);
+
+						that.executeListenersFromArray(_onPresenceDelegate,presence);
 
 					},
 					onError: function(error){
@@ -311,15 +394,18 @@ define([
 	   				onComposing: function(message)
 	   				{
 	   					console.log("onComposing");
-	   					console.log(message);
 
-	   					that.onComposing(message);
-	   					
+	   					message.from = message.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
+						var jid = message.from.split("/");
+						message.from = jid[0];
+
+						that.executeListenersFromArray(_onComposingDelegate,message);
+
 	   				},
-	   				onRoster: function( roster)
+	   				onRoster: function(roster)
 	   				{  			
 	   					console.log("onRoster");
-	   					//console.log(roster);
+	   					console.log(roster);
 
 	   					var _rosterJid = roster.jid;
 						_rosterJid = _rosterJid.match(/^[\w\W][^\/]+[^\/]/g)[0]; 
@@ -327,6 +413,10 @@ define([
 	   					var md5_contact = MD5.hexdigest(_rosterJid);
 
 	   					that.addContact(md5_contact,roster.jid,roster.name,roster.group);
+
+	   					that.setContactStatus(md5_contact,'offline');
+
+
 	   				}
 			    };
 

@@ -5,14 +5,13 @@ define([
   'backbone',
   'expressoAPI',
   'expressoIM',
-  //'collections/home/ExpressoCollection'
 ], function($, _, Backbone,expressoAPI,expressoIM) {
   
   var Shared = {};
 
   Shared.settings = {};
 
-  Shared.timeoutDelay = 1000;
+  Shared.timeoutDelay = 500;
 
   Shared.scrollDetail = null;
   Shared.scroll = null;
@@ -22,6 +21,9 @@ define([
 
   Shared.im = expressoIM;
   Shared.api = expressoAPI;
+
+  Shared.contentView = null;
+  Shared.detailView = null;
 
   //Shared.Expresso = ExpressoCollection;
 
@@ -39,6 +41,28 @@ define([
     }
     if (Shared.scrollMenu) {
       Shared.scrollMenu.refresh();
+    }
+  };
+
+  Shared.setCurrentView = function(type,view) {
+
+    if (type == 1) {
+      if (Shared.contentView != null) {
+        Shared.contentView.undelegateEvents();
+      }
+      Shared.contentView = view;
+    } else {
+      if (Shared.isSmartPhone()) {
+        if (Shared.contentView != null) {
+          Shared.contentView.undelegateEvents();
+        }
+        Shared.contentView = view;
+      } else {
+        if (Shared.detailView != null) {
+          Shared.detailView.undelegateEvents();
+        }
+        Shared.detailView = view;
+      }
     }
   };
 
@@ -79,6 +103,21 @@ define([
       height    : '50',
       tolerance : 0,
     });
+  };
+
+  Shared.setDefaultIMListeners = function() {
+
+    Shared.im.clearListeners();
+
+    var onMessageFunction = function (message) { 
+      Shared.menuView.setChatBadge(Shared.im.qtdUnreadMessages());
+    };
+
+    var onComposingFunction = function (message) { 
+
+    };
+
+    Shared.im.addOnMessageListener(onMessageFunction);
   };
   
   Shared.api.id(0);

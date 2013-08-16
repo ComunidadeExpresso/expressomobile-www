@@ -28,17 +28,23 @@ define([
       };
 
       var onComposingFunction = function (message) { 
-        //if (message.from == that.currentContact.jid) {
+
+        if (message.from == that.currentContact.jid) {
+          var composingText = "";
           if (message.state == "composing") {
-            $("#chatUserName").html(ThisContact.name + " (está escrevendo...)");
+            composingText = " (está escrevendo...)";
+          } 
+          if ($.trim(ThisContact.name) != "") {
+            $("#chatUserName").html(ThisContact.name + composingText);
           } else {
-            $("#chatUserName").html(ThisContact.name);
-          }          
-        //}
+            $("#chatUserName").html(ThisContact.jid + composingText);
+          }     
+        }
       };
 
-      Shared.im.setOnMessageFunction(onMessageFunction);
-      Shared.im.setOnComposingFunction(onComposingFunction);
+
+      Shared.im.addOnMessageListener(onMessageFunction);
+      Shared.im.addOnComposingListener(onComposingFunction);
 
       var data = {
         chatID: this.chatID,
@@ -62,6 +68,8 @@ define([
 
       this.scrollToLastMessage();
 
+      Shared.setCurrentView(2,this);
+
     },
 
     events: {
@@ -71,6 +79,7 @@ define([
     sendMessage: function (e) {
       if(e.which == 13 && !e.shiftKey){
         console.log("sendMessage");
+        console.log(this.currentContact.jid);
         Shared.im.sendMessage(this.currentContact.jid,$('#msgToSend').val());
         $('#msgToSend').val("");
         $('#msgToSend').blur();
@@ -88,13 +97,18 @@ define([
         messages: allMessages,
         chatID: this.chatID,
         contact: ThisContact,
-        _: _ 
+        _: _,
+        $ : $
       };
 
       console.log(data);
 
       var compiledMessagesTemplate = _.template( chatWindowMessagesTemplate, data );
       $("#scrollerDetail").html( compiledMessagesTemplate );
+
+      $('.myPicture').each(function() {
+        $(this).attr("src",$("#userPicture").attr("src"));
+      });
 
       this.scrollToLastMessage();
 
@@ -108,6 +122,10 @@ define([
     },
 
     loaded: function() {
+      if (Shared.scrollDetail != null) {
+        Shared.scrollDetail.destroy();
+        Shared.scrollDetail = null;
+      }
       if (Shared.scrollDetail == null) {
         Shared.scrollDetail = new iScroll('wrapperDetail');
       }

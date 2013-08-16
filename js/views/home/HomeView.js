@@ -33,6 +33,7 @@ define([
 
       //SALVA A VIEW DO MENU NO SHARED
       Shared.menuView = mView;
+
     },
 
     remove: function() {
@@ -79,6 +80,8 @@ define([
       this.loadMessagesInFolder(this.folderID,this.search);
 
       this.loaded();
+
+      Shared.setDefaultIMListeners();
       
     },
 

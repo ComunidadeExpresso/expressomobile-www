@@ -5,7 +5,7 @@
 .chatArea input:focus { border: 1px solid #0088CC; }
 
 .chat-away {
-  background-color: #000099;
+  background-color: #ff9c00;
   width: 10px;
   height: 10px;
   border-radius: 5px;
@@ -180,4 +180,18 @@
   background-color: #CCC;
   word-wrap: break-word;
   padding: 5px;
+}
+
+.badge-chat {
+  background-color: #990000;
+  position: absolute; 
+  margin-left: -30px; 
+  margin-top: -10px;
+}
+
+.badge-chat-list {
+  float: right; 
+  position: relative; 
+  top: 15px; 
+  margin-right: 5%; 
 }

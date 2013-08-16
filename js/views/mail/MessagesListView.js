@@ -49,6 +49,8 @@ define([
 
       this.getMessages(this.folderID,this.search,this.page,false,beforeRenderCallback,doneFunction);
 
+      Shared.setDefaultIMListeners();
+
     },
 
     selectFirstMessage: function() {

@@ -59,20 +59,32 @@ define([
            secondView.render();
         }
       } else {
-        var newData = {
-          _: _ 
-        };
+        
 
         var loadingView = new LoadingView({ el: $(primaryElementID) });
         loadingView.render();
 
-        var compiledTemplate = _.template( settingsListTemplate, newData );
-        $(primaryElementID).html( compiledTemplate ); 
-
         Shared.menuView.context.hideMenu();
+
+        var that = this;
+
+        setTimeout(function() {
+
+          var newData = {
+            _: _ 
+          };
+
+          var compiledTemplate = _.template( settingsListTemplate, newData );
+          $(primaryElementID).html( compiledTemplate );
+
+          that.loaded();
+
+        },Shared.timeoutDelay);
+
+        
       }
 
-      this.loaded();
+      Shared.setDefaultIMListeners();
 
     },
 
