@@ -6,7 +6,7 @@ ul, ol { list-style: none; }
 .left { float: left; /*padding-bottom: 8000px; margin-bottom: -8000px;*/ }
 .right { float: right; /*padding-bottom: 8000px; margin-bottom: -8000px;*/ }
 .clear { clear: both; }
-.hidden { display: none; }
+.hidden { display: none !important; }
 
 body #page { position: relative; height: 100%; width: 100%; background-color: #FFF; } 
 /*body #page.menuExpanded { margin-left: auto; }
@@ -91,7 +91,7 @@ body #menu dl dd ul#mainMenu li a .icon-contacts {
 }
 body #menu dl dd ul#mainMenu li a .icon-jabber { 
    border-radius: 5px;
-  background: url("../imgs/icon-catalogo-geral-72.png") no-repeat scroll center center;
+  background: url("../imgs/icon-chat-72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
 body #menu dl dd ul#mainMenu li a .icon-settings { 
@@ -348,6 +348,8 @@ body form { font-size: 16px; padding: 15px; }
 .badge-info {
   background-color: #3a87ad;
 }
+
+
 
 
 .ellipsis14 {
