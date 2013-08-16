@@ -17,6 +17,16 @@ require.config({
     jquery_dotdotdot: 'libs/jquery.dotdotdot/jquery.dotdotdot.min',
     jquery_xmpp: 'libs/jquery.xmpp/jquery.xmpp',
     templates: '../templates'
+  },
+
+  shim: {
+      backbone: {
+          deps: ['jquery','underscore'],
+          exports: 'Backbone'
+      },
+      underscore: {
+          exports: "_"
+      }
   }
 
 });
