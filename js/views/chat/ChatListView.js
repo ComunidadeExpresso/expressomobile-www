@@ -17,8 +17,6 @@ define([
 
       var that = this;
 
-     
-
       var primaryElementID = "#content";
       var detailElementID = "#contentDetail";
 
@@ -28,8 +26,30 @@ define([
 
       $(detailElementID).html("");
 
+
+      Shared.im.clearListeners();
+
+      var onMessageFunction = function (message) { 
+
+        if (message.id != that.secondViewName) {
+          var contact = Shared.im.getContactsByID(message.id);
+          that.setChatBadge(message.id,contact.qtdUnread);
+        } else {
+          that.setChatBadge(that.secondViewName,0);
+          Shared.im.setAsSeenAllMessagesFromContact(that.secondViewName);
+        }
+      };
+
+      var onPresenceFunction = function (message) { 
+        console.log("onPresenceFunction");
+        that.renderContactList();
+      };
+
+      Shared.im.addOnMessageListener(onMessageFunction);
+      Shared.im.addOnPresenceListener(onPresenceFunction);
+
       if (this.secondViewName != null) {
-        //console.log(this.secondViewName);
+
 
         var loadingView = new LoadingView({ el: $(detailElementID) });
         loadingView.render();
@@ -50,24 +70,6 @@ define([
         },Shared.timeoutDelay);
         
       } else { 
-
-        Shared.im.clearListeners();
-
-        var that = this;
-        var onMessageFunction = function (message) { 
-
-          var contact = Shared.im.getContactsByID(message.id);
-          that.setChatBadge(message.id,contact.qtdUnread);
-        };
-
-        var onPresenceFunction = function (message) { 
-          console.log("onPresenceFunction");
-          that.renderContactList();
-        };
-
-        Shared.im.addOnMessageListener(onMessageFunction);
-        Shared.im.addOnPresenceListener(onPresenceFunction);
-
 
         this.renderContactList();
 
