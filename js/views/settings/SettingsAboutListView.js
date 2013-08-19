@@ -12,16 +12,25 @@ define([
 
     render: function(){
 
-      var newData = {
-        _: _ 
-      };
+      var that = this;
 
-      var compiledTemplate = _.template( settingsAboutListTemplate, newData );
+      Shared.api.resource('/ExpressoVersion').params({}).done(function(result){
 
-      this.$el.html( compiledTemplate ); 
+        var newData = {
+          expressoVersion: result.expressoVersion,
+          apiVersion: result.apiVersion,
+          appVersion: Shared.appVersion,
+          _: _ 
+        };
 
-      this.loaded();
+        var compiledTemplate = _.template( settingsAboutListTemplate, newData );
 
+        that.$el.html( compiledTemplate ); 
+
+        that.loaded();
+
+      }).execute();
+      
     },
 
     loaded: function () 

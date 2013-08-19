@@ -9,6 +9,8 @@ define([
   
   var Shared = {};
 
+  Shared.appVersion = "1.0";
+
   Shared.settings = {};
 
   Shared.timeoutDelay = 500;
