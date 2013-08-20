@@ -132,6 +132,8 @@ define([
       } else {
         this.openMenu();
       }
+
+      return false;
     },
 
     openMenu: function()

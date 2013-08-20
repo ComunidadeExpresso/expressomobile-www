@@ -17,6 +17,7 @@ define([
   Shared.settings.resultsPerPage = 30;
 
   Shared.api = expressoAPI;
+  Shared.currentView = null;
 
   Shared.scrollerRefresh = function () {
     if (Shared.scrollDetail) {
@@ -35,6 +36,7 @@ define([
     if ($('body').hasClass('smartphone')) {
       retVal = true;
     }
+    return true;
     return retVal;
   }
 
@@ -43,6 +45,8 @@ define([
       $('body').addClass('smartphone');
     else 
       $('body').removeAttr('class');
+
+    $('body').addClass('smartphone');
   };
 
   Shared.refreshDotDotDot = function() {
@@ -67,13 +71,13 @@ define([
   };
 
   //AMBIENTE DE DEMONSTRAÇÃO SEM O PHONEGAP
-  Shared.api.context("/api/").crossdomain("http://demo.expressolivre.org/api/rest").phoneGap(false);
+  // Shared.api.context("/api/").crossdomain("http://demo.expressolivre.org/api/rest").phoneGap(false);
 
   //AMBIENTE DE DEMONSTRAÇÃO COM O PHONEGAP
   //Shared.api.context("http://demo.expressolivre.org/api/rest").crossdomain("http://demo.expressolivre.org/api/rest").phoneGap(true);
 
   // SEM USAR PHONEGAP
-  //Shared.api.context("/api/").crossdomain("http://api.expresso.pr.gov.br").phoneGap(false);
+  Shared.api.context("/api/").crossdomain("http://api.expresso.pr.gov.br").phoneGap(false);
   
 
   //USANDO PHONEGAP

@@ -1,0 +1,62 @@
+<% if (typeof(contacts) != 'undefined' && contacts.length > 0) { %>
+
+	<dl id="contactsList" class="general">
+
+		<% var summaryLetter = _.first(contacts).get('contactFirstName').charAt(0).toUpperCase(); %>
+		<dt><%=summaryLetter%></dt>
+		<dd>
+			<ul>
+		
+				<% _.each(contacts, function(c) { %>
+
+					<% if (!_.isEqual(summaryLetter, c.get('contactFirstName').charAt(0).toUpperCase())) { %>
+					
+						<% summaryLetter = c.get('contactFirstName').charAt(0).toUpperCase(); %>
+						
+						</ul>
+							</dd>
+							<dt><%=summaryLetter%></dt>
+							<dd>
+								<ul>
+
+					<% } %>
+
+					<li id="<%=c.get('contactID')%>">
+						<a href="/Contacts/General/<%= c.getFirstEmailAddress() %>" title="<%=c.get('contactFullName')%>">
+
+							<% 
+							var contactID = decodeURIComponent(c.get('contactID'));
+							var queryUID = contactID.split(",")[0]; 
+							var uid = queryUID.split("=");
+							var id = uid[1].replace(".", "___");
+							%>
+
+							<div id="picture_contact_<%= id %>" class="picture_image"></div>
+							<div class="info">
+								<span class="name"><%=c.get('contactFullName')%></span>
+								<span class="email"><%=c.getFirstEmailAddress()%></span>
+							</div>
+
+						</a>
+					</li>
+
+				<% }); %>
+
+			</ul>
+		</dd>
+
+	</dl>
+	
+<% } else { %>
+
+	<% if (_.isObject(error)) { %>
+
+		<p class="erro"><%= error.message %></p>
+
+	<% } else { %>
+
+		<p class="erro">Nenhum registro encontrado</p>
+
+	<% } %>
+
+<% } %>

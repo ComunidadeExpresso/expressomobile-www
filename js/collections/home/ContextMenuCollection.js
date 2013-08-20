@@ -38,7 +38,7 @@ define([
       getContactsMenu: function() {
         var menuItems = [
             { route: "/Contacts/Personal", title:"Contatos Pessoais"},
-            { route: "/Contacts/General/", title: "Catálogo Geral"}
+            { route: "/Contacts/General", title: "Catálogo Geral"}
           ];
 
         this.createModelsFromArray(menuItems);
