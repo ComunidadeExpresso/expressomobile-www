@@ -51,14 +51,35 @@ define([
 
       Shared.setDefaultIMListeners();
 
+      Shared.setCurrentView(1,this);
+
+    },
+
+    events: {
+      "keydown #searchField": "searchMessage"
+    },
+
+    searchMessage: function (e) {
+      if(e.which == 13 && !e.shiftKey){
+        console.log("searchField");
+        this.search = $('#searchField').val();
+
+        pullDownEl = document.getElementById('pullDown');
+        pullDownEl.className = 'loading';
+        pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Carregando...';
+        
+        this.pullDownAction();
+      }
     },
 
     selectFirstMessage: function() {
 
       //ROTEIA PARA CARREGAR A PRIMEIRA MENSAGEM DA LISTA.
       var firstMessage = this.collection[0];
-      $("#" + firstMessage.listItemID()).addClass("selected");
-      Shared.router.navigate(firstMessage.route(),{trigger: true});
+      if (firstMessage) {
+        $("#" + firstMessage.listItemID()).addClass("selected");
+        Shared.router.navigate(firstMessage.route(),{trigger: true});
+      } 
     },
 
     getMessages: function(pFolderID,pSearch,pPage,appendAtEnd,beforeRenderCallback,doneCallback)
@@ -85,10 +106,14 @@ define([
           doneCallback();
         }
 
+        var top = $('.top').outerHeight(true);
+        var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
+        
+        $('body').height($(window).height() - top);
+        $('#wrapper').css('top', top + search);
+
         Shared.refreshDotDotDot();
         Shared.scrollerRefresh();
-
-
 
       })
       .fail(function(result){
