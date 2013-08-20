@@ -68,7 +68,7 @@ define([
       })
       .execute();
 
-      this.context = new ContextMenuView({ el: $("#rightMenu")});
+      this.context = new ContextMenuView();
 
       var foldersMenuListView = new FoldersMenuListView();
       foldersMenuListView.render();
@@ -210,7 +210,7 @@ define([
 
     renderContextMenu: function(menuID,params) {
 
-      this.context = new ContextMenuView({ el: $("#rightMenu") });
+      this.context = new ContextMenuView();
       var contextMenuCollection = new ContextMenuCollection();
       if (menuID == 1) {
           this.context.collection = contextMenuCollection.getDetailMessageMenu(params.folderID,params.msgID);

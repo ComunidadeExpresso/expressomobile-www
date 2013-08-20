@@ -48,9 +48,7 @@ define([
 
 			// this.getContactDetails(this.contactID, this.secondViewName == 'Personal' ? '1' : '2', done, done);
 
-			var contextMenu = new ContextMenuCollection();
-			Shared.menuView.context.collection = contextMenu.getContactsMenu(that.folderID,that.msgID);
-			Shared.menuView.context.render();
+			Shared.menuView.renderContextMenu(3,{});
 
 		},
 
