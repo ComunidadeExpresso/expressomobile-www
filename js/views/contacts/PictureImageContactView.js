@@ -1,4 +1,4 @@
-define([
+	define([
 	'jquery',
 	'underscore',
 	'backbone',
@@ -12,22 +12,20 @@ define([
 	{
 		render: function(data)
 		{
-			var done = function (data)
+			var done = function (value)
 			{
-				var contactID = decodeURIComponent(data.contact.get('contactID'));
+				var contactID = decodeURIComponent(value.contact.get('contactID'));
 				var queryUID = contactID.split(",")[0]; 
 				var uid = queryUID.split("=");
 				var id = uid[1].replace(".", "___");
 
-				$('#picture_contact_' + id + ' img').attr('src', 'data:image/gif;base64,' + data.contact.get('contactImagePicture'));
+				$('#picture_contact_' + id + ' img').attr('src', 'data:image/gif;base64,' + value.contact.get('contactImagePicture'));
 			}
 
 			for (var i in data.contacts)
 			{
-
 				if (data.contacts[i].get('contactHasImagePicture') == 1)
 				{
-					console.log(data.contacts[i]);
 					this.getContactPictureImage(data.contacts[i].get('contactID'), done, done);	
 				}
 			}

@@ -45,19 +45,19 @@ define ([
 	        .done(function (result)
 	        {
 	        	var thisModel = new ContactPictureImageModel(result.contacts[0]);
-	        		that.set(thisModel);
+	        		// that.set(thisModel);
 
 		        if (that.done)
-	        		that.done(that);
+	        		that.done(thisModel);
 	        })
 	        .fail( function (error) 
 	        {
 				if (that.fail)
-	        		that.fail(result);
+	        		that.fail(error);
 	        })
 	        .execute();
 
-	       return that;
+			return that;
 		},
 
 		execute: function ()

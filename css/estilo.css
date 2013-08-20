@@ -43,7 +43,7 @@ body #page .main #content dl dd ul li a { text-decoration: none; color: #777777;
 
 
 body #page .main #contentDetail { width: 60%; height: 100%; position: relative; font-size: 19px; margin-right: -1px; }
-body #page .main #contentDetail #scrollerDetail { padding: 20px; }
+/*body #page .main #contentDetail #scrollerDetail { padding: 20px; }*/
 body #page .main .container { position: absolute; top: 53px; right: 0; left: 0; bottom: 0; background: none repeat scroll 0 0 #FFFFFF; }
 body.smartphone #page .main #contentDetail { display: none; }
 

@@ -1,14 +1,8 @@
 <h2 id="contentTitle" class="ellipsis50"><%= contact.get('contactFullName') %></h2>
 
-<form action="#" class="searchArea">
-	<input type="text" class="searchField" value="" placeholder="Procurar Por:" />
-</form>
-
-<div id="wrapper" class="container">
-	<div id="scroller">
-		
+<div id="wrapperDetail" class="container">
+	<div id="scrollerDetail">
 		<dl id="contactDetails">
-
 
 			<% if (!_.isEmpty(contact.get('contactMails'))) { %>
 						

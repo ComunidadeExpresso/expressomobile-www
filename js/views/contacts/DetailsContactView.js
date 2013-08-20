@@ -37,6 +37,8 @@ define([
 
 				var compiledTemplate = _.template(DetailsContactTemplate, contact);
 				$(detailElementID).html(compiledTemplate);
+				
+				this.loaded();			
 			}
 
 			if (this.secondViewName == 'Personal')
@@ -50,15 +52,24 @@ define([
 			Shared.menuView.context.collection = contextMenu.getContactsMenu(that.folderID,that.msgID);
 			Shared.menuView.context.render();
 
-			this.loaded();			
 		},
 
 		initialize: function() { },
 
 		loaded: function () 
 		{
-			var that = this;
-			Shared.scroll = new iScroll('wrapper');
+			if (Shared.isSmartPhone())
+			{
+				$('#wrapperDetail').removeAttr('id').attr('id', 'wrapper');
+				$('#scrollerDetail').removeAttr('id').attr('id', 'scroller');
+			}
+				console.log(Shared.scrollDetail);
+				console.log(Shared.scroll);
+				console.log(Shared.scrollMenu);
+
+				Shared.scrollDetail = new iScroll('wrapperDetail');
+
+			Shared.scrollerRefresh();
 
 			var homeView = new HomeView();
 			homeView.refreshWindow();
