@@ -1,5 +1,16 @@
-<ul>
-	<% _.each(menuItems, function(menuItem){ %>
-	<li><a href="<%=menuItem.get("route")%>" title="<%=menuItem.get("title")%>"><%=menuItem.get("title")%></a></li>
-	<% }); %>
+<ul class="right topButtons">
+  <li>
+    <input id="btn-primary-action" type="button" value="" class="hidden" style=""> 
+  </li>
+  <li><a id="contextMenuButton" href="#" class="contextMenu">Menu de contexto</a></li>
 </ul>
+<div id="contextMenu" class="hidden">
+	<ul>
+		<% _.each(menuItems, function(menuItem){ %>
+			<% if (!menuItem.get("primary")) { %>
+				<li><a href="<%=menuItem.get("route")%>" title="<%=menuItem.get("title")%>"><%=menuItem.get("title")%></a></li>
+			<% } %>
+		<% }); %>
+	</ul>
+</div>
+

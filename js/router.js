@@ -7,12 +7,13 @@ define([
   'views/login/LoginView',
   'views/home/HomeView',
   'views/mail/DetailMessageView',
+  'views/mail/ComposeMessageView',
   'views/settings/SettingsListView',
   'views/contacts/ContactsListView',
   'views/contacts/DetailsContactView',
   'views/calendar/CalendarListView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView,SettingsListView,ContactsListView, DetailsContactView,CalendarListView,ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarListView,ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -21,6 +22,7 @@ define([
       'Home' : 'homeView',
       'Login' : 'loginView',
       'Mail/Folders/*folderID' : 'openFolderView',
+      'Mail/Message/New' : 'composeMessageView',
       'Mail/Messages/:msgID/*folderID' : 'detailMessageView',
       'Contacts' : 'contactsListView',
       'Contacts/:secondViewName' : 'contactsListView',
@@ -111,6 +113,16 @@ define([
       detailMessageView.msgID = msgID;
 
       detailMessageView.render();
+
+      Shared.menuView.closeMenu();
+  
+    });
+
+    app_router.on('route:composeMessageView', function (msgID,folderID) {
+
+      var composeMessageView = new ComposeMessageView();
+
+      composeMessageView.render();
 
       Shared.menuView.closeMenu();
   

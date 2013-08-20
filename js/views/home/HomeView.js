@@ -93,9 +93,9 @@ define([
 
     events: {
       "click #menuButton": "toggleMenu",
-      "click #contextMenuButton": "toggleContextMenu",
       "click .listFolderItemLink": "selectFolderItem",
       "click .menuLink": "selectMenuItem",
+      "click .listItemLink": "selectListItem",
       "click #contextMenu ul li a": "selectContextMenuItem"
     },
 
