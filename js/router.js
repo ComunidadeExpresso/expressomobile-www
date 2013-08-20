@@ -10,9 +10,10 @@ define([
   'views/mail/ComposeMessageView',
   'views/settings/SettingsListView',
   'views/contacts/ContactsListView',
+  'views/contacts/DetailsContactView',
   'views/calendar/CalendarListView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView,SettingsListView,ContactsListView,CalendarListView,ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarListView,ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -25,6 +26,7 @@ define([
       'Mail/Messages/:msgID/*folderID' : 'detailMessageView',
       'Contacts' : 'contactsListView',
       'Contacts/:secondViewName' : 'contactsListView',
+      'Contacts/:secondViewName/:contactID' : 'detailsContactView',
       'Calendar' : 'calendarListView',
       'Calendar/:secondViewName' : 'calendarListView',
       'Chat' : 'chatListView',
@@ -138,9 +140,20 @@ define([
 
     app_router.on('route:contactsListView', function (secondViewName) {
 
-      var contactsListView = new ContactsListView();
+      contactsListView = new ContactsListView();
       contactsListView.secondViewName = secondViewName;
       contactsListView.render();
+
+      Shared.menuView.selectMenu(3);
+  
+    });
+
+    app_router.on('route:detailsContactView', function (secondViewName, contactID) {
+
+      detailsContactView = new DetailsContactView();
+      detailsContactView.secondViewName = secondViewName;
+      detailsContactView.contactID = contactID;
+      detailsContactView.render();
 
       Shared.menuView.selectMenu(3);
   

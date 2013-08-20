@@ -96,9 +96,10 @@ define([
       "click .listFolderItemLink": "selectFolderItem",
       "click .menuLink": "selectMenuItem",
       "click .listItemLink": "selectListItem",
+      "click #contextMenu ul li a": "selectContextMenuItem"
     },
 
-    selectListItem: function(e){
+	selectListItem: function(e){
 
       e.preventDefault();
 
@@ -121,6 +122,13 @@ define([
     selectMenuItem: function(e){
       e.preventDefault();
       Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
+    },
+
+    selectContextMenuItem: function(e){
+      e.preventDefault();
+      Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
+      
+      this.toggleContextMenu();
     },
 
     selectFolderItem: function(e){

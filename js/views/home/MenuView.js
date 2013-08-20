@@ -152,6 +152,8 @@ define([
       } else {
         this.openMenu();
       }
+
+      return false;
     },
 
     openMenu: function()
@@ -215,6 +217,9 @@ define([
       }
       if (menuID == 2) {
           this.context.collection = contextMenuCollection.getSendMessageMenu();
+      }
+      if (menuID == 3) {
+          this.context.collection = contextMenuCollection.getContactsMenu();
       }
       this.context.render();
     },

@@ -68,8 +68,8 @@ define([
 
     setPrimaryAction: function() {
       var primary = this.collection.getPrimaryAction();
-      this.primaryAction = primary.get("route");
       if (primary) {
+        this.primaryAction = primary.get("route");
         $("#btn-primary-action").removeAttr("class");
         if (primary.get("iconClass") != '') {
           $("#btn-primary-action").attr('class', 'btn btn-context ' + primary.get("iconClass"));

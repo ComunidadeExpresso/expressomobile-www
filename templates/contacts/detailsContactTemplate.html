@@ -1,0 +1,42 @@
+<h2 id="contentTitle" class="ellipsis50"><%= contact.get('contactFullName') %></h2>
+
+<form action="#" class="searchArea">
+	<input type="text" class="searchField" value="" placeholder="Procurar Por:" />
+</form>
+
+<div id="wrapper" class="container">
+	<div id="scroller">
+		
+		<dl id="contactDetails">
+
+
+			<% if (!_.isEmpty(contact.get('contactMails'))) { %>
+						
+				<dt>Contas de e-mail</dt>
+				<dd>
+					<ul>
+						<% _.each(contact.get('contactMails'), function (email) { %>
+							<li><%= email %></li>
+						<% }); %>
+					</ul>
+				</dd>
+
+			<% } %>
+
+			<% if (!_.isEmpty(contact.get('contactPhones')) && !_.isEmpty(_.first(contact.get('contactPhones')))) { %>
+
+				<dt>Telefones</dt>
+				<dd>
+					<ul>
+						<% _.each(contact.get('contactPhones'), function (phone) { %>
+							<li><%= phone %></li>
+						<% }); %>
+					</ul>
+				</dd>
+
+			<% } %>
+
+		</dl>
+		
+	</div>
+</div>

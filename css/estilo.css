@@ -48,7 +48,7 @@ body #page .main .container { position: absolute; top: 53px; right: 0; left: 0; 
 body.smartphone #page .main #contentDetail { display: none; }
 
 /** Busca **/
-body #page .main #content .searchArea { margin: 5px; }
+body #page .main #content .searchArea { margin: 5px; padding: 8px; }
 body #page .main #content .searchArea input { width: 93%; border-radius: 15px 15px 15px 15px; min-height: 35px; background-color: #FFFFFF; border: 1px solid #CCCCCC; padding: 0 3%; }
 body #page .main #content .searchArea input:focus { border: 1px solid #0088CC; }
 
@@ -181,6 +181,24 @@ body form { font-size: 16px; padding: 15px; }
   body #page .main dl#credits dd a { color: #777777; }
   body #page .main dl#credits dd ul { background-color: transparent; }
   body #page .main dl#credits dd ul li { height: auto; border: 0; line-height: normal; margin: 5px 0; list-style-position: inside; list-style-type: circle; }
+
+
+  /** Contatos **/
+body #page .main dl#contactsList dd ul li { height: 71px; }
+body #page .main dl#contactsList dd ul li a { height: 71px; }
+body #page .main dl#contactsList dd ul li a div.picture_image { height: 61px; width: 46px; margin-top: 5px; float: left; }
+body #page .main dl#contactsList dd ul li a div.picture_image img { height: 61px; width: 46px; /*margin-top: 5px; float: left;*/ }
+body #page .main dl#contactsList.general dd ul li a div.info { margin-left: 61px; }
+body #page .main dl#contactsList dd ul li a div.info span { display: block; line-height: normal; margin-left: 0 }
+body #page .main dl#contactsList dd ul li a div.info span.name { font-size: 14px; padding-top: 18px;  }
+body #page .main dl#contactsList dd ul li a div.info span.email { font-size: 13px; }
+
+  /** Contatos > Detalhes **/
+  body #page .main dl#contactDetails dt { border-bottom: 1px solid #3A87AD; color: #3A87AD; font-size: 16px; font-weight: bold; padding: 10px; margin-top: 1px; background-color: #FFF; }
+  body #page .main dl#contactDetails dd { font-size: 14px; color: #777777; padding: 10px; margin-bottom: 5px;  }
+  body #page .main dl#contactDetails dd a { color: #777777; }
+  body #page .main dl#contactDetails dd ul { background-color: transparent; }
+  body #page .main dl#contactDetails dd ul li { height: auto; border: 0; line-height: normal; margin: 5px 0; list-style-position: inside; list-style-type: circle; }
 
 
 /** Pull down styles **/

@@ -122,6 +122,7 @@ define([
     Shared.im.addOnMessageListener(onMessageFunction);
   };
   
+
   Shared.api.id(0);
   Shared.api.debug(false);
 
