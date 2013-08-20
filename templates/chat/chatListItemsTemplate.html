@@ -1,0 +1,28 @@
+<% for (var i in contacts) { %>
+  <% if (contacts[i].length) { %>
+    <dt>
+      <% if (i == 'online') { %>Online<% } %>
+      <% if (i == 'busy') { %>Ocupado<% } %>
+      <% if (i == 'away') { %>Ausente<% } %>
+      <% if (i == 'offline') { %>Offline<% } %>
+    </dt>
+    <ul>
+      <% _.each(contacts[i], function(contact){ %>
+        <% if (contact.id != null) { %>
+        <li id="<%=contact.id%>"> 
+          <a href="/Chat/<%=contact.id%>" class="listItemLink">
+            <div class="chat-<%=i%>"></div>
+            <div id="<%=contact.id%>_badge" style="" class="badge badge-chat-list hidden"><%= contact.qtdUnread %></div>
+            <% if (contact.name != null) { %>
+            <h3 class="ellipsis20"><%= contact.name %></h3>
+            <span class="ellipsis14"><%= contact.jid %></span>
+            <% } else { %>
+            <h3 class="ellipsis20"><%= contact.jid %></h3>
+            <% } %>
+          </a>
+        </li>
+        <% } %>
+      <% }); %>
+    </ul>
+  <% } %>
+<% } %>

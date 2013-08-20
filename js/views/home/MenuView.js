@@ -25,11 +25,28 @@ define([
     render: function(){
 
       if (_.isNull(this.profile)) {
+
+
+        console.log('renderMenu');
         //UPDATE PROFILE
         //GERALMENTE O PROFILE É ENVIAOD PELO MENU-VIEW PORÉM SE O USUÁRIO REALIZAR O RELOAD DA PÁGINA
-        //ENTÃO SERÁ NECESSÁRIO RECARREGÁ-LO DE UM COOKIE.
-        this.profile = JSON.parse(decodeURIComponent(Shared.api.read_cookie("profile")));
-        Shared.profile = this.profile;
+        //ENTÃO SERÁ NECESSÁRIO RECARREGÁ-LO DO LOCALSTORAGE
+
+        var expressoValue = Shared.api.getLocalStorageValue("expresso");
+
+        if (expressoValue != null) {
+
+          var authValue = expressoValue.auth;
+
+          if (authValue != null) {
+            Shared.api.auth(authValue);
+          }
+
+          Shared.profile = expressoValue.profile;
+          this.profile = Shared.profile;
+
+        }
+
       }
 
       var data = {
@@ -164,6 +181,7 @@ define([
       this.menuOpen = false;
       $('#menu').removeClass('expanded').removeAttr('style');
       $('#page').removeAttr('style');
+      $('#page').css('margin-left', '0');
     },
 
     loaded: function () 
@@ -174,6 +192,17 @@ define([
       }
 
       Shared.scrollMenu = new iScroll('menu');
+    },
+
+    setChatBadge: function(value) 
+    {
+      if (value > 0) {
+        $("#badge_chat").removeClass("hidden");
+        $("#badge_chat").html(value);
+      } else {
+        $("#badge_chat").addClass("hidden");
+        $("#badge_chat").html(value);
+      }
     }
 
   });

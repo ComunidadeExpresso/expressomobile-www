@@ -33,6 +33,7 @@ define([
 
       //SALVA A VIEW DO MENU NO SHARED
       Shared.menuView = mView;
+
     },
 
     remove: function() {
@@ -46,6 +47,30 @@ define([
       this.$el.html(homeTemplate);
 
       var that = this;
+
+
+      var expressoValue = Shared.api.getLocalStorageValue("expresso");
+
+      if (expressoValue != null) {
+
+        var userName = expressoValue.username;
+        var passwd = expressoValue.password;
+
+        Shared.im
+        .username(userName)
+        .password(passwd)
+        .connect();
+
+        Shared.api.phoneGap(expressoValue.phoneGap);
+
+        if (expressoValue.phoneGap) {
+          Shared.api.context(expressoValue.serverAPI).crossdomain(expressoValue.serverAPI);
+        } else {
+          Shared.api.context("/api/").crossdomain(expressoValue.serverAPI);
+        }
+
+      }
+
       
       this.menuView = new MenuView( { el : $("#scrollerMenu") });
       this.menuView.profile = this.profile;
@@ -55,6 +80,8 @@ define([
       this.loadMessagesInFolder(this.folderID,this.search);
 
       this.loaded();
+
+      Shared.setDefaultIMListeners();
       
     },
 
@@ -70,6 +97,26 @@ define([
       "click .listFolderItemLink": "selectFolderItem",
       "click .menuLink": "selectMenuItem",
       "click #contextMenu ul li a": "selectContextMenuItem"
+    },
+
+	selectListItem: function(e){
+
+      e.preventDefault();
+
+      $('#scrollerList li').each(function() { 
+          $(this).removeClass( 'selected' ); 
+      }); 
+
+      var parent = $(e.target).parent();
+
+      if (parent.hasClass("listItemLink")) {
+        parent = parent.parent();
+      }
+
+      parent.addClass("selected");
+
+      Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
+
     },
 
     selectMenuItem: function(e){
@@ -101,6 +148,7 @@ define([
       //alert('refreshWindow()');
       var top = $('.top').outerHeight(true);
       var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
+      var chat = $('.chatArea').outerHeight(true) == null ? 0 : $('.chatArea').outerHeight(true);
       
       // Verify screen width to define device type
       //deviceType($(window).width() < 720);
@@ -111,6 +159,7 @@ define([
 
       $('body').height($(window).height() - top);
       $('#wrapper').css('top', top + search);
+      $('#wrapperDetail').css('top', top + chat);
 
       Shared.scrollerRefresh();
       Shared.refreshDotDotDot();

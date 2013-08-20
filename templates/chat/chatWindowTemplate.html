@@ -1,0 +1,11 @@
+<h2 id="chatUserName">
+	<% if ($.trim(contact.name) != '') { %><%=contact.name%><% } else { %><%=contact.jid%><% } %>
+</h2>
+<div class="chatArea">
+	<input id='msgToSend' type="text" class="chatTextField" value="" placeholder="Mensagem:"  onKeyPress=""/>
+</div>
+<article id="wrapperDetail" class="container">
+  <div id="scrollerDetail">
+  	
+  </div>
+</article>

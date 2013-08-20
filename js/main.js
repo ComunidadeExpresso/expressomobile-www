@@ -10,10 +10,23 @@ require.config({
     underscore: 'libs/underscore/underscore-min',
     iscroll: 'libs/iscroll/src/iscroll',
     backbone: 'libs/backbone/backbone-min',
+    localstorage: 'libs/Backbone.localStorage/backbone.localstorage',
     expressoAPI: 'libs/expresso/expressoAPI',
+    expressoIM: 'libs/expresso/expressoIM',
     jquery_touchwipe: 'libs/jquery.touchwipe/jquery.touchwipe.min',
     jquery_dotdotdot: 'libs/jquery.dotdotdot/jquery.dotdotdot.min',
+    jquery_xmpp: 'libs/jquery.xmpp/jquery.xmpp',
     templates: '../templates'
+  },
+
+  shim: {
+      backbone: {
+          deps: ['jquery','underscore'],
+          exports: 'Backbone'
+      },
+      underscore: {
+          exports: "_"
+      }
   }
 
 });

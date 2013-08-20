@@ -82,16 +82,24 @@ define([
 
     app_router.on('route:defaultAction', function (actions) {
 
-      var authCookie = Shared.api.readCookie("auth");
+      var expressoValue = Shared.api.getLocalStorageValue("expresso");
 
-      if (authCookie != null) {
-        Shared.api.auth(authCookie);
+      if (expressoValue != null) {
+
+        var authValue = expressoValue.auth;
+
+        if (authValue != null) {
+          Shared.api.auth(authValue);
+        }
+
+        Shared.profile = expressoValue.profile;
+
       }
 
       if (Shared.api.auth()) {
-        app_router.navigate("Home",true);
+        app_router.navigate("Home",{ trigger: true });
       } else {
-        app_router.navigate("Login",true);
+        app_router.navigate("Login",{ trigger: true });
       }
 
     });

@@ -1,0 +1,22 @@
+<% _.each(messages, function(message){ %>
+  <% var lastMsgJID = ''; %>
+	<% if (message.jid != "me") { %>
+		<div class="fullWidth">
+  		<img class="chat-picture left">
+  		<div class="triangle-right left">
+  			<%=message.body%>
+  		</div>
+  		<div class="clear"></div>
+  	</div>
+	<% } else { %>
+  	<div class="fullWidth">
+  		<img class="myPicture chat-picture right">
+  		<div class="triangle-right right">
+  			<%=message.body%>
+  		</div>
+  		<div class="clear"></div>
+  	</div>
+	<% } %>
+  <% lastMsgJID = message.jid; %>
+<% }); %>
+<div id="last_message"></div>
