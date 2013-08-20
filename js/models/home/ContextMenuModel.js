@@ -11,6 +11,7 @@ define([
         route: "",
         title: "",
         iconClass: "",
+        primary: false,
     },
 
     initialize: function() {

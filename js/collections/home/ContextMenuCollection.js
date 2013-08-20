@@ -22,9 +22,9 @@ define([
         }
       },
 
-      getDetailMessageMenu: function(msgID,folderID) {
+      getDetailMessageMenu: function(folderID,msgID) {
         var menuItems = [
-            { route: "/Mail/Message/New", title:"Nova Mensagem"},
+            { route: "/Mail/Message/New", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
             { route: "/Mail/Message/DelMessage/" + msgID + "/" + folderID, title: "Excluir"},
             { route: "/Mail/Message/ReplyMessage/" + msgID + "/" + folderID, title: "Responder"},
             { route: "/Mail/Message/ReplyToAll/" + msgID + "/" + folderID, title: "Responder p/ Todos"},
@@ -33,6 +33,26 @@ define([
 
         this.createModelsFromArray(menuItems);
         return this;
+      },
+
+      getSendMessageMenu: function(folderID,msgID) {
+        var menuItems = [
+            { route: "/Chat", title:"Enviar", iconClass : '', primary: true}
+            ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
+      },
+
+      getPrimaryAction: function() {
+        var retVal = false;
+        for (var i in this.models) {
+          if (this.models[i].get('primary') == true) {
+            //console.log(this.models[i].get("route"));
+            retVal = this.models[i];
+          }
+        }
+        return retVal;
       },
 
       getContactsMenu: function() {

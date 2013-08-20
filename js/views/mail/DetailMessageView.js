@@ -48,10 +48,7 @@ define([
 
           $(elementID).html( compiledTemplate ); 
 
-          var contextMenu = new ContextMenuCollection();
-          Shared.menuView.context.collection = contextMenu.getDetailMessageMenu(that.folderID,that.msgID);
-          Shared.menuView.context.render();
-          
+          Shared.menuView.renderContextMenu(1,{folderID: that.folderID, msgID: that.msgID});
 
           that.loaded();
 
@@ -68,18 +65,14 @@ define([
         Shared.scrollDetail = null;
       }
 
-        console.log('DetailMessageLoaded()');
+      var top = $('.top').outerHeight(true);
+      var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
+      
+      $('body').height($(window).height() - top);
+      $('#wrapper').css('top', top + search);
 
-        var top = $('.top').outerHeight(true);
-        var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
-
-        //refreshDotDotDot();
-
-        $('body').height($(window).height() - top);
-        $('#wrapper').css('top', top + search);
-
-        var that = this;
-        Shared.scrollDetail = new iScroll('wrapperDetail');
+      var that = this;
+      Shared.scrollDetail = new iScroll('wrapperDetail');
     }
 
   });

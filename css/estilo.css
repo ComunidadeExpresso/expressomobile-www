@@ -536,6 +536,27 @@ body form { font-size: 16px; padding: 15px; }
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
+.btn-context {
+    background-color: #006DCC;
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    margin-top: 6px;
+    height: 40px;
+}
+
+.btn-compose {
+    background: url("../imgs/btn-compose.png") no-repeat scroll center center;
+    background-color: #006DCC;
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    min-width: 40px;
+    height: 40px;
+}
+
 
 .product-logo {
   width: 250px;

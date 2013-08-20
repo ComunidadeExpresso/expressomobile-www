@@ -6,15 +6,17 @@ define([
   'jquery_dotdotdot',
   'backbone',
   'shared',
-  'text!templates/home/contextMenuTemplate.html'
-], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, contextMenuTemplate){
+  'text!templates/home/contextMenuTemplate.html',
+  'collections/home/ContextMenuCollection',
+], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, contextMenuTemplate,ContextMenuCollection){
 
   var ContextMenuView = Backbone.View.extend({
-    el: $("#contextMenu"),
+    el: $("#rightMenu"),
 
     menuOpen: false,
     profile: null,
     collection: null,
+    primaryAction: '',
 
     render: function(){
 
@@ -27,8 +29,60 @@ define([
 
       $('#contextMenuButton').addClass('contextMenu');
 
-      $("#contextMenu").html(compiledTemplate);
+      this.$el.html(compiledTemplate);
 
+      this.setPrimaryAction();
+
+    },
+
+    initialize : function ( options ) {
+
+      // `on()` or `bind()`
+      //$("#btn-primary-action").click(this.routeToPrimaryAction);
+
+      //this.on( 'click #btn-primary-action', this.routeToPrimaryAction, this );
+
+    },
+
+    events: {
+      "click #contextMenuButton": "toggleMenu",
+      "click #btn-primary-action": "routeToPrimaryAction",
+    },
+
+    routeToPrimaryAction: function(e){
+
+      console.log("routeToPrimaryAction");
+      console.log(this.primaryAction);
+
+      e.preventDefault();
+
+      this.undelegateEvents();
+
+      if (this.primaryAction != '') {
+        Shared.router.navigate(this.primaryAction,{trigger: true});
+      } 
+
+    },
+
+    
+
+    setPrimaryAction: function() {
+      var primary = this.collection.getPrimaryAction();
+      this.primaryAction = primary.get("route");
+      if (primary) {
+        $("#btn-primary-action").removeAttr("class");
+        if (primary.get("iconClass") != '') {
+          $("#btn-primary-action").attr('class', 'btn btn-context ' + primary.get("iconClass"));
+          $("#btn-primary-action").val("");
+        } else {
+          $("#btn-primary-action").attr('class', 'btn btn-primary btn-context');
+          $("#btn-primary-action").val(primary.get("title"));
+        }
+        
+      } else {
+        $("#btn-primary-action").removeAttr("class");
+        $("#btn-primary-action").attr('class', 'hidden');
+      }
     },
 
     hideMenu: function() {
@@ -55,11 +109,6 @@ define([
       this.menuOpen = false;
       $('#contextMenu').addClass('hidden');
     },
-
-    loaded: function () 
-    {
-
-    }
 
   });
 

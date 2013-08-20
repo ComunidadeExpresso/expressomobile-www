@@ -9,7 +9,8 @@ define([
   'views/mail/FoldersMenuListView',
   'text!templates/home/menuTemplate.html',
   'views/home/ContextMenuView',
-], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, FoldersMenuListView, menuTemplate,ContextMenuView){
+  'collections/home/ContextMenuCollection',
+], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, FoldersMenuListView, menuTemplate,ContextMenuView,ContextMenuCollection){
 
   var MenuView = Backbone.View.extend({
     el: $("#scrollerMenu"),
@@ -67,12 +68,14 @@ define([
       })
       .execute();
 
-      this.context = new ContextMenuView();
+      this.context = new ContextMenuView({ el: $("#rightMenu")});
 
       var foldersMenuListView = new FoldersMenuListView();
       foldersMenuListView.render();
 
     },
+
+
 
     setQuota: function (used,total) {
 
@@ -201,7 +204,20 @@ define([
         $("#badge_chat").addClass("hidden");
         $("#badge_chat").html(value);
       }
-    }
+    },
+
+    renderContextMenu: function(menuID,params) {
+
+      this.context = new ContextMenuView({ el: $("#rightMenu") });
+      var contextMenuCollection = new ContextMenuCollection();
+      if (menuID == 1) {
+          this.context.collection = contextMenuCollection.getDetailMessageMenu(params.folderID,params.msgID);
+      }
+      if (menuID == 2) {
+          this.context.collection = contextMenuCollection.getSendMessageMenu();
+      }
+      this.context.render();
+    },
 
   });
 
