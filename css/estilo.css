@@ -201,6 +201,69 @@ body #page .main dl#contactsList dd ul li a div.info span.email { font-size: 13p
   body #page .main dl#contactDetails dd ul li { height: auto; border: 0; line-height: normal; margin: 5px 0; list-style-position: inside; list-style-type: circle; }
 
 
+/** Agenda **/
+body #page .main #agenda .ui-datepicker { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; width: auto; border: 0; background: #F1F1F1; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-header { border: 0; border-radius: 0; background-color: #3A87AD; height: 40px; line-height: 40px; color: #FFF; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-header a { cursor: pointer; text-align: center; width: 50px; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-header .ui-datepicker-prev { float: left; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-header .ui-datepicker-next { float: right; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-header .ui-datepicker-title { text-align: center }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar { width: 100%; background-color: #FFFFFF; border-spacing: 0; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr { height: 50px; background-color: #F1F1F1; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar thead tr { height:30px; background-color: #777777; color: #FFF; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar thead tr th { }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar thead tr th span { font-weight: normal; font-size: 14px; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td { width: 14%; border: 1px #FFF solid; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td a,
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td span { height: 50px; text-align: center; line-height: 50px; display: block; text-decoration: none; color: #777777; font-weight: bold; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepicker-today a { color: #FFF; background-color: #3A87AD; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepicker-week-end  a { color: #CC6600; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.hasEvent a { background-color: #CC6600; color: #FFFFFF; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepicker-current-day { border: 1px #777777 solid; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepicker-unselectable span { font-weight: normal; }
+
+  /** Agenda - Lista resumida **/
+  body #page .main #eventsList .noEvent { height: 100px; line-height: 100px; text-align: center; color: #777777; }
+  body #page .main ul#events li { border-left: 8px solid #3A87AD; font-size: 16px; height: 60px; background-color: #FFFFFF; }
+  body #page .main ul#events li a { height: 60px; }
+  body #page .main ul#events li a div.hourly { float: left; width: 60px; text-align: center; }
+  body #page .main ul#events li a div.hourly strong { font-weight: bold; color: #3A87AD; display: block; height: 23px; line-height: 23px; font-size: 13px; }
+  body #page .main ul#events li a div.hourly strong.start { margin-top: 7px; }
+  body #page .main ul#events li a span { font-size: 14px; color: #777777; margin-left: 12px; line-height: 60px; }
+  body #page .main ul#events li a span.complete { color: #3A87AD; font-size: 14px; font-weight: bold; }
+
+  /** Agenda - Lista completa **/
+  body #page .main table#eventsTable { width: 100%; font-size: 16px; border-spacing: 0; margin-top: 1px; }
+  body #page .main table#eventsTable tr { height: 60px; }
+  body #page .main table#eventsTable tr td { border-bottom: 1px solid #CCCCCC; border-top: 1px #FFF solid; height: 60px; }
+  body #page .main table#eventsTable tr td.hourly { border-left: 8px solid #3A87AD; color: #3A87AD; width: 60px; font-weight: bold; text-align: center; }
+  body #page .main table#eventsTable tr td.description a { padding: 12px; color: #777777; font-size: 14px; text-decoration: none; display: block; height: 100%; }
+  body #page .main table#eventsTable tr td.busy { background-color: #F1F1F1; }
+
+  /** Agenda - Detalhes do evento **/
+  body #page .main table#eventDetails { width: 100%; font-size: 16px; border-spacing: 0; margin-top: 1px; }
+  body #page .main table#eventDetails tr { height: 60px; }
+  body #page .main table#eventDetails tr td { border-bottom: 1px solid #CCCCCC; border-top: 1px #FFF solid; min-height: 60px; }
+  body #page .main table#eventDetails tr td.item { border-left: 8px solid #3A87AD; color: #3A87AD; width: 120px; font-weight: bold; text-align: left; padding-left: 5px; }
+  body #page .main table#eventDetails tr td.description { padding: 12px; color: #777777; font-size: 14px;}
+  body #page .main table#eventDetails tr td.busy { background-color: #F1F1F1; }
+
+  
+  /*body form#addEvent ol li input[type=checkbox] { margin: 3px 0; }*/
+  body form#addEvent ol li.date ol li { width: 47%; margin: 0; display: inline; }
+  body form#addEvent ol li.participants { color: #777777; }
+  body form#addEvent ol li.participants h4 { display: inline; font-weight: bold; }
+  body form#addEvent ol li.participants a { text-decoration: none; margin-left: 10px; color: #3A87AD; }
+  body form#addEvent ol li.participants ol { margin: 10px 0; }
+  body form#addEvent ol li.participants ol li { margin: 10px 0; }
+
+  /** Adicionar participantes **/
+  body #page .main #contentDetail dl#participantsList { margin-top: 1px;  }
+  body #page .main dl#participantsList dt { font-size: 16px; color: #FFFFFF; padding: 10px; border-bottom: 1px #FFFFFF solid; font-weight: bold; background-color: #3A87AD; }
+  body #page .main dl#participantsList dd ul li { vertical-align: middle; height: 50px; line-height: 50px; padding: 0 10px; color: #777777; border-bottom: 1px solid #CCCCCC; border-top: 1px solid #FFFFFF; font-size: 14px; text-align: left; }
+  body #page .main dl#participantsList dd ul li input.check { float: right; margin-top: 18px; }
+  body #page .main dl#participantsList dd ul li a { text-decoration: none; color: #777777; font-weight: bold; }
+
 /** Pull down styles **/
 #pullDown, #pullUp { 
 	background:#fff;

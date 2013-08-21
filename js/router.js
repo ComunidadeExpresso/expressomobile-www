@@ -11,9 +11,9 @@ define([
   'views/settings/SettingsListView',
   'views/contacts/ContactsListView',
   'views/contacts/DetailsContactView',
-  'views/calendar/CalendarListView',
+  'views/calendar/CalendarView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarListView,ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarView,ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -27,8 +27,8 @@ define([
       'Contacts' : 'contactsListView',
       'Contacts/:secondViewName' : 'contactsListView',
       'Contacts/:secondViewName/:contactID' : 'detailsContactView',
-      'Calendar' : 'calendarListView',
-      'Calendar/:secondViewName' : 'calendarListView',
+      'Calendar' : 'calendarView',
+      'Calendar/:year/:month/:day' : 'calendarView',
       'Chat' : 'chatListView',
       'Chat/:secondViewName' : 'chatListView',
       'Settings' : 'settingsListView',
@@ -159,11 +159,14 @@ define([
   
     });
 
-    app_router.on('route:calendarListView', function (secondViewName) {
+    app_router.on('route:calendarView', function (year, month, day) {
 
-      var calendarListView = new CalendarListView();
-      calendarListView.secondViewName = secondViewName;
-      calendarListView.render();
+      var calendarView = new CalendarView();
+      calendarView.year = year;
+      calendarView.month = month;
+      calendarView.day = day;
+      
+      calendarView.render();
 
       Shared.menuView.selectMenu(2);
   
