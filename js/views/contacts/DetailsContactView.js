@@ -38,7 +38,7 @@ define([
 				var compiledTemplate = _.template(DetailsContactTemplate, contact);
 				$(detailElementID).html(compiledTemplate);
 				
-				this.loaded();			
+				that.loaded();			
 			}
 
 			if (this.secondViewName == 'Personal')

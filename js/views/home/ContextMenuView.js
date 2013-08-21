@@ -38,10 +38,6 @@ define([
 
     initialize : function ( options ) {
 
-      // `on()` or `bind()`
-      //$("#btn-primary-action").click(this.routeToPrimaryAction);
-
-      //this.on( 'click #btn-primary-action', this.routeToPrimaryAction, this );
 
     },
 
@@ -73,8 +69,6 @@ define([
       } 
 
     },
-
-    
 
     setPrimaryAction: function() {
       var primary = this.collection.getPrimaryAction();
