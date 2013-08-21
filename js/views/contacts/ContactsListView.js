@@ -53,10 +53,6 @@ define([
 
 			Shared.menuView.renderContextMenu(3,{});
 
-			// var contextMenu = new ContextMenuCollection();
-			// Shared.menuView.context.collection = contextMenu.getContactsMenu();
-			// Shared.menuView.context.render();
-
 			this.loaded();			
 		},
 

@@ -11,7 +11,6 @@ define([
 ], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, contextMenuTemplate,ContextMenuCollection){
 
   var ContextMenuView = Backbone.View.extend({
-    el: $("#rightMenu"),
 
     menuOpen: false,
     profile: null,
@@ -31,22 +30,29 @@ define([
 
       this.$el.html(compiledTemplate);
 
+      $("#rightMenu").empty().append(this.$el);
+
       this.setPrimaryAction();
 
     },
 
     initialize : function ( options ) {
 
-      // `on()` or `bind()`
-      //$("#btn-primary-action").click(this.routeToPrimaryAction);
-
-      //this.on( 'click #btn-primary-action', this.routeToPrimaryAction, this );
 
     },
 
     events: {
       "click #contextMenuButton": "toggleMenu",
       "click #btn-primary-action": "routeToPrimaryAction",
+      "click #contextMenu ul li a": "selectContextMenuItem"
+    },
+
+    selectContextMenuItem: function(e){
+      e.preventDefault();
+
+      Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
+      
+      this.toggleMenu();
     },
 
     routeToPrimaryAction: function(e){
@@ -56,15 +62,13 @@ define([
 
       e.preventDefault();
 
-      this.undelegateEvents();
+      this.closeMenu();
 
       if (this.primaryAction != '') {
         Shared.router.navigate(this.primaryAction,{trigger: true});
       } 
 
     },
-
-    
 
     setPrimaryAction: function() {
       var primary = this.collection.getPrimaryAction();
