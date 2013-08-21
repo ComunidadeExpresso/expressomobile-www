@@ -175,6 +175,11 @@ define([
 		viewContact: function(e)
 		{
 			e.preventDefault();
+
+			// $('dl#contactsList dd ul li').removeAttr('class');
+			console.log($(e.target).parent());
+			$(e.target).parent().addClass('selected');
+
 			Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
 		}
 

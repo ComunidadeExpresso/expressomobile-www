@@ -1,66 +1,65 @@
 define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'shared',
-  'text!templates/calendar/calendarListTemplate.html',
-], function($, _, Backbone, Shared, calendarListTemplate){
+	'jquery',
+	'underscore',
+	'backbone',
+	'shared',
+	'text!templates/calendar/calendarListTemplate.html',
+], function($, _, Backbone, Shared, calendarListTemplate)
+{
+	var CalendarListView = Backbone.View.extend(
+	{
 
-  var CalendarListView = Backbone.View.extend({
+		secondViewName: '',
 
-    secondViewName: '',
+		render: function()
+		{
+			var that = this;
+			var primaryElementID = "#content";
+			var detailElementID = "#contentDetail";
 
-    render: function(){
+			if (Shared.isSmartPhone())
+				detailElementID = "#content";
 
-      var that = this;
+			$(detailElementID).html("");
 
-      var primaryElementID = "#content";
-      var detailElementID = "#contentDetail";
+			if (this.secondViewName != null)
+				console.log(this.secondViewName);
 
-      if (Shared.isSmartPhone()) {
-        detailElementID = "#content";
-      }
+			if (this.secondViewName == "Personal") 
+			{
+				//var secondView = new SettingsSupportListView({ el: $(detailElementID) });
+				//secondView.render();
+			}
 
-      $(detailElementID).html("");
+			if (this.secondViewName == "General") 
+			{
+				//var secondView = new SettingsAboutListView({ el: $(detailElementID) });
+				//secondView.render();
+			} 
+			else 
+			{ 
+				var newData = { _: _ };
+				var compiledTemplate = _.template( calendarListTemplate, newData );
 
-      if (this.secondViewName != null) {
-        console.log(this.secondViewName);
-        if (this.secondViewName == "Personal") {
-           //var secondView = new SettingsSupportListView({ el: $(detailElementID) });
-           //secondView.render();
-        }
-        if (this.secondViewName == "General") {
-           //var secondView = new SettingsAboutListView({ el: $(detailElementID) });
-           //secondView.render();
-        }
-      } else { 
-        var newData = {
-          _: _ 
-        };
+				$(primaryElementID).html( compiledTemplate ); 
+				Shared.menuView.context.hideMenu();
+			}
 
-        var compiledTemplate = _.template( calendarListTemplate, newData );
-        $(primaryElementID).html( compiledTemplate ); 
+			this.loaded();
+		},
 
-        Shared.menuView.context.hideMenu();
-      }
+		initialize: function() 
+		{
+			this.secondViewName = "";
+		},
 
-      this.loaded();
+		loaded: function () 
+		{
+			var that = this;
+			Shared.scroll = new iScroll('wrapper');
+		}
+	});
 
-    },
+	return CalendarListView;
 
-    initialize: function() {
-      this.secondViewName = "";
-    },
-
-    loaded: function () 
-    {
-
-      var that = this;
-      Shared.scroll = new iScroll('wrapper');
-
-    }
-  });
-
-  return CalendarListView;
-  
 });

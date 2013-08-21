@@ -38,7 +38,7 @@ define([
 				var compiledTemplate = _.template(DetailsContactTemplate, contact);
 				$(detailElementID).html(compiledTemplate);
 				
-				this.loaded();			
+				that.loaded();			
 			}
 
 			if (this.secondViewName == 'Personal')
@@ -62,14 +62,13 @@ define([
 			{
 				$('#wrapperDetail').removeAttr('id').attr('id', 'wrapper');
 				$('#scrollerDetail').removeAttr('id').attr('id', 'scroller');
+
+				Shared.scrollDetail = new iScroll('wrapper');
 			}
-				console.log(Shared.scrollDetail);
-				console.log(Shared.scroll);
-				console.log(Shared.scrollMenu);
-
+			else
+			{
 				Shared.scrollDetail = new iScroll('wrapperDetail');
-
-			Shared.scrollerRefresh();
+			}
 
 			var homeView = new HomeView();
 			homeView.refreshWindow();
