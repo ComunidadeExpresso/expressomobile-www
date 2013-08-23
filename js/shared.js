@@ -27,8 +27,6 @@ define([
   Shared.contentView = null;
   Shared.detailView = null;
 
-  //Shared.Expresso = ExpressoCollection;
-
   Shared.im_url = "http://im.pr.gov.br:5280/http-bind";
   Shared.im_domain = "im.pr.gov.br";
 

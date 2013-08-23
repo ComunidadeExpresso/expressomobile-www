@@ -215,8 +215,11 @@ define([
       if (menuID == 1) {
           this.context.collection = contextMenuCollection.getDetailMessageMenu(params.folderID,params.msgID);
       }
-      if (menuID == 2) {
+      if (menuID == 'newMessage') {
           this.context.collection = contextMenuCollection.getSendMessageMenu();
+      }
+      if (menuID == 'newMessageWithCc') {
+          this.context.collection = contextMenuCollection.getSendMessageMenuWithCC();
       }
       if (menuID == 3) {
           this.context.collection = contextMenuCollection.getContactsMenu();
