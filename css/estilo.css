@@ -218,8 +218,8 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td a,
 body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td span { height: 50px; text-align: center; line-height: 50px; display: block; text-decoration: none; color: #777777; font-weight: bold; }
 body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepicker-today a { color: #FFF; background-color: #3A87AD; }
 body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepicker-week-end  a { color: #CC6600; }
-body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.hasEvent a { background-color: #CC6600; color: #FFFFFF; }
-body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepicker-current-day { border: 1px #777777 solid; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.hasEvent a { border: 1px #CC6600 dotted; }
+body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepicker-current-day a { border: 1px #777777 solid; }
 body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepicker-unselectable span { font-weight: normal; }
 
   /** Agenda - Lista resumida **/
@@ -235,7 +235,7 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
   /** Agenda - Lista completa **/
   body #page .main table#eventsTable { width: 100%; font-size: 16px; border-spacing: 0; margin-top: 1px; }
   body #page .main table#eventsTable tr { height: 60px; }
-  body #page .main table#eventsTable tr td { border-bottom: 1px solid #CCCCCC; border-top: 1px #FFF solid; height: 60px; }
+  body #page .main table#eventsTable tr td { border-bottom: 1px solid #CCCCCC; /*border-top: 1px #FFF solid;*/ height: 60px; }
   body #page .main table#eventsTable tr td.hourly { border-left: 8px solid #3A87AD; color: #3A87AD; width: 60px; font-weight: bold; text-align: center; }
   body #page .main table#eventsTable tr td.description a { padding: 12px; color: #777777; font-size: 14px; text-decoration: none; display: block; height: 100%; }
   body #page .main table#eventsTable tr td.busy { background-color: #F1F1F1; }

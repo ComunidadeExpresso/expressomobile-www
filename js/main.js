@@ -28,6 +28,12 @@ require.config({
       },
       underscore: {
           exports: "_"
+      },
+      jqueryui: {
+        deps: ['jquery']
+      },
+      jqueryui_datepicker_ptBR: {
+        deps: ['jquery', 'jqueryui']
       }
   }
 

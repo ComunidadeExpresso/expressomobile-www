@@ -1,0 +1,38 @@
+<% if (typeof(events) != 'undefined' && events.length > 0) { %>
+
+	<ul id="events">
+	
+		<% _.each(events, function(e) { %>
+
+			<li>
+				<a href="Calendar/Events/<%= e.get('eventID') %>" title="Ver evento">
+					<div class="hourly">
+
+						<% 
+							var startTime = (e.get('eventStartDate')).split(' ')[1];
+							var endTime = (e.get('eventEndDate')).split(" ")[1];
+						%>
+
+						<strong class="start"><%= startTime %></strong>
+						<strong class="end"><%= endTime %></strong>
+
+					</div>
+					<span><%= e.get('eventName') %></span>
+				</a>
+			</li>
+		
+		<% }); %>
+
+		<li>
+			<a href="/Calendar/FullDay/<%= year + '/' + month + '/' + day %>" title="Ver evento" class="see_all">
+				<span class="complete">Ver tudo</span>
+			</a>
+		</li>
+
+	</ul>
+
+<% } else { %>
+
+	<p class="noEvent">Nenhum evento agendado</p>
+
+<% } %>

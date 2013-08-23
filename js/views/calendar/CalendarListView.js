@@ -5,10 +5,12 @@ define([
 	'shared',
 	'collections/calendar/EventsListCollection',
 	'views/home/LoadingView',
+	'views/calendar/CalendarEventsDayListView',
+	'views/calendar/CalendarFullDayListView',
 	'text!templates/calendar/calendarTemplate.html',
 	'jqueryui',
 	'jqueryui_datepicker_ptBR',
-], function($, _, Backbone, Shared, EventsListCollection, LoadingView, calendarTemplate, jqueryui, jqueryui_datepicker_ptBR)
+], function($, _, Backbone, Shared, EventsListCollection, LoadingView, CalendarEventsDayListView, CalendarFullDayListView, calendarTemplate, jqueryui, jqueryui_datepicker_ptBR)
 {
 	var CalendarListView = Backbone.View.extend(
 	{
@@ -16,55 +18,94 @@ define([
 		year: '',
 		month: '',
 		day: '',
+		fullDay: false,
 		data: {},
+		dayTitle: '',
 
 		render: function()
 		{
-			console.log(this.year + '-' + this.month + '-' + this.day);
-
 			var that = this;
+			var pad = "00";
+			var today = new Date();
 
-			var callback = function ()
+			if (this.year == '' || this.year == undefined)
+				this.year = today.getFullYear();
+
+			if (this.month == '' || this.month == undefined)
+			{
+				this.month = today.getMonth() + 1; // Months are zero based;
+				this.month = pad.substring(0, pad.length - ("" + this.month).length) + ("" + this.month);
+			}
+
+			if (this.day == '' || this.day == undefined)
+				this.day = today.getDate();
+
+			var callback = function (data)
 			{
 				var template = _.template(calendarTemplate);
 				that.$el.empty().html(template);
+
 				that.renderDatePicker();
+				that.listDayEvents(data);
 			}
 
-			var pad = "00";
-			var currentDate = new Date();
-			var month = currentDate.getMonth() + 1; // Months are zero based;
-			var m = pad.substring(0, pad.length - ("" + month).length) + ("" + month);
-			var y = currentDate.getFullYear();
-			var lastDay = new Date(y, m, 0);
+			var lastDay = new Date(this.year, this.month, 0);
 				lastDay = lastDay.getDate();
 
-			var pDateStart =  '01/' + m + '/' + y;
-			var pDateEnd =  lastDay + '/' + m + '/' + y;
+			var pDateStart =  '01/' + this.month + '/' + this.year;
+			var pDateEnd =  lastDay + '/' + this.month + '/' + this.year;
 
-			this.getEvents(pDateStart, pDateEnd, callback, callback);
+			this.listEvents(pDateStart, pDateEnd, callback, callback);
 		},
 
-		getEvents: function (pDateStart, pDateEnd, callbackSucess, callbackFail)
+		listEvents: function (pDateStart, pDateEnd, callbackSucess, callbackFail)
 		{
 			var that = this;
 
 			var eventsData = new EventsListCollection();
-				eventsData.getEvents(pDateStart, pDateEnd)
+				eventsData.listEvents(pDateStart, pDateEnd)
 				.done(function (data) 
 				{
+
 					that.data = { events: data.models, _: _ };
 
 					if (callbackSucess)
-						callbackSucess();
+						callbackSucess(that.data);
 				})
 				.fail(function (data) 
 				{
 					that.data = { error: data.error, _: _ };
 					
 					if (callbackFail)
-						callbackFail();
+						callbackFail(that.data);
 				});
+		},
+
+		listDayEvents: function(data)
+		{
+			// if (!Shared.isSmartPhone() || !this.fullDay)
+			// {
+				// var calendarFullDayListView = new CalendarFullDayListView({el: $('#scroller')});
+				var calendarFullDayListView = new CalendarFullDayListView();
+					calendarFullDayListView.year = this.year;
+					calendarFullDayListView.month = this.month;
+					calendarFullDayListView.day = this.day;
+					calendarFullDayListView.data = data;
+					calendarFullDayListView.dayTitle = this.dayTitle;
+					calendarFullDayListView.render();
+			// }
+			// else
+			// {
+				var calendarEventsDayListView = new CalendarEventsDayListView({el: $('#eventsList')});
+					calendarEventsDayListView.year = this.year;
+					calendarEventsDayListView.month = this.month;
+					calendarEventsDayListView.day = this.day;
+					calendarEventsDayListView.data = data;
+					calendarEventsDayListView.render();
+
+			// }
+
+			this.loaded();
 		},
 
 		initialize: function() { },
@@ -75,7 +116,8 @@ define([
 
 			var callback = function (data)
 			{
-				that.refreshDatePicker()
+				that.refreshDatePicker();
+				// that.listDayEvents();
 			}
 
 			var pad = "00";
@@ -86,7 +128,7 @@ define([
 			var pDateStart =  '01/' + m + '/' + y;
 			var pDateEnd =  lastDay + '/' + m + '/' + y;
 
-			this.getEvents(pDateStart, pDateEnd, callback, callback);
+			this.listEvents(pDateStart, pDateEnd, callback, callback);
 	 	},
 
 		highlightDays: function (date)
@@ -114,6 +156,7 @@ define([
 		refreshDatePicker: function ()
 		{
 			$('#agenda').datepicker("refresh");
+			// this.dayTitle = $.datepicker.formatDate('DD, dd/mm/yy', new Date());
 		},
 
 		renderDatePicker: function () 
@@ -133,7 +176,6 @@ define([
 				dateFormat: 'DD, dd/mm/yy',
 				onChangeMonthYear: function (year, month, widget)
 				{
-					that.data = {};
 					that.changeMonthYear(year, month, widget);
 				},
 				beforeShowDay: function (date)
@@ -146,77 +188,17 @@ define([
 					var url = 'Calendar/' + selectedDate[2] + '/' + selectedDate[1] + '/' + selectedDate[0];
 
 					Shared.router.navigate(url, {trigger: true});
-
-					// global_date = date;
-
-					// if ($('body').hasClass('smartphone'))
-					// {
-					// 	$('#eventsList').html(new EJS({url: './templates/agenda-eventos.ejs'}).render());
-					// 	$('#events').on('click', 'a', function (event)
-					// 	{
-					// 		var template = $(this).prop('href');
-
-					// 		$('#scroller').html(new EJS({url: template}).render());
-
-					// 		if (!$(this).hasClass('see_all'))
-					// 			$('#contentTitle').text($(this).find('span').text());
-					// 		else
-					// 		{
-					// 			$('#contentTitle').text(global_date);
-					// 			$('#eventsTable').on('click', 'a', function (event)
-					// 			{
-					// 				var template = $(this).prop('href');
-										
-					// 				$('#scroller').html(new EJS({url: template}).render());
-					// 				$('#contentTitle').text($(this).text());
-
-					// 				scrollerRefresh();
-
-					// 				return false;
-					// 			});
-					// 		}
-							
-					// 		scrollerRefresh();
-
-					// 		return false;
-					// 	});
-					// }
-					// else
-					// {
-					// 	$('#scrollerDetail').html(new EJS({url: './templates/agenda-eventos-completa.ejs'}).render());
-					// 	$('#contentDetailTitle').text(date);
-					// 	$('#eventsTable').on('click', 'a', function (event)
-					// 	{
-					// 		var template = $(this).prop('href');
-					// 		var title,
-					// 			panel;
-
-					// 		if ($('body').hasClass('smartphone'))
-					// 		{
-					// 			panel = $('#scroller');
-					// 			title = $('#contentTitle');
-					// 		}
-					// 		else
-					// 		{
-					// 			panel = $('#scrollerDetail');
-					// 			title = $('#contentDetailTitle');
-					// 		}
-
-					// 		panel.html(new EJS({url: template}).render());
-					// 		title.text($(this).text());
-					// 		scrollerRefresh();
-
-					// 		return false;
-					// 	});
-					// }
-
-					// scrollerRefresh();
 				}
 			});
 
 			if (this.year != '' && this.month != '' && this.day != '')
 				$("#agenda").datepicker("setDate", new Date(this.year, this.month - 1, this.day));
 
+			this.dayTitle = $.datepicker.formatDate('DD, dd/mm/yy', new Date(this.year, this.month - 1, this.day));
+		},
+
+		loaded: function ()
+		{
 			Shared.scroll = new iScroll('wrapper');
 		}
 	});

@@ -12,8 +12,9 @@ define([
   'views/contacts/ContactsListView',
   'views/contacts/DetailsContactView',
   'views/calendar/CalendarView',
+  'views/calendar/CalendarDetailsView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarView,ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarView,CalendarDetailsView,ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -29,6 +30,8 @@ define([
       'Contacts/:secondViewName/:contactID' : 'detailsContactView',
       'Calendar' : 'calendarView',
       'Calendar/:year/:month/:day' : 'calendarView',
+      'Calendar/FullDay/:year/:month/:day' : 'calendarFullDayView',
+      'Calendar/Events/:eventID' : 'calendarDetailsView',
       'Chat' : 'chatListView',
       'Chat/:secondViewName' : 'chatListView',
       'Settings' : 'settingsListView',
@@ -165,8 +168,33 @@ define([
       calendarView.year = year;
       calendarView.month = month;
       calendarView.day = day;
+      calendarView.fullDay = false;
       
       calendarView.render();
+
+      Shared.menuView.selectMenu(2);
+  
+    });
+
+    app_router.on('route:calendarFullDayView', function (year, month, day) {
+
+      var calendarView = new CalendarView();
+      calendarView.year = year;
+      calendarView.month = month;
+      calendarView.day = day;
+      calendarView.fullDay = true;
+      
+      calendarView.render();
+
+      Shared.menuView.selectMenu(2);
+  
+    });
+
+    app_router.on('route:calendarDetailsView', function (eventID) {
+
+      var calendarDetailsView = new CalendarDetailsView();
+      calendarDetailsView.eventID = eventID;
+      calendarDetailsView.render();
 
       Shared.menuView.selectMenu(2);
   

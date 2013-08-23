@@ -1,0 +1,69 @@
+<table id="eventDetails"> 
+	<tr>
+		<td class="item">
+			Início
+		</td>
+		<td class="description">
+			<%= event.get('eventDateStart') %> - <%= event.get('eventTimeStart') %>
+		</td>
+	</tr> 
+	<tr>
+		<td class="item">
+			Término
+		</td>
+		<td class="description">
+			<%= event.get('eventDateEnd') %> - <%= event.get('eventTimeEnd') %>
+		</td>
+	</tr> 
+	<tr>
+		<td class="item">
+			Local
+		</td>
+		<td class="description">
+			<%= event.get('eventLocation') %>
+		</td>
+	</tr> 
+	<tr>
+		<td class="item">
+			Prioridade
+		</td>
+		<td class="description">
+			<%= event.get('eventPriority') %>
+		</td>
+	</tr> 
+	<tr>
+		<td class="item">
+			Acesso
+		</td>
+		<td class="description">
+			
+		</td>
+	</tr> 
+	<tr>
+		<td class="item">
+			Participantes
+		</td>
+		<td class="description">
+			<% if ((event.get('eventParticipants')).length > 0) { %>
+				<%= (event.get('eventParticipants')).join(', ') %>
+			<% } %>
+		</td>
+	</tr> 
+	<tr>
+		<td class="item">
+			Criado por
+		</td>
+		<td class="description">
+			<%= event.get('eventOwner') %>
+		</td>
+	</tr>  
+	<tr>
+		<td class="item">
+			Descrição
+		</td>
+		<td class="description">
+			<%= event.get('eventDescription') %>
+		</td>
+	</tr> 
+	
+</table>

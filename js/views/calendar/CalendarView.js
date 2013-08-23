@@ -15,6 +15,7 @@ define([
 		year: '',
 		month: '',
 		day: '',
+		fullDay: false,
 
 		render: function()
 		{
@@ -29,13 +30,12 @@ define([
 			var loadingView = new LoadingView({el: $('#scroller')});
 				loadingView.render();
 
-			console.log(this.year + '-' + this.month + '-' + this.day);
-
 			var calendarListview = new CalendarListView({el: $('#scroller')});
 				calendarListview.year = this.year;
 				calendarListview.month = this.month;
 				calendarListview.day = this.day;
-				calendarListview.render()
+				calendarListview.fullDay = this.fullDay;
+				calendarListview.render();
 
 			this.loaded();
 		},

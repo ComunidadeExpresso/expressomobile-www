@@ -28,7 +28,7 @@ define([
 	        this.model = EventModel;
 		},
 
-		getEvents: function (pDateStart, pDateEnd)
+		listEvents: function (pDateStart, pDateEnd)
 		{	
 			var that = this;
 				that._data = {};

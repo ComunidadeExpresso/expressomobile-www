@@ -1,0 +1,58 @@
+<%
+var startTime = new Date(year, month - 1, day, 0, 0, 0);
+var endTime = new Date(year, month - 1, day, 23, 30, 0);
+%>
+<table id="eventsTable"> 
+
+
+	<% while (startTime.getTime() <= endTime.getTime()) { %>
+
+		<%
+			var pad = '00';
+			var hours = startTime.getHours();
+			var minutes = startTime.getMinutes();
+			var time = (pad.substring(0, pad.length - ("" + hours).length) + ("" + hours)) + ':' + (pad.substring(0, pad.length - ("" + minutes).length) + ("" + minutes));
+
+			if ((typeof(events) != 'undefined' && events.length > 0) && (typeof(hourlyBusy) != 'undefined' && hourlyBusy.length > 0))
+			{
+				
+				var event = hourlyBusy.filter(function (element)
+				{
+					return element.dateStart.getTime() == startTime.getTime();
+				});
+
+				var tdClass = 'description';
+				var description = '';
+				var eventID = 0;
+				var tdRowSpan = '';
+
+				if (event.length > 0)
+				{
+					tdClass += ' busy';
+					description = events[event[0].index].get('eventName') + ' - ' + events[event[0].index].get('eventDescription');
+					eventID = events[event[0].index].get('eventID');
+
+					if (event[0].rowSpan > 1)
+						tdRowSpan = ' rowSpan="' + event[0].rowSpan + '"';
+				}
+			}
+		%>
+
+		<tr>
+			<td class="hourly">
+				<%= time %>
+			</td>
+			<td class="<%= tdClass %>"<%= tdRowSpan %>>
+				<% if (description != '' && eventID != 0) { %>
+					<a href="/Calendar/Events/<%= eventID %>" title="Ver detalhes">
+						<%= description %>
+					</a>
+				<% } %>
+			</td>
+		</tr> 		
+
+		<% startTime.setMinutes(startTime.getMinutes() + 30); %>
+
+	<% } %>
+
+</table>
