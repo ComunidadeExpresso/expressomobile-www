@@ -591,3 +591,75 @@ body #page .main dl#contactsList dd ul li a div.info span.email { font-size: 13p
 }
 
 
+.messageInput {
+  min-height: 35px; 
+  background-color: #FFFFFF; 
+  border: 0px solid #CCCCCC; 
+  padding: 0px;
+  vertical-align: center;
+  width: 100%;
+}
+
+.messageBodyInput {
+  padding-top: 15px;
+  border: 0px;
+  padding-bottom: 50px;
+}
+
+.formListItem {
+  border-bottom: 1px solid #CCCCCC;
+  width: 100%;
+}
+
+.formFieldTitle {
+  float: left;
+  line-height: 50px;
+}
+
+.formField {
+  width: 100%;
+}
+
+.inputMessage {
+  border: 0px;
+  min-width: 250px; 
+  height: 50px; 
+  font-size: 18px;
+  float: left;
+}
+
+.recipientmsgTo {
+  float: left;
+}
+
+.recipientmsgCc {
+  float: left;
+}
+
+.recipientmsgBcc {
+  float: left;
+}
+
+.fakeTextarea {
+    -moz-appearance: textfield-multiline;
+    -webkit-appearance: textarea;
+    border: 0px solid gray;
+    font: medium -moz-fixed;
+    font: -webkit-small-control;
+    min-height: 50px;
+    overflow: auto;
+    padding: 2px;
+    /*resize: both;*/
+}
+
+
+.badge-write-message {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 10px;
+  background-color: #3a87ad;
+  font-size: 18px;
+  line-height: 30px;
+}
+
+

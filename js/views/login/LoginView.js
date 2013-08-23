@@ -13,12 +13,11 @@ define([
 ], function($, _, Backbone, Shared, MessagesModel, MessagesCollection, loginTemplate,LoadingView,HomeView,expressoIM,ExpressoCollection){
 
   var LoginView = Backbone.View.extend({
-    el: $("#mainAppPageContent"),
 
     render: function(){
 
-     
       this.$el.html(loginTemplate);
+      $("#mainAppPageContent").empty().append(this.$el);
 
     },
     events: {
@@ -46,7 +45,8 @@ define([
       var loadingView = new LoadingView({ el: $("#loadingLogin") });
       loadingView.render();
 
-    
+      var that = this; 
+
       Shared.api
       .resource('Login')
       .params({user:userName,password:passwd})
@@ -61,7 +61,6 @@ define([
           serverAPI: serverURL
         };
 
-        //Shared.api.setLocalStorageValue("auth",Shared.api.auth());
         Shared.api.setLocalStorageValue("expresso",expressoValues);
 
         var homeView = new HomeView();
@@ -73,9 +72,15 @@ define([
         return false;
       })
       .fail(function(result){
-        $("#mainAppPageContent").html(loginTemplate);
-        //Shared.router.navigate('Login',{trigger: true});
+
         alert(result.error.message);
+
+        //that.render();
+
+        //$("#mainAppPageContent").empty().append(that.$el);
+        //$("#mainAppPageContent").html(loginTemplate);
+        Shared.router.navigate('',{trigger: true});
+        
         
         return false;
       })

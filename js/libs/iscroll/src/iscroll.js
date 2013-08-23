@@ -143,13 +143,15 @@ var m = Math,
           			!(e.target instanceof HTMLSelectElement) && 
           		  	!(e.srcElement instanceof HTMLSelectElement) &&
 
+          		  	!((e.target instanceof HTMLDivElement) && ($(e.target).attr("contenteditable") == "true")) &&
+          		  	!(e.srcElement instanceof HTMLDivElement) &&
+
         		  	!(e.target instanceof HTMLTextAreaElement) && 
 		          	!(e.srcElement instanceof HTMLTextAreaElement)) {
 					
 						e.preventDefault(); 
 
 				}
-
 			},
 			onScrollStart: null,
 			onBeforeScrollMove: null,

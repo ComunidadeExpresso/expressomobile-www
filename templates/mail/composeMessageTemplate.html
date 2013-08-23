@@ -1,27 +1,110 @@
-<h2 class="ellipsis50">Nova Mensagem</h2>
+<h2 id="msgSubjectTitle" class="ellipsis50"><% if (message.get("msgSubject") != "") { %><%=message.get("msgSubject")%><% } else { %>Nova Mensagem<% } %></h2>
 <article id="wrapperDetail" class="container">
 	<div id="scrollerDetail">
-		<ul>
-			<li id="msgSubjectTitle" class="listPageTitle ellipsis">
-				
-			</li>
-			<li class="formListItem">
-				Para: <textarea id="msgTo" name="msgTo" style="width: 100%; height: 40px;" autocorrect="off" autocapitalize="off"></textarea>
-			</li>
-			<div id="msgCCBcc" style="display: none;">
-				<li class="formListItem">
-					Cc: <textarea id="msgCc" name="msgCc" style="width: 100%; height: 40px;" autocorrect="off" autocapitalize="off"></textarea>
-				</li>
-				<li class="formListItem">
-					Bcc: <textarea id="msgBcc" name="msgBcc" style="width: 100%; height: 40px;" autocorrect="off" autocapitalize="off"></textarea>
-				</li>
-			</div>
-			<li class="formListItem">
-				Assunto: <textarea id="msgSubject" name="msgSubject" style="width: 100%; height: 40px;" autocorrect="off" autocapitalize="off" onKeyPress="$('#msgSubjectTitle').html(this.value)"></textarea>
-			</li>
-			<li class="formListItem">
-				<textarea id="msgBody" name="msgBody" style="width: 100%; height: 100%; min-height: 300px;" autocorrect="off" autocapitalize="off"></textarea>
-			</li>
-		</ul>
+		<div id="composeMessage" style="margin: 10px;">
+			<dl>
+				<div id="composeMessageHeader">
+					<dd class="formListItem">
+						
+						<div id="msgToField" class="formField">
+							<div class="formFieldTitle">
+								Para:&nbsp;&nbsp;
+							</div>
+
+							<div id="msgToRecipients">
+								<% if (message.get("msgTo")) {  %>
+				                  	<% _.each(message.get("msgTo"), function(msgRecipient){ %>
+				                  		<div class="recipientmsgTo">
+						                    <span class="badge badge-write-message">
+						                    <% if ($.trim(msgRecipient.fullName) != '') { %> 
+						                      <%=$.trim(msgRecipient.fullName)%>
+						                    <% } else { %>
+						                      <%=msgRecipient.mailAddress%>
+						                    <% } %>
+						                    </span>
+						                    <input type="text" class="msgToInput hidden" value='<%=message.getEmailStringForMessageRecipient(msgRecipient)%>'>
+					                	</div>
+				                  	<% }); %>
+
+				                <% } %>
+			            	</div>
+			                <input type="text" id="msgToInput" name="msgToInput" class="inputMessage">
+
+						</div>
+						<div class="clear"></div>
+					</dd>
+					<div id="msgCCBcc" class="hidden">
+						<dd class="formListItem">
+							<div class="formFieldTitle">
+							Cc:&nbsp;&nbsp;
+							</div>
+							<div id="msgCcField" class="formField">
+
+								<div id="msgCcRecipients">
+									<% if (message.get("msgCc")) {  %>
+					                  	<% _.each(message.get("msgCc"), function(msgRecipient){ %>
+					                  		<div class="recipientmsgCc">
+							                    <span class="badge badge-write-message">
+							                    <% if ($.trim(msgRecipient.fullName) != '') { %> 
+							                      <%=$.trim(msgRecipient.fullName)%>
+							                    <% } else { %>
+							                      <%=msgRecipient.mailAddress%>
+							                    <% } %>
+							                    </span>
+							                    <input type="text" class="msgCcInput hidden" value='<%=message.getEmailStringForMessageRecipient(msgRecipient)%>'>
+						                	</div>
+					                  	<% }); %>
+
+					                <% } %>
+				            	</div>
+				                <input type="text" id="msgCcInput" name="msgCcInput" class="inputMessage">
+
+							</div>
+							<div class="clear"></div>
+						</dd>
+						<dd class="formListItem">
+							<div class="formFieldTitle">
+							Bcc:&nbsp;&nbsp;
+							</div>
+							<div id="msgBccField" class="formField">
+
+								<div id="msgBccRecipients">
+									<% if (message.get("msgBcc")) {  %>
+					                  	<% _.each(message.get("msgBcc"), function(msgRecipient){ %>
+					                  		<div class="recipientmsgBcc">
+							                    <span class="badge badge-write-message">
+							                    <% if ($.trim(msgRecipient.fullName) != '') { %> 
+							                      <%=$.trim(msgRecipient.fullName)%>
+							                    <% } else { %>
+							                      <%=msgRecipient.mailAddress%>
+							                    <% } %>
+							                    </span>
+							                    <input type="text" class="msgBccInput hidden" value='<%=message.getEmailStringForMessageRecipient(msgRecipient)%>'>
+						                	</div>
+					                  	<% }); %>
+
+					                <% } %>
+				            	</div>
+				                <input type="text" id="msgBccInput" name="msgBccInput" class="inputMessage">
+							</div>
+							<div class="clear"></div>
+						</dd>
+					</div>
+					<dd class="formListItem">
+						<div class="formFieldTitle">
+							Assunto:&nbsp;&nbsp;
+						</div>
+						<div class="formField">
+							<input type="text" id="msgSubjectInput" name="msgSubject" class="inputMessage" value="<%=message.get("msgSubject")%>" autocorrect="off" autocapitalize="off" style="width: 70%;">
+						</div>
+						<div class="clear"></div>
+					</dd>
+				</div>
+				<dd>
+					<div id="msgBodyInput" class="messageBodyInput" style="width: 100%;" contenteditable="true"><%=message.getMessageBody(true)%></div>
+					&nbsp;
+				</dd>
+			</dl>
+		</div>
 	</div>
 </article>

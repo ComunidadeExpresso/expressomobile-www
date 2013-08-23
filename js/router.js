@@ -22,7 +22,8 @@ define([
       'Home' : 'homeView',
       'Login' : 'loginView',
       'Mail/Folders/*folderID' : 'openFolderView',
-      'Mail/Message/New' : 'composeMessageView',
+      'Mail/Message/:secondViewName' : 'composeMessageView',
+      'Mail/Message/:secondViewName/:msgID/*folderID' : 'composeMessageView',
       'Mail/Messages/:msgID/*folderID' : 'detailMessageView',
       'Contacts' : 'contactsListView',
       'Contacts/:secondViewName' : 'contactsListView',
@@ -118,12 +119,13 @@ define([
   
     });
 
-    app_router.on('route:composeMessageView', function (msgID,folderID) {
+    app_router.on('route:composeMessageView', function (secondViewName,msgID,folderID) {
 
       var composeMessageView = new ComposeMessageView();
-
+      composeMessageView.secondViewName = secondViewName;
+      composeMessageView.msgID = msgID;
+      composeMessageView.folderID = folderID;
       composeMessageView.render();
-
       Shared.menuView.closeMenu();
   
     });

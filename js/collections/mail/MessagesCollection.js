@@ -80,6 +80,10 @@ define([
 
       },
 
+      getMessageByID: function(PfolderID,PmsgID) {
+        return this.getMessagesInFolder(PfolderID,PmsgID,'',1);
+      },
+
       execute: function() {
         return this.api.execute();
       },

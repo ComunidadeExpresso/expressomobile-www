@@ -37,7 +37,18 @@ define([
 
       getSendMessageMenu: function(folderID,msgID) {
         var menuItems = [
-            { route: "/Chat", title:"Enviar", iconClass : '', primary: true}
+            { route: "/Mail/Message/Send", title:"Enviar", iconClass : '', primary: true},
+            { route: "/Mail/Message/AddCcBcc", title:"Adicionar CC/BCC", iconClass : '', primary: false}
+            ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
+      },
+
+      getSendMessageMenuWithCC: function(folderID,msgID) {
+        var menuItems = [
+            { route: "/Mail/Message/Send", title:"Enviar", iconClass : '', primary: true},
+            { route: "/Mail/Message/RemoveCcBcc", title:"Remover CC/BCC", iconClass : '', primary: false}
             ];
 
         this.createModelsFromArray(menuItems);
