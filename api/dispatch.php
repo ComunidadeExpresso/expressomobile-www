@@ -36,10 +36,30 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		break;
 	case 'POST':
 
-		// Pass parameters by post fields
 		curl_setopt($curl, CURLOPT_URL, $url);
-		$data = "id=".$_POST['id']."&params=" . stripslashes(json_encode($_POST['params']));
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+		 if (!$_FILES) {
+			
+			$data = "id=".$_POST['id']."&params=" . stripslashes(json_encode($_POST['params']));
+			
+			curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+		} else {
+
+			$newPost = $_POST;
+
+			$newPost['params'] = stripslashes(json_encode($_POST['params']));
+
+			$i = 1;
+			foreach ($_FILES as $file) {
+				move_uploaded_file($file['tmp_name'], dirname($file['tmp_name']) . '/' . $file['name']);
+				$newPost['file_' . $i] = '@' . dirname($file['tmp_name']) . '/' . $file['name'];
+				//$newPost['file_' . $i] = curl_file_create($file['tmp_name'],$file['type'],$file['name']);
+				$i = $i + 1;
+			}
+
+			curl_setopt($curl, CURLOPT_POSTFIELDS, $newPost);
+		}
 
 		$result = curl_exec($curl);
 		break;

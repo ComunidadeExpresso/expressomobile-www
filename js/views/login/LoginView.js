@@ -25,8 +25,6 @@ define([
     },
     loginUser: function(ev) {
 
-      //Shared.api.context("/api/").crossdomain("http://api.expresso.pr.gov.br").phoneGap(false);
-
       var userName = $("#username").val();
       var passwd = $("#password").val();
 

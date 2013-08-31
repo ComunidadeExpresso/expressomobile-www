@@ -53,6 +53,8 @@ define([
 
       Shared.setCurrentView(1,this);
 
+      Shared.menuView.renderContextMenu('messageList',{folderID: that.folderID});
+
     },
 
     events: {

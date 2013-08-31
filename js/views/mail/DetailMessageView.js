@@ -11,7 +11,6 @@ define([
 
   var DetailMessageView = Backbone.View.extend({
 
-    el: $("#contentDetail"),
     folderID: 'INBOX',
     msgID: '',
     search: '',
@@ -21,13 +20,15 @@ define([
 
     render: function(){
 
-      var that = this;
-
       var elementID = "#contentDetail";
 
       if (Shared.isSmartPhone()) {
         elementID = "#content";
       }
+
+      this.$el.html("");
+
+      var that = this;
 
       if (this.msgID) {
 
@@ -46,7 +47,9 @@ define([
 
           var compiledTemplate = _.template( detailMessageTemplate, data );
 
-          $(elementID).html( compiledTemplate ); 
+          that.$el.html(compiledTemplate);
+
+          $(elementID).empty().append(that.$el);
 
           Shared.menuView.renderContextMenu(1,{folderID: that.folderID, msgID: that.msgID});
 
@@ -55,10 +58,24 @@ define([
         }).execute();
       }
 
-
     },
 
+    events:
+    {
+      'click .attachmentLink': 'openAttachment'
+    },
+
+    openAttachment: function(e) {
+      // console.log('openAttachment');
+      // console.log(e.currentTarget.getAttribute("href"));
+      e.preventDefault();
+      Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
+    },
+
+
     loaded: function () {
+
+      
 
       if (Shared.scrollDetail != null) {
         Shared.scrollDetail.destroy();
@@ -71,8 +88,7 @@ define([
       $('body').height($(window).height() - top);
       $('#wrapper').css('top', top + search);
 
-      var that = this;
-      Shared.scrollDetail = new iScroll('wrapperDetail');
+      Shared.scrollDetail = new iScroll('wrapperDetail',{hScroll: true, vScroll: true, hScrollBar: true, vScrollBar: true });
     }
 
   });

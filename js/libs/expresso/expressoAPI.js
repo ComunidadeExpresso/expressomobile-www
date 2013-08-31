@@ -4,6 +4,100 @@ define([
   'backbone',
 ], function($, _, Backbone){
 
+	jQuery.ajaxTransport( 'arraybuffer', function( options, originalOptions, jqXHR ) {
+        return {
+            send: function( headers, completeCallback ) {
+                jqXHR = new XMLHttpRequest();
+                jqXHR.open( options.type, options.url );
+                jqXHR.responseType = options.dataType;
+                jqXHR.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                jqXHR.timeout = options.xdrTimeout || Number.MAX_VALUE;
+                jqXHR.onload = function() { options.loadArrayBuffer( jqXHR.response ); };
+                jqXHR.send( ( options.hasContent && options.data ) || null );
+
+            },
+            abort: function() { if ( jqXHR ) { jqXHR.onerror = jQuery.noop; jqXHR.abort(); } }
+        };
+    });
+
+	//CHROME DOESN'T HAVE sendAsBinary METHOD FOR FILE UPLOAD, 
+	//THIS IS THE WORKAROUND.
+ //    try {
+	//   if (typeof XMLHttpRequest.prototype.sendAsBinary == 'undefined') {
+	//     XMLHttpRequest.prototype.sendAsBinary = function(text){
+	//     	alert('Chrome');
+	//       var data = new ArrayBuffer(text.length);
+	//       var ui8a = new Uint8Array(data, 0);
+	//       for (var i = 0; i < text.length; i++) ui8a[i] = (text.charCodeAt(i) & 0xff);
+	//       this.send(ui8a);
+	//     }
+	//   }
+	// } catch (e) {}
+
+
+	 jQuery.ajaxTransport( 'fileupload', function( options, originalOptions, jqXHR ) {
+        return {
+            send: function( headers, completeCallback ) {
+                jqXHR = new XMLHttpRequest();
+                jqXHR.open( options.type, options.url, true );
+                var boundary = 'AaB03x';
+                var body = '';
+
+                body += "--" + boundary + "\r\n";
+			    body += "Content-Disposition: form-data; name=\"id\"\r\n\r\n";
+			    body += options.id;
+			    body += "\r\n";
+
+			    if (!options.phoneGap) { 
+
+				    for ( var i in options.params ) {
+	                    body += "--" + boundary + "\r\n";
+	                    body += "Content-Disposition: form-data; name='params["+i+"]'\r\n\r\n";
+	                    body += options.params[i];
+	                    body += "\r\n";
+	                }
+
+                } else {
+
+                	body += "--" + boundary + "\r\n";
+				    body += "Content-Disposition: form-data; name=\"params\"\r\n\r\n";
+				    body += JSON.stringify(options.params);
+				    body += "\r\n";
+
+                }
+
+                for ( var i in options.files ) {
+                    body += "--" + boundary + "\r\n";
+                    body += "Content-Disposition: form-data; name='upload"+i+"'; filename='"+options.files[i].filename+"'\r\n";
+                    body += "Content-Type: application/octet-stream\r\n";
+                    body += "Content-Transfer-Encoding: binary\r\n\r\n";
+                    body += atob(options.files[i].src) + "\r\n";
+                }
+
+
+                body += "--" + boundary + "--";
+
+                jqXHR.onload = function() { options.loadArrayBuffer( jqXHR.response ); };
+                jqXHR.onerror = function(e) { console.log('ERROR'); console.log(e); }
+                jqXHR.setRequestHeader('content-type', 'multipart/form-data; boundary=' + boundary);
+
+			    var array = new Uint8Array(new ArrayBuffer(body.length));
+ 
+				for(i = 0; i < body.length; i++) {
+				  array[i] = body.charCodeAt(i);
+				}
+
+				//THIS WORKS ON CHROME, FIREFOX AND SAFARI,
+				//BUT IS STILL NOT WORKING IN PHONEGAP.
+				var blob = new Blob([array.buffer], {type: "binary"});
+			    jqXHR.send(blob);
+
+            },
+            abort: function() { if ( jqXHR ) { jqXHR.onerror = jQuery.noop; jqXHR.abort(); } }
+        };
+    });
+
+	
 	var ExpressoAPI = new function() {
 
 		var _id = "0";
@@ -14,9 +108,13 @@ define([
 
 		var _auth = "";
 
-		var _debug = false;
+		var _debug = true;
+
+		var _dataType = '';
 
 		var _data = {};
+
+		var _files = [];
 
 		var _phoneGap = true;
 
@@ -63,8 +161,15 @@ define([
 			return this;
 		};
 
+		this.dataType = function(value) {
+			if(value == undefined) return _dataType;
+			_dataType = value;
+			return this;
+		};
+
 		this.resource = function(value) {
 			if(value == undefined) return _data[_id].resource;
+			_dataType = '';
 			_data[_id].resource = '/' + String(value).replace(/^\/*|\/*$/g,'');
 			return this;
 		};
@@ -72,6 +177,16 @@ define([
 		this.type = function(value) {
 			if(value == undefined) return _data[_id].type;
 			_data[_id].type = (value.toUpperCase() == 'GET')? 'GET' : 'POST';
+			return this;
+		};
+
+		this.clearFiles = function() {
+			_files = [];
+			return this;
+		};
+
+		this.addFile = function(fileData,fileName) {
+			_files.push({ "filename": fileName, "src" : fileData});
 			return this;
 		};
 
@@ -155,7 +270,8 @@ define([
 		  
 		    }  
 		  
-		    return '';   */
+		    return '';   
+		  */
 		}
 
 		this.options = function(value) {
@@ -185,13 +301,45 @@ define([
 					id: 	_id,
 					params: JSON.stringify(_data[_id].send.params)
 				};
+				conf.params = _data[_id].send.params;
 				conf.crossDomain =  true;
+				conf.phoneGap = _phoneGap;
+				if (this.dataType() == 'arraybuffer') {
+					conf.dataType = this.dataType();
+					conf.loadArrayBuffer = function(arrayBuffer) {
+						if (_data[this.id].done) _data[this.id].done(arrayBuffer,_data[this.id].send);
+					};
+				}
+				if (this.dataType() == 'fileupload') {
+					conf.dataType = this.dataType();
+					conf.files = _files;
+					conf.loadArrayBuffer = function(arrayBuffer) {
+						if (_data[this.id].done) _data[this.id].done(arrayBuffer,_data[this.id].send);
+					};
+				}
 
 			} else {
 				conf.id		= _id;
 				conf.type	= this.type();
 				conf.url	= this.url();
 				conf.data	= _data[_id].send;
+				conf.params = _data[_id].send.params;
+				conf.phoneGap = _phoneGap;
+				if (this.dataType() == 'arraybuffer') {
+					conf.dataType = this.dataType();
+					conf.loadArrayBuffer = function(arrayBuffer) {
+						// var blob = new Blob([arrayBuffer]);
+						// console.log(blob.size);
+						if (_data[this.id].done) _data[this.id].done(arrayBuffer,_data[this.id].send);
+					};
+				}
+				if (this.dataType() == 'fileupload') {
+					conf.dataType = this.dataType();
+					conf.files = _files;
+					conf.loadArrayBuffer = function(arrayBuffer) {
+						if (_data[this.id].done) _data[this.id].done(arrayBuffer,_data[this.id].send);
+					};
+				}
 				
 			}
 			
@@ -207,31 +355,40 @@ define([
 			}
 			
 			jQuery.ajax(conf).done(function(response) {
+
 				if (response && response.result) {
 					if (_debug) {
 						console.log('ExpressoAPI - DONE callback');
 						console.log(JSON.stringify(response));
 					}
+					console.log('ExpressoAPI - DONE callback');
+					console.log(JSON.stringify(response));
 					if (response.result.auth) ExpressoAPI.auth(response.result.auth);
-					if (_data[this.id].resource=='/Logout') ExpressoAPI.auth("");
-					if (_data[this.id].done) _data[this.id].done(response.result,_data[this.id].send);
+					if (_data[this.id]) {
+						if (_data[this.id].resource=='/Logout') ExpressoAPI.auth("");
+						if (_data[this.id].done) _data[this.id].done(response.result,_data[this.id].send);
+					}
 				} else {
 					if (_debug) {
 						console.log('ExpressoAPI - ERROR callback');
 						console.log(JSON.stringify(response));
 					}
-					if (_data[this.id].fail) _data[this.id].fail(response,_data[this.id].send);
+					if (_data[this.id].done) _data[this.id].done(response,_data[this.id].send);
 				}
+
 			}).fail(function(response) {
 				if (_debug) {
 					console.log('ExpressoAPI - FAIL callback');
 					console.log(JSON.stringify(response));
 				}
 				if (_data[this.id].fail) _data[this.id].fail(response,_data[this.id].send);
+
 			}).always(function() {
 				if (_debug) console.log('ExpressoAPI - ALWAYS callback');
-				if (_data[this.id].always) _data[this.id].always(_data[this.id].send);
-				delete _data[this.id];
+				if (_data[this.id]) {
+					if (_data[this.id].always) _data[this.id].always(_data[this.id].send);
+					delete _data[this.id];
+				}
 			});
 			this.id(_id+1);
 			return this;

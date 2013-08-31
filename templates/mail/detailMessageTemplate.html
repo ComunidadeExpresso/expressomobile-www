@@ -1,74 +1,120 @@
 <% _.each(messages, function(message){ %>
 <h2 class="ellipsis50"><%= message.get("msgSubject") %></h2>
 <article id="wrapperDetail" class="container">
-<div id="scrollerDetail">
-    <div class="white-block detail-box pad-2">
-                    
-              <div class="head">
-                <div class="msg-list-images">
-                  <% if (message.get("msgHasAttachments") == '1') { %>
-                  <div class="msg-attachments"></div>
-                  <% } %>
-                  <% if (message.get("msgFlagged") == '1') { %>
-                  <div class="msg-flagged"></div>
-                  <% } %>
-                  <% if (message.get("msgForwarded") == '1') { %>
-                  <div class="msg-forwarded"></div>
-                  <% } %>
-                  <div class="clear"></div>
-                </div>
-                De:
-                <span class="badge badge-info">
-                 <%= message.get("msgFrom").mailAddress %>
-              </span>
-              </div>
-              
-              <p class="desc">
-                 Para: 
-                 <% if (message.get("msgTo")) {  %>
-                  <% _.each(message.get("msgTo"), function(msgRecipient){ %>
-                    <span class="badge">
-                    <% if ($.trim(msgRecipient.fullName) != '') { %> 
-                      <%=$.trim(msgRecipient.fullName)%>
-                    <% } else { %>
-                      <%=msgRecipient.mailAddress%>
-                    <% } %>
-                    </span>
-                  <% }); %>
-                  <% } %>
-                  <% if (message.get("msgCc")) {  %>
-                  <br>Cc:
-                  <% _.each(message.get("msgCc"), function(msgRecipientCc){ %>
-                    <span class="badge">
-                    <% if ($.trim(msgRecipientCc.fullName) != '') { %> 
-                      <%=$.trim(msgRecipientCc.fullName)%>
-                    <% } else { %>
-                      <%=msgRecipientCc.mailAddress%>
-                    <% } %>
-                    </span>
-                  <% }); %>
-                  <% } %>
-                  <% if (message.get("msgBcc")) {  %>
-                  <br>Cc:
-                  <% _.each(message.get("msgBcc"), function(msgRecipientBcc){ %>
-                    <span class="badge">
-                    <% if ($.trim(msgRecipientBcc.fullName) != '') { %> 
-                      <%=$.trim(msgRecipientBcc.fullName)%>
-                    <% } else { %>
-                      <%=msgRecipientBcc.mailAddress%>
-                    <% } %>
-                    </span>
-                  <% }); %>
-                  <% } %>
-              </p>
-              
-              <div class="comments">23/07/2013 as 20:00
-              <p style="float: right; font-size: 14px; margin-right: 10px;">Mostrar mais detalhes...</p></div>
-              
-              <div class="clear"></div>
+  <div id="scrollerDetail">
+    <table id="messageDetails"> 
+      <tr>
+        <td class="item">
+          De:
+        </td>
+        <td class="description">
+          <span class="badge badge-write-message">
+             <%= message.get("msgFrom").mailAddress %>
+          </span>
+        </td>
+        <td>
+          <div class="msg-list-images">
+            <% if (message.get("msgHasAttachments") == '1') { %>
+            <div class="msg-attachments"></div>
+            <% } %>
+            <% if (message.get("msgFlagged") == '1') { %>
+            <div class="msg-flagged"></div>
+            <% } %>
+            <% if (message.get("msgForwarded") == '1') { %>
+            <div class="msg-forwarded"></div>
+            <% } %>
+            <div class="clear"></div>
+          </div>
+        </td>
+      </tr> 
+      <div id="msgDetails" class="hidden">
+        <tr>
+          <td class="item">
+            Para:
+          </td>
+          <td class="description" colspan="2">
+            <% if (message.get("msgTo")) {  %>
+              <% _.each(message.get("msgTo"), function(msgRecipient){ %>
+                <span class="badge badge-write-message">
+                <% if ($.trim(msgRecipient.fullName) != '') { %> 
+                  <%=$.trim(msgRecipient.fullName)%>
+                <% } else { %>
+                  <%=msgRecipient.mailAddress%>
+                <% } %>
+                </span>
+              <% }); %>
+            <% } %>
+          </td>
+        </tr> 
+        <% if (message.get("msgCc")) {  %>
+        <tr>
+          <td class="item">
+            Cc:
+          </td>
+          <td class="description" colspan="2">
+              <% _.each(message.get("msgCc"), function(msgRecipientCc){ %>
+                <span class="badge badge-write-message">
+                <% if ($.trim(msgRecipientCc.fullName) != '') { %> 
+                  <%=$.trim(msgRecipientCc.fullName)%>
+                <% } else { %>
+                  <%=msgRecipientCc.mailAddress%>
+                <% } %>
+                </span>
+              <% }); %>
             
-            </div>
-    <p><%=message.getMessageBody(false)%></p>
+          </td>
+        </tr> 
+        <% } %>
+        <% if (message.get("msgBcc")) {  %>
+        <tr>
+          <td class="item">
+            Bcc:
+          </td>
+          <td class="description" colspan="2">
+              <% _.each(message.get("msgBcc"), function(msgRecipientBcc){ %>
+                <span class="badge badge-write-message">
+                <% if ($.trim(msgRecipientBcc.fullName) != '') { %> 
+                  <%=$.trim(msgRecipientBcc.fullName)%>
+                <% } else { %>
+                  <%=msgRecipientBcc.mailAddress%>
+                <% } %>
+                </span>
+              <% }); %>
+          </td>
+        </tr> 
+        <% } %>
+      </div>
+      <% if (message.get("msgAttachments")) {  %>
+      <tr>
+        <td class="item">
+          Anexos:
+        </td>
+        <td class="description" colspan="2">
+            <% 
+            var attachments = message.get("msgAttachments");
+            for (var i in attachments) {
+            %>
+              <br>
+              <a href="<%=message.getAttachmentRoute(attachments[i].attachmentID)%>" class="attachmentLink">
+                <span class="badge badge-attachment">
+                <%=$.trim(attachments[i].attachmentName)%>
+                <%=message.getAttachmentSize(attachments[i].attachmentID)%>
+                </span>
+              </a>
+              <br>
+              <a href="<%=message.getDownloadAttachmentRoute(attachments[i].attachmentID)%>" class="attachmentLink">
+                  Download
+              </a>
+            <% } %>
+        </td>
+      </tr> 
+      <% } %>
+      <tr>
+        <td class="itemBody" colspan="3">
+          <%=message.getMessageBody(false)%>
+        </td>
+      </tr> 
+    </table>
   </div>
 </article>
 <% }); %>

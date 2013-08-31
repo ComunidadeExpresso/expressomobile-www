@@ -34,9 +34,17 @@ define([
 
       $(elementID).empty().append(this.$el);
 
-      Shared.menuView.renderContextMenu('newMessage',{});
+      this.renderContextMenu();
 
       this.loaded();
+    },
+
+    renderContextMenu: function() {
+      if ($("#msgCcRow").hasClass("hidden")) {
+        Shared.menuView.renderContextMenu('newMessage',{});
+      } else {
+        Shared.menuView.renderContextMenu('newMessageWithCc',{});
+      }
     },
 
     render: function(){
@@ -54,7 +62,8 @@ define([
         var pMessage = new MessagesModel();
         pMessage.set("msgSubject","");
         pMessage.set("msgTo",[]);
-        //pMessage.addRecipient("msgTo","projetomobile@celepar.pr.gov.br","Projeto Mobile");
+        pMessage.set("msgCc",[]);
+        pMessage.set("msgBcc",[]);
         pMessage.set("msgBody","");
 
         this.renderComposeMessage(pMessage);
@@ -65,10 +74,12 @@ define([
 
         var onSendMessage = function() {
           Shared.router.navigate("/Mail/Messages/" + this.folderID,{ trigger: true });
+          alert("Sua Mensagem foi Enviada!");
         };
 
         var onFailSendMessage = function() {
-
+          Shared.router.navigate("/Mail/Messages/" + this.folderID,{ trigger: true });
+          alert("Ocorreu um erro ao Enviar sua Mensagem.");
         };
 
         var Message = this.getNewMessageModel();
@@ -78,6 +89,31 @@ define([
 
         Message.send(onSendMessage,onFailSendMessage);
 
+      }
+
+      if (this.secondViewName == "AttachPicture") {
+
+        var uploadPhoto = function(imageData) {
+
+          that.showAttachments();
+
+          that.prependAttachmentImage(imageData);
+
+          that.renderContextMenu();
+
+        };
+        var onFail = function onFail(message) {
+            alert('Não foi possível adicionar a foto aos anexos.');
+        };
+        if (navigator.camera != undefined) {
+          // navigator.camera.getPicture(uploadPhoto, onFail, { quality: 60, 
+          // destinationType: Camera.DestinationType.DATA_URL, sourceType: Camera.PictureSourceType.PHOTOLIBRARY }); 
+
+          navigator.camera.getPicture(uploadPhoto, onFail, { quality: 60, 
+            destinationType: Camera.DestinationType.DATA_URL }); 
+        } else {
+          alert("Seu dispositivo não possui câmera!");
+        }
       }
 
       if (this.secondViewName == "DelMessage") {
@@ -178,14 +214,15 @@ define([
     },
 
     events: {
-      "keypress #msgToInput" : "addRecipientTo",
+      "keydown #msgToInput" : "addRecipientTo",
       "keydown #msgCcInput" : "addRecipientTo",
       "keydown #msgBccInput" : "addRecipientTo",
       "keydown #msgSubjectInput" : "updateSubject",
       "keydown #msgBodyInput" : "updateBody",
-      "click #msgToField" : "focusRecipientTo",
-      "click #msgCcField" : "focusRecipientCc",
-      "click #msgBccField" : "focusRecipientBcc",
+      "click #msgToRow" : "focusRecipientTo",
+      "click #msgCcRow" : "focusRecipientCc",
+      "click #msgBccRow" : "focusRecipientBcc",
+      "click #msgSubjectRow" : "focusSubject",
     },
 
     updateSubject: function(e) {
@@ -210,6 +247,14 @@ define([
 
     focusRecipientBcc: function(e) {
       $("#msgBccInput").focus();
+    },
+
+    focusSubject: function(e) {
+      $("#msgSubjectInput").focus();
+    },
+
+    showAttachments: function(e) {
+      $("#msgAttachmentsRow").removeClass("hidden");
     },
 
 
@@ -274,6 +319,26 @@ define([
       }
     },
 
+    prependAttachmentImage: function(imageData) {
+
+      var div = $("<figure />").addClass("recipientmsgAttachments");
+
+      var image = $("<img />");
+      image.attr("width","70");
+      image.attr("height","80");
+      image.addClass("attachmentImage");
+      image.attr("src","data:image/jpeg;base64," + imageData);
+
+      var link = $("<a />").attr("href","/Mail/Message/RemoveAttachment/");
+      
+      image.appendTo(link);
+      link.appendTo(div);
+
+      div.appendTo($("#polaroid"));
+
+      this.updateBody();
+    },
+
     prependEmailRecipientBadgeToDiv: function(prefix,divID,emailRecipient) {
 
       var div = $("<div />").addClass("recipient" + prefix);
@@ -303,6 +368,7 @@ define([
           string = string + ", ";
         }
       });
+      string = string + ", " + $("#" + prefix + "Input").val();
       return string;
     },
 
@@ -335,18 +401,27 @@ define([
         "msgType" : "html"
       }
 
-      console.log(message);
-
       var mModel = new MessagesModel(message);
+
+      var bstr = 'base64,';
+
+      mModel.clearFiles();
+
+      $('.attachmentImage').each(function(i, obj) {
+        var src = $(obj).attr('src').substr($(obj).attr('src').indexOf(bstr)+bstr.length);
+        mModel.addFile(src,'anexo_' + (i + 1) + '.png');
+      }); 
 
       return mModel;
     },
 
     toggleCCBcc: function() {
-      if ($("#msgCCBcc").hasClass("hidden")) {
-        $("#msgCCBcc").removeClass("hidden");
+      if ($("#msgCcRow").hasClass("hidden")) {
+        $("#msgCcRow").removeClass("hidden");
+        $("#msgBccRow").removeClass("hidden");
       } else {
-        $("#msgCCBcc").addClass("hidden");
+        $("#msgCcRow").addClass("hidden");
+        $("#msgBccRow").addClass("hidden");
       }
       
     },
@@ -369,7 +444,6 @@ define([
 
       this.refreshWindowHeight();
 
-      
       Shared.scrollDetail = new iScroll('wrapperDetail');
     }
   });

@@ -721,8 +721,107 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
   padding-right: 10px;
   margin-right: 10px;
   background-color: #3a87ad;
+  font-size: 16px;
+  line-height: 30px;
+}
+
+
+/** Mensagens - Detalhes da Mensagem **/
+body #page .main table#messageDetails { width: 100%; font-size: 16px; border-spacing: 0; margin-top: 1px; }
+body #page .main table#messageDetails tr { height: 60px; }
+body #page .main table#messageDetails tr td { border-bottom: 1px solid #CCCCCC; border-top: 1px #FFF solid; min-height: 60px; }
+body #page .main table#messageDetails tr td.item { border-left: 8px solid #3A87AD; color: #3A87AD; width: 50px; font-weight: bold; text-align: left; padding-left: 5px; }
+body #page .main table#messageDetails tr td.description { padding: 12px; color: #777777; font-size: 14px;}
+body #page .main table#messageDetails tr td.descriptionCompose { padding: 0px; color: #777777; font-size: 14px;}
+body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3A87AD; padding-left: 5px; }
+
+.badge-attachment {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 10px;
+  background-color: #137300;
   font-size: 18px;
   line-height: 30px;
 }
 
 
+figure, figcaption {
+display: block;
+}
+#polaroid{
+width:100%;
+overflow:hidden;
+padding:20px 10px;
+}
+#polaroid figure{
+float:left;
+position:relative;
+width:70px;
+margin:10px 20px;
+padding: 6px 8px 10px 8px;
+-webkit-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
+-moz-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
+box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
+background: #eee6d8;
+background: -webkit-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
+background: -moz-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
+background: -o-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
+background: -ms-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
+background: linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
+-webkit-transform:rotate(-1deg);
+-moz-transform: rotate(-1deg);
+-o-transform: rotate(-1deg);
+-ms-transform: rotate(-1deg);
+transform: rotate(-1deg);
+-webkit-backface-visibility:hidden; /*prevent rotated text being jagged in Chrome and Safari*/
+}
+#poaroid figure:nth-child(even) {
+-webkit-transform:rotate(2deg);
+-moz-transform: rotate(2deg);
+-o-transform: rotate(2deg);
+-ms-transform: rotate(2deg);
+transform: rotate(2deg);
+-webkit-backface-visibility:hidden; /*prevent rotated text being jagged in Chrome and Safari*/
+-webkit-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
+-moz-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
+box-shadow: -4px 4px 8px -4px rgba(0, 0, 0, .75);
+}
+#polaroid figure:before {
+content: '';
+display: block;
+position: absolute;
+left:5px;
+top: -15px;
+width: 75px;
+height: 25px;
+background-color: rgba(222,220,198,0.7);
+-webkit-transform: rotate(-12deg);
+-moz-transform: rotate(-12deg);
+-o-transform: rotate(-12deg);
+-ms-transform: rotate(-12deg);
+}
+#polaroid figure:nth-child(even):before {
+left:150px;
+top: -15px;
+width: 55px;
+height: 25px;
+-webkit-transform: rotate(12deg);
+-moz-transform: rotate(12deg);
+-o-transform: rotate(12deg);
+-ms-transform: rotate(12deg);
+}
+#polaroid figcaption{
+text-align:center;
+font-family: 'Reenie Beanie', cursive; /*Reenie Beanie is available through Google Webfonts http://code.google.com/webfonts/specimen/Reenie+Beanie*/
+font-size:1.3em;
+color:#454f40;
+letter-spacing:0.09em;
+}
+/**IE Hacks - see http://css3pie.com/ for more info on how to use CS3Pie and to download the latest version**/
+#polaroid figure{
+-pie-background: linear-gradient(#ede1c9, #fef8e2 20%, #f2ebde 60%);
+behavior: url(assets/pie/PIE.htc);
+position:relative; /*required to make PIE work*/
+padding-top:10px\9;
+padding-right:10px\9;
+}

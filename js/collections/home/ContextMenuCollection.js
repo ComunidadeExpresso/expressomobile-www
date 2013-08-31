@@ -22,6 +22,16 @@ define([
         }
       },
 
+      getMessagesListMenu: function(folderID) {
+        var menuItems = [
+            { route: "/Mail/Message/New", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
+            { route: "/Mail/Folder/New", title: "Nova Pasta", primary: false}
+          ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
+      },
+
       getDetailMessageMenu: function(folderID,msgID) {
         var menuItems = [
             { route: "/Mail/Message/New", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
@@ -41,6 +51,12 @@ define([
             { route: "/Mail/Message/AddCcBcc", title:"Adicionar CC/BCC", iconClass : '', primary: false}
             ];
 
+        var takePicture = {route: "/Mail/Message/AttachPicture", title: "Tirar Foto", iconClass: '', primary: false};
+
+        //if (Shared.api.phoneGap()) {
+          menuItems.push(takePicture);
+        //}
+
         this.createModelsFromArray(menuItems);
         return this;
       },
@@ -50,6 +66,12 @@ define([
             { route: "/Mail/Message/Send", title:"Enviar", iconClass : '', primary: true},
             { route: "/Mail/Message/RemoveCcBcc", title:"Remover CC/BCC", iconClass : '', primary: false}
             ];
+
+        var takePicture = {route: "/Mail/Message/AttachPicture", title: "Tirar Foto", iconClass: '', primary: false};
+
+        if (Shared.api.phoneGap()) {
+          menuItems.push(takePicture);
+        }
 
         this.createModelsFromArray(menuItems);
         return this;

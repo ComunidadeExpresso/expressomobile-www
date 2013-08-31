@@ -36,7 +36,8 @@ define([
         msgSeen: "",
         msgSize: "",
         msgBodyResume: "",
-        msgType: ""
+        msgType: "",
+        files: [],
     },
 
     initialize: function() {
@@ -47,6 +48,21 @@ define([
 		  this.deleteResource = '/Mail/DelMessage';
     },
 
+    clearFiles: function() {
+      this.set("files",[]);    
+    },
+
+    addFile: function(fileData,fileName) {
+      var files = this.get("files");
+      var file = {
+        "filename" : fileName,
+        "src": fileData,
+      };
+
+      files.push(file);
+
+      this.set("files",files);
+    },
     
     route: function() {
       return '/Mail/Messages/' + this.get("msgID") + "/" + this.get("folderID");
@@ -68,8 +84,41 @@ define([
       return resultString;
     },
 
+    getAttachmentRoute: function(attachmentID) {
+      var retVal = '';
+      var that = this;
+      _.each(this.get("msgAttachments"), function(msgAttachment){
+        if (msgAttachment.attachmentID == attachmentID) {
+          retVal = '/Mail/Message/Attachment/' + msgAttachment.attachmentID + "=-=" + msgAttachment.attachmentName + "=-=" + msgAttachment.attachmentEncoding+ "=-="+ msgAttachment.attachmentIndex + "=-=" + that.get("msgID") + "=-=" + that.get("folderID");
+        }
+      });
+      return retVal;
+    },
+
+    getDownloadAttachmentRoute: function(attachmentID) {
+      var retVal = '';
+      var that = this;
+      _.each(this.get("msgAttachments"), function(msgAttachment){
+        if (msgAttachment.attachmentID == attachmentID) {
+          retVal = '/Mail/Message/DownloadAttachment/' + msgAttachment.attachmentID + "=-=" + msgAttachment.attachmentName + "=-=" + msgAttachment.attachmentEncoding+ "=-="+ msgAttachment.attachmentIndex + "=-=" + that.get("msgID") + "=-=" + that.get("folderID");
+        }
+      });
+      return retVal;
+    },
+
+    getAttachmentSize: function(attachmentID) {
+      var retVal = '';
+      var that = this;
+      _.each(this.get("msgAttachments"), function(msgAttachment){
+        if (msgAttachment.attachmentID == attachmentID) {
+          retVal = that.bytesToSize(msgAttachment.attachmentSize,0);
+        }
+      });
+      return "(" + retVal + ")";
+    },
+
     getMessageBody: function(signature) {
-      console.log("getMessageBody");
+      //console.log("getMessageBody");
       // var tmp = document.createElement("DIV");
       // tmp.innerHTML = this.get("msgBody");
       // var retString = tmp.textContent || tmp.innerText || "";
@@ -77,12 +126,12 @@ define([
       if (signature == true) {
         retString = this.getUserSignature() + retString;
       }
-      console.log(retString);
+      //console.log(retString);
       return retString;
     },
 
     getUserSignature: function() {
-      return "<br><br>Atenciosamente,<br>Jair Goncalves Pereira Junior<br><br><br>Mensagem Enviada do Expresso Mobile.<br><br><br>";
+      return "<br><br>Atenciosamente,<br>Jair Goncalves Pereira Junior<br><br><br>Mensagem Enviada do Expresso Mobile.";
     },
 
     getEmailStringForMessageRecipient: function(emailRecipient) {
@@ -129,14 +178,25 @@ define([
         msgType:this.get("msgType")
       };
 
+      var files = this.get("files");
+
       this.api
       .resource(this.createResource)
-      .params(params)
+      .params(params);
+
+      this.api.clearFiles();
+
+      for (var i in files) {
+        this.api.addFile(files[i].src,files[i].filename);
+      }
+
+      this.api
+      .dataType("fileupload")
       .done(function(result){
         callbackSuccess(result);
       })
       .fail(function(error) {
-        callbackFail(result);
+        callbackFail(error);
       })
       .execute();
     },
@@ -152,9 +212,36 @@ define([
       	callbackSuccess(result);
       })
       .fail(function(error) {
-        callbackFail(result);
+        callbackFail(error);
       })
       .execute();
+    },
+
+    bytesToSize: function(bytes, precision)
+    {  
+        var kilobyte = 1024;
+        var megabyte = kilobyte * 1024;
+        var gigabyte = megabyte * 1024;
+        var terabyte = gigabyte * 1024;
+       
+        if ((bytes >= 0) && (bytes < kilobyte)) {
+            return bytes + ' B';
+     
+        } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
+            return (bytes / kilobyte).toFixed(precision) + ' KB';
+     
+        } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
+            return (bytes / megabyte).toFixed(precision) + ' MB';
+     
+        } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
+            return (bytes / gigabyte).toFixed(precision) + ' GB';
+     
+        } else if (bytes >= terabyte) {
+            return (bytes / terabyte).toFixed(precision) + ' TB';
+     
+        } else {
+            return bytes + ' B';
+        }
     },
 
   });
