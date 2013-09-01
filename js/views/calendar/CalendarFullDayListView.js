@@ -27,7 +27,7 @@ define([
 			var contentTitle = $('#contentTitle');
 			var container = $('#scroller');
 
-			if (!Shared.isSmartPhone())
+			if (!Shared.isSmartPhoneResolution())
 			{
 				$('#contentDetail').html(_.template(detailContentTemplate));
 

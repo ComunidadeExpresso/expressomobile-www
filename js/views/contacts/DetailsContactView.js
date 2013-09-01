@@ -25,7 +25,7 @@ define([
 
 			$(detailElementID).html("");
 
-			if (Shared.isSmartPhone())
+			if (Shared.isSmartPhoneResolution())
 				detailElementID = "#content";
 
 			var loadingView = new LoadingView({el: $(detailElementID)});
@@ -56,7 +56,7 @@ define([
 
 		loaded: function () 
 		{
-			if (Shared.isSmartPhone())
+			if (Shared.isSmartPhoneResolution())
 			{
 				$('#wrapperDetail').removeAttr('id').attr('id', 'wrapper');
 				$('#scrollerDetail').removeAttr('id').attr('id', 'scroller');

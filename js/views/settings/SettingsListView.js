@@ -26,7 +26,7 @@ define([
 
       $(detailElementID).html("");
 
-      if (Shared.isSmartPhone()) {
+      if (Shared.isSmartPhoneResolution()) {
         detailElementID = "#content";
       }
       

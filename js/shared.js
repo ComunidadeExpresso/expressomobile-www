@@ -32,6 +32,34 @@ define([
 
   Shared.im.resource("NEW_RESOURCE").url(Shared.im_url).domain(Shared.im_domain);
 
+  //CHECKS IF THE DEVICE IS AN SMARTPHONE OR AN TABLET RESOLUTION
+  Shared.isTabletResolution = function() {
+    return ($(window).width() >= 720);
+  };
+  Shared.isSmartPhoneResolution = function() {
+    return !Shared.isTabletResolution();
+  };
+
+  //CHECKS IF THE USER IS IN A BROWSER IN A DESKTOP OR IN A PHONEGAP APPLICATION
+  Shared.isDesktop = function() {
+    var retVal = true;
+    if (Shared.isPhonegap() || (Shared.isAndroid()) || (Shared.isIDevice())) {
+      retVal = false;
+    }
+    return retVal;
+  };
+  Shared.isPhonegap = function() {
+    return Shared.api.phonegap();
+  };
+
+  //CHECKS IF THE DEVICE IS AN ANDROID OR AN IPHONE/IPAD DEVICE.
+  Shared.isAndroid = function() {
+    return (/android/gi).test(navigator.appVersion);
+  };
+  Shared.isIDevice = function() {
+    return (/iphone|ipad/gi).test(navigator.appVersion);
+  };
+
   Shared.scrollerRefresh = function () {
     if (Shared.scrollDetail) {
       Shared.scrollDetail.refresh();
@@ -52,7 +80,7 @@ define([
       }
       Shared.contentView = view;
     } else {
-      if (Shared.isSmartPhone()) {
+      if (Shared.isSmartPhoneResolution()) {
         if (Shared.contentView != null) {
           Shared.contentView.undelegateEvents();
         }
@@ -66,13 +94,7 @@ define([
     }
   };
 
-  Shared.isSmartPhone = function() {
-    var retVal = false;
-    if ($('body').hasClass('smartphone')) {
-      retVal = true;
-    }
-    return retVal;
-  }
+
 
   Shared.deviceType = function(smartphone) {
     if (smartphone) {

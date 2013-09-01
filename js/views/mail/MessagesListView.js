@@ -34,7 +34,7 @@ define([
       var doneFunction = function() { 
         console.log('HasDone'); 
 
-        if (!Shared.isSmartPhone()) {
+        if (Shared.isTabletResolution()) {
            that.selectFirstMessage(); 
         }
 

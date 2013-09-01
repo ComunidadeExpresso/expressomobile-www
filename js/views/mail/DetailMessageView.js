@@ -22,7 +22,7 @@ define([
 
       var elementID = "#contentDetail";
 
-      if (Shared.isSmartPhone()) {
+      if (Shared.isSmartPhoneResolution()) {
         elementID = "#content";
       }
 

@@ -83,7 +83,7 @@ define([
 
 		listDayEvents: function(data)
 		{
-			// if (!Shared.isSmartPhone() || !this.fullDay)
+			// if (!Shared.isSmartPhoneResolution() || !this.fullDay)
 			// {
 				// var calendarFullDayListView = new CalendarFullDayListView({el: $('#scroller')});
 				var calendarFullDayListView = new CalendarFullDayListView();

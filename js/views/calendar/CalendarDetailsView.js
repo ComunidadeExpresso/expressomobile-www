@@ -19,7 +19,7 @@ define([
 			var that = this;
 			var contentTitle = $('#contentTitle');
 
-			if (!Shared.isSmartPhone())
+			if (!Shared.isSmartPhoneResolution())
 			{
 				$('#contentDetail').html(_.template(detailContentTemplate));
 
@@ -72,7 +72,7 @@ define([
 
 		loaded: function()
 		{
-			if (!Shared.isSmartPhone())
+			if (!Shared.isSmartPhoneResolution())
 				Shared.scrollDetail = new iScroll('wrapperDetail');
 			else
 				Shared.scroll = new iScroll('wrapper');

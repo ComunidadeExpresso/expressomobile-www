@@ -19,7 +19,7 @@ define([
     renderComposeMessage: function(pMessage) {
       var elementID = "#contentDetail";
 
-      if (Shared.isSmartPhone()) {
+      if (Shared.isSmartPhoneResolution()) {
         elementID = "#content";
       }
 
@@ -35,6 +35,35 @@ define([
       $(elementID).empty().append(this.$el);
 
       this.renderContextMenu();
+
+      var that = this;
+
+      var handleFileSelect = function(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+
+        var files = evt.dataTransfer.files; 
+
+        var output = [];
+        for (var i = 0, f; f = files[i]; i++) {
+
+          output.push("<div class='simple-attachment'><div class='icon'></div><div class='attachment-name'>" + escape(f.name) + "</div><div class='attachment-size'>" + f.size + " bytes</div></div>");
+
+        }
+        $("#msgAttachmentsRecipients").prepend(output.join(''));
+
+        that.updateBody();
+      }
+
+      var handleDragOver = function(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+        evt.dataTransfer.dropEffect = 'copy'; 
+      }
+
+      var dropZone = document.getElementById('msgAttachmentsRecipients');
+      dropZone.addEventListener('dragover', handleDragOver, false);
+      dropZone.addEventListener('drop', handleFileSelect, false);
 
       this.loaded();
     },
@@ -53,7 +82,7 @@ define([
 
       var that = this;
 
-      if (Shared.isSmartPhone()) {
+      if (Shared.isSmartPhoneResolution()) {
         elementID = "#content";
       }
 
@@ -80,6 +109,9 @@ define([
         var onFailSendMessage = function() {
           Shared.router.navigate("/Mail/Messages/" + this.folderID,{ trigger: true });
           alert("Ocorreu um erro ao Enviar sua Mensagem.");
+
+          // 88, 1.88  - 299
+          // 78, 1.88  - 
         };
 
         var Message = this.getNewMessageModel();
@@ -223,6 +255,13 @@ define([
       "click #msgCcRow" : "focusRecipientCc",
       "click #msgBccRow" : "focusRecipientBcc",
       "click #msgSubjectRow" : "focusSubject",
+      // "dragover #drop_zone" : "dragover",
+    },
+
+    dragover: function(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      evt.dataTransfer.dropEffect = 'copy'; 
     },
 
     updateSubject: function(e) {
@@ -334,7 +373,7 @@ define([
       image.appendTo(link);
       link.appendTo(div);
 
-      div.appendTo($("#polaroid"));
+      div.appendTo($("#msgAttachmentsRecipients"));
 
       this.updateBody();
     },

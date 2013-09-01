@@ -37,7 +37,7 @@ define([
 
 			$(detailElementID).html("");
 
-			if (Shared.isSmartPhone())
+			if (Shared.isSmartPhoneResolution())
 				detailElementID = "#content";
 
 			var compiledTemplate = _.template(ContactsListTemplate, data);

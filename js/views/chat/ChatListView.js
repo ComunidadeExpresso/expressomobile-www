@@ -20,7 +20,7 @@ define([
       var primaryElementID = "#content";
       var detailElementID = "#contentDetail";
 
-      if (Shared.isSmartPhone()) {
+      if (Shared.isSmartPhoneResolution()) {
         detailElementID = "#content";
       }
 
