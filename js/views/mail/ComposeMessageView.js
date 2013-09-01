@@ -36,34 +36,44 @@ define([
 
       this.renderContextMenu();
 
-      var that = this;
 
-      var handleFileSelect = function(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
+      if (Shared.isDesktop()) {
 
-        var files = evt.dataTransfer.files; 
+        //ENABLE ATTACHMENTS AND DROP ZONE.
 
-        var output = [];
-        for (var i = 0, f; f = files[i]; i++) {
+        var that = this;
 
-          output.push("<div class='simple-attachment'><div class='icon'></div><div class='attachment-name'>" + escape(f.name) + "</div><div class='attachment-size'>" + f.size + " bytes</div></div>");
+        var handleDragOverDropZone = function(evt) {
+          evt.stopPropagation();
+          evt.preventDefault();
+          evt.dataTransfer.dropEffect = 'copy'; 
+        };
 
-        }
-        $("#msgAttachmentsRecipients").prepend(output.join(''));
+        var handleFileSelectInDropZone = function(evt) {
 
-        that.updateBody();
+          evt.stopPropagation();
+          evt.preventDefault();
+
+          var files = evt.dataTransfer.files; 
+
+          var output = [];
+          for (var i = 0, f; f = files[i]; i++) {
+
+            output.push("<div class='simple-attachment'><div class='icon'></div><div class='attachment-name'>" + escape(f.name) + "</div><div class='attachment-size'>" + f.size + " bytes</div></div>");
+
+          }
+          $("#msgAttachmentsRecipients").prepend(output.join(''));
+
+          that.updateBody();
+        };
+
+        var dropZone = document.getElementById('msgAttachmentsRecipients');
+        $(dropZone).addClass("drop_zone");
+        $("#msgAttachmentsRow").removeClass("hidden");
+        dropZone.addEventListener('dragover', handleDragOverDropZone, false);
+        dropZone.addEventListener('drop', handleFileSelectInDropZone, false);
+
       }
-
-      var handleDragOver = function(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
-        evt.dataTransfer.dropEffect = 'copy'; 
-      }
-
-      var dropZone = document.getElementById('msgAttachmentsRecipients');
-      dropZone.addEventListener('dragover', handleDragOver, false);
-      dropZone.addEventListener('drop', handleFileSelect, false);
 
       this.loaded();
     },
@@ -75,6 +85,8 @@ define([
         Shared.menuView.renderContextMenu('newMessageWithCc',{});
       }
     },
+
+    
 
     render: function(){
 
@@ -255,13 +267,6 @@ define([
       "click #msgCcRow" : "focusRecipientCc",
       "click #msgBccRow" : "focusRecipientBcc",
       "click #msgSubjectRow" : "focusSubject",
-      // "dragover #drop_zone" : "dragover",
-    },
-
-    dragover: function(evt) {
-      evt.stopPropagation();
-      evt.preventDefault();
-      evt.dataTransfer.dropEffect = 'copy'; 
     },
 
     updateSubject: function(e) {

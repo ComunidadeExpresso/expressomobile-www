@@ -765,6 +765,7 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
   background: -ms-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
   background: linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
   -webkit-backface-visibility:hidden; /*prevent rotated text being jagged in Chrome and Safari*/
+  border-radius: 5px 5px 5px 5px;
 }
 
 .simple-attachment .icon {

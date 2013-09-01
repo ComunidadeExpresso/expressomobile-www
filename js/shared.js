@@ -49,7 +49,7 @@ define([
     return retVal;
   };
   Shared.isPhonegap = function() {
-    return Shared.api.phonegap();
+    return Shared.api.phoneGap();
   };
 
   //CHECKS IF THE DEVICE IS AN ANDROID OR AN IPHONE/IPAD DEVICE.
