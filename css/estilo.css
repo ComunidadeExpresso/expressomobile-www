@@ -744,84 +744,77 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
   line-height: 30px;
 }
 
+.simple-attachment {
+  display: block;
+  width: 100%;
+  height: 80px;
+  -pie-background: linear-gradient(#ede1c9, #fef8e2 20%, #f2ebde 60%);
+  behavior: url(assets/pie/PIE.htc);
+  position:relative; /*required to make PIE work*/
+  float: left;
+  margin: 0px;
+  padding: 0px;
+  margin-bottom: 10px;
+  -webkit-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
+  -moz-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
+  box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
+  background: #eee6d8;
+  background: -webkit-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
+  background: -moz-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
+  background: -o-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
+  background: -ms-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
+  background: linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
+  -webkit-backface-visibility:hidden; /*prevent rotated text being jagged in Chrome and Safari*/
+}
 
-figure, figcaption {
-display: block;
+.simple-attachment .icon {
+  background: url("../imgs/icon-attachment.png") no-repeat scroll center center; 
+  background-size: 70px 80px;
+  width: 70px;
+  height: 80px;
+  float: left;
 }
-#polaroid{
-width:100%;
-overflow:hidden;
-padding:20px 10px;
+
+.simple-attachment .icon-image {
+  width: 70px;
+  height: 80px;
+  float: left;
 }
-#polaroid figure{
-float:left;
-position:relative;
-width:70px;
-margin:10px 20px;
-padding: 6px 8px 10px 8px;
--webkit-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
--moz-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
-background: #eee6d8;
-background: -webkit-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
-background: -moz-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
-background: -o-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
-background: -ms-linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
-background: linear-gradient(top, #ede1c9, #fef8e2 20%, #f2ebde 60%);
--webkit-transform:rotate(-1deg);
--moz-transform: rotate(-1deg);
--o-transform: rotate(-1deg);
--ms-transform: rotate(-1deg);
-transform: rotate(-1deg);
--webkit-backface-visibility:hidden; /*prevent rotated text being jagged in Chrome and Safari*/
+
+
+.simple-attachment .attachment-name {
+  font-family: 'Reenie Beanie', cursive; /*Reenie Beanie is available through Google Webfonts http://code.google.com/webfonts/specimen/Reenie+Beanie*/
+  font-size:1.4em;
+  color:#454f40;
+  letter-spacing:0.09em;
+  margin-top: 15px;
+  text-align: left;
 }
-#poaroid figure:nth-child(even) {
--webkit-transform:rotate(2deg);
--moz-transform: rotate(2deg);
--o-transform: rotate(2deg);
--ms-transform: rotate(2deg);
-transform: rotate(2deg);
--webkit-backface-visibility:hidden; /*prevent rotated text being jagged in Chrome and Safari*/
--webkit-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
--moz-box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, .75);
-box-shadow: -4px 4px 8px -4px rgba(0, 0, 0, .75);
+
+.simple-attachment .attachment-size {
+  font-size:1.0em;
+  color:#454f40;
+  letter-spacing:0.09em;
+  margin-top: 0px;
+  margin-bottom: 15px;
+  text-align: left;
 }
-#polaroid figure:before {
-content: '';
-display: block;
-position: absolute;
-left:5px;
-top: -15px;
-width: 75px;
-height: 25px;
-background-color: rgba(222,220,198,0.7);
--webkit-transform: rotate(-12deg);
--moz-transform: rotate(-12deg);
--o-transform: rotate(-12deg);
--ms-transform: rotate(-12deg);
+
+.attachmentImage {
+  width: 70px;
+  height: 80px;
 }
-#polaroid figure:nth-child(even):before {
-left:150px;
-top: -15px;
-width: 55px;
-height: 25px;
--webkit-transform: rotate(12deg);
--moz-transform: rotate(12deg);
--o-transform: rotate(12deg);
--ms-transform: rotate(12deg);
+
+.drop_zone {
+  margin: 10px;
+    border: 2px dashed #BBBBBB;
+    border-radius: 5px 5px 5px 5px;
+    color: #BBBBBB;
+    padding: 5px;
+    text-align: center;
 }
-#polaroid figcaption{
-text-align:center;
-font-family: 'Reenie Beanie', cursive; /*Reenie Beanie is available through Google Webfonts http://code.google.com/webfonts/specimen/Reenie+Beanie*/
-font-size:1.3em;
-color:#454f40;
-letter-spacing:0.09em;
-}
-/**IE Hacks - see http://css3pie.com/ for more info on how to use CS3Pie and to download the latest version**/
-#polaroid figure{
--pie-background: linear-gradient(#ede1c9, #fef8e2 20%, #f2ebde 60%);
-behavior: url(assets/pie/PIE.htc);
-position:relative; /*required to make PIE work*/
-padding-top:10px\9;
-padding-right:10px\9;
+
+#drop_zone_text {
+    padding: 25px;
+    text-align: center;
 }

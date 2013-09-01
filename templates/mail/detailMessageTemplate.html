@@ -94,17 +94,20 @@
             var attachments = message.get("msgAttachments");
             for (var i in attachments) {
             %>
-              <br>
-              <a href="<%=message.getAttachmentRoute(attachments[i].attachmentID)%>" class="attachmentLink">
-                <span class="badge badge-attachment">
-                <%=$.trim(attachments[i].attachmentName)%>
-                <%=message.getAttachmentSize(attachments[i].attachmentID)%>
-                </span>
-              </a>
-              <br>
-              <a href="<%=message.getDownloadAttachmentRoute(attachments[i].attachmentID)%>" class="attachmentLink">
-                  Download
-              </a>
+              <div class="simple-attachment"> 
+                
+                    <div class="icon">
+                      
+                    </div>
+                    <div class="attachment-name"><%=$.trim(attachments[i].attachmentName)%></div>
+                    <div class="attachment-size"><%=message.getAttachmentSize(attachments[i].attachmentID)%></div>
+                    <a href="<%=message.getAttachmentRoute(attachments[i].attachmentID)%>" class="attachmentLink">
+                      Visualizar
+                    </a>
+                    <a href="<%=message.getDownloadAttachmentRoute(attachments[i].attachmentID)%>" class="attachmentLink">
+                      Download
+                    </a>
+              </div>
             <% } %>
         </td>
       </tr> 
