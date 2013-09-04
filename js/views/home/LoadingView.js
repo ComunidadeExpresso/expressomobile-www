@@ -12,7 +12,11 @@ define([
 
     render: function(){
 
-      Shared.menuView.renderContextMenu(0,[]); 
+      if (Shared.menuView) {
+        Shared.menuView.renderContextMenu(0,[]); 
+      }
+
+      
 
       var newData = {
         _: _ 
