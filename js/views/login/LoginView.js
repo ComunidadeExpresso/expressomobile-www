@@ -30,9 +30,11 @@ define([
 
       var serverURL = $("#serverURL").val();
 
-      var isPhoneGap = $("#isPhoneGap").is(':checked');
+      //var isPhoneGap = $("#isPhoneGap").is(':checked');
 
-      Shared.api.phoneGap(isPhoneGap);
+      //Shared.api.phoneGap(isPhoneGap);
+
+      var isPhoneGap = Shared.api.phoneGap();
 
       if (isPhoneGap) {
         Shared.api.context(serverURL).crossdomain(serverURL);

@@ -27,6 +27,10 @@ define([
   Shared.contentView = null;
   Shared.detailView = null;
 
+
+  //MENSAGE THAT IT'S BEING COMPOSED.
+  Shared.currentDraftMessage = '';
+
   Shared.im_url = "http://im.pr.gov.br:5280/http-bind";
   Shared.im_domain = "im.pr.gov.br";
 
@@ -127,6 +131,10 @@ define([
     });
   };
 
+  Shared.handleErrors = function(error) {
+    //alert(error);
+  };
+
   Shared.setDefaultIMListeners = function() {
 
     Shared.im.clearListeners();
@@ -163,6 +171,32 @@ define([
     }
 
   }
+
+
+
+
+  // deviceready is PhoneGap's init event
+document.addEventListener('deviceready', function () {
+
+  
+  Shared.api.phoneGap(true);
+
+  if (window.plugins.webintent != undefined) {
+    window.plugins.webintent.getExtra("android.intent.extra.STREAM", function (url) {
+      alert("ENVIO_ARQUIVOS");
+      alert(url);
+      Shared.router.navigate("/Mail/Message/New",{trigger: true});
+      // url is the value of EXTRA_TEXT 
+    }, function() {
+      //alert("No Extra Suplied");
+      // There was no extra supplied.
+    });
+
+  } else {
+    //alert("Sem WebIntent");
+  }
+
+});
 
   window.onunload = function(){
 
