@@ -5,12 +5,15 @@ define([
   'shared',
   'text!templates/mail/messagesListTemplate.html',
   'views/mail/MessagesListItemsView',
+  'collections/mail/FoldersCollection',
   'collections/mail/MessagesCollection',
   'views/home/LoadingView'
-], function($, _, Backbone, Shared, messagesListTemplate, MessagesListItemsView, MessagesCollection,LoadingView){
+], function($, _, Backbone, Shared, messagesListTemplate, MessagesListItemsView, FoldersCollection, MessagesCollection,LoadingView){
 
   var MessagesListView = Backbone.View.extend({
 
+    currentFolder : [],
+    parentFolders : [],
     folderID: 'INBOX',
     msgID: '',
     search: '',
@@ -20,14 +23,21 @@ define([
 
       var that = this;
 
+      var elementID = "#content";
+
       var beforeRenderCallback = function() {
         var newData = {
           folderID: that.folderID,
+          currentFolder: that.currentFolder,
           _: _ 
         };
 
         var compiledTemplate = _.template( messagesListTemplate, newData );
-        $("#content").html( compiledTemplate ); 
+
+        that.$el.html(compiledTemplate);
+
+        $(elementID).empty().append(that.$el);
+
       }
       
 
@@ -47,7 +57,7 @@ define([
       var loadingView = new LoadingView({ el: $("#contentDetail") });
       loadingView.render();
 
-      this.getMessages(this.folderID,this.search,this.page,false,beforeRenderCallback,doneFunction);
+      that.getMessages(that.folderID,that.search,that.page,false,beforeRenderCallback,doneFunction);
 
       Shared.setDefaultIMListeners();
 
@@ -88,34 +98,60 @@ define([
     {
 
       var messagesData = new MessagesCollection();
+      var foldersCollection = new FoldersCollection();
 
       var that = this;
 
-      messagesData.getMessagesInFolder(pFolderID,'',pSearch,pPage).done(function(data){
+      foldersCollection.getFolders(this.folderID,this.search).done( function (foldersData) {
 
-        that.collection = data.models;
 
-        if (beforeRenderCallback) {
-          console.log('beforeCallBack');
-          beforeRenderCallback();
-        }
+        var currentFolder = foldersData.getFolderByID(that.folderID);
+        var parentFolders = foldersData.getSubFoldersFromFolderID(that.folderID);
 
-        var messagesListItemsView = new MessagesListItemsView({ el: $("#scrollerList"), collection: data });
-        messagesListItemsView.render(appendAtEnd);
+        that.currentFolder = currentFolder;
+        that.parentFolders = parentFolders;
 
-        if (doneCallback) {
-          console.log('doneCallback');
-          doneCallback();
-        }
 
-        var top = $('.top').outerHeight(true);
-        var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
-        
-        $('body').height($(window).height() - top);
-        $('#wrapper').css('top', top + search);
+            messagesData.getMessagesInFolder(pFolderID,'',pSearch,pPage).done(function(data){
 
-        Shared.refreshDotDotDot();
-        Shared.scrollerRefresh();
+                    that.collection = data.models;
+
+                    if (beforeRenderCallback) {
+                      beforeRenderCallback();
+                    }
+
+                    var messagesListItemsView = new MessagesListItemsView({ el: $("#scrollerList"), collection: data , parentFolders: that.parentFolders });
+                    if (!appendAtEnd) {
+                      messagesListItemsView.parentFolders = that.parentFolders;
+                    } else {
+                      messagesListItemsView.parentFolders = [];
+                    }
+                    
+                    messagesListItemsView.render(appendAtEnd);
+
+                    if (doneCallback) {
+                      doneCallback();
+                    }
+
+                    var top = $('.top').outerHeight(true);
+                    var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
+                    
+                    $('body').height($(window).height() - top);
+                    $('#wrapper').css('top', top + search);
+
+                    Shared.refreshDotDotDot();
+                    Shared.scrollerRefresh();
+
+            })
+            .fail(function(result){
+              if (result.error.code == 7) {
+                Shared.router.navigate('Login',{trigger: true});
+                alert("Sua sessão expirou.");
+              }
+              
+              return false;
+            })
+            .execute();
 
       })
       .fail(function(result){
@@ -127,6 +163,8 @@ define([
         return false;
       })
       .execute();
+
+      
     },
 
     pullDownAction: function () 

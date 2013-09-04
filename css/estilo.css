@@ -114,27 +114,36 @@ body #menu dl dd ul#myFolders li a .icon { width: 30px; height: 30px; }
 body #menu dl dd ul#myFolders li a span { line-height: 30px; vertical-align: top; margin-left: 35px; float: left; width: 90%; }
 body #menu dl dd ul#myFolders li a span .badge.badge-info { float: right; }
 
-body #menu dl dd ul#myFolders li a .folder-inbox {
+.folder-icon {
+  width: 30px; 
+  height: 30px;
+  float: left;
+  top: 10px;
+  left: 5px;
+  position: relative;
+}
+
+.folder-inbox {
   background: url("../imgs/folder-inbox.png") no-repeat scroll center center;
 }
 
-body #menu dl dd ul#myFolders li a .folder-drafts {
+.folder-drafts {
   background: url("../imgs/folder-drafts.png") no-repeat scroll center center;
 }
 
-body #menu dl dd ul#myFolders li a .folder-sent {
+.folder-sent {
   background: url("../imgs/folder-sent.png") no-repeat scroll center center;
 }
 
-body #menu dl dd ul#myFolders li a .folder-blue {
+.folder-blue {
   background: url("../imgs/folder-blue.png") no-repeat scroll center center;
 }
 
-body #menu dl dd ul#myFolders li a .folder-trash-full {
+.folder-trash-full {
   background: url("../imgs/folder-trash-full.png") no-repeat scroll center center;
 }
 
-body #menu dl dd ul#myFolders li a .folder-shared {
+.folder-shared {
   background: url("../imgs/folder-shared.png") no-repeat scroll center center;
 }
 
@@ -784,8 +793,7 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
 
 
 .simple-attachment .attachment-name {
-  font-family: 'Reenie Beanie', cursive; /*Reenie Beanie is available through Google Webfonts http://code.google.com/webfonts/specimen/Reenie+Beanie*/
-  font-size:1.4em;
+  font-size:14px;
   color:#454f40;
   letter-spacing:0.09em;
   margin-top: 15px;
@@ -793,7 +801,7 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
 }
 
 .simple-attachment .attachment-size {
-  font-size:1.0em;
+  font-size:12px;
   color:#454f40;
   letter-spacing:0.09em;
   margin-top: 0px;
@@ -819,3 +827,35 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
     padding: 25px;
     text-align: center;
 }
+
+.icon-add {
+  width: 40px;
+  height: 40px;
+  float: right;
+  margin-right: 25px;
+  margin-top: 5px;
+  background: url("../imgs/icon-add.png") no-repeat scroll center center;
+}
+
+.btn-right {
+  float: right;
+  width: 70px;
+  margin-top: 25px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.right_link_blue {
+  width: 70px;
+  height: 80px;
+  background-color: #0000FF;
+  color: #FFF;
+  font-size: 16px;
+  vertical-align: center;
+  text-align: center;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin-left: 10px;
+  text-align: center;
+}
+

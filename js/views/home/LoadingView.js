@@ -12,6 +12,8 @@ define([
 
     render: function(){
 
+      Shared.menuView.renderContextMenu(0,[]); 
+
       var newData = {
         _: _ 
       };

@@ -71,7 +71,11 @@ define([
                     body += "Content-Disposition: form-data; name='upload"+i+"'; filename='"+options.files[i].filename+"'\r\n";
                     body += "Content-Type: application/octet-stream\r\n";
                     body += "Content-Transfer-Encoding: binary\r\n\r\n";
-                    body += atob(options.files[i].src) + "\r\n";
+                    if (options.files[i].dataType == "base64") {
+                    	body += atob(options.files[i].src) + "\r\n";
+                    } else {
+                    	body += options.files[i].src + "\r\n";
+                    }
                 }
 
 
@@ -108,7 +112,7 @@ define([
 
 		var _auth = "";
 
-		var _debug = true;
+		var _debug = false;
 
 		var _dataType = '';
 
@@ -116,7 +120,7 @@ define([
 
 		var _files = [];
 
-		var _phoneGap = true;
+		var _phoneGap = false;
 
 		this.id = function(value) {
 			if(value == undefined) return _id;
@@ -361,8 +365,6 @@ define([
 						console.log('ExpressoAPI - DONE callback');
 						console.log(JSON.stringify(response));
 					}
-					console.log('ExpressoAPI - DONE callback');
-					console.log(JSON.stringify(response));
 					if (response.result.auth) ExpressoAPI.auth(response.result.auth);
 					if (_data[this.id]) {
 						if (_data[this.id].resource=='/Logout') ExpressoAPI.auth("");
@@ -373,7 +375,7 @@ define([
 						console.log('ExpressoAPI - ERROR callback');
 						console.log(JSON.stringify(response));
 					}
-					if (_data[this.id].done) _data[this.id].done(response,_data[this.id].send);
+					if (_data[this.id].fail) _data[this.id].fail(response,_data[this.id].send);
 				}
 
 			}).fail(function(response) {

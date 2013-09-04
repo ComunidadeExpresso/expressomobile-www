@@ -42,6 +42,7 @@ define([
           var data = {
             messages: data.models,
             _: _ ,
+            Shared: Shared,
             $: $
           };
 
@@ -75,8 +76,6 @@ define([
 
     loaded: function () {
 
-      
-
       if (Shared.scrollDetail != null) {
         Shared.scrollDetail.destroy();
         Shared.scrollDetail = null;
@@ -88,7 +87,12 @@ define([
       $('body').height($(window).height() - top);
       $('#wrapper').css('top', top + search);
 
-      Shared.scrollDetail = new iScroll('wrapperDetail',{hScroll: true, vScroll: true, hScrollBar: true, vScrollBar: true });
+      Shared.scrollDetail = new iScroll('wrapperDetail',{vScroll:true, hScroll:true, hScrollBar: true, vScrollBar: true });
+
+
+      Shared.refreshDotDotDot();
+      Shared.scrollerRefresh();
+
     }
 
   });

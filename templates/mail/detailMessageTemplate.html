@@ -95,18 +95,21 @@
             for (var i in attachments) {
             %>
               <div class="simple-attachment"> 
-                
-                    <div class="icon">
-                      
-                    </div>
-                    <div class="attachment-name"><%=$.trim(attachments[i].attachmentName)%></div>
-                    <div class="attachment-size"><%=message.getAttachmentSize(attachments[i].attachmentID)%></div>
+                    <div class="icon"></div>
                     <a href="<%=message.getAttachmentRoute(attachments[i].attachmentID)%>" class="attachmentLink">
-                      Visualizar
+                      <div class="btn btn-primary btn-right">
+                        Visualizar
+                      </div> 
                     </a>
-                    <a href="<%=message.getDownloadAttachmentRoute(attachments[i].attachmentID)%>" class="attachmentLink">
-                      Download
-                    </a>
+                    <% if (Shared.isDesktop()) { %>
+                      <a href="<%=message.getDownloadAttachmentRoute(attachments[i].attachmentID)%>" class="attachmentLink" style="float: right;">
+                        <div class="btn btn-primary btn-right">
+                          Download</div>
+                      </a>
+                    <% } %>
+                    <div class="attachment-name ellipsis14"><%=unescape($.trim(attachments[i].attachmentName))%></div>
+                    <div class="attachment-size ellipsis14"><%=message.getAttachmentSize(attachments[i].attachmentID)%></div> 
+                    <div class="clear"></div>
               </div>
             <% } %>
         </td>

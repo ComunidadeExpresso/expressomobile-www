@@ -1,3 +1,32 @@
+<% _.each(parentFolders, function(folder){ %>
+  <li>
+    <a href="<%=folder.route()%>" name="<%=folder.route()%>" data-toggle="collapse" data-target="#menu" class="listFolderItemLink">
+      <% if (folder.get("folderType") == 0) { %>
+        <div class="folder-icon  folder-inbox"></div>
+      <% } %>
+      <% if (folder.get("folderType") == 4) { %>
+        <div class="folder-icon folder-drafts"></div>
+      <% } %>
+      <% if (folder.get("folderType") == 1) { %>
+        <div class="folder-icon  folder-sent"></div>
+      <% } %>
+      <% if (folder.get("folderType") == 2) { %>
+        <div class="folder-icon  folder-blue"></div>
+      <% } %>
+      <% if (folder.get("folderType") == 3) { %>
+        <div class="folder-icon  folder-trash-full"></div>
+      <% } %>
+      <% if (folder.get("folderType") == 5) { %>
+        <div class="folder-icon  folder-blue"></div>
+      <% } %>
+      <% if (folder.get("folderType") == 6) { %>
+        <div class="folder-icon  folder-shared"></div>
+      <% } %>
+      <% if (folder.get("qtdUnreadMessages") != 0) { %><strong class="badge badge-info" style="float: right; margin-top: 20px; margin-right: 10px;"><%=folder.get("qtdUnreadMessages")%></strong><% } %>
+      <h3 class="ellipsis20" style="margin-left: 40px;"><%=folder.get("folderName")%></h3>
+    </a>
+  </li>
+<% }); %>
 <% _.each(messages, function(message){ %>
   <li id="<%=message.listItemID()%>"> 
     <a href="<%=message.route()%>" class="listItemLink">

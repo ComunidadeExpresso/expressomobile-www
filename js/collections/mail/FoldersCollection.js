@@ -38,6 +38,26 @@ define([
 
       },
 
+      getSubFoldersFromFolderID: function(PfolderID) {
+        var result = [];
+        _.each(this.models, function(folder){
+          if (folder.get("folderParentID") == PfolderID) {
+            result.push(folder);
+          }
+        });
+        return result;
+      },
+
+      getFolderByID: function(PfolderID) {
+        var result = [];
+        _.each(this.models, function(folder){
+          if (folder.get("folderID") == PfolderID) {
+            result = folder;
+          }
+        });
+        return result;
+      },
+
       getFolders : function(PfolderID,Psearch) {
 
         var that = this;

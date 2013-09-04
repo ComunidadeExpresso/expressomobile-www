@@ -3,8 +3,9 @@ define([
   'underscore',
   'backbone',
   'shared',
+  'views/home/LoadingView',
   'text!templates/mail/attachmentMessageTemplate.html'
-], function($, _, Backbone, Shared, attachmentMessageTemplate){
+], function($, _, Backbone, Shared, LoadingView, attachmentMessageTemplate){
 
   var AttachmentMessageView = Backbone.View.extend({
 
@@ -26,6 +27,8 @@ define([
         msgID : this.msgID,
         folderID : this.folderID,
       };
+
+
 
       Shared.api.resource('/Mail/Attachment').dataType("arraybuffer").params(params).done(function(result){
 
@@ -51,6 +54,9 @@ define([
       if (Shared.isSmartPhoneResolution()) {
         elementID = "#content";
       }
+
+      var loadingView = new LoadingView({ el: $(elementID) });
+      loadingView.render();
 
       var that = this;
 

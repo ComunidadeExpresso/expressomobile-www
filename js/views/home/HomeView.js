@@ -86,7 +86,7 @@ define([
     },
 
     loadMessagesInFolder: function(Pfolder,Psearch) {
-      var messagesListView = new MessagesListView({ el: $("#content") , folderID: Pfolder, search: Psearch, page: this.page });
+      var messagesListView = new MessagesListView({ folderID: Pfolder, search: Psearch, page: this.page });
       messagesListView.folderID = Pfolder;
       messagesListView.render();
     },

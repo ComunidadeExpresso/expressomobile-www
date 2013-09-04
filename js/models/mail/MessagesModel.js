@@ -52,11 +52,12 @@ define([
       this.set("files",[]);    
     },
 
-    addFile: function(fileData,fileName) {
+    addFile: function(fileData,fileName,dataType) {
       var files = this.get("files");
       var file = {
         "filename" : fileName,
         "src": fileData,
+        "dataType": dataType,
       };
 
       files.push(file);
@@ -69,7 +70,7 @@ define([
     },
 
     listItemID: function() {
-      return 'Mail_Message_ListItem_' + this.get("folderID").replace("/","_") + "_" + this.get("msgID");
+      return 'Mail_Message_ListItem_' + this.get("folderID").split('/').join('_') + "_" + this.get("msgID");
     },
 
     getEmailsRecipientsInArray: function(fieldName) {
@@ -163,6 +164,33 @@ define([
       msgRecipient.push(recipient);
 
       this.set(fieldName,msgRecipient);
+    },
+
+    addBinaryFile: function(fileName,file) {
+      var reader = new FileReader();
+      var that = this;
+      reader.fileName = file.name;
+      reader.onerror = function(e) {
+      };
+      reader.onprogress = function(e) {
+
+      };
+      reader.onabort = function(e) {
+        
+      };
+      reader.onloadstart = function(e) {
+        
+      };
+      reader.onload = function(e) {
+
+        blobBinaryString = reader.result;
+
+        that.addFile(blobBinaryString,escape(reader.fileName),'binary');
+                        
+        //console.log(blobBinaryString);
+      }
+
+      reader.readAsBinaryString(file);
     },
     
     send: function(callbackSuccess,callbackFail) {

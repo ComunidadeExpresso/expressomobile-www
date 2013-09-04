@@ -24,6 +24,8 @@ define([
       var primaryElementID = "#content";
       var detailElementID = "#contentDetail";
 
+      Shared.menuView.renderContextMenu(0,[]); 
+
       $(detailElementID).html("");
 
       if (Shared.isSmartPhoneResolution()) {
@@ -63,8 +65,6 @@ define([
 
         var loadingView = new LoadingView({ el: $(primaryElementID) });
         loadingView.render();
-
-        Shared.menuView.context.hideMenu();
 
         var that = this;
 

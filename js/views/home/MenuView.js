@@ -66,6 +66,9 @@ define([
       .done(function(result){
         $("#userPicture").attr("src","data:image/gif;base64," + result.contacts[0].contactImagePicture);
       })
+      .fail(function(error) {
+        Shared.handleErrors(error);
+      })
       .execute();
 
       this.context = new ContextMenuView();

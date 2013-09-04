@@ -53,9 +53,9 @@ define([
 
         var takePicture = {route: "/Mail/Message/AttachPicture", title: "Tirar Foto", iconClass: '', primary: false};
 
-        //if (Shared.api.phoneGap()) {
+        if (Shared.isPhonegap()) {
           menuItems.push(takePicture);
-        //}
+        }
 
         this.createModelsFromArray(menuItems);
         return this;

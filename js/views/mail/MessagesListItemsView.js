@@ -8,14 +8,20 @@ define([
 
   var MessagesListItemsView = Backbone.View.extend({
 
+    parentFolders : [],
+
     render: function(nextPage){
 
       var that = this;
 
       var data = {
+        parentFolders: this.parentFolders,
         messages: this.collection.models,
         _: _ 
       };
+
+      console.log("parentFolders");
+      console.log(that.parentFolders);
 
       var compiledTemplate = _.template( messagesListItemsTemplate, data );
       if (nextPage) {

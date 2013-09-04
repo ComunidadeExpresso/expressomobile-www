@@ -19,6 +19,10 @@ define([
 
     render: function(){
 
+      if (!this.collection) {
+        this.collection = new ContextMenuCollection();
+      }
+
       var data = {
         menuItems: this.collection.models,
         _: _ 
@@ -33,6 +37,10 @@ define([
       $("#rightMenu").empty().append(this.$el);
 
       this.setPrimaryAction();
+
+      if (this.collection.models.length == 0) {
+        this.hideMenu();
+      }
 
     },
 
@@ -71,6 +79,7 @@ define([
     },
 
     setPrimaryAction: function() {
+
       var primary = this.collection.getPrimaryAction();
       if (primary) {
         this.primaryAction = primary.get("route");

@@ -7,6 +7,7 @@
 		          Para:
 		        </td>
 		        <td class="descriptionCompose">
+		        	<div class='icon-add'></div>
 		        	<div id="msgToRecipients">
 						<% if (message.get("msgTo")) {  %>
 		                  	<% _.each(message.get("msgTo"), function(msgRecipient){ %>
@@ -23,7 +24,8 @@
 		                  	<% }); %>
 		                <% } %>
 	            	</div>
-	                <input type="text" id="msgToInput" name="msgToInput" class="inputMessage" value="">
+	                <input type="text" id="msgToInput" name="msgToInput" class="inputMessage" value="projetomobile@celepar.pr.gov.br">
+	                <div class="clear"></div>
 		        </td>
 	    	</tr>
 		    <tr id="msgCcRow" class="hidden">
@@ -31,6 +33,7 @@
 		          Cc:
 		        </td>
 		        <td class="descriptionCompose">
+		        	<div class='icon-add'></div>
 		        	<div id="msgCcRecipients">
 						<% if (message.get("msgCc")) {  %>
 		                  	<% _.each(message.get("msgCc"), function(msgRecipient){ %>
@@ -49,6 +52,7 @@
 		                <% } %>
 	            	</div>
 	                <input type="text" id="msgCcInput" name="msgCcInput" class="inputMessage">
+	                <div class="clear"></div>
 		        </td>
 	    	</tr>
 	    	<tr id="msgBccRow" class="hidden">
@@ -56,6 +60,7 @@
 		          Bcc:
 		        </td>
 		        <td class="descriptionCompose">
+		        	<div class='icon-add'></div>
 		        	<div id="msgBccRecipients">
 						<% if (message.get("msgBcc")) {  %>
 		                  	<% _.each(message.get("msgBcc"), function(msgRecipient){ %>
@@ -72,7 +77,9 @@
 		                  	<% }); %>
 		                <% } %>
 	            	</div>
+
 	                <input type="text" id="msgBccInput" name="msgBccInput" class="inputMessage">
+	                <div class="clear"></div>
 		        </td>
 	    	</tr>
 	    	<tr id="msgSubjectRow">

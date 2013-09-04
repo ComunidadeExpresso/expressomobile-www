@@ -15,6 +15,7 @@ define([
     secondViewName: '',
     msgID: '',
     folderID: '',
+    currentMessage : '',
 
     renderComposeMessage: function(pMessage) {
       var elementID = "#contentDetail";
@@ -59,10 +60,14 @@ define([
           var output = [];
           for (var i = 0, f; f = files[i]; i++) {
 
-            output.push("<div class='simple-attachment'><div class='icon'></div><div class='attachment-name'>" + escape(f.name) + "</div><div class='attachment-size'>" + f.size + " bytes</div></div>");
+            output.push("<div class='simple-attachment'><div class='icon'></div><div class='attachment-name'>" + f.name + "</div><div class='attachment-size'>(" + Shared.currentDraftMessage.bytesToSize(f.size,0) + ")</div></div>");
+
+            Shared.currentDraftMessage.addBinaryFile(escape(f.name),files[i]);
 
           }
           $("#msgAttachmentsRecipients").prepend(output.join(''));
+
+
 
           that.updateBody();
         };
@@ -106,6 +111,9 @@ define([
         pMessage.set("msgCc",[]);
         pMessage.set("msgBcc",[]);
         pMessage.set("msgBody","");
+        pMessage.clearFiles();
+
+        Shared.currentDraftMessage = pMessage;
 
         this.renderComposeMessage(pMessage);
 
@@ -121,9 +129,6 @@ define([
         var onFailSendMessage = function() {
           Shared.router.navigate("/Mail/Messages/" + this.folderID,{ trigger: true });
           alert("Ocorreu um erro ao Enviar sua Mensagem.");
-
-          // 88, 1.88  - 299
-          // 78, 1.88  - 
         };
 
         var Message = this.getNewMessageModel();
@@ -149,7 +154,7 @@ define([
         var onFail = function onFail(message) {
             alert('Não foi possível adicionar a foto aos anexos.');
         };
-        if (navigator.camera != undefined) {
+        if ((Shared.isPhonegap()) && (navigator.camera != undefined)) {
           // navigator.camera.getPicture(uploadPhoto, onFail, { quality: 60, 
           // destinationType: Camera.DestinationType.DATA_URL, sourceType: Camera.PictureSourceType.PHOTOLIBRARY }); 
 
@@ -424,17 +429,20 @@ define([
     //   return pMessage;
     // },
 
+    updateCurrentMessage: function() {
+
+    },
+
     getNewMessageModel: function() {
 
+      //LOAD TEMP FILES
+      var tempFiles = Shared.currentDraftMessage.get("files");
 
       var msgTo = this.getMessageStringForRecipient("msgTo");
       var msgSubject = $("#msgSubjectInput").val();
       var msgCc = this.getMessageStringForRecipient("msgCc");
       var msgBcc = this.getMessageStringForRecipient("msgBcc");
-      var value = $("#msgBodyInput").html();
-      // value = value.replace(/<br>/g, "\\r\\n");
-      // alert(value);
-      var msgBody = value;
+      var msgBody = $("#msgBodyInput").html();
 
       var message = { 
         "msgToString" : msgTo,
@@ -451,9 +459,11 @@ define([
 
       mModel.clearFiles();
 
+      mModel.set("files",tempFiles);
+
       $('.attachmentImage').each(function(i, obj) {
         var src = $(obj).attr('src').substr($(obj).attr('src').indexOf(bstr)+bstr.length);
-        mModel.addFile(src,'anexo_' + (i + 1) + '.png');
+        mModel.addFile(src,'anexo_' + (i + 1) + '.png',"base64");
       }); 
 
       return mModel;
