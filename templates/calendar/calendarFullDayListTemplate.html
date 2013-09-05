@@ -15,7 +15,6 @@ var endTime = new Date(year, month - 1, day, 23, 30, 0);
 
 			if ((typeof(events) != 'undefined' && events.length > 0) && (typeof(hourlyBusy) != 'undefined' && hourlyBusy.length > 0))
 			{
-				
 				var event = hourlyBusy.filter(function (element)
 				{
 					return element.dateStart.getTime() == startTime.getTime();

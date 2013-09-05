@@ -40,6 +40,45 @@ define ([
 			return this.api.execute();
 		},
 
+		done: function (value)
+		{
+			this.done = value;
+
+			return this;
+		},
+
+		fail: function (value)
+		{
+			this.fail = value;
+
+			return this;
+		},
+
+		getPersonalContact: function(pContactID)
+		{	
+			var that = this;
+
+			this.api
+	        .resource('Catalog/Contacts')
+	        .params({contactID:pContactID,contactType:'1'})
+	        .done(function (result)
+	        {
+				var thisModel = new ContactModel(result.contacts[0]);
+	        		that.set(thisModel);
+
+				if (that.done)
+	        		that.done(thisModel);
+	        })
+	        .fail( function (error) 
+	        {
+				if (that.fail)
+	        		that.fail(error); 
+	        })
+	        .execute();
+
+	        return that;
+		},
+
 		getFirstEmailAddress: function()
 		{
 			return this.get('contactMails')[0];

@@ -20,7 +20,7 @@
 			Local
 		</td>
 		<td class="description">
-			<%= event.get('eventLocation') %>
+			<%= _.isEmpty(event.get('eventLocation')) ? '-' : event.get('eventLocation') %>
 		</td>
 	</tr> 
 	<tr>
@@ -28,25 +28,37 @@
 			Prioridade
 		</td>
 		<td class="description">
-			<%= event.get('eventPriority') %>
+			<%= event.getPriority() %>
 		</td>
-	</tr> 
-	<tr>
-		<td class="item">
-			Acesso
-		</td>
-		<td class="description">
-			
-		</td>
-	</tr> 
+	</tr>
 	<tr>
 		<td class="item">
 			Participantes
 		</td>
-		<td class="description">
-			<% if ((event.get('eventParticipants')).length > 0) { %>
-				<%= (event.get('eventParticipants')).join(', ') %>
-			<% } %>
+		<td class="description" id="listParticipants">
+				
+			<% 
+			if (event.get('eventParticipantsLdap').length > 0) 
+			{ 
+				%>
+				<ul>
+				<%
+				var participants = event.get('eventParticipantsLdap');
+				for (var i in participants) 
+				{
+					if (!_.isEmpty(participants[i].get('contactFullName')))
+					{
+					%>	
+						<li><%= participants[i].get('contactFullName') %></li>
+					<%
+					}
+				}
+				%>
+				</ul>
+				<%
+			}
+			%>
+
 		</td>
 	</tr> 
 	<tr>
@@ -54,7 +66,9 @@
 			Criado por
 		</td>
 		<td class="description">
-			<%= event.get('eventOwner') %>
+			<% if (!_.isEmpty(event.get('eventOwner'))) { %>
+				<%= event.get('eventOwner').get('contactFullName') %>
+			<% } %>
 		</td>
 	</tr>  
 	<tr>

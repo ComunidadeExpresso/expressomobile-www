@@ -8,7 +8,8 @@ define([
 	'views/home/LoadingView',
 	'views/calendar/CalendarListView',
 	'text!templates/master/primaryContentTemplate.html',
-], function($, jqueryui, jqueryui_datepicker_ptBR, _, Backbone, Shared, LoadingView, CalendarListView, primaryContentTemplate)
+	'collections/home/ContextMenuCollection'
+], function($, jqueryui, jqueryui_datepicker_ptBR, _, Backbone, Shared, LoadingView, CalendarListView, primaryContentTemplate, ContextMenuCollection)
 {
 	var CalendarView = Backbone.View.extend(
 	{
@@ -36,6 +37,8 @@ define([
 				calendarListview.day = this.day;
 				calendarListview.fullDay = this.fullDay;
 				calendarListview.render();
+			
+			Shared.menuView.renderContextMenu('calendar',{});
 
 			this.loaded();
 		},

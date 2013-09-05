@@ -38,9 +38,8 @@ define([
 
 			var callback = function (data)
 			{
-				console.log(data);
-
 				contentTitle.text(data.event.get('eventName'));
+
 				that.$el.empty().html(_.template(calendarDetailsTemplate, data));
 				that.loaded();
 			}
@@ -58,8 +57,7 @@ define([
 				{
 					that.data = { event: data, _: _ };
 
-					if (callbackSucess)
-						callbackSucess(that.data);
+					callbackSucess(that.data);
 				})
 				.fail(function (data) 
 				{

@@ -9,8 +9,14 @@
 					<div class="hourly">
 
 						<% 
-							var startTime = (e.get('eventStartDate')).split(' ')[1];
-							var endTime = (e.get('eventEndDate')).split(" ")[1];
+							var startTime = 'Todo';
+							var endTime = 'o dia';
+
+							if (e.get('eventAllDay') == '0')
+							{
+								var startTime = (e.get('eventStartDate')).split(' ')[1];
+								var endTime = (e.get('eventEndDate')).split(" ")[1];	
+							}
 						%>
 
 						<strong class="start"><%= startTime %></strong>

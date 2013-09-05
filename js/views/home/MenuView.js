@@ -230,6 +230,9 @@ define([
       if (menuID == 3) {
           this.context.collection = contextMenuCollection.getContactsMenu();
       }
+      if (menuID == 'calendar') {
+          this.context.collection = contextMenuCollection.getCalendarMenu();
+      }
       this.context.render();
     },
 
