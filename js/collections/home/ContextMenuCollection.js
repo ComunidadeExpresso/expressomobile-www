@@ -35,10 +35,10 @@ define([
       getDetailMessageMenu: function(folderID,msgID) {
         var menuItems = [
             { route: "/Mail/Message/New", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
-            { route: "/Mail/Message/DelMessage/" + msgID + "/" + folderID, title: "Excluir"},
-            { route: "/Mail/Message/ReplyMessage/" + msgID + "/" + folderID, title: "Responder"},
-            { route: "/Mail/Message/ReplyToAll/" + msgID + "/" + folderID, title: "Responder p/ Todos"},
-            { route: "/Mail/Message/Forward/" + msgID + "/" + folderID, title: "Encaminhar"}
+            { route: "/Mail/Message/DelMessage/" + msgID + "/" + folderID, iconClass : 'context-delete-message', title: "Excluir"},
+            { route: "/Mail/Message/ReplyMessage/" + msgID + "/" + folderID, iconClass : 'context-reply', title: "Responder"},
+            { route: "/Mail/Message/ReplyToAll/" + msgID + "/" + folderID, iconClass : 'context-reply-all', title: "Responder p/ Todos"},
+            { route: "/Mail/Message/Forward/" + msgID + "/" + folderID, iconClass : 'context-forward', title: "Encaminhar"}
           ];
 
         this.createModelsFromArray(menuItems);
@@ -90,8 +90,8 @@ define([
 
       getContactsMenu: function() {
         var menuItems = [
-            { route: "/Contacts/Personal", title:"Contatos Pessoais"},
-            { route: "/Contacts/General", title: "Catálogo Geral"}
+            { route: "/Contacts/Personal", iconClass: 'context-catalogo-pessoal', title:"Contatos Pessoais"},
+            { route: "/Contacts/General", iconClass: 'context-catalogo-geral', title: "Catálogo Geral"}
           ];
 
         this.createModelsFromArray(menuItems);

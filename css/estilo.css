@@ -76,32 +76,32 @@ body #menu dl dd ul#mainMenu li a span { float: left; margin-left: 55px; height:
 body #menu dl dd ul#mainMenu li a .icon { width: 40px; height: 32px; }
 body #menu dl dd ul#mainMenu li a .icon-email { 
    border-radius: 5px;
-  background: url("../imgs/icon-email-72.png") no-repeat scroll center center;
+  background: url("../imgs/icon-caixa-entrada-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
 body #menu dl dd ul#mainMenu li a .icon-agenda { 
    border-radius: 5px;
-  background: url("../imgs/icon-agenda-72.png") no-repeat scroll center center;
+  background: url("../imgs/icon-agenda-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
 body #menu dl dd ul#mainMenu li a .icon-contacts { 
    border-radius: 5px;
-  background: url("../imgs/icon-catalogo-geral-72.png") no-repeat scroll center center;
+  background: url("../imgs/icon-contatos-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
 body #menu dl dd ul#mainMenu li a .icon-jabber { 
    border-radius: 5px;
-  background: url("../imgs/icon-chat-72.png") no-repeat scroll center center;
+  background: url("../imgs/icon-chat-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
 body #menu dl dd ul#mainMenu li a .icon-settings { 
    border-radius: 5px;
-  background: url("../imgs/icon-settings-72.png") no-repeat scroll center center;
+  background: url("../imgs/icon-preferencias-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
 body #menu dl dd ul#mainMenu li a .icon-logout { 
   border-radius: 5px;
-  background: url("../imgs/icon-logout-72.png") no-repeat scroll center center;
+  background: url("../imgs/icon-sair-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
 
@@ -124,33 +124,37 @@ body #menu dl dd ul#myFolders li a span .badge.badge-info { float: right; }
 }
 
 .folder-inbox {
-  background: url("../imgs/folder-inbox.png") no-repeat scroll center center;
+  background: url("../imgs/icon-caixa-entrada-30x30.png") no-repeat scroll center center;
 }
 
 .folder-drafts {
-  background: url("../imgs/folder-drafts.png") no-repeat scroll center center;
+  background: url("../imgs/icon-rascunho-30x30.png") no-repeat scroll center center;
 }
 
 .folder-sent {
-  background: url("../imgs/folder-sent.png") no-repeat scroll center center;
+  background: url("../imgs/icon-encaminhadas-30x30.png") no-repeat scroll center center;
 }
 
 .folder-blue {
-  background: url("../imgs/folder-blue.png") no-repeat scroll center center;
+  background: url("../imgs/icon-pasta-30x30.png") no-repeat scroll center center;
+}
+
+.folder-trash {
+  background: url("../imgs/icon-lixeira-vazia-30x30.png") no-repeat scroll center center;
 }
 
 .folder-trash-full {
-  background: url("../imgs/folder-trash-full.png") no-repeat scroll center center;
+  background: url("../imgs/icon-lixeira-cheia-30x30.png") no-repeat scroll center center;
 }
 
 .folder-shared {
-  background: url("../imgs/folder-shared.png") no-repeat scroll center center;
+  background: url("../imgs/icon-pasta-compartilhada-30x30.png") no-repeat scroll center center;
 }
 
 
 
 /** Menu de contexto **/
-body #page .top #contextMenu { background-color: #333333; width: 200px; position: absolute; top: 53px; right: 0; z-index: 9999; }
+body #page .top #contextMenu { background-color: #333333; width: 240px; position: absolute; top: 53px; right: 0; z-index: 9999; }
 body #page .top #contextMenu ul li { border-bottom: 1px solid #2C2C2C; }
 body #page .top #contextMenu ul li a { color: #EFEFEF; text-decoration: none; display: block; padding: 15px 10px; width: 200px; }
 
@@ -637,7 +641,7 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
 }
 
 .btn-compose {
-    background: url("../imgs/btn-compose.png") no-repeat scroll center center;
+    background: url("../imgs/icon-nova-mensagem-30x30.png") no-repeat scroll center center;
     background-color: #006DCC;
     background-repeat: repeat-x;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
@@ -645,6 +649,38 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
     min-width: 40px;
     height: 40px;
+}
+
+.context-icon {
+  float: left;
+  min-width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  margin-top: -5px;
+}
+
+.context-reply {
+    background: url("../imgs/icon-responder-30x30.png") no-repeat scroll center center;
+}
+
+.context-reply-all {
+  background: url("../imgs/icon-responder-todos-30x30.png") no-repeat scroll center center;
+}
+
+.context-delete-message {
+  background: url("../imgs/icon-excluir-mensagem-30x30.png") no-repeat scroll center center;
+}
+
+.context-forward {
+  background: url("../imgs/icon-encaminhar-30x30.png") no-repeat scroll center center;
+}
+
+.context-catalogo-geral {
+  background: url("../imgs/icon-catalogo-geral-30x30.png") no-repeat scroll center center;
+}
+
+.context-catalogo-pessoal {
+  background: url("../imgs/icon-catalogo-pessoal-30x30.png") no-repeat scroll center center;
 }
 
 
