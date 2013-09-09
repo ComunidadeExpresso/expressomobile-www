@@ -121,14 +121,18 @@ define([
 
       if (this.secondViewName == "Send") {
 
-        var onSendMessage = function() {
+        var onSendMessage = function(result) {
           Shared.router.navigate("/Mail/Messages/" + this.folderID,{ trigger: true });
           alert("Sua Mensagem foi Enviada!");
+          //alert(JSON.stringify(result));
+          // Shared.router.navigate("/Mail/Message/New",{ trigger: true });
         };
 
-        var onFailSendMessage = function() {
+        var onFailSendMessage = function(error) {
+          alert(error.message);
+          // Shared.router.navigate("/Mail/Message/New",{ trigger: true });
           Shared.router.navigate("/Mail/Messages/" + this.folderID,{ trigger: true });
-          alert("Ocorreu um erro ao Enviar sua Mensagem.");
+          
         };
 
         var Message = this.getNewMessageModel();

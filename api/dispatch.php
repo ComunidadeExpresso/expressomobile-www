@@ -25,6 +25,7 @@ curl_setopt_array($curl, array(
 	CURLOPT_SSL_VERIFYPEER	=> false,
 ));
 
+
 // Choose request method
 switch ($_SERVER['REQUEST_METHOD']) {
 	case 'GET':
@@ -38,28 +39,27 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 		curl_setopt($curl, CURLOPT_URL, $url);
 
-		 if (!$_FILES) {
-			
-			$data = "id=".$_POST['id']."&params=" . stripslashes(json_encode($_POST['params']));
-			
-			curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
 
-		} else {
+		$newPost['id'] = $_POST['id'];
+		$newPost['params'] = $_POST['params'];
 
-			$newPost = $_POST;
+		foreach ($newPost['params'] as $i => $value) {
+			$newPost['params'][$i] = htmlentities(mb_convert_encoding($_POST['params'][$i],"ISO-8859-1","UTF-8"));
+		}
 
-			$newPost['params'] = stripslashes(json_encode($_POST['params']));
+		$newPost['params'] = stripslashes(mb_convert_encoding(html_entity_decode(json_encode($newPost['params'])),"UTF-8","ISO-8859-1" ));
+
+		 if ($_FILES) {
 
 			$i = 1;
 			foreach ($_FILES as $file) {
 				move_uploaded_file($file['tmp_name'], dirname($file['tmp_name']) . '/' . $file['name']);
 				$newPost['file_' . $i] = '@' . dirname($file['tmp_name']) . '/' . $file['name'];
-				//$newPost['file_' . $i] = curl_file_create($file['tmp_name'],$file['type'],$file['name']);
 				$i = $i + 1;
 			}
 
-			curl_setopt($curl, CURLOPT_POSTFIELDS, $newPost);
 		}
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $newPost);
 
 		$result = curl_exec($curl);
 		break;

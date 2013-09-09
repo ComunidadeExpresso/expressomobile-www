@@ -75,10 +75,6 @@ define([
 
         alert(result.error.message);
 
-        //that.render();
-
-        //$("#mainAppPageContent").empty().append(that.$el);
-        //$("#mainAppPageContent").html(loginTemplate);
         Shared.router.navigate('',{trigger: true});
         
         

@@ -4,6 +4,35 @@ define([
   'backbone',
 ], function($, _, Backbone){
 
+	function stripslashes (str) {
+	  // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+	  // +   improved by: Ates Goral (http://magnetiq.com)
+	  // +      fixed by: Mick@el
+	  // +   improved by: marrtins
+	  // +   bugfixed by: Onno Marsman
+	  // +   improved by: rezna
+	  // +   input by: Rick Waldron
+	  // +   reimplemented by: Brett Zamir (http://brett-zamir.me)
+	  // +   input by: Brant Messenger (http://www.brantmessenger.com/)
+	  // +   bugfixed by: Brett Zamir (http://brett-zamir.me)
+	  // *     example 1: stripslashes('Kevin\'s code');
+	  // *     returns 1: "Kevin's code"
+	  // *     example 2: stripslashes('Kevin\\\'s code');
+	  // *     returns 2: "Kevin\'s code"
+	  return (str + '').replace(/\\(.?)/g, function (s, n1) {
+	    switch (n1) {
+	    case '\\':
+	      return '\\';
+	    case '0':
+	      return '\u0000';
+	    case '':
+	      return '';
+	    default:
+	      return n1;
+	    }
+	  });
+	}
+
 	jQuery.ajaxTransport( 'arraybuffer', function( options, originalOptions, jqXHR ) {
         return {
             send: function( headers, completeCallback ) {
@@ -52,8 +81,14 @@ define([
 
 				    for ( var i in options.params ) {
 	                    body += "--" + boundary + "\r\n";
-	                    body += "Content-Disposition: form-data; name='params["+i+"]'\r\n\r\n";
-	                    body += options.params[i];
+	                    body += "Content-Disposition: form-data; name='params["+i+"]'\r\n";
+	                    body += "Content-Type: text/plain; charset=UTF-8 \r\n\r\n";
+	                    // body += "Content-Transfer-Encoding: utf-8\r\n\r\n";
+	                    // if (!options.phoneGap) { 
+	                    	body += unescape(encodeURIComponent(options.params[i]));
+	                	// } else {
+	                		// body += options.params[i];
+	                	// }
 	                    body += "\r\n";
 	                }
 
@@ -76,25 +111,49 @@ define([
                     } else {
                     	body += options.files[i].src + "\r\n";
                     }
+
+
                 }
 
 
                 body += "--" + boundary + "--";
 
-                jqXHR.onload = function() { options.loadArrayBuffer( jqXHR.response ); };
-                jqXHR.onerror = function(e) { console.log('ERROR'); console.log(e); }
-                jqXHR.setRequestHeader('content-type', 'multipart/form-data; boundary=' + boundary);
+                // alert(body);
 
+
+
+                jqXHR.onload = function() { options.loadArrayBuffer( jqXHR.response ); };
+                jqXHR.onerror = function(e) { console.log('ERROR'); console.log(e); };
+                jqXHR.setRequestHeader('content-type', 'multipart/form-data; charset=UTF-8; boundary=' + boundary);
 			    var array = new Uint8Array(new ArrayBuffer(body.length));
  
 				for(i = 0; i < body.length; i++) {
 				  array[i] = body.charCodeAt(i);
 				}
 
+				
+
 				//THIS WORKS ON CHROME, FIREFOX AND SAFARI,
 				//BUT IS STILL NOT WORKING IN PHONEGAP.
-				var blob = new Blob([array.buffer], {type: "binary"});
-			    jqXHR.send(blob);
+				if (options.phoneGap) {
+					// jqXHR.overrideMimeType('text/plain; charset=utf-8');
+
+					// alert('Send ArrayBuffer');
+			    	jqXHR.send(array);
+
+					// var bb = new (window.MozBlobBuilder || window.WebKitBlobBuilder || window.BlobBuilder)();
+					// bb.append(array.buffer);
+					// var blob = bb.getBlob("binary");
+
+				} else {
+					// alert('new Blob');
+					var blob = new Blob([array.buffer], {type: "binary"});
+
+					// alert('Send');
+			    	jqXHR.send(blob);
+				}
+				
+				
 
             },
             abort: function() { if ( jqXHR ) { jqXHR.onerror = jQuery.noop; jqXHR.abort(); } }
@@ -317,8 +376,15 @@ define([
 				if (this.dataType() == 'fileupload') {
 					conf.dataType = this.dataType();
 					conf.files = _files;
-					conf.loadArrayBuffer = function(arrayBuffer) {
-						if (_data[this.id].done) _data[this.id].done(arrayBuffer,_data[this.id].send);
+					conf.loadArrayBuffer = function(response) {
+						var jsonResponse = JSON.parse(response);
+
+						if(jsonResponse && jsonResponse.error && jsonResponse.error.message) {
+							if (_data[this.id].fail) _data[this.id].fail(jsonResponse.error,_data[this.id].send);
+						} else {
+							if (_data[this.id].done) _data[this.id].done(jsonResponse.result,_data[this.id].send);
+						}
+
 					};
 				}
 

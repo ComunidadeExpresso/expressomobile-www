@@ -143,8 +143,7 @@ define([
       var chat = $('.chatArea').outerHeight(true) == null ? 0 : $('.chatArea').outerHeight(true);
       
       // Verify screen width to define device type
-      //deviceType($(window).width() < 720);
-      if ($(window).width() < 720) 
+      if (Shared.isSmartPhoneResolution())
         $('body').addClass('smartphone');
       else 
         $('body').removeAttr('class');
