@@ -144,10 +144,8 @@ define([
 
             })
             .fail(function(result){
-              if (result.error.code == 7) {
-                Shared.router.navigate('Login',{trigger: true});
-                alert("Sua sessão expirou.");
-              }
+              
+              Shared.handleErrors(result.error);
               
               return false;
             })
@@ -155,11 +153,9 @@ define([
 
       })
       .fail(function(result){
-        if (result.error.code == 7) {
-          Shared.router.navigate('Login',{trigger: true});
-          alert("Sua sessão expirou.");
-        }
-        
+
+        Shared.handleErrors(result.error);
+
         return false;
       })
       .execute();

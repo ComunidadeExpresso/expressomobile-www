@@ -27,6 +27,10 @@ define([
   Shared.contentView = null;
   Shared.detailView = null;
 
+  //USED WHEN THE ANDROID SEND FILES AND OPENS A NEW COMPOSE MESSAGE.
+  Shared.newMessageIntent = false;
+  Shared.newMessageFiles = true;
+
 
   //MENSAGE THAT IT'S BEING COMPOSED.
   Shared.currentDraftMessage = '';
@@ -133,6 +137,24 @@ define([
 
   Shared.handleErrors = function(error) {
     //alert(error);
+    if (error.code == 7) {
+
+      var expressoValues = {
+        auth: "", 
+        "profile": "",
+        username: "", 
+        password: "",
+        phoneGap: "",
+        serverAPI: ""
+      };
+
+      Shared.api.setLocalStorageValue("expresso",expressoValues);
+
+      Shared.router.navigate('Login',{trigger: true});
+      alert("Sua sessão expirou...");
+
+      
+    }
   };
 
   Shared.setDefaultIMListeners = function() {
@@ -178,22 +200,22 @@ define([
   // deviceready is PhoneGap's init event
 document.addEventListener('deviceready', function () {
 
-  
   Shared.api.phoneGap(true);
 
   if (window.plugins.webintent != undefined) {
     window.plugins.webintent.getExtra("android.intent.extra.STREAM", function (url) {
-      alert("ENVIO_ARQUIVOS");
+
       alert(url);
-      Shared.router.navigate("/Mail/Message/New",{trigger: true});
-      // url is the value of EXTRA_TEXT 
+
+      Shared.newMessageIntent = true;
+      Shared.newMessageFiles = url;
+
     }, function() {
-      //alert("No Extra Suplied");
-      // There was no extra supplied.
+
     });
 
   } else {
-    //alert("Sem WebIntent");
+    //SEM WEBINTENT.
   }
 
 });
