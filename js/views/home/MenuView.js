@@ -64,7 +64,10 @@ define([
       .resource('Catalog/ContactPicture')
       .params({contactID:this.profile.contactID,contactType:'2'})
       .done(function(result){
-        $("#userPicture").attr("src","data:image/gif;base64," + result.contacts[0].contactImagePicture);
+        if (result.contacts[0].contactImagePicture != "") {
+          $("#userPicture").css("background-image","url('data:image/gif;base64," + result.contacts[0].contactImagePicture + "')");
+          $("#userPicture").css("background-size","46px 61px");
+        } 
       })
       .fail(function(error) {
         Shared.handleErrors(error);
