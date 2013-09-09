@@ -5,7 +5,8 @@ define([
   'backbone',
   'expressoAPI',
   'expressoIM',
-], function($, _, Backbone,expressoAPI,expressoIM) {
+  'views/home/UserMessageView',
+], function($, _, Backbone,expressoAPI,expressoIM,UserMessageView) {
   
   var Shared = {};
 
@@ -102,7 +103,16 @@ define([
     }
   };
 
-
+  Shared.showMessage = function( message) {
+    var messageView = new UserMessageView();
+    messageView.msgType = message.type;
+    messageView.msgTitle = message.title;
+    messageView.msgDescription = message.description;
+    messageView.elementID = message.elementID;
+    messageView.msgRoute = message.route;
+    messageView.msgIcon = message.icon;
+    messageView.render();
+  };
 
   Shared.deviceType = function(smartphone) {
     if (smartphone) {
@@ -163,6 +173,19 @@ define([
 
     var onMessageFunction = function (message) { 
       Shared.menuView.setChatBadge(Shared.im.qtdUnreadMessages());
+
+      console.log(message);
+
+      var message = {
+        type: "chat-message",
+        icon: 'icon-jabber',
+        title: message.body,
+        description: message.jid,
+        route: "/Chat/" + message.id,
+        elementID: "#pageMessage",
+      }
+
+      Shared.showMessage(message);
     };
 
     var onComposingFunction = function (message) { 

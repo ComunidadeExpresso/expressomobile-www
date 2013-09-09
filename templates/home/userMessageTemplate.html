@@ -1,5 +1,17 @@
-Mensagem para o Usuário.
-
-<br><br>
-
-<input id="btn-user-message" type="button" value="Recarregar" class="btn btn-primary"  onclick="" style="width: 50%;">
+<% if (route != "") { %>
+<a href="<%=route%>" class="routeMessage">
+<% } %>
+	<div class="<%=type%> message">
+		<% if (icon != "") { %>
+			<div class="message-icon <%=icon%>"></div>
+		<% } %>
+		<% if (description != '') { %>
+			<h3><%=title%></h3>
+			<p><%=description%></p>
+		<% } else { %>
+			<h4><%=title%></h4>
+		<% } %>
+	</div>
+<% if (route != "") { %>
+	</a>
+<% } %>

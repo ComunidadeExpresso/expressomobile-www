@@ -18,6 +18,9 @@ define([
 
 		render: function(data)
 		{
+
+			
+
 			var that = this;
 			var primaryElementID = "#content";
 			var detailElementID = "#contentDetail";

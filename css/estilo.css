@@ -57,7 +57,7 @@ body #page .main #content .searchArea input:focus { border: 1px solid #0088CC; }
 body #menu { width: 50%; height: 100%; position: absolute; margin-top: -53px; background: url("../imgs/bg.png"); display: none; }
 body #menu.expanded { display: block; }
 body #menu #personalInfo { height: 61px; padding: 10px 10px; border-bottom: 1px solid #2C2C2C }
-body #menu #personalInfo img { float: left; width: 46px; height: 61px; border-radius: 6px 6px 6px 6px; background: url('../imgs/contactPhotoFrameNone.png') center center no-repeat; }
+#userPicture { float: left; width: 46px; height: 61px; border-radius: 6px 6px 6px 6px; background: url('../imgs/contactPhotoFrameNone.png') center center no-repeat; }
 body #menu #personalInfo .personalData { margin: 0 0 0 56px; height: 61px; color: #FFF; }
 body #menu #personalInfo .personalData span { display: block; }
 body #menu #personalInfo .personalData span.name { font-size: 15px; }
@@ -74,32 +74,32 @@ body #menu dl dd ul#mainMenu li.selected { background: transparent url('../imgs/
 body #menu dl dd ul#mainMenu li.selected a { color: #EFEFEF; border: 1px solid #444444; background-color: #222222; border-radius: 5px 5px 5px 5px; }
 body #menu dl dd ul#mainMenu li a span { float: left; margin-left: 55px; height: 32px; line-height: 32px; vertical-align: top; }
 body #menu dl dd ul#mainMenu li a .icon { width: 40px; height: 32px; }
-body #menu dl dd ul#mainMenu li a .icon-email { 
+.icon-email { 
    border-radius: 5px;
   background: url("../imgs/icon-caixa-entrada-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
-body #menu dl dd ul#mainMenu li a .icon-agenda { 
+.icon-agenda { 
    border-radius: 5px;
   background: url("../imgs/icon-agenda-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
-body #menu dl dd ul#mainMenu li a .icon-contacts { 
+.icon-contacts { 
    border-radius: 5px;
   background: url("../imgs/icon-contatos-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
-body #menu dl dd ul#mainMenu li a .icon-jabber { 
+.icon-jabber { 
    border-radius: 5px;
   background: url("../imgs/icon-chat-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
-body #menu dl dd ul#mainMenu li a .icon-settings { 
+.icon-settings { 
    border-radius: 5px;
   background: url("../imgs/icon-preferencias-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
-body #menu dl dd ul#mainMenu li a .icon-logout { 
+.icon-logout { 
   border-radius: 5px;
   background: url("../imgs/icon-sair-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
@@ -893,5 +893,72 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
   padding-left: 10px;
   margin-left: 10px;
   text-align: center;
+}
+
+
+.message{
+    background-size: 40px 40px;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
+              transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
+              transparent 75%, transparent);                    
+     box-shadow: inset 0 -1px 0 rgba(255,255,255,.4);
+     width: 100%;
+     border: 1px solid;
+     color: #fff;
+     padding: 10px;
+     position: fixed;
+     text-shadow: 0 1px 0 rgba(0,0,0,.5);
+     animation: animate-bg 5s linear infinite;
+     z-index: 9999;
+}
+
+.chat-message {
+     background-color: #4ea5cd;
+     border-color: #3b8eb5;
+}
+
+.error{
+     background-color: #de4343;
+     border-color: #c43d3d;
+}
+     
+.warning{
+     background-color: #eaaf51;
+     border-color: #d99a36;
+}
+
+.success{
+     background-color: #61b832;
+     border-color: #55a12c;
+}
+
+.message h3{
+     margin: 0 0 5px 0;       
+     font-size: 12px;
+
+}
+
+
+.message h4{
+     margin: 0 0 10px 0;
+     margin-top: 6px;
+     margin-left: 30px;       
+     font-size: 16px;
+}
+
+.message p{
+     margin: 0;     
+     font-size: 10px;                     
+}
+
+.message-icon { width: 40px; height: 32px; float: left; }
+
+@keyframes animate-bg {
+    from {
+        background-position: 0 0;
+    }
+    to {
+       background-position: -80px 0;
+    }
 }
 

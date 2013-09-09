@@ -121,17 +121,39 @@ define([
 
       if (this.secondViewName == "Send") {
 
+        var that = this;
+
         var onSendMessage = function(result) {
-          Shared.router.navigate("/Mail/Messages/" + this.folderID,{ trigger: true });
-          alert("Sua Mensagem foi Enviada!");
+        
+          var message = {
+            type: "success",
+            icon: 'icon-email',
+            title: "Mensagem enviada com sucesso!",
+            description: "",
+            elementID: "#pageMessage",
+          }
+
+          Shared.showMessage(message);
+
+          Shared.router.navigate("/Mail/Folders/INBOX",{ trigger: true });
+          // alert("Sua Mensagem foi Enviada!");
           //alert(JSON.stringify(result));
           // Shared.router.navigate("/Mail/Message/New",{ trigger: true });
         };
 
         var onFailSendMessage = function(error) {
-          alert(error.message);
-          // Shared.router.navigate("/Mail/Message/New",{ trigger: true });
-          Shared.router.navigate("/Mail/Messages/" + this.folderID,{ trigger: true });
+
+          var message = {
+            type: "error",
+            icon: 'icon-email',
+            title: "Ocorreu um erro ao enviar a mensagem!",
+            description: error.message,
+            elementID: "#pageMessage",
+          }
+
+          Shared.showMessage(message);
+
+          Shared.router.navigate("/Mail/Folders/INBOX",{ trigger: true });
           
         };
 
@@ -174,12 +196,39 @@ define([
         var loadingView = new LoadingView({ el: $(elementID) });
         loadingView.render();
 
+        var that = this;
+
         var onDeleteMessage = function() {
-          Shared.router.navigate("/Mail/Messages/" + this.folderID,{ trigger: true });
+
+          Shared.showMessage({
+            type: "success",
+            icon: 'icon-email',
+            title: "Mensagem excluída com sucesso!",
+            description: "",
+            elementID: "#pageMessage",
+          });
+
+          var message = { msgID: that.msgID, folderID: that.folderID};
+          var mModel = new MessagesModel(message);
+
+          if (Shared.isTabletResolution()) {
+            $("#" + mModel.listItemID()).remove();
+
+            Shared.router.navigate("/Mail/Folders/" + that.folderID,{ trigger: true });
+          }
+
         };
 
         var onFailDeleteMessage = function() {
+          Shared.showMessage({
+            type: "error",
+            icon: 'icon-email',
+            title: "Não foi possível excluir a mensagem selecionada!",
+            description: "",
+            elementID: "#pageMessage",
+          });
 
+          Shared.router.navigate("/Mail/Folders/" + that.folderID,{ trigger: true });
         };
 
         var message = { msgID: this.msgID, folderID: this.folderID};
@@ -187,6 +236,50 @@ define([
 
         mModel.delete(onDeleteMessage,onFailDeleteMessage);
         
+      }
+
+      if (this.secondViewName == "ReplyToAll") {
+        
+        
+
+        var ReplyOnGetMessage = function(result) {
+
+          var newMessage = result.models[0];
+
+          var from = newMessage.get("msgFrom");
+          var msgTo = newMessage.get("msgTo");
+          var msgCc = newMessage.get("msgCc");
+          var msgBcc = newMessage.get("msgBcc");
+
+          newMessage.set("msgTo",[]);
+          newMessage.set("msgCc",[]);
+          newMessage.set("msgBcc",[]);
+
+          newMessage.addRecipient("msgTo",from.mailAddress, from.fullName);
+          for (var i in msgTo) {
+            newMessage.addRecipient("msgCc",msgTo[i].mailAddress,msgTo[i].fullName);
+          }
+          for (var i in msgCc) {
+            newMessage.addRecipient("msgCc",msgCc[i].mailAddress,msgCc[i].fullName);
+          }
+          
+          newMessage.set("msgSubject","Re: " + newMessage.get("msgSubject"));
+
+          that.renderComposeMessage(newMessage);
+
+          
+        };
+        var ReplyOnGetMessageFailed = function() {
+          
+        };
+
+        var loadingView = new LoadingView({ el: $(elementID) });
+        loadingView.render();
+
+        var mCollection = new MessagesCollection();
+
+        mCollection.getMessageByID( this.folderID, this.msgID).done(ReplyOnGetMessage).fail(ReplyOnGetMessageFailed).execute();
+
       }
 
       if (this.secondViewName == "ReplyMessage") {

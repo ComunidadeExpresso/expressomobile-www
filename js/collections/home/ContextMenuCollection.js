@@ -35,10 +35,10 @@ define([
       getDetailMessageMenu: function(folderID,msgID) {
         var menuItems = [
             { route: "/Mail/Message/New", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
-            { route: "/Mail/Message/DelMessage/" + msgID + "/" + folderID, iconClass : 'context-delete-message', title: "Excluir"},
             { route: "/Mail/Message/ReplyMessage/" + msgID + "/" + folderID, iconClass : 'context-reply', title: "Responder"},
             { route: "/Mail/Message/ReplyToAll/" + msgID + "/" + folderID, iconClass : 'context-reply-all', title: "Responder p/ Todos"},
-            { route: "/Mail/Message/Forward/" + msgID + "/" + folderID, iconClass : 'context-forward', title: "Encaminhar"}
+            { route: "/Mail/Message/Forward/" + msgID + "/" + folderID, iconClass : 'context-forward', title: "Encaminhar"},
+            { route: "/Mail/Message/DelMessage/" + msgID + "/" + folderID, iconClass : 'context-delete-message', title: "Excluir"},
           ];
 
         this.createModelsFromArray(menuItems);
