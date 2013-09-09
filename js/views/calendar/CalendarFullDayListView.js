@@ -46,9 +46,12 @@ define([
 			var hourlyBusy = [];
 			var events = new EventsListCollection();
 			var date = new Date(this.year, this.month - 1, this.day);
+			var allDayRowSpan = 48;
 
 			for (var i in this.data.events)
 			{
+				var rowSpan = 0;
+
 				var start = (this.data.events[i].get('eventStartDate')).split(' ');
 				var dateStart = start[0].split('/');
 				var timeStart = start[1].split(':')
@@ -64,23 +67,27 @@ define([
 
 				if (dateStart.getTime() == date.getTime() || dateEnd.getTime() == date.getTime())
 				{
-					var rowSpan = 0;
-
-					while (dateTimeStart.getTime() <= dateTimeEnd.getTime())
+					if (this.data.events[i].get('eventAllDay') == '1')
+						rowSpan = allDayRowSpan;
+					else
 					{
-						rowSpan = rowSpan + 1;
-						dateTimeStart.setMinutes(dateTimeStart.getMinutes() + 30);
+						while (dateTimeStart.getTime() <= dateTimeEnd.getTime())
+						{
+							rowSpan = rowSpan + 1;
+							dateTimeStart.setMinutes(dateTimeStart.getMinutes() + 30);
+						}
 					}
+
+					events.add(this.data.events[i]);
 
 					var dateStar = dateTimeStart;
 					var eventSummary = new Object();
 						eventSummary.dateStart = dateStartAux;
 						eventSummary.dateEnd = dateTimeEnd;
-						eventSummary.index = i;
 						eventSummary.rowSpan = rowSpan;
+						eventSummary.index = events.length - 1;
 
 					hourlyBusy.push(eventSummary);
-					events.add(this.data.events[i]);
 				}
 			}
 

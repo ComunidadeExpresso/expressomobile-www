@@ -1,8 +1,10 @@
 define ([
-  'underscore',
-  'backbone',
-  'shared'
-], function (_, Backbone, Shared) 
+	'underscore',
+	'backbone',
+	'shared',
+	'models/contacts/ContactModel',
+	'collections/contacts/DetailsContactCollection'
+], function (_, Backbone, Shared, ContactModel, DetailsContactCollection) 
 {
 	var EventModel = Backbone.Model.extend(
 	{
@@ -14,10 +16,19 @@ define ([
 	        eventDescription: "",
 	        eventLocation: "",
 	        eventParticipants: [],
+	        eventParticipantsLdap: [],
 	        eventStartDate: "",
 	        eventEndDate: "",
 	        eventAllDay: "0",
-	        eventExParticipants: ""
+	        eventExParticipants: "",
+			eventCategoryID: "",
+			eventDateEnd: "",
+			eventDateStart: "",
+			eventDescription: "",
+			eventOwner: "",
+			eventPriority: "",
+			eventTimeEnd: "",
+			eventTimeStart: ""
 		},
 
 		initialize: function ()
@@ -52,22 +63,23 @@ define ([
 		{	
 			var that = this;
 
-			console.log('pEventID: ' + pEventID);
-
-
 			this.api
 			.resource('Calendar/Event')
 			.params({eventID: pEventID})
 	        .done(function (result)
 	        {
-	        	var thisModel = new EventModel(result.events[0]);
-	        		that.set(thisModel);
+	        	// var thisModel = new EventModel(result.events[0]);
+	        		that.set(result.events[0]);
+	        		that.getEventOwner();
 
-		        if (that.done)
-	        		that.done(thisModel);
+		        // if (that.done)
+	        	// 	that.done(that);
 	        })
 	        .fail( function (error) 
 	        {
+	        	console.log('getEvent');
+				console.log(error);
+
 				if (that.fail)
 	        		that.fail(error);
 	        })
@@ -75,6 +87,62 @@ define ([
 
 			return that;
 
+		},
+
+		getPriority: function ()
+		{
+			var priority = ['-', 'Baixa', 'Normal', 'Alta'];
+
+			return priority[this.get('eventPriority')];
+		},
+
+		getEventParticipants: function (callback)
+		{
+			var listParticipants = this.get('eventParticipants');
+			var listUidNumbers = [];
+			var that = this;
+
+			for (var i in listParticipants)
+				listUidNumbers.push(listParticipants[i].contactUIDNumber);
+
+			var detailsContactCollection = new DetailsContactCollection();
+				detailsContactCollection.getContactDetails(listUidNumbers)
+				.done (function (data) 
+				{
+					that.set({eventParticipantsLdap: data.models});
+
+					 if (that.done)
+		        		that.done(that)
+				})
+				.fail (function (error) 
+				{
+					console.log('getEventParticipants');
+					console.log(error);
+
+					if (that.fail)
+		        		that.fail(error);
+				})
+		},
+
+		getEventOwner: function (callback)
+		{
+			var that = this;
+
+			var detailsContactCollection = new DetailsContactCollection();
+				detailsContactCollection.getContactDetails(this.get('eventOwner'))
+				.done (function (data) 
+				{
+					that.set({eventOwner: data.models[0]});
+	        		that.getEventParticipants();
+				})
+				.fail (function (error) 
+				{
+					console.log('getEventOwner');
+					console.log(error);
+
+					if (that.fail)
+		        		that.fail(error);
+				})
 		},
 
 		execute: function ()

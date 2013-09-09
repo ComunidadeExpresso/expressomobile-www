@@ -52,8 +52,6 @@ define([
 	        })
 	        .fail( function (error) 
 	        {
-	        	console.log(error);
-
 				if (that._data.fail) 
 					that._data.fail(error); 
 	        })
@@ -73,6 +71,38 @@ define([
 			this.api
 	        .resource('Catalog/Contacts')
 	        .params({search:pContactID,contactType:'2'})
+	        .done(function (result)
+	        {
+				for (var i in result.contacts) 
+				{
+					var thisContact = new thatModel(result.contacts[i]);
+					that.add(thisContact);
+				}
+
+				if (that._data.done)
+					that._data.done(that);
+	        })
+	        .fail( function (error) 
+	        {
+				if (that._data.fail) 
+					that._data.fail(error); 
+	        })
+	        .execute();
+
+	        return that;
+		},
+
+		getContactDetails: function(pContactID)
+		{	
+			var that = this;
+				that._data = {};
+
+			var thatModel = ContactModel;
+			var data = this._data;
+
+			this.api
+	        .resource('Catalog/Contacts')
+	        .params({search:'', contactID: pContactID,contactType:'2'})
 	        .done(function (result)
 	        {
 				for (var i in result.contacts) 

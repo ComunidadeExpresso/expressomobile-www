@@ -96,6 +96,15 @@ define([
 
         this.createModelsFromArray(menuItems);
         return this;
+      },
+
+      getCalendarMenu: function() {
+        var menuItems = [
+            { route: "/Calendar/Events/Add", title:"Adicionar evento"}
+          ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
       }
 
   });

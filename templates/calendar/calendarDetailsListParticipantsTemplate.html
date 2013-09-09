@@ -1,0 +1,20 @@
+<% 
+if (participants.length > 0) 
+{ 
+	%>
+	<ul>
+	<%
+	for (var i in participants) 
+	{
+		if (!_.isEmpty(participants[i].get('contactFullName')))
+		{
+		%>	
+			<li><%= participants[i].get('contactFullName') %></li>
+		<%
+		}
+	}
+	%>
+	</ul>
+	<%
+}
+%>

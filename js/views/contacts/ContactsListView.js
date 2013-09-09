@@ -137,8 +137,6 @@ define([
 
 			var doneGeneralContacts = function (data)
 			{
-				console.log(data);
-
 				var template = _.template(GeneralContactsListTemplate, data);
 				$('#scroller').html(template);
 

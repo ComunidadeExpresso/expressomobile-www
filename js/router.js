@@ -37,6 +37,7 @@ define([
       'Calendar/:year/:month/:day' : 'calendarView',
       'Calendar/FullDay/:year/:month/:day' : 'calendarFullDayView',
       'Calendar/Events/:eventID' : 'calendarDetailsView',
+      'Calendar/Events/Add' : 'calendarEditEventView',
       'Chat' : 'chatListView',
       'Chat/:secondViewName' : 'chatListView',
       'Settings' : 'settingsListView',
@@ -235,6 +236,18 @@ define([
       var calendarDetailsView = new CalendarDetailsView();
       calendarDetailsView.eventID = eventID;
       calendarDetailsView.render();
+
+      Shared.menuView.selectMenu(2);
+  
+    });
+
+    app_router.on('route:calendarEditEventView', function (eventID) {
+
+      console.log('calendarEditEventView');
+
+      var calendarEditEventView = new CalendarEditEventView();
+      // calendarEditEventView.eventID = eventID;
+      calendarEditEventView.render();
 
       Shared.menuView.selectMenu(2);
   
