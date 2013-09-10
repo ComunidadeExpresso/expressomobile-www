@@ -57,7 +57,6 @@ body #page .main #content .searchArea input:focus { border: 1px solid #0088CC; }
 body #menu { width: 50%; height: 100%; position: absolute; margin-top: -53px; background: url("../imgs/bg.png"); display: none; }
 body #menu.expanded { display: block; }
 body #menu #personalInfo { height: 61px; padding: 10px 10px; border-bottom: 1px solid #2C2C2C }
-#userPicture { float: left; width: 46px; height: 61px; border-radius: 6px 6px 6px 6px; background: url('../imgs/contactPhotoFrameNone.png') center center no-repeat; }
 .userPicture { float: left; width: 46px; height: 61px; border-radius: 6px 6px 6px 6px; background: url('../imgs/contactPhotoFrameNone.png') center center no-repeat; }
 body #menu #personalInfo .personalData { margin: 0 0 0 56px; height: 61px; color: #FFF; }
 body #menu #personalInfo .personalData span { display: block; }

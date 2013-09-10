@@ -1,7 +1,7 @@
 <div id="scrollerMenu" class="container">
 
   <div id="personalInfo">
-    <div id="userPicture"></div>
+    <div id="userPicture" class="userPicture"></div>
     <div class="personalData">
       <span id="userName" class="name"><% if (!_.isNull(user.contactFullName)) { %><%=user.contactFullName%><% } %></span>
       <span id="userEmail" class="email"><% if (!_.isNull(user.contactMails[0])) { %><%=user.contactMails[0]%><% } %></span>
