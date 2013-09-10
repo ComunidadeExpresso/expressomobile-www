@@ -111,6 +111,7 @@ define([
     messageView.elementID = message.elementID;
     messageView.msgRoute = message.route;
     messageView.msgIcon = message.icon;
+    messageView.timeout = message.timeout;
     messageView.render();
   };
 
@@ -228,7 +229,7 @@ document.addEventListener('deviceready', function () {
   if (window.plugins.webintent != undefined) {
     window.plugins.webintent.getExtra("android.intent.extra.STREAM", function (url) {
 
-      alert(url);
+      //alert(url);
 
       Shared.newMessageIntent = true;
       Shared.newMessageFiles = url;
@@ -243,7 +244,7 @@ document.addEventListener('deviceready', function () {
 
 });
 
-  window.onunload = function(){
+  var exitFunction = function(){
 
     var expressoValue = Shared.api.getLocalStorageValue("expresso");
 
@@ -256,6 +257,12 @@ document.addEventListener('deviceready', function () {
     } else {
       window.location.href = "/Login";
     }
+  };
+  
+  if(window.onpagehide || window.onpagehide === null){
+     window.addEventListener('pagehide', exitFunction, false);
+  } else {
+     window.addEventListener('unload', exitFunction, false);
   }
 
   //Shared.router is created in App.js

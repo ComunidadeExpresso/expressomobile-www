@@ -1,5 +1,5 @@
 <% _.each(messages, function(message){ %>
-<h2 class="ellipsis50"><%= message.get("msgSubject") %></h2>
+<h2 class="ellipsis50"><span class="subtitle-detail-text"><%=message.get("msgDate")%>&nbsp;(<%=message.getTimeAgo()%>)</span><%= message.get("msgSubject") %></h2>
 <article id="wrapperDetail" class="container">
   <div id="scrollerDetail">
     <table id="messageDetails"> 
@@ -13,7 +13,7 @@
           </span>
         </td>
         <td>
-          <div class="msg-list-images">
+          <div class="msg-list-images" style="width: 150px;">
             <% if (message.get("msgHasAttachments") == '1') { %>
             <div class="msg-attachments"></div>
             <% } %>

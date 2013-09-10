@@ -101,7 +101,7 @@ define([
 				if (pContactType == '1')
 					this.listPersonalContacts(pSearch);
 				else
-					this.listGeneralContacts(pSearch);
+					this.listGeneralContacts(this.removeAccents(pSearch));
 			}
 
 			this.searchLength = search.length
@@ -116,8 +116,21 @@ define([
 			
 			var donePersonalContacts = function (data)
 			{
-				var template = _.template(PersonalContactsListTemplate, data);
-				$('#scroller').html(template);
+		
+				if (data.contacts.length > 0) {
+					var template = _.template(PersonalContactsListTemplate, data);
+					$('#scroller').html(template);
+				} else {
+					Shared.showMessage({
+			            type: "error",
+			            icon: 'icon-contacts',
+			            title: "Nenhum Resultado Encontrado.",
+			            route: "",
+			            description: "",
+			            timeout: 0,
+			            elementID: "#scroller",
+			        });
+				}
 
 				Shared.refreshDotDotDot();
 				Shared.scrollerRefresh();
@@ -137,8 +150,37 @@ define([
 
 			var doneGeneralContacts = function (data)
 			{
-				var template = _.template(GeneralContactsListTemplate, data);
-				$('#scroller').html(template);
+
+				if (data.error == undefined) {
+					var template = _.template(GeneralContactsListTemplate, data);
+					$('#scroller').html(template);
+				} else {
+
+					if (data.error.code == "1001") {
+			          Shared.showMessage({
+			            type: "chat-message",
+			            icon: 'icon-contacts',
+			            title: "Sua busca deve ser específica.",
+			            route: "",
+			            description: "Procure pelo nome e sobrenome.<br>Nenhum resultado será exibido caso a sua busca retorne mais do que 200 contatos.",
+			            timeout: 0,
+			            elementID: "#scroller",
+			          });
+			        }
+
+			        if (data.error.code == "1019") {
+			          Shared.showMessage({
+			            type: "error",
+			            icon: 'icon-contacts',
+			            title: "Nenhum Resultado Encontrado.",
+			            route: "",
+			            description: "Procure pelo nome e sobrenome.<br>Nenhum resultado será exibido caso a sua busca retorne mais do que 200 contatos.",
+			            timeout: 0,
+			            elementID: "#scroller",
+			          });
+			        }
+				}
+				
 
 				var pictureImageContactView = new PictureImageContactView({el: $('.picture_image')});
 				pictureImageContactView.render(data);
@@ -175,7 +217,23 @@ define([
 			$(e.target).parent().addClass('selected');
 
 			Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
-		}
+		},
+
+		removeAccents: function(strAccents) {
+			var strAccents = strAccents.split('');
+			var strAccentsOut = new Array();
+			var strAccentsLen = strAccents.length;
+			var accents = 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž';
+			var accentsOut = "AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz";
+			for (var y = 0; y < strAccentsLen; y++) {
+				if (accents.indexOf(strAccents[y]) != -1) {
+					strAccentsOut[y] = accentsOut.substr(accents.indexOf(strAccents[y]), 1);
+				} else
+					strAccentsOut[y] = strAccents[y];
+			}
+			strAccentsOut = strAccentsOut.join('');
+			return strAccentsOut;
+        },
 
 	});
 

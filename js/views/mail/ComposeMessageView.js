@@ -136,9 +136,7 @@ define([
           Shared.showMessage(message);
 
           Shared.router.navigate("/Mail/Folders/INBOX",{ trigger: true });
-          // alert("Sua Mensagem foi Enviada!");
-          //alert(JSON.stringify(result));
-          // Shared.router.navigate("/Mail/Message/New",{ trigger: true });
+
         };
 
         var onFailSendMessage = function(error) {
@@ -166,26 +164,43 @@ define([
 
       }
 
+      var uploadPicture = function(imageData) {
+
+        that.showAttachments();
+
+        that.prependAttachmentImage(imageData);
+
+        that.renderContextMenu();
+
+      };
+      var onFailUploadPicture = function onFail(message) {
+          Shared.showMessage({
+            type: "error",
+            icon: 'icon-email',
+            title: "Não foi possível adicionar a foto aos anexos!",
+            description: "",
+            elementID: "#pageMessage",
+          });
+      };
+
       if (this.secondViewName == "AttachPicture") {
 
-        var uploadPhoto = function(imageData) {
-
-          that.showAttachments();
-
-          that.prependAttachmentImage(imageData);
-
-          that.renderContextMenu();
-
-        };
-        var onFail = function onFail(message) {
-            alert('Não foi possível adicionar a foto aos anexos.');
-        };
         if ((Shared.isPhonegap()) && (navigator.camera != undefined)) {
-          // navigator.camera.getPicture(uploadPhoto, onFail, { quality: 60, 
-          // destinationType: Camera.DestinationType.DATA_URL, sourceType: Camera.PictureSourceType.PHOTOLIBRARY }); 
 
-          navigator.camera.getPicture(uploadPhoto, onFail, { quality: 60, 
+          navigator.camera.getPicture(uploadPicture, onFailUploadPicture, { quality: 60, 
             destinationType: Camera.DestinationType.DATA_URL }); 
+        } else {
+          alert("Seu dispositivo não possui câmera!");
+        }
+      }
+
+      if (this.secondViewName == "AttachGalleryPicture") {
+
+        
+        if ((Shared.isPhonegap()) && (navigator.camera != undefined)) {
+
+          navigator.camera.getPicture(uploadPicture, onFailUploadPicture, { quality: 60, 
+            destinationType: Camera.DestinationType.DATA_URL, sourceType: Camera.PictureSourceType.PHOTOLIBRARY }); 
         } else {
           alert("Seu dispositivo não possui câmera!");
         }

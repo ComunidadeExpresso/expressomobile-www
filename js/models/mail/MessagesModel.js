@@ -1,8 +1,9 @@
 define([
   'underscore',
   'backbone',
-  'shared'
-], function(_, Backbone, Shared) {
+  'shared',
+  'moment',
+], function(_, Backbone, Shared, moment) {
   
   var MessagesModel = Backbone.Model.extend({
 
@@ -164,6 +165,11 @@ define([
       msgRecipient.push(recipient);
 
       this.set(fieldName,msgRecipient);
+    },
+
+    getTimeAgo: function() {
+      var date = this.get("msgDate");
+      return moment(date, "DD/MM/YYYY hh:mm").fromNow();
     },
 
     addBinaryFile: function(fileName,file) {

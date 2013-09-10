@@ -58,6 +58,7 @@ body #menu { width: 50%; height: 100%; position: absolute; margin-top: -53px; ba
 body #menu.expanded { display: block; }
 body #menu #personalInfo { height: 61px; padding: 10px 10px; border-bottom: 1px solid #2C2C2C }
 #userPicture { float: left; width: 46px; height: 61px; border-radius: 6px 6px 6px 6px; background: url('../imgs/contactPhotoFrameNone.png') center center no-repeat; }
+.userPicture { float: left; width: 46px; height: 61px; border-radius: 6px 6px 6px 6px; background: url('../imgs/contactPhotoFrameNone.png') center center no-repeat; }
 body #menu #personalInfo .personalData { margin: 0 0 0 56px; height: 61px; color: #FFF; }
 body #menu #personalInfo .personalData span { display: block; }
 body #menu #personalInfo .personalData span.name { font-size: 15px; }
@@ -380,7 +381,7 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
 
 .msg-list-images {
 	float: right;
-	width: 150px !important;
+	width: 120px !important;
 	height: 50px;
 }
 
@@ -960,5 +961,14 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
     to {
        background-position: -80px 0;
     }
+}
+
+.subtitle-detail-text {
+  text-align: right; 
+  margin: 0px; 
+  margin-right: 10px; 
+  font-size: 14px; 
+  float: right; 
+  color: #777777;
 }
 

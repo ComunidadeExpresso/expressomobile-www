@@ -31,6 +31,7 @@
   <li id="<%=message.listItemID()%>"> 
     <a href="<%=message.route()%>" class="listItemLink">
       <div class="msg-list-images">
+        <span class="ellipsis14" style="text-align: right; margin: 5px; font-size: 10px;"><%=message.getTimeAgo()%></span>
         <% if (message.get("msgHasAttachments") == '1') { %>
         <div class="msg-attachments"></div>
         <% } %>
@@ -43,7 +44,7 @@
         <div class="clear"></div>
       </div>
       <% if (message.get("msgSeen") == '0') { %>
-        <div class="msg-unread"></div>
+        <div id="<%=message.listItemID()%>_unread" class="msg-unread"></div>
       <% } %>
       <h3 class="ellipsis20"><%= message.get("msgSubject") %></h3>
       <span class="ellipsis14"><%= message.get("msgFrom").mailAddress %></span>

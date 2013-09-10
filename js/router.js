@@ -64,16 +64,23 @@ define([
     });
 
     app_router.on('route:openFolderView', function (PfolderID) {
-  
-      var homeView = new HomeView({folderID: PfolderID});
-      Shared.menuView.closeMenu();
-      homeView.loadMessagesInFolder(PfolderID,'');
 
-      if (PfolderID == 'INBOX') {
-        Shared.menuView.selectMenu(1);
+      if (!Shared.newMessageIntent) {
+        var homeView = new HomeView({folderID: PfolderID});
+        Shared.menuView.closeMenu();
+        homeView.loadMessagesInFolder(PfolderID,'');
+
+        if (PfolderID == 'INBOX') {
+          Shared.menuView.selectMenu(1);
+        } else {
+          Shared.menuView.selectMenu(0);
+        }
       } else {
-        Shared.menuView.selectMenu(0);
+        Shared.newMessageIntent = false;
+        Shared.router.navigate("/Mail/Message/New",{ trigger: true });
       }
+      
+      
 
     });
 

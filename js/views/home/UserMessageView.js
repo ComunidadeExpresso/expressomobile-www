@@ -13,6 +13,7 @@ define([
     msgRoute: '',
     msgIcon: '',
     elementID : '',
+    timeout: 3000,
 
     render: function(){
 
@@ -34,9 +35,11 @@ define([
 
       var that = this;
 
-      setTimeout(function() {
-          $(that.elementID).empty();
-      },3000);
+      if (that.timeout > 0) {
+        setTimeout(function() {
+            $(that.elementID).empty();
+        },that.timeout);
+      }
 
     },
 

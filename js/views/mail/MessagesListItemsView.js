@@ -54,6 +54,10 @@ define([
 
       parent.addClass("selected");
 
+      var elementID = $(parent).attr("id");
+
+      $("#" +elementID + "_unread").removeClass("msg-unread");
+
       Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
 
     }

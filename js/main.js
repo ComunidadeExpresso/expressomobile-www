@@ -1,8 +1,4 @@
-// Author: Thomas Davis <thomasalwyndavis@gmail.com>
-// Filename: main.js
 
-// Require.js allows us to configure shortcut alias
-// Their usage will become more apparent futher along in the tutorial.
 require.config({
   urlArgs: "bust=" + (new Date()).getTime(),
   paths: {
@@ -17,6 +13,7 @@ require.config({
     jquery_touchwipe: 'libs/jquery.touchwipe/jquery.touchwipe.min',
     jquery_dotdotdot: 'libs/jquery.dotdotdot/jquery.dotdotdot.min',
     jquery_xmpp: 'libs/jquery.xmpp/jquery.xmpp',
+    moment: 'libs/moment/moment.min',
     jqueryui_datepicker_ptBR: 'libs/jquery-ui/development-bundle/ui/i18n/jquery.ui.datepicker-pt-BR',
     templates: '../templates'
   },
@@ -25,6 +22,10 @@ require.config({
       backbone: {
           deps: ['jquery','underscore'],
           exports: 'Backbone'
+      },
+      moment: {
+          deps: ['jquery'],
+          exports: 'moment'
       },
       underscore: {
           exports: "_"
