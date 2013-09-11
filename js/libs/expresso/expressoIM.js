@@ -35,6 +35,10 @@ define([
 
 		var _onMessageDelegate = [];
 
+		var _onIqDelegate = [];
+
+		var _onDisconnectDelegate = [];
+
 		var _onComposingDelegate = [];
 
 		var _onPresenceDelegate = [];
@@ -72,6 +76,8 @@ define([
 			_onComposingDelegate = [];
 			_onPresenceDelegate = [];
 			_onErrorDelegate = [];
+			_onDisconnectDelegate = [];
+			_onIqDelegate = [];
 		};
 
 
@@ -83,6 +89,16 @@ define([
 
 		this.addOnMessageListener = function(value) {
 			_onMessageDelegate.push(value);
+			return this;
+		};
+
+		this.addOnIqListener = function(value) {
+			_onIqDelegate.push(value);
+			return this;
+		};
+
+		this.addOnDisconnectListener = function(value) {
+			_onDisconnectDelegate.push(value);
 			return this;
 		};
 
@@ -390,6 +406,8 @@ define([
 					},
 					onError: function(error){
 						console.log("onError");
+
+						that.executeListenersFromArray(_onErrorDelegate,error);
 					},
 	   				onComposing: function(message)
 	   				{

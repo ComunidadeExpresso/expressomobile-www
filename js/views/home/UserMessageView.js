@@ -17,6 +17,14 @@ define([
 
     render: function(){
 
+      if (this.timeout == undefined) {
+        this.timeout = 3000;
+      }
+
+      if (this.msgRoute == undefined) {
+        this.msgRoute = "";
+      }
+
       var newData = {
         _: _ ,
         type: this.msgType,

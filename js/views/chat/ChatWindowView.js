@@ -3,10 +3,11 @@ define([
   'underscore',
   'backbone',
   'shared',
+  'moment',
   'text!templates/chat/chatWindowTemplate.html',
   'text!templates/chat/chatWindowMessagesTemplate.html',
   'views/home/LoadingView',
-], function($, _, Backbone, Shared, chatWindowTemplate,chatWindowMessagesTemplate,LoadingView){
+], function($, _, Backbone, Shared, moment, chatWindowTemplate,chatWindowMessagesTemplate,LoadingView){
 
   var ChatWindowView = Backbone.View.extend({
 
@@ -97,6 +98,7 @@ define([
         messages: allMessages,
         chatID: this.chatID,
         contact: ThisContact,
+        moment: moment,
         _: _,
         $ : $
       };

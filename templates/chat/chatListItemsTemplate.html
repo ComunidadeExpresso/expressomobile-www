@@ -12,7 +12,7 @@
         <li id="<%=contact.id%>"> 
           <a href="/Chat/<%=contact.id%>" class="listItemLink">
             <div class="chat-<%=i%>"></div>
-            <div id="<%=contact.id%>_badge" style="" class="badge badge-chat-list hidden"><%= contact.qtdUnread %></div>
+            <div id="<%=contact.id%>_badge" style="" class="badge badge-chat-list <% if (contact.qtdUnread == 0) { %>hidden<% } %>"><%= contact.qtdUnread %></div>
             <% if (contact.name != null) { %>
             <h3 class="ellipsis20"><%= contact.name %></h3>
             <span class="ellipsis14"><%= contact.jid %></span>
