@@ -12,7 +12,7 @@ body #page { position: relative; height: 100%; width: 100%; background-color: #F
 /*body #page.menuExpanded { margin-left: auto; }
 body.smartphone #page.menuExpanded { margin-left: auto; }*/
 
-body #page .top { position: absolute; height: 53px; width: 100%; top: -53px; background: url("../imgs/logo_expresso_small.png") no-repeat scroll center center #F1F1F1; border-bottom: 1px solid #E5E5E5; }
+body #page .top { position: absolute; height: 53px; width: 100%; top: -53px; background: url("../imgs/icon.png") no-repeat scroll center center #F1F1F1; border-bottom: 1px solid #E5E5E5; }
 body #page .smartphone { position: absolute; height: 53px; width: 100%; top: -53px; background: url("../imgs/icon-logo-top.png") no-repeat scroll center center #F1F1F1; border-bottom: 1px solid #E5E5E5; }
 body #page .top .topButtons li { float: left; }
 body #page .top .topButtons li a { height: 53px; width: 53px; display: block; color: transparent; text-shadow: none; font: 0px/0 a; }
@@ -34,6 +34,11 @@ body #page .main #content ul li.selected { background-color: #3960A6; }
 body #page .main #content ul li.selected h3 { color: #FFFFFF; }
 body #page .main #content ul li.selected span { color: #FFFFFF; }
 body.smartphone #page .main #content { width: 100%; }
+
+ul li.selected { background-color: #3960A6; }
+ul li.selected h3 { color: #FFFFFF; }
+ul li.selected span { color: #FFFFFF; }
+ul li.selected a { color: #FFFFFF !important; }
 
 
 body #page .main #content dl dt { font-size: 16px; color: #FFFFFF; padding: 10px; border-bottom: 1px #FFFFFF solid; font-weight: bold; background-color: #3A87AD; }
@@ -167,9 +172,15 @@ body form { font-size: 16px; padding: 15px; }
   body form#changePassword ol li input { width: 100%; height: 30px; padding: 5px; }
 
   /** Preferências > Resultados por página **/
-  body form#resultsPage ol { border: 1px #CCCCCC solid; border-bottom: 0; }
-  body form#resultsPage ol li { border-bottom: 1px #CCCCCC solid; height: 50px; line-height: 50px; padding: 0 10px; color: #777777; }
-  body form#resultsPage ol li input.check { float: right; margin-top: 18px; }
+  body #detailList ul { width: 100%; background-color: #FAFAFA; }
+  body #detailList ul li { border-bottom: 1px solid #CCCCCC; border-top: 1px solid #FFFFFF; font-size: 14px; height: 60px; color: #000000; text-align: left; }
+  body #detailList ul li a { display: block; height: 60px; text-decoration: none; }
+  body #detailList ul li a h3 { color: #0088CC; margin-left: 30px; padding-top: 10px; font-size: 16px; }
+  body #detailList ul li a span { font-size: 13px; color: #777777; margin: 0 0 0 30px; }
+  body #detailList ul li.selected { background-color: #3960A6; }
+  body #detailList ul li.selected h3 { color: #FFFFFF; }
+  body #detailList ul li.selected span { color: #FFFFFF; }
+
 
   /** Preferências > Assinatura de e-mail **/
   body form#emailSignature ol li { margin: 15px 25px 15px 15px; }
