@@ -1,24 +1,16 @@
 <h2 class="ellipsis50">Resultados Por Página</h2>
 <article id="wrapperDetail" class="container">
 	<div id="scrollerDetail">
-
-
-		<form id="resultsPage">
-			<ol>
-				<li>
-					10 <input type="checkbox" name="resultadosPagina" class="check" value="10" />
+		<div id="detailList">
+			<ul>
+				<% _.each(possibleValues, function(value){ %>
+				<li value="<%=value%>" <% if (resultsperpage == value) { %>class="selected"<% } %>>
+					<a href="#" class="detailListItemLink">
+						<h3><%=value%></h3>
+					</a>
 				</li>
-				<li>
-					30 <input type="checkbox" name="resultadosPagina" class="check" value="30" />
-				</li>
-				<li>
-					50 <input type="checkbox" name="resultadosPagina" class="check" value="50" />
-				</li>
-				<li>
-					100 <input type="checkbox" name="resultadosPagina" class="check" value="100" />
-				</li>
-			</ol>
-		</form>
-
+				<% }); %>
+			</ul>
+		</div>
   	</div>
 </article>

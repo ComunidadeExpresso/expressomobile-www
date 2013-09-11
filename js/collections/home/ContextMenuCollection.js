@@ -32,6 +32,15 @@ define([
         return this;
       },
 
+      getResultsPerPageMenu: function(folderID) {
+        var menuItems = [
+            { route: "/Settings/SaveResultsPerPage", title:"Salvar", primary: true}
+          ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
+      },
+
       getDetailMessageMenu: function(folderID,msgID) {
         var menuItems = [
             { route: "/Mail/Message/New", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
@@ -81,7 +90,6 @@ define([
         var retVal = false;
         for (var i in this.models) {
           if (this.models[i].get('primary') == true) {
-            //console.log(this.models[i].get("route"));
             retVal = this.models[i];
           }
         }

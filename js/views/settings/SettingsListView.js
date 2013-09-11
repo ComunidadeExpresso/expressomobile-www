@@ -33,6 +33,7 @@ define([
       }
       
       if (this.secondViewName != null) {
+
         var loadingView = new LoadingView({ el: $(detailElementID) });
         loadingView.render();
 
@@ -53,16 +54,18 @@ define([
            secondView.render();
         }
         if (this.secondViewName == "ResultsPerPage") {
-           var secondView = new SettingsResultsPerPageListView({ el: $(detailElementID) });
+           var secondView = new SettingsResultsPerPageListView();
+           secondView.elementID = detailElementID;
            secondView.render();
         }
         if (this.secondViewName == "MailSignature") {
            var secondView = new SettingsMailSignatureListView({ el: $(detailElementID) });
            secondView.render();
         }
+
+
       } else {
         
-
         var loadingView = new LoadingView({ el: $(primaryElementID) });
         loadingView.render();
 
@@ -75,17 +78,39 @@ define([
           };
 
           var compiledTemplate = _.template( settingsListTemplate, newData );
-          $(primaryElementID).html( compiledTemplate );
+          that.$el.html(compiledTemplate);
+          $(primaryElementID).empty().html( that.$el );
 
           that.loaded();
 
         },Shared.timeoutDelay);
 
-        
       }
 
       Shared.setDefaultIMListeners();
 
+    },
+
+    events: {
+      "click .settinsLink": "selectMenuItem",
+    },
+
+    selectMenuItem: function(e){
+      e.preventDefault();
+
+      $('#settingsList li').each(function() { 
+          $(this).removeClass( 'selected' ); 
+      }); 
+
+      var parent = $(e.target).parent();
+
+      if (parent.hasClass("settinsLink")) {
+        parent = parent.parent();
+      }
+
+      parent.addClass("selected");
+
+      Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
     },
 
     initialize: function() {

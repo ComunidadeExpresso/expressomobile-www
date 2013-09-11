@@ -236,6 +236,9 @@ define([
       if (menuID == 'calendar') {
           this.context.collection = contextMenuCollection.getCalendarMenu();
       }
+      if (menuID == 'resultsperpage') {
+          this.context.collection = contextMenuCollection.getResultsPerPageMenu();
+      } 
       this.context.render();
     },
 
