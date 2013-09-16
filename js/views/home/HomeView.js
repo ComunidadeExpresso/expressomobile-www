@@ -82,6 +82,21 @@ define([
       this.loaded();
 
       Shared.setDefaultIMListeners();
+
+      $('#page').touchwipe(
+      {
+        wipeLeft: function() 
+        {
+          that.menuView.closeMenu();
+          Shared.scrollerRefresh();
+        },
+        wipeRight: function() 
+        {
+          that.menuView.openMenu();
+          Shared.scrollerRefresh();
+        },
+        preventDefaultEvents: true
+      });
       
     },
 
@@ -168,14 +183,11 @@ define([
     loaded: function () 
     {
 
-        console.log('loaded()');
-
         var top = $('.top').outerHeight(true);
         var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
         
         // Verify screen width to define device type
-        //alert($(window).width());
-        this.deviceType($(window).width() < 720);
+        this.deviceType(Shared.isSmartPhoneResolution());
 
         Shared.refreshDotDotDot();
 

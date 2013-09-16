@@ -33,6 +33,9 @@ require.config({
       jqueryui: {
         deps: ['jquery']
       },
+      jquery_touchwipe: {
+        deps: ['jquery']
+      },
       jqueryui_datepicker_ptBR: {
         deps: ['jquery', 'jqueryui']
       }
