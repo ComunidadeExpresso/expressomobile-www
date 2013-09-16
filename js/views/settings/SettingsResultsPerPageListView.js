@@ -27,7 +27,6 @@ define([
 
       this.loaded();
 
-      //Shared.menuView.renderContextMenu('resultsperpage',{});
 
     },
 
@@ -57,6 +56,8 @@ define([
 
       Shared.settings.resultsPerPage = valueSelected;
 
+      Shared.saveSettingsToLocalStorage();
+
       Shared.showMessage({
         type: "success",
         icon: 'icon-settings',
@@ -68,14 +69,6 @@ define([
       if (Shared.isSmartPhoneResolution()) {
         Shared.router.navigate("/Settings",{trigger: true});
       }
-
-      
-
-      // var elementID = $(parent).attr("id");
-
-      // $("#" +elementID + "_unread").removeClass("msg-unread");
-
-      // Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
 
     },
 

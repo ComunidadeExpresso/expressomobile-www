@@ -21,8 +21,24 @@ define([
 
     },
     events: {
-      'click #btn-login' : 'loginUser'
+      'click #btn-login' : 'loginUser',
+      "keydown #username" : "keydownUserName",
+      "keydown #password" : "keydownPassword",
     },
+
+    keydownUserName: function(e) {
+      if ( (e.which == 13 && !e.shiftKey) ) {
+        $("#password").focus();
+      }
+    },
+
+    keydownPassword: function(e) {
+      if ( (e.which == 13 && !e.shiftKey) ) {
+        this.loginUser();
+      }
+    },
+
+
     loginUser: function(ev) {
 
       var userName = $("#username").val();
@@ -42,45 +58,98 @@ define([
         Shared.api.context("/api/").crossdomain(serverURL);
       }
 
-      var loadingView = new LoadingView({ el: $("#loadingLogin") });
-      loadingView.render();
+      var errors = false;
 
-      var that = this; 
+      if (passwd == "") {
+        Shared.showMessage({
+            type: "error",
+            icon: 'icon-expresso',
+            title: "Senha não informada/inválida!",
+            description: "",
+            elementID: "#pageMessage",
+          });
+        errors = true;
+      }
 
-      Shared.api
-      .resource('Login')
-      .params({user:userName,password:passwd})
-      .done(function(result){
+      if (userName == "") {
+        Shared.showMessage({
+            type: "error",
+            icon: 'icon-expresso',
+            title: "Usuário não informado/inválido!",
+            description: "",
+            elementID: "#pageMessage",
+          });
+        errors = true;
+      }
 
-        var expressoValues = {
-          auth: Shared.api.auth(), 
-          "profile":result.profile[0],
-          username: userName, 
-          password: passwd,
-          phoneGap: isPhoneGap,
-          serverAPI: serverURL
-        };
+      
 
-        Shared.api.setLocalStorageValue("expresso",expressoValues);
+      if (!errors) {
 
-        var homeView = new HomeView();
-        homeView.profile = result.profile[0];
-        homeView.render();
+        var loadingView = new LoadingView({ el: $("#loadingLogin") });
+        loadingView.render();
 
-        //Shared.router.navigate('Home',{trigger: true});
-                
-        return false;
-      })
-      .fail(function(result){
+        var that = this; 
 
-        alert(result.error.message);
+        Shared.api
+        .resource('Login')
+        .params({user:userName,password:passwd})
+        .done(function(result){
 
-        Shared.router.navigate('',{trigger: true});
-        
-        
-        return false;
-      })
-      .execute();
+          var expressoValues = {
+            auth: Shared.api.auth(), 
+            "profile":result.profile[0],
+            username: userName, 
+            password: passwd,
+            phoneGap: isPhoneGap,
+            serverAPI: serverURL
+          };
+
+          Shared.api.setLocalStorageValue("expresso",expressoValues);
+
+          var homeView = new HomeView();
+          homeView.profile = result.profile[0];
+          homeView.render();
+
+          Shared.showMessage({
+            type: "success",
+            icon: 'icon-expresso',
+            title: "Bem vindo ao Expresso!",
+            description: "",
+            timeout: 2000,
+            elementID: "#pageMessage",
+          });
+
+          //Shared.router.navigate('Home',{trigger: true});
+                  
+          return false;
+        })
+        .fail(function(result){
+
+          if (result.error.code == 5) {
+
+            Shared.showMessage({
+              type: "error",
+              icon: 'icon-expresso',
+              title: "Usuário ou senha inválidos!",
+              description: "",
+              timeout: 0,
+              elementID: "#pageMessage",
+            });
+
+            setTimeout(function() {
+
+              Shared.router.navigate('',{trigger: true});
+
+            },2000);
+
+          }
+
+          return false;
+        })
+        .execute();
+
+      }
 
 
 

@@ -133,7 +133,7 @@ define([
     },
 
     getUserSignature: function() {
-      return "<br><br>Atenciosamente,<br>Jair Goncalves Pereira Junior<br><br><br>Mensagem Enviada do Expresso Mobile.";
+      return Shared.settings.mailSignature;
     },
 
     getEmailStringForMessageRecipient: function(emailRecipient) {

@@ -32,9 +32,9 @@ define([
         return this;
       },
 
-      getResultsPerPageMenu: function(folderID) {
+      getMailSignatureMenu: function(folderID) {
         var menuItems = [
-            { route: "/Settings/SaveResultsPerPage", title:"Salvar", primary: true}
+            { route: "/Settings/SaveMailSignature", title:"Salvar", primary: true}
           ];
 
         this.createModelsFromArray(menuItems);

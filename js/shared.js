@@ -14,13 +14,19 @@ define([
 
   Shared.settings = {};
 
+  Shared.settings.resultsPerPage = 30;
+
+  Shared.settings.mailSignature = "Mensagem enviada pelo Expresso Mobile.";
+
+  Shared.settings.automaticLogin = true;
+
   Shared.timeoutDelay = 500;
 
   Shared.scrollDetail = null;
   Shared.scroll = null;
   Shared.scrollMenu = null;
 
-  Shared.settings.resultsPerPage = 30;
+  
 
   Shared.im = expressoIM;
   Shared.api = expressoAPI;
@@ -146,6 +152,14 @@ define([
     });
   };
 
+  Shared.saveSettingsToLocalStorage = function() {
+    var expressoValues = Shared.api.getLocalStorageValue("expresso");
+
+    expressoValues.settings = Shared.settings;
+
+    Shared.api.setLocalStorageValue("expresso",expressoValues);
+  };
+
   Shared.handleErrors = function(error) {
     //alert(error);
     if (error.code == 7) {
@@ -156,15 +170,33 @@ define([
         username: "", 
         password: "",
         phoneGap: "",
-        serverAPI: ""
+        serverAPI: "",
+        settings: { 
+          resultsPerPage: 30,
+          automaticLogin: false,
+          mailSignature: '',
+        }
       };
 
       Shared.api.setLocalStorageValue("expresso",expressoValues);
 
-      Shared.router.navigate('Login',{trigger: true});
-      alert("Sua sessão expirou...");
+      Shared.showMessage({
+          type: "error",
+          icon: 'icon-expresso',
+          title: "Sua sessão expirou...",
+          description: "",
+          timeout: 0,
+          elementID: "#pageMessage",
+        });
 
-      
+        setTimeout(function() {
+
+          Shared.router.navigate('Login',{trigger: true});
+
+        },2000);
+
+      // Shared.router.navigate('Login',{trigger: true});
+ 
     }
   };
 
@@ -219,7 +251,7 @@ define([
   }
 
 
-
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 
   // deviceready is PhoneGap's init event
 document.addEventListener('deviceready', function () {
@@ -228,8 +260,6 @@ document.addEventListener('deviceready', function () {
 
   if (window.plugins.webintent != undefined) {
     window.plugins.webintent.getExtra("android.intent.extra.STREAM", function (url) {
-
-      //alert(url);
 
       Shared.newMessageIntent = true;
       Shared.newMessageFiles = url;
@@ -250,10 +280,12 @@ document.addEventListener('deviceready', function () {
 
     if (expressoValue != null) {
       if (expressoValue.auth != "") { 
+        //expressoValue.auth = "a" + expressoValue.auth;
+        Shared.api.setLocalStorageValue("expresso",expressoValue);
         window.location.href = "/Home";
       } else {
         window.location.href = "/Login";
-      } 
+      }
     } else {
       window.location.href = "/Login";
     }

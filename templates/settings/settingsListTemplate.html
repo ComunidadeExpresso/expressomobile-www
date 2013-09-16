@@ -6,8 +6,18 @@
 			<dt>Conta de e-mail</dt>
 			<dd>
 				<ul>
-					<li>projetomobile@celepar.pr.gov.br</li>
-					<li>Login automático <input type="checkbox" class="check" /></li>
+					<li><% if (!_.isNull(user.contactMails[0])) { %><%=user.contactMails[0]%><% } %></li>
+					<li>
+
+						<div id="automaticLogin" class="onoffswitch right" style="margin: 5px; margin-top: 10px;">
+						    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="automaticLoginSwitch" <% if (automaticLogin == true) { %>checked<% } %>>
+						    <label class="onoffswitch-label" for="automaticLoginSwitch">
+						        <div id="automaticLoginSwitchInner" class="onoffswitch-inner"></div>
+						        <div class="onoffswitch-switch"></div>
+						    </label>
+						</div>
+						Login automático 
+					</li>
 					<li><a href="/Settings/ChangePassword" class="settinsLink">Alterar senha</a></li>
 				</ul>
 			</dd>
@@ -32,6 +42,5 @@
 				</ul>
 			</dd>
 		</dl>
-
 	</div>
 </div>

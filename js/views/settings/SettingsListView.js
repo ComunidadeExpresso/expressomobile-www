@@ -26,41 +26,53 @@ define([
 
       Shared.menuView.renderContextMenu(0,[]); 
 
-      $(detailElementID).html("");
-
       if (Shared.isSmartPhoneResolution()) {
         detailElementID = "#content";
       }
       
       if (this.secondViewName != null) {
 
-        var loadingView = new LoadingView({ el: $(detailElementID) });
-        loadingView.render();
+        if (this.secondViewName != "SaveMailSignature") {
+
+          $(detailElementID).html("");
+
+          var loadingView = new LoadingView({ el: $(detailElementID) });
+          loadingView.render();
+
+        }
 
         if (this.secondViewName == "Support") {
            var secondView = new SettingsSupportListView({ el: $(detailElementID) });
-           secondView.render();
         }
         if (this.secondViewName == "About") {
            var secondView = new SettingsAboutListView({ el: $(detailElementID) });
-           secondView.render();
         }
         if (this.secondViewName == "Credits") {
            var secondView = new SettingsCreditsListView({ el: $(detailElementID) });
-           secondView.render();
         }
         if (this.secondViewName == "ChangePassword") {
            var secondView = new SettingsChangePasswordListView({ el: $(detailElementID) });
-           secondView.render();
         }
         if (this.secondViewName == "ResultsPerPage") {
            var secondView = new SettingsResultsPerPageListView();
            secondView.elementID = detailElementID;
-           secondView.render();
         }
         if (this.secondViewName == "MailSignature") {
            var secondView = new SettingsMailSignatureListView({ el: $(detailElementID) });
-           secondView.render();
+           
+        }
+
+        if (this.secondViewName == "SaveMailSignature") {
+           var secondView = new SettingsMailSignatureListView({ el: $(detailElementID) });
+           secondView.SaveMailSignature();
+        } else {
+
+          setTimeout(function() {
+
+            secondView.render();
+
+          },Shared.timeoutDelay);
+
         }
 
 
@@ -73,8 +85,12 @@ define([
 
         setTimeout(function() {
 
+          var user = Shared.api.getLocalStorageValue("expresso").profile;
+
           var newData = {
-            _: _ 
+            _: _,
+            user: user,
+            automaticLogin: Shared.settings.automaticLogin
           };
 
           var compiledTemplate = _.template( settingsListTemplate, newData );
@@ -93,6 +109,21 @@ define([
 
     events: {
       "click .settinsLink": "selectMenuItem",
+      "change #automaticLoginSwitch" : "selectAutomaticLogin",
+    },
+
+    selectAutomaticLogin: function(e){
+
+      if (Shared.settings.automaticLogin == true) {
+        $("#automaticLoginSwitch").val("off");
+        Shared.settings.automaticLogin = false;
+      } else {
+        $("#automaticLoginSwitch").val("on");
+        Shared.settings.automaticLogin = true;
+      }
+
+      Shared.saveSettingsToLocalStorage();
+      
     },
 
     selectMenuItem: function(e){

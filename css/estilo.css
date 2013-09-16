@@ -84,6 +84,11 @@ body #menu dl dd ul#mainMenu li a .icon { width: 40px; height: 32px; }
   background: url("../imgs/icon-caixa-entrada-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
+.icon-expresso { 
+   border-radius: 5px;
+  background: url("../imgs/icon.png") no-repeat scroll center center;
+  background-size: 40px 32px;
+}
 .icon-agenda { 
    border-radius: 5px;
   background: url("../imgs/icon-agenda-90x72.png") no-repeat scroll center center;
@@ -183,8 +188,8 @@ body form { font-size: 16px; padding: 15px; }
 
 
   /** Preferências > Assinatura de e-mail **/
-  body form#emailSignature ol li { margin: 15px 25px 15px 15px; }
-  body form#emailSignature ol li textarea { width: 100%; height: 150px; }
+  body #emailSignature ol li { margin: 15px 25px 15px 15px; }
+  body #emailSignature ol li textarea { width: 100%; height: 300px; font-size: 16px; border: 0px; border-color: #FFF; }
 
   /** Preferências > Suporte / Sugestões **/
   body form#support ol li { margin: 15px 25px 15px 15px; }
@@ -917,7 +922,7 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
      border: 1px solid;
      color: #fff;
      padding: 10px;
-     position: fixed;
+     position: absolute;
      text-shadow: 0 1px 0 rgba(0,0,0,.5);
      animation: animate-bg 5s linear infinite;
      z-index: 9999;
@@ -980,5 +985,53 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
   font-size: 14px; 
   float: right; 
   color: #777777;
+}
+
+
+.onoffswitch {
+    position: relative; width: 90px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #FFFFFF; border-radius: 20px;
+}
+.onoffswitch-inner {
+    width: 200%; margin-left: -100%;
+    -moz-transition: margin 0.2s ease-in 0s; -webkit-transition: margin 0.2s ease-in 0s;
+    -o-transition: margin 0.2s ease-in 0s; transition: margin 0.2s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "ON";
+    padding-left: 10px;
+    background-color: #2DBA1A; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "OFF";
+    padding-right: 10px;
+    background-color: #EEEEEE; color: #999999;
+    text-align: right;
+}
+.onoffswitch-switch {
+    width: 20px; margin: 5px;
+    background: #FFFFFF;
+    border: 2px solid #FFFFFF; border-radius: 20px;
+    position: absolute; top: 0; bottom: 0; right: 56px;
+    -moz-transition: all 0.2s ease-in 0s; -webkit-transition: all 0.2s ease-in 0s;
+    -o-transition: all 0.2s ease-in 0s; transition: all 0.2s ease-in 0s; 
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
 }
 
