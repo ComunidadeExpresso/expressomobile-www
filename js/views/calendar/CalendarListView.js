@@ -8,23 +8,25 @@ define([
 	'views/calendar/CalendarEventsDayListView',
 	'views/calendar/CalendarFullDayListView',
 	'text!templates/calendar/calendarTemplate.html',
+	'text!templates/master/primaryContentTemplate.html',
 	'jqueryui',
 	'jqueryui_datepicker_ptBR',
-], function($, _, Backbone, Shared, EventsListCollection, LoadingView, CalendarEventsDayListView, CalendarFullDayListView, calendarTemplate, jqueryui, jqueryui_datepicker_ptBR)
+], function($, _, Backbone, Shared, EventsListCollection, LoadingView, CalendarEventsDayListView, CalendarFullDayListView, calendarTemplate, primaryContentTemplate, jqueryui, jqueryui_datepicker_ptBR)
 {
 	var CalendarListView = Backbone.View.extend(
 	{
-		el: $('#scroller'),
+		el: $('#content'),
 		year: '',
 		month: '',
 		day: '',
 		fullDay: false,
 		data: {},
 		dayTitle: '',
+		container: $('#scroller'),
 
 		render: function()
 		{
-			var that = this;
+			var self = this;
 			var pad = "00";
 			var today = new Date();
 
@@ -40,13 +42,15 @@ define([
 			if (this.day == '' || this.day == undefined)
 				this.day = today.getDate();
 
+			this.clean();
+
 			var callback = function (data)
 			{
-				var template = _.template(calendarTemplate);
-				that.$el.empty().html(template);
-
-				that.renderDatePicker();
-				that.listDayEvents(data);
+				self.$el.html(_.template(primaryContentTemplate));
+				self.setElement($('#scroller').html(_.template(calendarTemplate)));
+				self.renderDatePicker();
+				self.listDayEvents(data);
+				self.loaded();
 			}
 
 			var lastDay = new Date(this.year, this.month, 0);
@@ -60,40 +64,39 @@ define([
 
 		listEvents: function (pDateStart, pDateEnd, callbackSucess, callbackFail)
 		{
-			var that = this;
+			var self = this;
 
 			var eventsData = new EventsListCollection();
 				eventsData.listEvents(pDateStart, pDateEnd)
 				.done(function (data) 
 				{
-
-					that.data = { events: data.models, _: _ };
+					self.data = { events: data.models, _: _ };
 
 					if (callbackSucess)
-						callbackSucess(that.data);
+						callbackSucess(self.data);
 				})
 				.fail(function (data) 
 				{
-					that.data = { error: data.error, _: _ };
+					self.data = { error: data.error, _: _ };
 					
 					if (callbackFail)
-						callbackFail(that.data);
+						callbackFail(self.data);
 				});
 		},
 
 		listDayEvents: function(data)
 		{
-			// if (!Shared.isSmartPhoneResolution() || !this.fullDay)
-			// {
-				// var calendarFullDayListView = new CalendarFullDayListView({el: $('#scroller')});
-				var calendarFullDayListView = new CalendarFullDayListView();
+			if (!Shared.isSmartPhoneResolution() || !this.fullDay)
+			{
+				var calendarFullDayListView = new CalendarFullDayListView({el: $('#contentDetail')});
+				// var calendarFullDayListView = new CalendarFullDayListView();
 					calendarFullDayListView.year = this.year;
 					calendarFullDayListView.month = this.month;
 					calendarFullDayListView.day = this.day;
 					calendarFullDayListView.data = data;
 					calendarFullDayListView.dayTitle = this.dayTitle;
 					calendarFullDayListView.render();
-			// }
+			}
 			// else
 			// {
 				var calendarEventsDayListView = new CalendarEventsDayListView({el: $('#eventsList')});
@@ -108,16 +111,19 @@ define([
 			this.loaded();
 		},
 
-		initialize: function() { },
+		initialize: function() 
+		{
+			this.container = $('#scroller');
+		},
 
 		changeMonthYear: function (y, m, widget)
 		{
-			var that = this;
+			var self = this;
 
 			var callback = function (data)
 			{
-				that.refreshDatePicker();
-				// that.listDayEvents();
+				self.refreshDatePicker();
+				// self.listDayEvents();
 			}
 
 			var pad = "00";
@@ -161,7 +167,7 @@ define([
 
 		renderDatePicker: function () 
 		{
-			var that = this;
+			var self = this;
 
 			$('#agenda').datepicker(
 			{
@@ -176,11 +182,11 @@ define([
 				dateFormat: 'DD, dd/mm/yy',
 				onChangeMonthYear: function (year, month, widget)
 				{
-					that.changeMonthYear(year, month, widget);
+					self.changeMonthYear(year, month, widget);
 				},
 				beforeShowDay: function (date)
 				{
-					return that.highlightDays(date);
+					return self.highlightDays(date);
 				},
 				onSelect: function(date, obj)
 				{
@@ -199,7 +205,39 @@ define([
 
 		loaded: function ()
 		{
+			if (Shared.scrollDetail != null) 
+			{
+				Shared.scrollDetail.destroy();
+				Shared.scrollDetail = null;
+			}
+
+			Shared.scrollDetail = new iScroll('wrapperDetail');
+		
+			if (Shared.scroll != null) 
+			{
+				Shared.scroll.destroy();
+				Shared.scroll = null;
+			}
+
 			Shared.scroll = new iScroll('wrapper');
+
+			Shared.scrollerRefresh();
+			Shared.menuView.renderContextMenu('calendar',{});
+
+			$('#content .searchArea').remove();
+			$('#contentTitle').text('Agenda');
+		},
+
+		clean: function ()
+		{
+			var contentLoadingView = new LoadingView({el: $('#content')});
+				contentLoadingView.render();
+
+			if (!Shared.isSmartPhoneResolution())
+			{
+				var contentDetailLoadingView = new LoadingView({el: $('#contentDetail')});
+					contentDetailLoadingView.render();
+			}
 		}
 	});
 

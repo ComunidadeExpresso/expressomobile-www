@@ -13,6 +13,7 @@ define([
 {
 	var CalendarView = Backbone.View.extend(
 	{
+		el: $('#content'),
 		year: '',
 		month: '',
 		day: '',
@@ -21,12 +22,12 @@ define([
 		render: function()
 		{
 			this.clean();
+			// var container = $('#content');
+			// var data = {_: _};
 
-			var elementID = "#content";
-			var data = {_: _};
-
-			var template = _.template(primaryContentTemplate, data);
-			$(elementID).html(template);
+			this.$el.empty().append(_.template(primaryContentTemplate));
+			// this.$el.html(_.template(primaryContentTemplate, data));
+			// container.empty().append(this.$el);
 
 			var loadingView = new LoadingView({el: $('#scroller')});
 				loadingView.render();
@@ -36,10 +37,8 @@ define([
 				calendarListview.month = this.month;
 				calendarListview.day = this.day;
 				calendarListview.fullDay = this.fullDay;
-				calendarListview.render();
-			
-			Shared.menuView.renderContextMenu('calendar',{});
-
+				
+			this.setElement(calendarListview.render());
 			this.loaded();
 		},
 

@@ -1,0 +1,102 @@
+<form id="addEvent">
+	<ol>
+		<li>
+			<label for="eventType">Tipo</label>
+			<select name="eventType" id="eventType">
+
+				<% _.each(types, function(t, i) { %>
+
+					<option value="<%= i %>" <%= (i == event.get('eventType')) ? 'selected="selected"' : '' %>><%= t %></option>
+
+				<% }); %>
+
+			</select>
+		</li>
+		<li>
+			<label for="eventName">Título</label>
+			<input type="text" name="eventName" id="eventName" placeholder="Título" value="<%= event.get('eventName') %>" />
+		</li>
+		<li>
+			<label for="eventDescription">Descrição</label>
+			<textarea name="eventDescription" id="eventDescription" placeholder="Descrição completa"><%= event.get('eventDescription') %></textarea>
+		</li>
+		<li>
+			<label for="eventCategoryID">Categoria</label>
+			<select name="eventCategoryID" id="eventCategoryID">
+
+				<% if (typeof(eventCategories) != 'undefined' && eventCategories.length > 0) { %>
+
+					<% _.each(eventCategories, function(e) { %>
+
+						<option value="<%= e.get('eventCategoryID') %>" <%= (e.get('eventCategoryID') == event.get('eventCategoryID')) ? 'selected="selected"' : '' %>><%= e.get('eventCategoryName') %></option>
+
+					<% }); %>
+
+				<% } else { %>
+
+					<option>Selecione...</option>
+
+				<% } %>
+
+			</select>
+		</li>
+		<li>
+			<label for="eventLocation">Localização</label>
+			<input type="text" name="eventLocation" id="eventLocation" placeholder="Localização" value="<%= event.get('eventLocation') %>" />
+		</li>
+		<li class="date">
+			<label for="eventDateStart">Data inicial</label>
+			<input type="date" name="eventDateStart" id="eventDateStart" placeholder="Data inicial" value="<%= event.get('eventDateStart') %>" />
+		</li>
+		<li class="date">
+			<label for="eventTimeStart">Hora inicial</label>
+			<input type="time" name="eventTimeStart" id="eventTimeStart" placeholder="Hora inicial" value="<%= event.get('eventTimeStart') %>" />
+		</li>
+		<li class="date">
+			<label for="eventDateEnd">Data final</label>
+			<input type="date" name="eventDateEnd" id="eventDateEnd" placeholder="Data final" value="<%= event.get('eventDateEnd') %>" />
+		</li>
+		<li class="date">
+			<label for="eventTimeEnd">Hora final</label>
+			<input type="time" name="eventTimeEnd" id="eventTimeEnd" placeholder="Hora final" value="<%= event.get('eventTimeEnd') %>" />
+		</li>
+		<li class="participants">
+			<!-- <h4>Participantes:</h4> -->
+			<label for="participantes">Participantes</label>
+			<a href="#" id="addParticipants" title="Adicionar participantes">Adicionar participantes</a>
+			<!-- <ol>
+				<li>
+					<input id="participante_1" type="checkbox" class="css-checkbox" name="participantes[]" value="1" checked="checked" /> 
+					<label for="participante_1" class="css-label">Alaor</label>
+				</li>
+				<li>
+					<input id="participante_2" type="checkbox" class="css-checkbox" name="participantes[]" value="2" checked="checked" /> 
+					<label for="participante_2" class="css-label">Bastiao</label>
+				</li>
+				<li>
+					<input id="participante_3" type="checkbox" class="css-checkbox" name="participantes[]" value="3" checked="checked" /> 
+					<label for="participante_3" class="css-label">Estevao</label>
+				</li>
+				<li>
+					<input id="participante_4" type="checkbox" class="css-checkbox" name="participantes[]" value="4" checked="checked" /> 
+					<label for="participante_4" class="css-label">Doroteia</label>
+				</li>
+			</ol> -->
+		</li>
+		<li>
+			<label for="eventPriority">Prioridade</label>
+			<select name="eventPriority" id="eventPriority">
+				<% _.each(priorities, function(p, i) { %>
+
+					<option value="<%= i %>" <%= (i == event.get('eventPriority')) ? 'selected="selected"' : '' %>><%= p %></option>
+
+				<% }); %>
+			</select>
+		</li>
+		<li>
+			<label for="eventExParticipants">Participantes externos</label>
+			<textarea name="eventExParticipants" id="eventExParticipants" placeholder="Participantes externos"><%= event.get('eventExParticipants') %></textarea>
+		</li>
+	</ol>
+	<input type="hidden" name="eventID" id="eventID" value="<%= event.get('eventID') %>" />
+</form>

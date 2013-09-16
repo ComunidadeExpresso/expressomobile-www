@@ -10,7 +10,7 @@ define ([
 	{
 		defaults:
 		{
-	        eventID: "",
+	        eventID: 0,
 	        eventDate: "",
 	        eventName: "",
 	        eventDescription: "",
@@ -26,9 +26,11 @@ define ([
 			eventDateStart: "",
 			eventDescription: "",
 			eventOwner: "",
+			eventOwnerIsParticipant: "",
 			eventPriority: "",
 			eventTimeEnd: "",
-			eventTimeStart: ""
+			eventTimeStart: "",
+			eventType: ""
 		},
 
 		initialize: function ()

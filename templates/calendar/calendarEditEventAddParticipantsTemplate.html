@@ -1,0 +1,54 @@
+<a href="#" id="backToEditEvent">Voltar para inserção do evento</a>
+
+<% if (typeof(contacts) != 'undefined' && contacts.length > 0) { %>
+
+	<dl id="participantsList">
+
+		<% var summaryLetter = _.first(contacts).get('contactFirstName').charAt(0).toUpperCase(); %>
+
+		<dt><%=summaryLetter%></dt>
+		<dd>
+			<ul>
+				<% _.each(contacts, function(c) { %>
+
+					<% if (!_.isEqual(summaryLetter, c.get('contactFirstName').charAt(0).toUpperCase())) { %>
+					
+						<% summaryLetter = c.get('contactFirstName').charAt(0).toUpperCase(); %>
+						
+						</ul>
+							</dd>
+							<dt><%=summaryLetter%></dt>
+							<dd>
+								<ul>
+
+					<%
+					} 
+					
+					var uid = (c.get('contactMails')[0]).split("@")[0]; 
+					console.log(uid);
+					%>
+
+					<li>
+						<input type="checkbox" class="check css-checkbox" name="<%= uid %>" id="<%= uid %>" value="<%= c.get('contactMails')[0] %>" />
+						<label class="css-label" for="<%= uid %>"><%=c.get('contactFullName')%></label>
+					</li>					
+
+				<% }); %>
+
+			</ul>
+		</dd>
+	</dl>
+
+<% } else { %>
+
+	<% if (_.isObject(error)) { %>
+
+		<p class="erro"><%= error.message %></p>
+
+	<% } else { %>
+
+		<p class="erro">Nenhum registro encontrado</p>
+
+	<% } %>
+
+<% } %>

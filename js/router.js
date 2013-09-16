@@ -12,10 +12,12 @@ define([
   'views/settings/SettingsListView',
   'views/contacts/ContactsListView',
   'views/contacts/DetailsContactView',
-  'views/calendar/CalendarView',
+  'views/calendar/CalendarListView',
   'views/calendar/CalendarDetailsView',
+  'views/calendar/CalendarEditEventView',
+  'views/calendar/CalendarSaveEventView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, AttachmentMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarView,CalendarDetailsView,ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, AttachmentMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView,ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -33,11 +35,12 @@ define([
       'Contacts' : 'contactsListView',
       'Contacts/:secondViewName' : 'contactsListView',
       'Contacts/:secondViewName/:contactID' : 'detailsContactView',
-      'Calendar' : 'calendarView',
-      'Calendar/:year/:month/:day' : 'calendarView',
+      'Calendar/Events/Save' : 'calendarSaveEventView',
+      'Calendar/Events/Add' : 'calendarEditEventView',
       'Calendar/FullDay/:year/:month/:day' : 'calendarFullDayView',
       'Calendar/Events/:eventID' : 'calendarDetailsView',
-      'Calendar/Events/Add' : 'calendarEditEventView',
+      'Calendar/:year/:month/:day' : 'calendarListView',
+      'Calendar' : 'calendarListView',
       'Chat' : 'chatListView',
       'Chat/:secondViewName' : 'chatListView',
       'Settings' : 'settingsListView',
@@ -210,15 +213,14 @@ define([
   
     });
 
-    app_router.on('route:calendarView', function (year, month, day) {
+    app_router.on('route:calendarListView', function (year, month, day) {
 
-      var calendarView = new CalendarView();
-      calendarView.year = year;
-      calendarView.month = month;
-      calendarView.day = day;
-      calendarView.fullDay = false;
-      
-      calendarView.render();
+      var calendarListView = new CalendarListView({el: $('#content')});
+      calendarListView.year = year;
+      calendarListView.month = month;
+      calendarListView.day = day;
+      calendarListView.fullDay = false;
+      calendarListView.render();
 
       Shared.menuView.selectMenu(2);
   

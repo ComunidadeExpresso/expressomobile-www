@@ -7,10 +7,12 @@ define([
 	'views/home/LoadingView',
 	'text!templates/calendar/calendarFullDayListTemplate.html',
 	'text!templates/master/detailContentTemplate.html',
-], function($, _, Backbone, Shared, EventsListCollection, LoadingView, calendarFullDayListTemplate, detailContentTemplate)
+	'text!templates/master/primaryContentTemplate.html',
+], function($, _, Backbone, Shared, EventsListCollection, LoadingView, calendarFullDayListTemplate, detailContentTemplate, primaryContentTemplate)
 {
 	var CalendarFullDayListView = Backbone.View.extend(
 	{
+		el: $('#content'),
 		year: '',
 		month: '',
 		day: '',
@@ -29,19 +31,17 @@ define([
 
 			if (!Shared.isSmartPhoneResolution())
 			{
-				$('#contentDetail').html(_.template(detailContentTemplate));
-
-				var loadingView = new LoadingView({el: $('#scrollerDetail')});	
-					loadingView.render();
+				this.$el = $('#contentDetail');
+				this.$el.html(_.template(detailContentTemplate));
 
 				contentTitle = $('#contentDetailTitle');
 				container = $('#scrollerDetail');
 			}
 			else
-			{
-				var loadingView = new LoadingView({el: $('#scroller')});
-					loadingView.render();				
-			}
+				this.$el.html(_.template(primaryContentTemplate));
+
+			var loadingView = new LoadingView({el: container});
+				loadingView.render();
 
 			var hourlyBusy = [];
 			var events = new EventsListCollection();
@@ -93,13 +93,39 @@ define([
 
 			var newData = {events: events.models, year: this.year, month: this.month, day: this.day, hourlyBusy: hourlyBusy, _: _};
 
-			this.$el.html(_.template(calendarFullDayListTemplate, newData));
-
 			contentTitle.text(this.dayTitle);
-			container.empty().append(this.$el);
+			
+			this.setElement(container.empty().append(_.template(calendarFullDayListTemplate, newData)));
+			this.loaded();
+		},
 
-			Shared.scroll = new iScroll('wrapperDetail');
-			Shared.scroll = new iScroll('wrapper');
+		loaded: function ()
+		{
+			$('#contentDetail .searchArea').remove();
+
+			if (!Shared.isSmartPhoneResolution())
+			{
+				if (Shared.scrollDetail != null) 
+				{
+					Shared.scrollDetail.destroy();
+					Shared.scrollDetail = null;
+				}
+
+				Shared.scrollDetail = new iScroll('wrapperDetail');
+			}
+			else
+			{
+				if (Shared.scroll != null) 
+				{
+					Shared.scroll.destroy();
+					Shared.scroll = null;
+				}
+
+				Shared.scroll = new iScroll('wrapper');
+			}
+
+			Shared.scrollerRefresh();
+			Shared.menuView.renderContextMenu('calendar',{});
 		},
 
 		initialize: function() { },

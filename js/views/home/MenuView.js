@@ -239,6 +239,9 @@ define([
       if (menuID == 'mailsignature') {
           this.context.collection = contextMenuCollection.getMailSignatureMenu();
       } 
+      if (menuID == 'calendarAddEvent') {
+          this.context.collection = contextMenuCollection.getCalendarAddEventMenu();
+      }
       this.context.render();
     },
 

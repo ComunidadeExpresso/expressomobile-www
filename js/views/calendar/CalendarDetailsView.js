@@ -11,37 +11,36 @@ define([
 {
 	var CalendarDetailsView = Backbone.View.extend(
 	{
-		el: $('#scroller'),
+		el: $('#content'),
 		eventID: 0,
 
 		render: function()
 		{
-			var that = this;
+			var self = this;
 			var contentTitle = $('#contentTitle');
+			var container = $('#scroller');
 
 			if (!Shared.isSmartPhoneResolution())
 			{
-				$('#contentDetail').html(_.template(detailContentTemplate));
-
-				var loadingView = new LoadingView({el: $('#scrollerDetail')});	
-					loadingView.render();
+				// $('#contentDetail').html(_.template(detailContentTemplate));
+				this.$el = $('#contentDetail');
+				this.$el.html(_.template(detailContentTemplate));
 
 				contentTitle = $('#contentDetailTitle');
-
-				this.$el = $('#scrollerDetail');
+				container = $('#scrollerDetail');
 			}
 			else
-			{
-				var loadingView = new LoadingView({el: $('#scroller')});
-					loadingView.render();				
-			}
+				this.$el.html(_.template(primaryContentTemplate));
+
+			var loadingView = new LoadingView({el: container});
+				loadingView.render();
 
 			var callback = function (data)
 			{
 				contentTitle.text(data.event.get('eventName'));
 
-				that.$el.empty().html(_.template(calendarDetailsTemplate, data));
-				that.loaded();
+				self.setElement(container.empty().append(_.template(calendarDetailsTemplate, data)));
+				self.loaded();
 			}
 
 			this.getEvent(this.eventID, callback, callback);
@@ -49,31 +48,52 @@ define([
 
 		getEvent: function (pEventID, callbackSucess, callbackFail)
 		{
-			var that = this;
+			var self = this;
 
 			var eventModel = new EventModel();
 				eventModel.getEvent(pEventID)
 				.done(function (data) 
 				{
-					that.data = { event: data, _: _ };
+					self.data = { event: data, _: _ };
 
-					callbackSucess(that.data);
+					callbackSucess(self.data);
 				})
 				.fail(function (data) 
 				{
-					that.data = { error: data.error, _: _ };
+					self.data = { error: data.error, _: _ };
 					
 					if (callbackFail)
-						callbackFail(that.data);
+						callbackFail(self.data);
 				});
 		},
 
 		loaded: function()
 		{
+			$('#contentDetail .searchArea').remove();
+
 			if (!Shared.isSmartPhoneResolution())
+			{
+				if (Shared.scrollDetail != null) 
+				{
+					Shared.scrollDetail.destroy();
+					Shared.scrollDetail = null;
+				}
+
 				Shared.scrollDetail = new iScroll('wrapperDetail');
+			}
 			else
+			{
+				if (Shared.scroll != null) 
+				{
+					Shared.scroll.destroy();
+					Shared.scroll = null;
+				}
+
 				Shared.scroll = new iScroll('wrapper');
+			}
+
+			Shared.scrollerRefresh();
+			Shared.menuView.renderContextMenu('calendar',{});
 		},
 
 		initialize: function() { }

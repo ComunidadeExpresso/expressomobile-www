@@ -113,6 +113,17 @@ define([
 
         this.createModelsFromArray(menuItems);
         return this;
+      },
+
+      getCalendarAddEventMenu: function ()
+      {
+        var menuItems = [
+            { route: "/Calendar/Events/Save", title:"Salvar", iconClass : '', primary: true},
+            { route: "/Calendar/Events/AddParticipants", title:"Adicionar participantes", iconClass : '', primary: false}
+            ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
       }
 
   });

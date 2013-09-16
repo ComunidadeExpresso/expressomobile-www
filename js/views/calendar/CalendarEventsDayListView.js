@@ -36,8 +36,8 @@ define([
 			}
 
 			var newData = {events: events.models, year: this.year, month: this.month, day: this.day, _:_};
-			var template = _.template(calendarEventsDayListTemplate, newData);
-				this.$el.empty().html(template);
+
+			this.$el.html(_.template(calendarEventsDayListTemplate, newData));
 		},
 
 		initialize: function() { },

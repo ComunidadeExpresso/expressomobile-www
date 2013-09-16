@@ -53,9 +53,9 @@ body #page .main .container { position: absolute; top: 53px; right: 0; left: 0; 
 body.smartphone #page .main #contentDetail { display: none; }
 
 /** Busca **/
-body #page .main #content .searchArea { margin: 5px; padding: 8px; }
-body #page .main #content .searchArea input { width: 93%; border-radius: 15px 15px 15px 15px; min-height: 35px; background-color: #FFFFFF; border: 1px solid #CCCCCC; padding: 0 3%; }
-body #page .main #content .searchArea input:focus { border: 1px solid #0088CC; }
+body #page .searchArea { margin: 5px; padding: 8px; }
+body #page .searchArea input { width: 93%; border-radius: 15px 15px 15px 15px; min-height: 35px; background-color: #FFFFFF; border: 1px solid #CCCCCC; padding: 0 3%; }
+body #page .searchArea input:focus { border: 1px solid #0088CC; }
 
 
 /** Menu **/
@@ -277,14 +277,27 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
   body #page .main table#eventDetails tr td.description { padding: 12px; color: #777777; font-size: 14px;}
   body #page .main table#eventDetails tr td.busy { background-color: #F1F1F1; }
 
-  
-  /*body form#addEvent ol li input[type=checkbox] { margin: 3px 0; }*/
-  body form#addEvent ol li.date ol li { width: 47%; margin: 0; display: inline; }
+  body form#addEvent { padding: 0; }
+  body form#addEvent ol li { min-height: 60px; border-left: 8px solid #3A87AD; border-bottom: 1px #CCC solid; border-top: 1px #FFF solid; }
+  body form#addEvent ol li label { padding-top: 20px; color: #3A87AD; width: 120px; font-weight: bold; text-align: left; padding-left: 5px; }
+  body form#addEvent ol li.date ol li { width: 47%; margin: 0; display: inline; border: 0; }
   body form#addEvent ol li.participants { color: #777777; }
   body form#addEvent ol li.participants h4 { display: inline; font-weight: bold; }
   body form#addEvent ol li.participants a { text-decoration: none; margin-left: 10px; color: #3A87AD; }
-  body form#addEvent ol li.participants ol { margin: 10px 0; }
-  body form#addEvent ol li.participants ol li { margin: 10px 0; }
+  body form#addEvent ol li.participants ol { margin: 35px 0 10px 15px; }
+  body form#addEvent ol li.participants ol li { margin: 10px 0; border: 0; min-height: 0; }
+  body form#addEvent ol li.participants ol li label { padding-top: 0; float: none; }
+  body form#addEvent ol li label { float: left; width: 150px; }
+
+  body form#addEvent input[type=text], body form#addEvent input[type=date], body form#addEvent input[type=time], body form#addEvent select, body form#addEvent textarea { /*border: 1px #CCC solid*/ border: 0; width: auto; margin: 10px 0;  padding: 10px 5px; font-size: 16px; /*border-radius: 3px 3px 3px 3px;*/ color: #777777; /*background-color: #F1F1F1;*/ }
+  body form#addEvent select { /*width: 100%; */height: 40px; padding: 0; }
+  body form#addEvent input[type=text]:focus, body form#addEvent input[type=date]:focus, body form#addEvent input[type=time]:focus, body form#addEvent select:focus, body form#addEvent textarea:focus { /*border: 1px solid #3A87AD;*/ }
+  body form#addEvent textarea { height: 150px; }
+  /*body form#addEvent body form { font-size: 16px; padding: 10px 15px; }*/
+  input[type=checkbox].css-checkbox { position: absolute; overflow: hidden; clip: rect(0 0 0 0); height: 1px; width: 1px; margin: -1px; padding: 0; border: 0; }
+  input[type=checkbox].css-checkbox + label.css-label { padding-left: 25px; height: 20px; display: inline-block; line-height: 20px; background-repeat: no-repeat; background-position: 0 0; font-size: 15px; vertical-align: middle; cursor:pointer; }
+  input[type=checkbox].css-checkbox:checked + label.css-label { background-position: 0 -20px; }
+  .css-label { background-image:url(../imgs/web-two-style.png); }
 
   /** Adicionar participantes **/
   body #page .main #contentDetail dl#participantsList { margin-top: 1px;  }

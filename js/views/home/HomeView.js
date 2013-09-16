@@ -153,9 +153,13 @@ define([
 
     refreshWindow: function() {
       //alert('refreshWindow()');
+
+
       var top = $('.top').outerHeight(true);
-      var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
       var chat = $('.chatArea').outerHeight(true) == null ? 0 : $('.chatArea').outerHeight(true);
+
+      var search = $('#content .searchArea').outerHeight(true) == null ? 0 : $('#content .searchArea').outerHeight(true);
+      var searchDetail = $('#contentDetail .searchArea').outerHeight(true) == null ? 0 : $('#contentDetail .searchArea').outerHeight(true);
       
       // Verify screen width to define device type
       if (Shared.isSmartPhoneResolution())
@@ -165,7 +169,7 @@ define([
 
       $('body').height($(window).height() - top);
       $('#wrapper').css('top', top + search);
-      $('#wrapperDetail').css('top', top + chat);
+      $('#wrapperDetail').css('top', top + chat + searchDetail);
 
       Shared.scrollerRefresh();
       Shared.refreshDotDotDot();
@@ -184,7 +188,8 @@ define([
     {
 
         var top = $('.top').outerHeight(true);
-        var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
+
+        var search = $('#content .searchArea').outerHeight(true) == null ? 0 : $('#content .searchArea').outerHeight(true);
         
         // Verify screen width to define device type
         this.deviceType(Shared.isSmartPhoneResolution());
