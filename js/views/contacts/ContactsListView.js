@@ -117,19 +117,28 @@ define([
 			var donePersonalContacts = function (data)
 			{
 		
-				if (data.contacts.length > 0) {
-					var template = _.template(PersonalContactsListTemplate, data);
-					$('#scroller').html(template);
+				if (data.error == undefined) {
+
+					if (data.contacts.length > 0) {
+
+						var template = _.template(PersonalContactsListTemplate, data);
+						$('#scroller').html(template);
+
+					} else {
+						Shared.showMessage({
+				            type: "error",
+				            icon: 'icon-contacts',
+				            title: "Nenhum Resultado Encontrado.",
+				            route: "",
+				            description: "",
+				            timeout: 0,
+				            elementID: "#scroller",
+				        });
+					}
+
 				} else {
-					Shared.showMessage({
-			            type: "error",
-			            icon: 'icon-contacts',
-			            title: "Nenhum Resultado Encontrado.",
-			            route: "",
-			            description: "",
-			            timeout: 0,
-			            elementID: "#scroller",
-			        });
+					$('#scroller').empty();
+					Shared.handleErrors(data.error);					
 				}
 
 				Shared.refreshDotDotDot();

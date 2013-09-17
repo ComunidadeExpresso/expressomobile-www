@@ -153,16 +153,37 @@ define([
   };
 
   Shared.saveSettingsToLocalStorage = function() {
-    var expressoValues = Shared.api.getLocalStorageValue("expresso");
 
-    expressoValues.settings = Shared.settings;
+    Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
-    Shared.api.setLocalStorageValue("expresso",expressoValues);
+      expressoValue.settings = Shared.settings;
+
+      Shared.api.setLocalStorageValue("expresso",expressoValue);
+
+    });
+
   };
 
-  Shared.handleErrors = function(error) {
-    //alert(error);
-    if (error.code == 7) {
+  Shared.handleErrors = function(error,preferences) {
+
+    console.log("handleErrors");
+    console.log(error);
+
+    if (error.code == 100) {
+      if (preferences != undefined) {
+
+      }
+      Shared.showMessage({
+          type: "error",
+          icon: 'icon-expresso',
+          title: "Verifique sua conexão com a Internet...",
+          description: "",
+          timeout: 3000,
+          elementID: "#pageMessage",
+        });
+    }
+
+    if ((error.code == 7) || (error.code == 3)) {
 
       var expressoValues = {
         auth: "", 
@@ -195,8 +216,6 @@ define([
 
         },2000);
 
-      // Shared.router.navigate('Login',{trigger: true});
- 
     }
   };
 
@@ -232,23 +251,32 @@ define([
   Shared.api.id(0);
   Shared.api.debug(false);
 
-  var expressoValue = Shared.api.getLocalStorageValue("expresso");
+  Shared.userHasAuth = function() {
+    Shared.api.getLocalStorageValue("expresso",function(expressoValue) {   
 
-  if (expressoValue != null) {
+      //if (expressoValue != null) {
 
-    var authValue = expressoValue.auth;
+        var authValue = expressoValue.auth;
 
-    if ((authValue != null) && (authValue != "")) {
+        if ((authValue != null) && (authValue != "")) {
 
-      var profile = expressoValue.profile;
+          var profile = expressoValue.profile;
 
-      Shared.profile = profile;
+          Shared.profile = profile;
 
-      Shared.api.auth(authValue);
-      
-    }
+          //alert("auth:" + authValue);
 
-  }
+          Shared.api.auth(authValue);
+          
+        }
+
+      //}
+
+    });
+  };
+
+  Shared.userHasAuth();
+  
 
 
 document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
@@ -257,6 +285,8 @@ document.addEventListener('touchmove', function (e) { e.preventDefault(); }, fal
 document.addEventListener('deviceready', function () {
 
   Shared.api.phoneGap(true);
+
+  Shared.api.createPhoneGapDatabase();
 
   if (window.plugins.webintent != undefined) {
     window.plugins.webintent.getExtra("android.intent.extra.STREAM", function (url) {
@@ -276,19 +306,22 @@ document.addEventListener('deviceready', function () {
 
   var exitFunction = function(){
 
-    var expressoValue = Shared.api.getLocalStorageValue("expresso");
+    Shared.api.getLocalStorageValue("expresso",function(expressoValue) {   
 
-    if (expressoValue != null) {
-      if (expressoValue.auth != "") { 
-        //expressoValue.auth = "a" + expressoValue.auth;
-        Shared.api.setLocalStorageValue("expresso",expressoValue);
-        window.location.href = "/Home";
+      if (expressoValue != null) {
+        if (expressoValue.auth != "") { 
+          
+          window.location.href = "/Home";
+        } else {
+          window.location.href = "/Login";
+        }
       } else {
         window.location.href = "/Login";
       }
-    } else {
-      window.location.href = "/Login";
-    }
+
+    });
+
+    
   };
   
   if(window.onpagehide || window.onpagehide === null){

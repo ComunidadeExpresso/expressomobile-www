@@ -165,21 +165,30 @@ define([
       .resource('Logout')
       .done(function(result){
 
-        var expressoValues = {auth: "", "profile":""};
+        Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
-        Shared.api.setLocalStorageValue("expresso",expressoValues);
+          var isPhoneGap = Shared.api.phoneGap();
 
-        //window.location.href = 'Login';
+          expressoValue.auth = "";
+          expressoValue.profile = "";
+          expressoValue.username = "";
+          expressoValue.password = "";
+          expressoValue.phoneGap = isPhoneGap;
+          expressoValue.serverAPI = "";
 
-        Shared.router.navigate('Login',true);
-                
+          Shared.api.setLocalStorageValue("expresso",expressoValue);
+
+          Shared.router.navigate('Login',true);
+
+
+        });
+
         return false;
       })
-      .fail(function(result){
-        //if (result.error.code == 7) {
-          Shared.router.navigate('Login',{trigger: true});
-        //}
-        alert(result.error.message);
+      .fail(function(error){
+
+        Shared.handleErrors(error);
+        
         return false;
       })
       .execute();

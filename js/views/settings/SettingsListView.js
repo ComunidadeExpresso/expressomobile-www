@@ -77,6 +77,8 @@ define([
 
 
       } else {
+
+        $(detailElementID).html("");
         
         var loadingView = new LoadingView({ el: $(primaryElementID) });
         loadingView.render();
@@ -85,19 +87,25 @@ define([
 
         setTimeout(function() {
 
-          var user = Shared.api.getLocalStorageValue("expresso").profile;
+          Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
+            var user = expressoValue.profile;
 
-          var newData = {
-            _: _,
-            user: user,
-            automaticLogin: Shared.settings.automaticLogin
-          };
+            var newData = {
+              _: _,
+              user: user,
+              auth: Shared.api.auth(),
+              automaticLogin: Shared.settings.automaticLogin
+            };
 
-          var compiledTemplate = _.template( settingsListTemplate, newData );
-          that.$el.html(compiledTemplate);
-          $(primaryElementID).empty().html( that.$el );
+            var compiledTemplate = _.template( settingsListTemplate, newData );
+            that.$el.html(compiledTemplate);
+            $(primaryElementID).empty().html( that.$el );
 
-          that.loaded();
+            that.loaded();
+
+
+          });
+          
 
         },Shared.timeoutDelay);
 
@@ -122,7 +130,50 @@ define([
         Shared.settings.automaticLogin = true;
       }
 
-      Shared.saveSettingsToLocalStorage();
+      // //BUG INTENTIONALY LEFT TO REPRODUCE AN INVALID AUTH.
+
+      Shared.api
+      .resource('Logout')
+      .done(function(result){
+
+        alert('logout');
+        
+      })
+      .fail(function(error){
+
+        Shared.handleErrors(error);
+        
+        return false;
+      })
+      .execute();
+
+      // Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
+
+      //   expressoValue.auth = "7a3dn5thro4puedfe3afmcu1j5:622de249d9f778dd9a6c67923528273b";
+
+      //   Shared.api.auth(expressoValue.auth);
+
+      //   Shared.api.setLocalStorageValue("expresso",expressoValue);
+
+      //   // Shared.saveSettingsToLocalStorage();
+      // });
+      
+      // var expressoValue = Shared.api.getLocalStorageValue("expresso");
+      // window.localStorage.removeItem("expresso");
+      // window.localStorage.clear();
+      // expressoValue.auth = "a" + expressoValue.auth;
+      // alert("new auth : " + expressoValue.auth);
+
+      // Shared.api.auth(expressoValue.auth);
+
+      // Shared.api.setLocalStorageValue("expresso",expressoValue);
+
+      // expressoValue = Shared.api.getLocalStorageValue("expresso");
+      // alert("storage auth : " + expressoValue.auth);
+      // alert("api auth: "+ Shared.api.auth());
+      // //END OF BUG
+
+      
       
     },
 

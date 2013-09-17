@@ -4,6 +4,18 @@ define([
   'backbone',
 ], function($, _, Backbone){
 
+
+	function addslashes(string) {
+	    return string.replace(/\\/g, '\\\\').
+	        replace(/\u0008/g, '\\b').
+	        replace(/\t/g, '\\t').
+	        replace(/\n/g, '\\n').
+	        replace(/\f/g, '\\f').
+	        replace(/\r/g, '\\r').
+	        replace(/'/g, '\\\'').
+	        replace(/"/g, '\\"');
+	}
+
 	function stripslashes (str) {
 	  // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
 	  // +   improved by: Ates Goral (http://magnetiq.com)
@@ -137,7 +149,6 @@ define([
 				//BUT IS STILL NOT WORKING IN PHONEGAP.
 				if (options.phoneGap) {
 					// jqXHR.overrideMimeType('text/plain; charset=utf-8');
-
 					// alert('Send ArrayBuffer');
 			    	jqXHR.send(array);
 
@@ -180,6 +191,12 @@ define([
 		var _files = [];
 
 		var _phoneGap = false;
+
+		//USED IN PHONEGAP DATABASE
+		var _db;
+		var _tempData;
+		var _tempName;
+		var _tempResult;
 
 		this.id = function(value) {
 			if(value == undefined) return _id;
@@ -294,22 +311,108 @@ define([
 
 		this.read_cookie =  function(key)
 		{
-		    var result;
-		    return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? (result[1]) : null;
+		    // var result;
+		    // return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? (result[1]) : null;
 		}
+
+		this.updatePhonegapDatabase = function(tx) {
+
+			var str = JSON.stringify(_tempData);
+		    var query = 'UPDATE expresso set data = \'' + str + '\' where id = 1';
+		    tx.executeSql(query);
+		};
+
+		this.getPhonegapDatabaseValue = function(tx) {
+
+			var that = this;
+
+			var query = 'SELECT * FROM expresso where id = 1';
+
+			var querySuccess = function(tx, results) {
+				if (results) {
+					var len = results.rows.length;
+				    //console.log("EXPRESSO table: " + len + " rows found.");
+				    for (var i=0; i<len; i++){
+				    	//console.log("Row = " + i + " ID = " + results.rows.item(i).id + " Data =  " + results.rows.item(i).data);
+				    	that._tempResult = results.rows.item(i).data;
+				    	that._tempCallback(JSON.parse(that._tempResult));
+				    }
+				}
+			}
+		    tx.executeSql(query, [], querySuccess, this.errorCB);
+		};
+
 
 		this.setLocalStorageValue = function(c_name,value) {
-			window.localStorage.setItem(c_name, JSON.stringify(value));
-		}
-
-		this.getLocalStorageValue =  function(name) {  
-		  
-			var value = window.localStorage.getItem(name);
-			if (value) {
-				return JSON.parse(value);
+			if (_phoneGap) {
+				_tempName = c_name;
+				_tempData = value;
+				_db.transaction(this.updatePhonegapDatabase, this.errorCB, this.successCB);
+			} else {
+				window.localStorage.setItem(c_name, JSON.stringify(value));
 			}
+			
+		};
 
-		}
+
+		this.getLocalStorageValue =  function(name,successCallBack) {
+
+			if (_phoneGap) {
+				_tempName = name;
+				_tempCallback = successCallBack;
+
+				_db.transaction(this.getPhonegapDatabaseValue, this.errorCB);
+
+			} else {
+
+				var value = window.localStorage.getItem(name);
+				if (value) {
+					successCallBack(JSON.parse(value));
+				}
+			}
+		  
+		};
+
+		this.errorCB = function(err) {
+	        //alert("Erro processando SQL: "+err);
+	    };
+
+	    this.successCB = function() {
+	        // alert("success running query database!");
+	    };
+
+
+		this.populatePhoneGapDatabase = function(tx) {
+			//tx.executeSql('DROP TABLE IF EXISTS expresso');
+
+			var expressovalue = {
+	          auth: "", 
+	          profile: "",
+	          username: "", 
+	          password: "",
+	          phoneGap: true,
+	          serverAPI: "",
+	          settings: { 
+	            resultsPerPage: 30,
+	            automaticLogin: false,
+	            mailSignature: 'Mensagem enviada pelo Expresso Mobile.',
+	          }
+	        };
+
+	        var str = JSON.stringify(expressovalue);
+
+		    tx.executeSql('CREATE TABLE IF NOT EXISTS expresso (id unique, data)');
+		    var query = 'INSERT INTO expresso (id, data) VALUES (1, \'' + str + '\')';
+		    tx.executeSql(query);
+
+		};
+
+		this.createPhoneGapDatabase = function() {
+			_db = window.openDatabase("expresso", "1.0", "Expresso Mobile", 200000);
+		    _db.transaction(this.populatePhoneGapDatabase, this.errorCB, this.successCB);
+
+		    _db.transaction(this.getPhonegapDatabaseValue, this.errorCB, this.successCB);
+		};
 
 		this.readCookie =  function(name) {  
 		  
@@ -318,24 +421,7 @@ define([
 				return value;
 			}
 
-	/*	    var cookiename = name + "=";  
-		  
-		    var ca = document.cookie.split(';');  
-		  
-		    for(var i=0;i < ca.length;i++)  
-		    {  
-		  
-		        var c = ca[i];  
-		  
-		        while (c.charAt(0)==' ') c = c.substring(1,c.length);  
-		  
-		        if (c.indexOf(cookiename) == 0) return c.substring(cookiename.length,c.length);  
-		  
-		    }  
-		  
-		    return '';   
-		  */
-		}
+		};
 
 		this.options = function(value) {
 			for (var method in value)
@@ -353,13 +439,17 @@ define([
 
 			var conf = {};
 
-			if (_phoneGap) {
-				
+			conf.headers = {'Cookie' : '' },
+			conf.xhrFields = { withCredentials: false };
 
-				//alert(JSON.stringify(_data[_id].send.params));
+			if (_phoneGap) {
+
+				// alert(JSON.stringify(_data[_id].send.params));
+				
 				conf.id = _id;
 				conf.type = this.type();
 				conf.url = this.url();
+				conf.timeout = 10000;
 				conf.data = {
 					id: 	_id,
 					params: JSON.stringify(_data[_id].send.params)
@@ -395,6 +485,7 @@ define([
 				conf.data	= _data[_id].send;
 				conf.params = _data[_id].send.params;
 				conf.phoneGap = _phoneGap;
+				conf.timeout = 10000;
 				if (this.dataType() == 'arraybuffer') {
 					conf.dataType = this.dataType();
 					conf.loadArrayBuffer = function(arrayBuffer) {
@@ -423,6 +514,33 @@ define([
 				console.log('ExpressoAPI - Execute:' + this.resource());
 				console.log(conf);
 			}
+
+			var networkError = { error: { code: 100, message: "Verifique sua conexão com a Internet."} };
+			var networkTimeoutError = { error: { code: 100, message: "Esgotou-se o tempo limite da solicitação."} };
+
+			if (_phoneGap) {
+				var networkState = navigator.connection.type;
+			    if (networkState == Connection.NONE){
+					if (_data[this.id()].fail) _data[this.id()].fail(networkError);
+			    }
+			} else {
+				var online = navigator.onLine;
+				if (!online) {
+					if (_data[this.id()].fail) _data[this.id()].fail(networkError);
+				}
+				
+			}
+
+			var that = this;
+
+			conf.error = function(x, t, m) {
+		        if(t==="timeout") {
+					if (_data[that.id()].fail) _data[that.id()].fail(networkTimeoutError);
+		            //alert("Timeout");
+		        } else {
+		            // alert(t);
+		        }
+		    };
 			
 			jQuery.ajax(conf).done(function(response) {
 
@@ -431,9 +549,9 @@ define([
 						console.log('ExpressoAPI - DONE callback');
 						console.log(JSON.stringify(response));
 					}
-					if (response.result.auth) ExpressoAPI.auth(response.result.auth);
+					if (response.result.auth) that.auth(response.result.auth);
 					if (_data[this.id]) {
-						if (_data[this.id].resource=='/Logout') ExpressoAPI.auth("");
+						if (_data[this.id].resource=='/Logout') that.auth("");
 						if (_data[this.id].done) _data[this.id].done(response.result,_data[this.id].send);
 					}
 				} else {

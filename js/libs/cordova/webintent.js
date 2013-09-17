@@ -47,6 +47,14 @@
         }, 'WebIntent', 'getExtra', [params]);
     };
 
+    WebIntent.prototype.clearCookies = function(params, success, fail) {
+        return cordova.exec(function(args) {
+            success(args);
+        }, function(args) {
+            fail(args);
+        }, 'WebIntent', 'clearCookies', [params]);
+    };
+
 
     WebIntent.prototype.onNewIntent = function(callback) {
         return cordova.exec(function(args) {

@@ -56,6 +56,13 @@ define([
 
           that.loaded();
 
+        }).fail(function(result){
+              
+          Shared.handleErrors(result.error);
+
+          $(elementID).empty();
+          
+          return false;
         }).execute();
       }
 
