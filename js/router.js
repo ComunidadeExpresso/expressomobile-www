@@ -17,7 +17,7 @@ define([
   'views/calendar/CalendarEditEventView',
   'views/calendar/CalendarSaveEventView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, AttachmentMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView,ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, AttachmentMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView,CalendarSaveEventView,ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 

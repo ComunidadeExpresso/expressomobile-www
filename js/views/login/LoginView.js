@@ -17,6 +17,7 @@ define([
     render: function(){
 
       this.$el.html(loginTemplate);
+      this.$el.attr("style","top: -53px; position: relative;");
       $("#mainAppPageContent").empty().append(this.$el);
 
     },

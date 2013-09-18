@@ -39,9 +39,13 @@ define([
 
       $(this.elementID).empty().append(this.$el);
 
+
+      $(this.elementID).attr("style","position: relative; top: -53px; width: 100%;");
       $(this.elementID).animate({top: -$(this.elementID).outerHeight()}, 500);
 
       var that = this;
+
+
 
       if (that.timeout > 0) {
         setTimeout(function() {
