@@ -222,7 +222,7 @@ define([
 			Shared.scroll = new iScroll('wrapper');
 
 			Shared.scrollerRefresh();
-			Shared.menuView.renderContextMenu('calendar',{});
+			Shared.menuView.renderContextMenu('calendar',{year: this.year, month: this.month, day: this.day});
 
 			$('#content .searchArea').remove();
 			$('#contentTitle').text('Agenda');

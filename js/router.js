@@ -17,7 +17,7 @@ define([
   'views/calendar/CalendarEditEventView',
   'views/calendar/CalendarSaveEventView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, AttachmentMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView,ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, AttachmentMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarSaveEventView,ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -36,7 +36,8 @@ define([
       'Contacts/:secondViewName' : 'contactsListView',
       'Contacts/:secondViewName/:contactID' : 'detailsContactView',
       'Calendar/Events/Save' : 'calendarSaveEventView',
-      'Calendar/Events/Add' : 'calendarEditEventView',
+      'Calendar/Events/Add/:year/:month/:day' : 'calendarAddEventView',
+      'Calendar/Events/Edit/:eventID' : 'calendarEditEventView',
       'Calendar/FullDay/:year/:month/:day' : 'calendarFullDayView',
       'Calendar/Events/:eventID' : 'calendarDetailsView',
       'Calendar/:year/:month/:day' : 'calendarListView',
@@ -252,14 +253,32 @@ define([
 
     app_router.on('route:calendarEditEventView', function (eventID) {
 
-      console.log('calendarEditEventView');
-
       var calendarEditEventView = new CalendarEditEventView();
       // calendarEditEventView.eventID = eventID;
       calendarEditEventView.render();
 
       Shared.menuView.selectMenu(2);
   
+    });
+
+    app_router.on('route:calendarAddEventView', function (year, month, day) {
+
+      var calendarAddEventView = new CalendarEditEventView({year: year, month: month, day: day});
+          // calendarAddEventView.year = year;
+          // calendarAddEventView.month = month;
+          // calendarAddEventView.day = day;
+          calendarAddEventView.render();
+
+      Shared.menuView.selectMenu(2);
+  
+    });
+
+    app_router.on('route:calendarSaveEventView', function () {
+
+      var calendarSaveEventView = new CalendarSaveEventView();
+      calendarSaveEventView.render();
+
+      Shared.menuView.selectMenu(2);
     });
 
     app_router.on('route:chatListView', function (secondViewName) {

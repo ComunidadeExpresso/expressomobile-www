@@ -3,34 +3,35 @@ define ([
 	'backbone',
 	'shared',
 	'models/contacts/ContactModel',
-	'collections/contacts/DetailsContactCollection'
-], function (_, Backbone, Shared, ContactModel, DetailsContactCollection) 
+	'collections/contacts/DetailsContactCollection',
+	'json2'
+], function (_, Backbone, Shared, ContactModel, DetailsContactCollection, json2) 
 {
 	var EventModel = Backbone.Model.extend(
 	{
 		defaults:
 		{
-	        eventID: 0,
-	        eventDate: "",
-	        eventName: "",
-	        eventDescription: "",
-	        eventLocation: "",
+	        eventID: '',
+	        eventDate: '',
+	        eventName: '',
+	        eventDescription: '',
+	        eventLocation: '',
 	        eventParticipants: [],
 	        eventParticipantsLdap: [],
-	        eventStartDate: "",
-	        eventEndDate: "",
+	        eventStartDate: '',
+	        eventEndDate: '',
 	        eventAllDay: "0",
-	        eventExParticipants: "",
-			eventCategoryID: "",
-			eventDateEnd: "",
-			eventDateStart: "",
-			eventDescription: "",
-			eventOwner: "",
-			eventOwnerIsParticipant: "",
-			eventPriority: "",
-			eventTimeEnd: "",
-			eventTimeStart: "",
-			eventType: ""
+	        eventExParticipants: '',
+			eventCategoryID: '',
+			eventDateEnd: '',
+			eventDateStart: '',
+			eventDescription: '',
+			eventOwner: '',
+			eventOwnerIsParticipant: '',
+			eventPriority: '',
+			eventTimeEnd: '',
+			eventTimeStart: '',
+			eventType: ''
 		},
 
 		initialize: function ()
@@ -73,6 +74,7 @@ define ([
 	        	// var thisModel = new EventModel(result.events[0]);
 	        		that.set(result.events[0]);
 	        		that.getEventOwner();
+	        		// that.getEventParticipants();
 
 		        // if (that.done)
 	        	// 	that.done(that);
@@ -105,10 +107,12 @@ define ([
 			var that = this;
 
 			for (var i in listParticipants)
-				listUidNumbers.push(listParticipants[i].contactUIDNumber);
+				listUidNumbers.push(parseInt(listParticipants[i].contactUIDNumber));
+
+			var pContactID = JSON.stringify(listUidNumbers);
 
 			var detailsContactCollection = new DetailsContactCollection();
-				detailsContactCollection.getContactDetails(listUidNumbers)
+				detailsContactCollection.getContactDetails(pContactID)
 				.done (function (data) 
 				{
 					that.set({eventParticipantsLdap: data.models});
@@ -118,9 +122,6 @@ define ([
 				})
 				.fail (function (error) 
 				{
-					console.log('getEventParticipants');
-					console.log(error);
-
 					if (that.fail)
 		        		that.fail(error);
 				})
@@ -145,6 +146,40 @@ define ([
 					if (that.fail)
 		        		that.fail(error);
 				})
+		},
+
+		saveEvent: function (params)
+		{
+			console.log(params);
+
+			var that = this;
+
+			this.api
+			.resource('Calendar/AddEvent')
+			.params(params)
+			.done(function (result)
+			{
+				console.log('saveEvent > done');
+				console.log(result)
+
+				var thisModel = new EventModel(result.events[0]);
+	        		that.set(result.events[0]);
+	        		// that.getEventParticipants();
+
+		        if (that.done)
+	        		that.done(that);
+			})
+			.fail( function (error) 
+			{
+				console.log('saveEvent > error');
+				console.log(error);
+
+				if (that.fail)
+		        		that.fail(error);
+			})
+			.execute();
+
+			return that;
 		},
 
 		execute: function ()

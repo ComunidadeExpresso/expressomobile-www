@@ -5,72 +5,93 @@ define([
 	'shared',
 	'models/calendar/EventModel',
 	'views/home/LoadingView',
-	'text!templates/calendar/calendarSaveEventTemplate.html',
-	'text!templates/master/detailContentTemplate.html',
-], function($, _, Backbone, Shared, EventModel, LoadingView, calendarEditEventTemplate, detailContentTemplate)
+	'views/calendar/CalendarEditEventView',
+], function($, _, Backbone, Shared, EventModel, LoadingView, CalendarEditEventView)
 {
-	var d = Backbone.View.extend(
+	var CalendarSaveEventView = Backbone.View.extend(
 	{
-		el: $('#scroller'),
+		el: $('#content'),
 		eventID: 0,
+		model: EventModel,
+		params: {},
 
-		render: function()
+		render: function (options)
 		{
-			var that = this;
-			var contentTitle = $('#contentTitle');
+			var self = this;
 
 			if (!Shared.isSmartPhoneResolution())
+				this.$el = $('#contentDetail');
+
+			// var loadingView = new LoadingView({el: this.$el});	
+			// 	loadingView.render();
+
+			// var calendarEditEventView = new CalendarEditEventView();
+			// Shared.menuView.renderContextMenu('calendarAddEvent',{});
+
+			var callback = function (result)
 			{
-				$('#contentDetail').html(_.template(detailContentTemplate));
-
-				var loadingView = new LoadingView({el: $('#scrollerDetail')});	
-					loadingView.render();
-
-				contentTitle = $('#contentDetailTitle');
-
-				this.$el = $('#scrollerDetail');
-
-				console.log('!Shared.isSmartPhoneResolution()');
-			}
-			else
-			{
-				var loadingView = new LoadingView({el: $('#scroller')});
-					loadingView.render();				
-
-				console.log('Shared.isSmartPhoneResolution()');
+				console.log('callback');
+				console.log(result);
+				Shared.router.navigate('/Calendar/Events/Add/' + self.model.id, {trigger: true});
+				// Backbone.history.navigate('/Calendar/Events/Add/' + self.model.id, true); 
+				// self.view.render({model: self.model});
 			}
 
-			contentTitle.text('Adicionar evento');
-
-			this.$el.empty().html(_.template(calendarEditEventTemplate));
-			this.loaded();
+			this.saveEvent(callback, callback);
 		},
 
-		loaded: function() 
-		{ 
-			if (!Shared.isSmartPhoneResolution())
-				Shared.scrollDetail = new iScroll('wrapperDetail');
-			else
-				Shared.scroll = new iScroll('wrapper');
+		saveEvent: function(callbackSucess, callbackFail)
+		{
+			console.log(this.model);
 
-			Shared.menuView.renderContextMenu('calendarAddEvent',{});
+			var eventModel = new EventModel();
 
-			var width = $('#contentDetail').width() - ($('body form#addEvent input[type=text]').position().left + 33);
-			var width_date = width / 2 - 30; 
+			// eventModel.save()
+			this.model.saveEvent(this.params)
+			.done(function (data) 
+			{
+				// self.data = { event: data, _: _ };
 
-			console.log(width);
-
-			$('body form#addEvent input[type=text]').width(width);
-			$('body form#addEvent select').width(width);
-			$('body form#addEvent textarea').width(width);
-			$('body form#addEvent li.date input[type=text]').width(width_date);
-
+				if (callbackSucess)
+					callbackSucess(data);
+			})
+			.fail(function (error) 
+			{
+				// self.data = { error: data.error, _: _ };
+				
+				if (callbackFail)
+					callbackFail(error);
+			});
 		},
 
-		initialize: function() { }
+		initialize: function (options)  
+		{
+			var dateStart = ($('#eventDateStart').val()).split('-');
+			var dateEnd = ($('#eventDateEnd').val()).split('-');
+
+			this.params = {
+				eventDateStart: dateStart[2] + '/' + dateStart[1] + '/' + dateStart[0],
+				eventTimeStart: $('#eventTimeStart').val(),
+				eventDateEnd: dateEnd[2] + '/' + dateEnd[1] + '/' + dateEnd[0],
+				eventTimeEnd: $('#eventTimeEnd').val(),
+				eventID: $('#eventID').val(),
+				eventType: $('#eventType').val(),
+				eventCategoryID: $('#eventCategoryID').val(),
+		        eventName: $('#eventName').val(),
+		        eventDescription: $('#eventDescription').val(),
+		        eventLocation: $('#eventLocation').val(),
+				eventPriority: $('#eventPriority').val(),
+				eventOwnerIsParticipant: '1',
+		        eventParticipants: $('#eventParticipants').val(),
+		        eventExParticipants: $('#eventExParticipants').val(),
+			};
+
+			this.model = new EventModel(this.params);
+			this.view = new CalendarEditEventView();
+		}
 		
 	});
 
-	return d;
+	return CalendarSaveEventView;
 
 });

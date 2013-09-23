@@ -14,17 +14,13 @@ define([
 {
 	var CalendarEditEventAddParticipantsView = Backbone.View.extend(
 	{
-		// el: $('#content'),
-		eventID: 0,
+		el: $('#content'),
 		model: EventModel,
-		container: $('#scroller'),
-		listSelecteds: [],
-
 		events: 
 		{
 			"keypress .searchField": "searchGeneralContacts",
 			"click #backToEditEvent": "backToEditEvent",
-			"click .css-checkbox": "checkParticipant"
+			"click .css-checkbox": "addParticipant"
 		},
 
 		render: function ()
@@ -35,20 +31,19 @@ define([
 		listGeneralContacts: function (pSearch)
 		{
 			var self = this;
-			var content = $('#content');
 			var contentTitle = $('#contentTitle');
 			var container = $('#scroller');
 
 			if (!Shared.isSmartPhoneResolution())
 			{
-				content = $('#contentDetail');
-				content.html(_.template(detailContentTemplate));
+				this.$el = $('#contentDetail');
+				this.$el.html(_.template(detailContentTemplate));
 
 				container = $('#scrollerDetail');
 				contentTitle = $('#contentDetailTitle');
 			}
 			else
-				content.html(_.template(primaryContentTemplate));
+				this.$el.html(_.template(primaryContentTemplate));
 
 			var loadingView = new LoadingView({el: container});	
 				loadingView.render();
@@ -57,13 +52,8 @@ define([
 
 			var callback = function (data)
 			{
-				self.$el.html(_.template(calendarEditEventAddParticipantsTemplate, data));
-				container.empty().append(self.$el);
-				self.setElement(content);
-
-				// var pictureImageContactView = new PictureImageContactView({el: $('.picture_image')});
-				// pictureImageContactView.render(data);
-
+				container.empty().append(_.template(calendarEditEventAddParticipantsTemplate, data));
+				self.setElement(self.$el);
 				self.loaded();
 			};
 
@@ -72,13 +62,13 @@ define([
 
 		listContacts: function (pSearch, ptype, callbackSuccess, callbackFail)
 		{
+			var self = this;
+
 			var contactsData = new ContactsListCollection();
 				contactsData.getContacts(pSearch, ptype)
 				.done(function (data) 
 				{
-					this.arrayContacts = { contacts: data.models, search: pSearch, _: _ };
-
-					callbackSuccess(this.arrayContacts);
+					callbackSuccess({ contacts: data.models, search: pSearch, listParticipants: self.model.get('eventParticipants'), _: _ });
 				})
 				.fail(function (data) 
 				{
@@ -100,11 +90,8 @@ define([
 					pSearch = '';
 				
 				// Define se precisa fazer a busca ou não
-				if (pSearch.length >= 3 || this.searchLength >=3)
+				if (pSearch.length >= 3 || this.searchLength >= 3)
 				{
-					// var loadingView = new LoadingView({el: $('#scroller')});
-					// loadingView.render();
-
 					this.listGeneralContacts(pSearch);
 				}
 
@@ -142,6 +129,7 @@ define([
 
 			Shared.scrollerRefresh();
 			Shared.refreshDotDotDot();
+			Shared.menuView.renderContextMenu('calendarAddEventParticipant',{});
 		},
 
 		initialize: function (options) 
@@ -152,13 +140,35 @@ define([
 
 		backToEditEvent: function (e)
 		{
-			// e.preventDefault();
+			e.preventDefault();
+
+			this.$el.off('click', '#backToEditEvent');
+			this.$el.off('click', '.css-checkbox');
+			this.$el.off('keypress', '.searchField');
+
 			this.view.render({model: this.model});
 		},
 
-		checkParticipant: function (e)
-		{
-			console.log('checkParticipant');
+		addParticipant: function (e)
+		{	
+			console.log('addParticipant');
+
+			var listParticipants = this.model.get('eventParticipants');
+			var participant = $(e.target).val();
+			var index = _.isEmpty(listParticipants) ? -1 : _.indexOf(listParticipants, participant);
+
+			if ($(e.target).is(':checked'))
+			{
+				if (index == -1)
+					listParticipants.push(participant);
+			}
+			else
+			{
+				if (index != -1)
+					listParticipants.splice(index, 1);
+			}
+
+			this.model.set({eventParticipants: listParticipants});
 		}
 	});
 
