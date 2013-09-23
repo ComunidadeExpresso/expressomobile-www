@@ -57,6 +57,9 @@ define([
         Shared.scrollerRefresh();
 
       })
+      .fail(function (error) {
+        Shared.handleErrors(error);
+      })
       .execute();
     }
 

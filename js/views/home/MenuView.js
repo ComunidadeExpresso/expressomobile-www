@@ -25,7 +25,7 @@ define([
 
     render: function(){
 
-      if (_.isNull(this.profile)) {
+      //if (_.isNull(this.profile)) {
 
 
         console.log('renderMenu');
@@ -33,51 +33,55 @@ define([
         //GERALMENTE O PROFILE É ENVIAOD PELO MENU-VIEW PORÉM SE O USUÁRIO REALIZAR O RELOAD DA PÁGINA
         //ENTÃO SERÁ NECESSÁRIO RECARREGÁ-LO DO LOCALSTORAGE
 
-        var expressoValue = Shared.api.getLocalStorageValue("expresso");
+        var that = this;
+        Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
-        if (expressoValue != null) {
+          if (expressoValue != null) {
 
-          var authValue = expressoValue.auth;
+            var authValue = expressoValue.auth;
 
-          if (authValue != null) {
-            Shared.api.auth(authValue);
+            if (authValue != null) {
+              Shared.api.auth(authValue);
+            }
+
+            Shared.profile = expressoValue.profile;
+            that.profile = Shared.profile;
+
           }
 
-          Shared.profile = expressoValue.profile;
-          this.profile = Shared.profile;
 
-        }
+          var data = {
+            user: that.profile,
+            _: _ 
+          };
 
-      }
+          var compiledTemplate = _.template( menuTemplate, data );
 
-      var data = {
-        user: this.profile,
-        _: _ 
-      };
-
-      var compiledTemplate = _.template( menuTemplate, data );
-
-      this.$el.html(compiledTemplate);
+          that.$el.html(compiledTemplate);
 
 
-      Shared.api
-      .resource('Catalog/ContactPicture')
-      .params({contactID:this.profile.contactID,contactType:'2'})
-      .done(function(result){
-        if (result.contacts[0].contactImagePicture != "") {
-          $("#userPicture").css("background-image","url('data:image/gif;base64," + result.contacts[0].contactImagePicture + "')");
-          $("#userPicture").css("background-size","46px 61px");
-        } 
-      })
-      .fail(function(error) {
-        Shared.handleErrors(error);
-      })
-      .execute();
+          Shared.api
+          .resource('Catalog/ContactPicture')
+          .params({contactID:that.profile.contactID,contactType:'2'})
+          .done(function(result){
+            if (result.contacts[0].contactImagePicture != "") {
+              $("#userPicture").css("background-image","url('data:image/gif;base64," + result.contacts[0].contactImagePicture + "')");
+              $("#userPicture").css("background-size","46px 61px");
+            } 
+          })
+          .fail(function(error) {
+            Shared.handleErrors(error);
+          })
+          .execute();
 
-      this.context = new ContextMenuView();
+          that.context = new ContextMenuView();
 
-      var foldersMenuListView = new FoldersMenuListView();
-      foldersMenuListView.render();
+          var foldersMenuListView = new FoldersMenuListView();
+          foldersMenuListView.render();
+
+        });
+
+      //}
 
     },
 

@@ -14,6 +14,8 @@ define([
 
     currentFolder : [],
     parentFolders : [],
+    elementID: "#content",
+    detailElementID: "#contentDetail",
     folderID: 'INBOX',
     msgID: '',
     search: '',
@@ -21,9 +23,9 @@ define([
 
     render: function(){
 
-      var that = this;
+      this.elementID = "#content";
 
-      var elementID = "#content";
+      var that = this;
 
       var beforeRenderCallback = function() {
         var newData = {
@@ -36,7 +38,7 @@ define([
 
         that.$el.html(compiledTemplate);
 
-        $(elementID).empty().append(that.$el);
+        $(that.elementID).empty().append(that.$el);
 
       }
       
@@ -146,6 +148,10 @@ define([
             .fail(function(result){
               
               Shared.handleErrors(result.error);
+
+              $(that.elementID).empty();
+
+              $(that.detailElementID).empty();
               
               return false;
             })
@@ -155,6 +161,10 @@ define([
       .fail(function(result){
 
         Shared.handleErrors(result.error);
+
+        $(that.elementID).empty();
+
+        $(that.detailElementID).empty();
 
         return false;
       })

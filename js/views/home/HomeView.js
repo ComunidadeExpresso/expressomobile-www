@@ -49,54 +49,57 @@ define([
       var that = this;
 
 
-      var expressoValue = Shared.api.getLocalStorageValue("expresso");
+      Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
-      if (expressoValue != null) {
+        if (expressoValue != null) {
 
-        var userName = expressoValue.username;
-        var passwd = expressoValue.password;
+          var userName = expressoValue.username;
+          var passwd = expressoValue.password;
 
-        Shared.im
-        .username(userName)
-        .password(passwd)
-        .connect();
+          Shared.im
+          .username(userName)
+          .password(passwd)
+          .connect();
 
-        Shared.api.phoneGap(expressoValue.phoneGap);
+          Shared.api.phoneGap(expressoValue.phoneGap);
 
-        if (expressoValue.phoneGap) {
-          Shared.api.context(expressoValue.serverAPI).crossdomain(expressoValue.serverAPI);
-        } else {
-          Shared.api.context("/api/").crossdomain(expressoValue.serverAPI);
+          if (expressoValue.phoneGap) {
+            Shared.api.context(expressoValue.serverAPI).crossdomain(expressoValue.serverAPI);
+          } else {
+            Shared.api.context("/api/").crossdomain(expressoValue.serverAPI);
+          }
+
         }
 
-      }
+        
+        that.menuView = new MenuView( { el : $("#scrollerMenu") });
+        that.menuView.profile = that.profile;
+        that.menuView.render();
+       
+        that.menuView.selectMenu(1);
+        that.loadMessagesInFolder(that.folderID,that.search);
 
-      
-      this.menuView = new MenuView( { el : $("#scrollerMenu") });
-      this.menuView.profile = this.profile;
-      this.menuView.render();
-     
-      this.menuView.selectMenu(1);
-      this.loadMessagesInFolder(this.folderID,this.search);
+        that.loaded();
 
-      this.loaded();
+        Shared.setDefaultIMListeners();
 
-      Shared.setDefaultIMListeners();
-
-      $('#page').touchwipe(
-      {
-        wipeLeft: function() 
+        $('#page').touchwipe(
         {
-          that.menuView.closeMenu();
-          Shared.scrollerRefresh();
-        },
-        wipeRight: function() 
-        {
-          that.menuView.openMenu();
-          Shared.scrollerRefresh();
-        },
-        preventDefaultEvents: true
+          wipeLeft: function() 
+          {
+            that.menuView.closeMenu();
+            Shared.scrollerRefresh();
+          },
+          wipeRight: function() 
+          {
+            that.menuView.openMenu();
+            Shared.scrollerRefresh();
+          },
+          preventDefaultEvents: true
+        });
+
       });
+      
       
     },
 

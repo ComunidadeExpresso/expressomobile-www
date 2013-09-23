@@ -104,19 +104,21 @@ define([
 
     app_router.on('route:defaultAction', function (actions) {
 
-      var expressoValue = Shared.api.getLocalStorageValue("expresso");
+      Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
-      if (expressoValue != null) {
+        if (expressoValue != null) {
 
-        var authValue = expressoValue.auth;
+          var authValue = expressoValue.auth;
 
-        if (authValue != null) {
-          Shared.api.auth(authValue);
+          if (authValue != null) {
+            Shared.api.auth(authValue);
+          }
+
+          Shared.profile = expressoValue.profile;
+
         }
 
-        Shared.profile = expressoValue.profile;
-
-      }
+      });
 
       if (Shared.api.auth()) {
         app_router.navigate("Home",{ trigger: true });
