@@ -106,9 +106,25 @@ define([
         return this;
       },
 
-      getCalendarMenu: function() {
+      getCalendarMenu: function(year, month, day) {
+
+        var today = new Date();
+        var pad = "00";
+
+        if (year == '' || year == undefined)
+          year = today.getFullYear();
+
+        if (month == '' || month == undefined)
+        {
+          month = today.getMonth() + 1; // Months are zero based;
+          month = pad.substring(0, pad.length - ("" + month).length) + ("" + month);
+        }
+
+        if (day == '' || day == undefined)
+          day = today.getDate();
+
         var menuItems = [
-            { route: "/Calendar/Events/Add", title:"Adicionar evento"}
+            { route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, title:"Adicionar evento"}
           ];
 
         this.createModelsFromArray(menuItems);
@@ -120,6 +136,16 @@ define([
         var menuItems = [
             { route: "/Calendar/Events/Save", title:"Salvar", iconClass : '', primary: true},
             { route: "/Calendar/Events/AddParticipants", title:"Adicionar participantes", iconClass : '', primary: false}
+            ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
+      },
+
+      getCalendarAddEventParticipantMenu: function ()
+      {
+        var menuItems = [
+            { route: "/Calendar/Events/Participants/Save", title:"Salvar", iconClass : '', primary: true}
             ];
 
         this.createModelsFromArray(menuItems);

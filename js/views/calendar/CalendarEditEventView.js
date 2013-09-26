@@ -16,18 +16,21 @@ define([
 		el: $('#content'),
 		eventID: 0,
 		model: EventModel,
+		year: '',
+		month: '',
+		day: '',
 
 		types: 
 		{
-			"normal": "Normal",
-			"private": "Restrito",
-			"privateHiddenFields": "Privado",
-			"hourAppointment": "Apontamento de Horas"
+			"1": "Normal",
+			"2": "Restrito"
+			// "privateHiddenFields": "Privado",
+			// "hourAppointment": "Apontamento de Horas"
 		},
 
 		priorities: 
 		{
-			"0": "Nenhum",
+			"": "Nenhum",
 			"1": "Baixo",
 			"2": "Normal",
 			"3": "Alto"
@@ -35,7 +38,8 @@ define([
 
 		events: 
 		{
-			"click #addParticipants": "addParticipants"
+			"click #addParticipants": "addParticipants",
+			"click .css-checkbox": "removeParticipant"
 		},
 
 		render: function (options)
@@ -47,7 +51,10 @@ define([
 			if (options != undefined && options.model != undefined)
 				this.model = options.model;
 			else
-				this.model = new EventModel();
+			{
+				this.model.set({eventTimeStart: '08:00'});
+				this.model.set({eventTimeEnd: '08:30'});
+			}
 
 			if (!Shared.isSmartPhoneResolution())
 			{
@@ -113,9 +120,23 @@ define([
 			$('body form#addEvent li.date input[type=text]').width(width_date);
 		},
 
-		initialize: function () 
+		initialize: function (options) 
 		{ 
 			this.model = new EventModel();
+
+			if (options != undefined)
+			{
+				this.year = options.year;
+				this.month = options.month;
+				this.day = options.day;
+			}
+
+			if (this.year != '' && this.month != '' && this.day != '')
+			{
+				this.model.set({eventDateStart: this.year + '-' + this.month + '-' + this.day});
+				this.model.set({eventDateEnd: this.year + '-' + this.month + '-' + this.day});
+			}
+
 		},
 
 		listEventCategories: function (pCategoryId, callbackSuccess, callbackFail)
@@ -155,12 +176,28 @@ define([
 
 			this.model = new EventModel(attrs);
 
+			this.$el.off('click', '#addParticipants');
+			this.$el.off('click', '.css-checkbox');
+
 			var calendarEditEventAddParticipantsView = new CalendarEditEventAddParticipantsView({model: this.model, view: new CalendarEditEventView()});
-			// var calendarEditEventAddParticipantsView = new CalendarEditEventAddParticipantsView({model: this.model, view: this});
 				calendarEditEventAddParticipantsView.render();
+		},
+
+		removeParticipant: function (e)
+		{
+			var listParticipants = this.model.get('eventParticipants');
+			var participant = $(e.target).val();
+			var index = _.indexOf(listParticipants, participant);
+
+			if (index != -1)
+			{
+				listParticipants.splice(index, 1);
+				$(e.target).parent('li').fadeOut(400, function () { $(this).remove(); });
+			}
+
+			this.model.set({eventParticipants: listParticipants});
 		}
 	});
 
 	return CalendarEditEventView;
-
 });

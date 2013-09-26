@@ -238,13 +238,16 @@ define([
           this.context.collection = contextMenuCollection.getContactsMenu();
       }
       if (menuID == 'calendar') {
-          this.context.collection = contextMenuCollection.getCalendarMenu();
+          this.context.collection = contextMenuCollection.getCalendarMenu(params.year, params.month, params.day);
       }
       if (menuID == 'mailsignature') {
           this.context.collection = contextMenuCollection.getMailSignatureMenu();
       } 
       if (menuID == 'calendarAddEvent') {
           this.context.collection = contextMenuCollection.getCalendarAddEventMenu();
+      }
+      if (menuID == 'calendarAddEventParticipant') {
+          this.context.collection = contextMenuCollection.getCalendarAddEventParticipantMenu();
       }
       this.context.render();
     },

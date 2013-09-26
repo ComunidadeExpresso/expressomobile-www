@@ -25,11 +25,14 @@
 					} 
 					
 					var uid = (c.get('contactMails')[0]).split("@")[0]; 
-					console.log(uid);
 					%>
 
 					<li>
-						<input type="checkbox" class="check css-checkbox" name="<%= uid %>" id="<%= uid %>" value="<%= c.get('contactMails')[0] %>" />
+						<%
+						var checked = _.contains(listParticipants, c.get('contactMails')[0]) ? "checked='checked'" : '';
+						%>
+
+						<input type="checkbox" class="check css-checkbox" <%= checked %> name="<%= uid %>" id="<%= uid %>" value="<%= c.get('contactMails')[0] %>" />
 						<label class="css-label" for="<%= uid %>"><%=c.get('contactFullName')%></label>
 					</li>					
 

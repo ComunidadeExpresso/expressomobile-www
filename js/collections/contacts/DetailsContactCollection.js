@@ -100,9 +100,16 @@ define([
 			var thatModel = ContactModel;
 			var data = this._data;
 
+
+			// var pContactID = JSON.stringify(pContactID);
+			console.log('getContactDetails');
+			console.log(pContactID);
+			console.log(typeof(pContactID));
+
 			this.api
 	        .resource('Catalog/Contacts')
-	        .params({search:'', contactID: pContactID,contactType:'2'})
+	        // .params({search:'',contactType:'2'})
+	        .params({search:'',contactID:pContactID,contactType:'2'})
 	        .done(function (result)
 	        {
 				for (var i in result.contacts) 
