@@ -94,7 +94,23 @@
             var attachments = message.get("msgAttachments");
             for (var i in attachments) {
             %>
-              <div class="simple-attachment"> 
+              <div class="attachment attachment-arquivo-background">
+                  <div class="attachmentTitle">
+
+                      <a href="<%=message.getDownloadAttachmentRoute(attachments[i].attachmentID)%>" class="attachmentLink">
+
+                      <div class="downloadAttachment">
+                      </div>
+                      <div class="fileSize" style="">
+                        <%=message.getAttachmentSize(attachments[i].attachmentID)%>
+                      </div>
+                      <div class="fileName" style="">
+                        <%=unescape($.trim(attachments[i].attachmentName))%>
+                      </div>
+                    </a>
+                  </div>
+              </div>
+              <!-- <div class="simple-attachment"> 
                     <div class="icon"></div>
                     <a href="<%=message.getAttachmentRoute(attachments[i].attachmentID)%>" class="attachmentLink">
                       <div class="btn btn-primary btn-right">
@@ -107,10 +123,10 @@
                           Download</div>
                       </a>
                     <% } %>
-                    <div class="attachment-name ellipsis14"><%=unescape($.trim(attachments[i].attachmentName))%></div>
-                    <div class="attachment-size ellipsis14"><%=message.getAttachmentSize(attachments[i].attachmentID)%></div> 
+                    <div class="attachment-name"><%=unescape($.trim(attachments[i].attachmentName))%></div>
+                    <div class="attachment-size"><%=message.getAttachmentSize(attachments[i].attachmentID)%></div> 
                     <div class="clear"></div>
-              </div>
+              </div> -->
             <% } %>
         </td>
       </tr> 

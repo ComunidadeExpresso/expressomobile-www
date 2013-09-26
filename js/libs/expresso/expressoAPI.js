@@ -5,46 +5,6 @@ define([
 ], function($, _, Backbone){
 
 
-	function addslashes(string) {
-	    return string.replace(/\\/g, '\\\\').
-	        replace(/\u0008/g, '\\b').
-	        replace(/\t/g, '\\t').
-	        replace(/\n/g, '\\n').
-	        replace(/\f/g, '\\f').
-	        replace(/\r/g, '\\r').
-	        replace(/'/g, '\\\'').
-	        replace(/"/g, '\\"');
-	}
-
-	function stripslashes (str) {
-	  // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-	  // +   improved by: Ates Goral (http://magnetiq.com)
-	  // +      fixed by: Mick@el
-	  // +   improved by: marrtins
-	  // +   bugfixed by: Onno Marsman
-	  // +   improved by: rezna
-	  // +   input by: Rick Waldron
-	  // +   reimplemented by: Brett Zamir (http://brett-zamir.me)
-	  // +   input by: Brant Messenger (http://www.brantmessenger.com/)
-	  // +   bugfixed by: Brett Zamir (http://brett-zamir.me)
-	  // *     example 1: stripslashes('Kevin\'s code');
-	  // *     returns 1: "Kevin's code"
-	  // *     example 2: stripslashes('Kevin\\\'s code');
-	  // *     returns 2: "Kevin\'s code"
-	  return (str + '').replace(/\\(.?)/g, function (s, n1) {
-	    switch (n1) {
-	    case '\\':
-	      return '\\';
-	    case '0':
-	      return '\u0000';
-	    case '':
-	      return '';
-	    default:
-	      return n1;
-	    }
-	  });
-	}
-
 	jQuery.ajaxTransport( 'arraybuffer', function( options, originalOptions, jqXHR ) {
         return {
             send: function( headers, completeCallback ) {
@@ -61,115 +21,57 @@ define([
         };
     });
 
-	//CHROME DOESN'T HAVE sendAsBinary METHOD FOR FILE UPLOAD, 
-	//THIS IS THE WORKAROUND.
- //    try {
-	//   if (typeof XMLHttpRequest.prototype.sendAsBinary == 'undefined') {
-	//     XMLHttpRequest.prototype.sendAsBinary = function(text){
-	//     	alert('Chrome');
-	//       var data = new ArrayBuffer(text.length);
-	//       var ui8a = new Uint8Array(data, 0);
-	//       for (var i = 0; i < text.length; i++) ui8a[i] = (text.charCodeAt(i) & 0xff);
-	//       this.send(ui8a);
-	//     }
-	//   }
-	// } catch (e) {}
+	jQuery.ajaxTransport( 'fileupload', function( options, originalOptions, jqXHR ) {
+		return {
+			send: function( headers, completeCallback ) {
+				jqXHR = new XMLHttpRequest();
+				jqXHR.open( options.type, options.url, true );
+				console.log('url: '+(options.url));
+				console.log('type: '+(options.type));
+				var boundary = 'AaB03x';
+				var body = '';
+				var data = {
+					id: options.id,
+					params: options.params,
+				};
 
-
-	 jQuery.ajaxTransport( 'fileupload', function( options, originalOptions, jqXHR ) {
-        return {
-            send: function( headers, completeCallback ) {
-                jqXHR = new XMLHttpRequest();
-                jqXHR.open( options.type, options.url, true );
-                var boundary = 'AaB03x';
-                var body = '';
-
-                body += "--" + boundary + "\r\n";
+				body += "--" + boundary + "\r\n";
 			    body += "Content-Disposition: form-data; name=\"id\"\r\n\r\n";
 			    body += options.id;
 			    body += "\r\n";
 
-			    if (!options.phoneGap) { 
-
-				    for ( var i in options.params ) {
-	                    body += "--" + boundary + "\r\n";
-	                    body += "Content-Disposition: form-data; name='params["+i+"]'\r\n";
-	                    body += "Content-Type: text/plain; charset=UTF-8 \r\n\r\n";
-	                    // body += "Content-Transfer-Encoding: utf-8\r\n\r\n";
-	                    // if (!options.phoneGap) { 
-	                    	body += unescape(encodeURIComponent(options.params[i]));
-	                	// } else {
-	                		// body += options.params[i];
-	                	// }
-	                    body += "\r\n";
-	                }
-
-                } else {
-
-                	body += "--" + boundary + "\r\n";
-				    body += "Content-Disposition: form-data; name=\"params\"\r\n\r\n";
-				    body += JSON.stringify(options.params);
-				    body += "\r\n";
-
-                }
-
-                for ( var i in options.files ) {
+				for ( var i in options.params ) {
                     body += "--" + boundary + "\r\n";
-                    body += "Content-Disposition: form-data; name='upload"+i+"'; filename='"+options.files[i].filename+"'\r\n";
-                    body += "Content-Type: application/octet-stream\r\n";
-                    body += "Content-Transfer-Encoding: binary\r\n\r\n";
-                    if (options.files[i].dataType == "base64") {
-                    	body += atob(options.files[i].src) + "\r\n";
-                    } else {
-                    	body += options.files[i].src + "\r\n";
-                    }
-
-
+                    body += "Content-Disposition: form-data; name='params["+i+"]'\r\n";
+                    body += "Content-Type: text/plain; charset=UTF-8 \r\n\r\n";
+                    body += unescape(encodeURIComponent(options.params[i]));
+                    body += "\r\n";
                 }
 
-
-                body += "--" + boundary + "--";
-
-                // alert(body);
-
-
-
-                jqXHR.onload = function() { options.loadArrayBuffer( jqXHR.response ); };
-                jqXHR.onerror = function(e) { console.log('ERROR'); console.log(e); };
-                jqXHR.setRequestHeader('content-type', 'multipart/form-data; charset=UTF-8; boundary=' + boundary);
-			    var array = new Uint8Array(new ArrayBuffer(body.length));
- 
-				for(i = 0; i < body.length; i++) {
-				  array[i] = body.charCodeAt(i);
+				for ( var i in options.files ) {
+					var file = options.files[i];
+					body += "--" + boundary + "\r\n";
+					body += "Content-Disposition: form-data; name='upload"+i+"'; filename='"+file.filename+"'\r\n";
+					body += "Content-Type: application/octet-stream\r\n";
+					body += "Content-Transfer-Encoding: binary\r\n\r\n";
+					if (options.files[i].dataType == "base64") {
+						body += (file.data)? file.data : atob(file.src.replace(/[^A-Za-z0-9\+\/\=]/g,"")) + "\r\n";
+					} else {
+					 	body += options.files[i].src + "\r\n";
+				    }
 				}
-
-				
-
-				//THIS WORKS ON CHROME, FIREFOX AND SAFARI,
-				//BUT IS STILL NOT WORKING IN PHONEGAP.
-				if (options.phoneGap) {
-					// jqXHR.overrideMimeType('text/plain; charset=utf-8');
-					// alert('Send ArrayBuffer');
-			    	jqXHR.send(array);
-
-					// var bb = new (window.MozBlobBuilder || window.WebKitBlobBuilder || window.BlobBuilder)();
-					// bb.append(array.buffer);
-					// var blob = bb.getBlob("binary");
-
-				} else {
-					// alert('new Blob');
-					var blob = new Blob([array.buffer], {type: "binary"});
-
-					// alert('Send');
-			    	jqXHR.send(blob);
-				}
-				
-				
-
-            },
-            abort: function() { if ( jqXHR ) { jqXHR.onerror = jQuery.noop; jqXHR.abort(); } }
-        };
-    });
+				body += "--" + boundary + "--";
+				jqXHR.setRequestHeader('content-type', 'multipart/form-data; boundary=' + boundary);
+				jqXHR.onload = function() { options.loadArrayBuffer( jqXHR.response ); };
+				jqXHR.onerror = function() { };
+				if ( typeof XMLHttpRequest.prototype.sendAsBinary == 'undefined' ) {
+					var ui8a = new Uint8Array( Array.prototype.map.call( body, function (x) { return x.charCodeAt(0) & 0xff; } ) );
+					jqXHR.send( ui8a.buffer );
+				} else jqXHR.sendAsBinary( body );
+			},
+			abort: function() { if ( jqXHR ) { jqXHR.onerror = jQuery.noop; jqXHR.abort(); } }
+		};
+	});
 
 	
 	var ExpressoAPI = new function() {
@@ -265,8 +167,8 @@ define([
 			return this;
 		};
 
-		this.addFile = function(fileData,fileName) {
-			_files.push({ "filename": fileName, "src" : fileData});
+		this.addFile = function(fileData,fileName,dataType) {
+			_files.push({ "filename": fileName, "src" : fileData,"dataType" : dataType});
 			return this;
 		};
 
@@ -449,7 +351,6 @@ define([
 				conf.id = _id;
 				conf.type = this.type();
 				conf.url = this.url();
-				conf.timeout = 10000;
 				conf.data = {
 					id: 	_id,
 					params: JSON.stringify(_data[_id].send.params)
@@ -462,8 +363,7 @@ define([
 					conf.loadArrayBuffer = function(arrayBuffer) {
 						if (_data[this.id].done) _data[this.id].done(arrayBuffer,_data[this.id].send);
 					};
-				}
-				if (this.dataType() == 'fileupload') {
+				}  else if (this.dataType() == 'fileupload') {
 					conf.dataType = this.dataType();
 					conf.files = _files;
 					conf.loadArrayBuffer = function(response) {
@@ -476,6 +376,8 @@ define([
 						}
 
 					};
+				} else {
+					conf.timeout = 10000;
 				}
 
 			} else {
@@ -485,7 +387,7 @@ define([
 				conf.data	= _data[_id].send;
 				conf.params = _data[_id].send.params;
 				conf.phoneGap = _phoneGap;
-				conf.timeout = 10000;
+				
 				if (this.dataType() == 'arraybuffer') {
 					conf.dataType = this.dataType();
 					conf.loadArrayBuffer = function(arrayBuffer) {
@@ -493,13 +395,15 @@ define([
 						// console.log(blob.size);
 						if (_data[this.id].done) _data[this.id].done(arrayBuffer,_data[this.id].send);
 					};
-				}
-				if (this.dataType() == 'fileupload') {
+				} else if (this.dataType() == 'fileupload') {
+
 					conf.dataType = this.dataType();
 					conf.files = _files;
 					conf.loadArrayBuffer = function(arrayBuffer) {
 						if (_data[this.id].done) _data[this.id].done(arrayBuffer,_data[this.id].send);
 					};
+				} else {
+					conf.timeout = 10000;
 				}
 				
 			}

@@ -292,7 +292,10 @@ document.addEventListener('deviceready', function () {
     window.plugins.webintent.getExtra("android.intent.extra.STREAM", function (url) {
 
       Shared.newMessageIntent = true;
-      Shared.newMessageFiles = url;
+      alert(url);
+      Shared.newMessageFiles = eval(url);
+
+      
 
     }, function() {
 

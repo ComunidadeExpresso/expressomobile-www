@@ -123,6 +123,11 @@ body #menu dl dd ul#myFolders li a { height: 30px; color: #333333; margin-right:
 body #menu dl dd ul#myFolders li a .icon { width: 30px; height: 30px; }
 body #menu dl dd ul#myFolders li a span { line-height: 30px; vertical-align: top; margin-left: 35px; float: left; width: 90%; }
 body #menu dl dd ul#myFolders li a span .badge.badge-info { float: right; }
+.badge-subfolders { 
+  float: right; 
+  background-color: #c4c4c4 !important; 
+  font-family: Verdana;
+}
 
 .folder-icon {
   width: 30px; 
@@ -161,6 +166,11 @@ body #menu dl dd ul#myFolders li a span .badge.badge-info { float: right; }
   background: url("../imgs/icon-pasta-compartilhada-30x30.png") no-repeat scroll center center;
 }
 
+.icon-add-folder {
+  border-radius: 5px;
+  background: url("../imgs/icon-adicionar-contato-pessoal-30x30.png") no-repeat scroll center center;
+  background-size: 40px 32px;
+}
 
 
 /** Menu de contexto **/
@@ -873,11 +883,10 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
   margin-bottom: 15px;
   text-align: left;
 }
-
+/*
 .attachmentImage {
-  width: 70px;
-  height: 80px;
-}
+
+}*/
 
 .drop_zone {
   margin: 10px;
@@ -1046,5 +1055,69 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px; 
+}
+
+
+.attachment {
+  width: 160px;
+  height: 150px;
+  border: 1px solid #CCC;
+  margin: 10px;
+  float: left;
+}
+.attachment img {
+  height: 100%;
+}
+.attachmentTitle {
+  font-family: Verdana;
+  font-size: 12px;
+  color: #FFF;
+  background-color: #000;
+  position: absolute;
+  width: 160px;
+  height: 50px;
+  margin-top: 100px;
+  opacity:0.7;
+  filter:alpha(opacity=70); /* For IE8 and earlier */
+  z-index: 200;
+}
+.attachmentTitle .fileName {
+  margin: 10px;
+  text-align: left;
+  height: 16px; 
+  overflow: hidden;
+}
+.attachmentTitle .fileSize {
+  margin-top: 24px; 
+  margin-left: 10px; 
+  position: absolute;
+}
+.attachmentTitle .deleteAttachment {
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+  font-size: 18px;
+  background: url('../imgs/icon-excluir-mensagem-30x30.png');
+  width: 30px;
+  height: 30px;
+}
+
+.attachmentTitle .downloadAttachment {
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+  font-size: 18px;
+  background: url('../imgs/icon-download-30x30.png');
+  width: 30px;
+  height: 30px;
+}
+
+.attachmentTitle a {
+  text-decoration: none;
+  color: #FFF;
+}
+
+.attachment-arquivo-background {
+  background: url('../imgs/icon-anexo-arquivo-160x150.png');
 }
 

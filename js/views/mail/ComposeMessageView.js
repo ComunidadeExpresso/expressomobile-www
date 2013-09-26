@@ -7,8 +7,9 @@ define([
   'models/mail/MessagesModel',
   'collections/mail/MessagesCollection',
   'collections/home/ContextMenuCollection',
+  'views/mail/PreviewAttachmentMessageView',
   'views/home/LoadingView',
-], function($, _, Backbone, Shared, composeMessageTemplate,MessagesModel,MessagesCollection,ContextMenuCollection,LoadingView){
+], function($, _, Backbone, Shared, composeMessageTemplate,MessagesModel,MessagesCollection,ContextMenuCollection,PreviewAttachmentMessageView,LoadingView){
 
   var ComposeMessageView = Backbone.View.extend({
 
@@ -26,7 +27,8 @@ define([
 
       var newData = {
         _: _,
-        message: pMessage
+        message: pMessage,
+        isDesktop: Shared.isDesktop(),
       };
 
       var compiledTemplate = _.template( composeMessageTemplate, newData );
@@ -57,17 +59,15 @@ define([
 
           var files = evt.dataTransfer.files; 
 
-          var output = [];
           for (var i = 0, f; f = files[i]; i++) {
 
-            output.push("<div class='simple-attachment'><div class='icon'></div><div class='attachment-name'>" + f.name + "</div><div class='attachment-size'>(" + Shared.currentDraftMessage.bytesToSize(f.size,0) + ")</div></div>");
+            var fileID = Shared.currentDraftMessage.getQtdFiles();
 
-            Shared.currentDraftMessage.addBinaryFile(escape(f.name),files[i]);
+            var attachID = that.prependAttachmentImage(fileID,f.name,f.size,'binary');
+
+            Shared.currentDraftMessage.addBinaryFile(attachID,escape(f.name),files[i]);
 
           }
-          $("#msgAttachmentsRecipients").prepend(output.join(''));
-
-
 
           that.updateBody();
         };
@@ -168,7 +168,11 @@ define([
 
         that.showAttachments();
 
-        that.prependAttachmentImage(imageData);
+        var fileID = Shared.currentDraftMessage.getQtdFiles();
+
+        that.prependAttachmentImage(fileID,'Foto ' + fileID + ".png",'','base64',imageData);
+
+        Shared.currentDraftMessage.addFile(fileID,imageData,'Foto ' + fileID + ".png","base64");
 
         that.renderContextMenu();
 
@@ -396,6 +400,7 @@ define([
 
     updateBody: function(e) {
       Shared.scrollerRefresh();
+      //Shared.refreshDotDotDot();
     },
 
     focusRecipientTo: function(e) {
@@ -430,9 +435,6 @@ define([
       //59 - PONTO E VIRGULA
       //188 - VIRGULA
       //8 - BACKSPACE
-
-      //alert(e.which);
-      //alert("jair");
 
       var prefix = "msgTo";
       var nextOrder = "msgCc";
@@ -480,24 +482,21 @@ define([
       }
     },
 
-    prependAttachmentImage: function(imageData) {
+    prependAttachmentImage: function(fileID,fileName,fileSize,fileType,imageData) {
 
-      var div = $("<figure />").addClass("recipientmsgAttachments");
+      var preview = new PreviewAttachmentMessageView();
 
-      var image = $("<img />");
-      image.attr("width","70");
-      image.attr("height","80");
-      image.addClass("attachmentImage");
-      image.attr("src","data:image/jpeg;base64," + imageData);
+      preview.fileID = fileID;
+      preview.fileName = fileName;
+      preview.fileSize = fileSize;
+      preview.fileType = fileType;
+      preview.fileData = imageData;
 
-      var link = $("<a />").attr("href","/Mail/Message/RemoveAttachment/");
-      
-      image.appendTo(link);
-      link.appendTo(div);
-
-      div.appendTo($("#msgAttachmentsRecipients"));
+      preview.render();
 
       this.updateBody();
+
+      
     },
 
     prependEmailRecipientBadgeToDiv: function(prefix,divID,emailRecipient) {
@@ -573,10 +572,10 @@ define([
 
       mModel.set("files",tempFiles);
 
-      $('.attachmentImage').each(function(i, obj) {
-        var src = $(obj).attr('src').substr($(obj).attr('src').indexOf(bstr)+bstr.length);
-        mModel.addFile(src,'anexo_' + (i + 1) + '.png',"base64");
-      }); 
+      // $('.attachmentImage').each(function(i, obj) {
+      //   var src = $(obj).attr('src').substr($(obj).attr('src').indexOf(bstr)+bstr.length);
+      //   mModel.addFile(src,'Anexo ' + (i + 1) + '.png',"base64");
+      // }); 
 
       return mModel;
     },
@@ -617,3 +616,7 @@ define([
   return ComposeMessageView;
   
 });
+
+
+
+

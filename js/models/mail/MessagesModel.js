@@ -53,9 +53,10 @@ define([
       this.set("files",[]);    
     },
 
-    addFile: function(fileData,fileName,dataType) {
+    addFile: function(fileID,fileData,fileName,dataType) {
       var files = this.get("files");
       var file = {
+        "fileID" : fileID,
         "filename" : fileName,
         "src": fileData,
         "dataType": dataType,
@@ -64,6 +65,18 @@ define([
       files.push(file);
 
       this.set("files",files);
+    },
+
+    removeFileByID: function(fileID) {
+      var files = this.get("files");
+      var newFiles = [];
+      for (var i in files) {
+        console.log(files[i]);
+        if (files[i].fileID != fileID) {
+          newFiles.push(files[i]);
+        }
+      }
+      this.set("files",newFiles);
     },
     
     route: function() {
@@ -116,7 +129,7 @@ define([
           retVal = that.bytesToSize(msgAttachment.attachmentSize,0);
         }
       });
-      return "(" + retVal + ")";
+      return "" + retVal + "";
     },
 
     getMessageBody: function(signature) {
@@ -146,7 +159,7 @@ define([
       return resultString;
     },
 
-    htmlDecode: function(text) {
+    htmlDecode: function(text) { 
       var decoded = $('<div/>').html(text).text();
       return decoded;
     },
@@ -172,10 +185,16 @@ define([
       return moment(date, "DD/MM/YYYY hh:mm").fromNow();
     },
 
-    addBinaryFile: function(fileName,file) {
+    getQtdFiles: function() {
+      var files = this.get("files");
+      return files.length;
+    },
+
+    addBinaryFile: function(fileID,fileName,file) {
       var reader = new FileReader();
       var that = this;
-      reader.fileName = file.name;
+      reader.fileName = fileName;
+      reader.fileID = fileID;
       reader.onerror = function(e) {
       };
       reader.onprogress = function(e) {
@@ -191,7 +210,7 @@ define([
 
         blobBinaryString = reader.result;
 
-        that.addFile(blobBinaryString,escape(reader.fileName),'binary');
+        that.addFile(reader.fileID,blobBinaryString,escape(reader.fileName),'binary');
                         
         //console.log(blobBinaryString);
       }
@@ -221,7 +240,7 @@ define([
       this.api.clearFiles();
 
       for (var i in files) {
-        this.api.addFile(files[i].src,files[i].filename);
+        this.api.addFile(files[i].src,files[i].filename,files[i].dataType);
       }
 
       this.api

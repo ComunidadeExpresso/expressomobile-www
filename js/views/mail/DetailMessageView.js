@@ -74,8 +74,6 @@ define([
     },
 
     openAttachment: function(e) {
-      // console.log('openAttachment');
-      // console.log(e.currentTarget.getAttribute("href"));
       e.preventDefault();
       Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
     },
@@ -94,7 +92,7 @@ define([
       $('body').height($(window).height() - top);
       $('#wrapper').css('top', top + search);
 
-      Shared.scrollDetail = new iScroll('wrapperDetail',{vScroll:true, hScroll:true, hScrollBar: true, vScrollBar: true });
+      Shared.scrollDetail = new iScroll('wrapperDetail',{vScroll:true, hScroll:true, hScrollBar: true, vScrollBar: true , zoom: true });
 
 
       Shared.refreshDotDotDot();

@@ -31,6 +31,10 @@
         }, 'WebIntent', 'hasExtra', [params]);
     };
 
+    WebIntent.prototype.saveImage = function(b64String, params, win, fail) {
+        return cordova.exec(win, fail, "WebIntent", "saveImage", [b64String, params]);
+    };
+
     WebIntent.prototype.getUri = function(success, fail) {
         return cordova.exec(function(args) {
             success(args);

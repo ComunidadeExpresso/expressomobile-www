@@ -2,7 +2,8 @@
 	<% if (folder.get("folderParentID") == "") { %>
 	<li>
 		<a href="<%=folder.route()%>" name="<%=folder.route()%>" data-toggle="collapse" data-target="#menu" class="listFolderItemLink">
-			<span><%=folder.get("folderName")%><% if (folder.get("qtdUnreadMessages") != 0) { %><strong class="badge badge-info"><%=folder.get("qtdUnreadMessages")%></strong><% } %></span>
+			<span><%=folder.get("folderName")%><% if (folder.get("folderHasChildren") == 1) { %><strong class="badge badge-subfolders"> > </strong><% } %><% if (folder.get("qtdUnreadMessages") != 0) { %><strong class="badge badge-info"><%=folder.get("qtdUnreadMessages")%></strong><% } %>
+				</span>
 		<% if (folder.get("folderType") == 0) { %>
 			<div class="icon folder-inbox"></div>
 		<% } %>
@@ -29,3 +30,13 @@
 	</li>
 	<% } %> 
 <% }); %>
+    <dd>
+      <ul id="subMenuFolders">
+        <li class="newFolder">
+          <a href="/Mail/Folder/New" class="menuLink">
+            <span>Nova Pasta</span>
+            <div class="icon icon-add-folder"></div>
+          </a>
+        </li>
+      </ul>
+    </dd>

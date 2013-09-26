@@ -1,0 +1,15 @@
+<div id="attach_<%=fileID%>" class="attachment<% if (fileType != 'base64') { %> attachment-arquivo-background <% } %>">
+    <div class="attachmentTitle">
+      <a id="attachLink_<%=fileID%>" href="#" class="deleteAttachmentLink">
+        <div class="deleteAttachment"></div>
+        <div class="fileSize"></div>
+        <div class="fileName"><%=fileName%></div>
+        
+      </a>
+    </div>
+    <% if (fileType == "base64") { %>
+      <div style="position: relative; overflow: hidden;">
+        <img class="attachmentImage" style="position: relative; left: 0px;" src="data:image/jpeg;base64,<%=fileData%>">
+      </div>
+    <% } %>
+</div>

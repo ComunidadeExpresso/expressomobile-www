@@ -76,12 +76,27 @@ define([
         that.menuView.profile = that.profile;
         that.menuView.render();
        
-        that.menuView.selectMenu(1);
-        that.loadMessagesInFolder(that.folderID,that.search);
-
-        that.loaded();
+        
 
         Shared.setDefaultIMListeners();
+
+
+
+        if (!Shared.newMessageIntent) {
+
+          that.menuView.selectMenu(1);
+
+          that.loadMessagesInFolder(that.folderID,that.search);
+
+          that.loaded();
+
+        } else {
+
+          that.loaded();
+          
+          Shared.newMessageIntent = false;
+          Shared.router.navigate("/Mail/Message/New",{ trigger: true });
+        }
 
         $('#page').touchwipe(
         {

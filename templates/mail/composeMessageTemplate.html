@@ -98,10 +98,13 @@
 		        <td class="descriptionCompose">
 		        	
 		        	<div id="msgAttachmentsRecipients">
-		        			
+		        		
+		        		<% if (isDesktop) { %>
+		        		<div class="clear"></div>
 						<div id="drop_zone_text">
 							Arraste e solte os arquivos aqui...
 						</div>
+						<% } %>
 	            	</div>
 		        </td>
 	    	</tr>

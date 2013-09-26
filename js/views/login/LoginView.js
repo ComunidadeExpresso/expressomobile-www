@@ -166,6 +166,8 @@ define([
       .resource('Logout')
       .done(function(result){
 
+        Shared.scrollMenu = null;
+
         Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
           var isPhoneGap = Shared.api.phoneGap();
