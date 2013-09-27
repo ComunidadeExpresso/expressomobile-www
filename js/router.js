@@ -8,7 +8,6 @@ define([
   'views/home/HomeView',
   'views/mail/DetailMessageView',
   'views/mail/ComposeMessageView',
-  'views/mail/AttachmentMessageView',
   'views/settings/SettingsListView',
   'views/contacts/ContactsListView',
   'views/contacts/DetailsContactView',
@@ -17,7 +16,7 @@ define([
   'views/calendar/CalendarEditEventView',
   'views/calendar/CalendarSaveEventView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, AttachmentMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarSaveEventView,ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarSaveEventView,ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -28,9 +27,6 @@ define([
       'Mail/Folders/*folderID' : 'openFolderView',
       'Mail/Message/:secondViewName' : 'composeMessageView',
       'Mail/Message/:secondViewName/:msgID/*folderID' : 'composeMessageView',
-      // 'Mail/Message/Attachment/:attachmentID/:attachmentName/:attachmentEncoding/:attachmentIndex/:msgID/*folderID' : 'attachmentMessageView',
-      'Mail/Message/Attachment/*attachmentString' : 'attachmentMessageView',
-      'Mail/Message/DownloadAttachment/*attachmentString' : 'attachmentMessageDownload',
       'Mail/Messages/:msgID/*folderID' : 'detailMessageView',
       'Contacts' : 'contactsListView',
       'Contacts/:secondViewName' : 'contactsListView',
@@ -146,39 +142,6 @@ define([
   
     });
 
-    app_router.on('route:attachmentMessageView', function (attachmentString) {
-
-      var arrParams = attachmentString.split("=-=");
-
-      // attachmentID,attachmentName,attachmentEncoding,attachmentIndex,msgID,folderID
-
-      var attachmentMessageView = new AttachmentMessageView();
-      attachmentMessageView.attachmentID = arrParams[0];
-      attachmentMessageView.attachmentName = arrParams[1];
-      attachmentMessageView.attachmentEncoding = arrParams[2];
-      attachmentMessageView.attachmentIndex = arrParams[3];
-      attachmentMessageView.msgID = arrParams[4];
-      attachmentMessageView.folderID = arrParams[5];
-      attachmentMessageView.render();
-      Shared.menuView.closeMenu();
-  
-    });
-
-    app_router.on('route:attachmentMessageDownload', function (attachmentString) {
-
-      var arrParams = attachmentString.split("=-=");
-
-      var attachmentMessageView = new AttachmentMessageView();
-      attachmentMessageView.attachmentID = arrParams[0];
-      attachmentMessageView.attachmentName = arrParams[1];
-      attachmentMessageView.attachmentEncoding = arrParams[2];
-      attachmentMessageView.attachmentIndex = arrParams[3];
-      attachmentMessageView.msgID = arrParams[4];
-      attachmentMessageView.folderID = arrParams[5];
-      attachmentMessageView.download();
-      Shared.menuView.closeMenu();
-  
-    });
 
     app_router.on('route:settingsListView', function (secondViewName) {
 

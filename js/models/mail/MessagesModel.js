@@ -71,7 +71,6 @@ define([
       var files = this.get("files");
       var newFiles = [];
       for (var i in files) {
-        console.log(files[i]);
         if (files[i].fileID != fileID) {
           newFiles.push(files[i]);
         }
@@ -99,34 +98,12 @@ define([
       return resultString;
     },
 
-    getAttachmentRoute: function(attachmentID) {
-      var retVal = '';
-      var that = this;
-      _.each(this.get("msgAttachments"), function(msgAttachment){
-        if (msgAttachment.attachmentID == attachmentID) {
-          retVal = '/Mail/Message/Attachment/' + msgAttachment.attachmentID + "=-=" + msgAttachment.attachmentName + "=-=" + msgAttachment.attachmentEncoding+ "=-="+ msgAttachment.attachmentIndex + "=-=" + that.get("msgID") + "=-=" + that.get("folderID");
-        }
-      });
-      return retVal;
-    },
-
-    getDownloadAttachmentRoute: function(attachmentID) {
-      var retVal = '';
-      var that = this;
-      _.each(this.get("msgAttachments"), function(msgAttachment){
-        if (msgAttachment.attachmentID == attachmentID) {
-          retVal = '/Mail/Message/DownloadAttachment/' + msgAttachment.attachmentID + "=-=" + msgAttachment.attachmentName + "=-=" + msgAttachment.attachmentEncoding+ "=-="+ msgAttachment.attachmentIndex + "=-=" + that.get("msgID") + "=-=" + that.get("folderID");
-        }
-      });
-      return retVal;
-    },
-
     getAttachmentSize: function(attachmentID) {
       var retVal = '';
       var that = this;
       _.each(this.get("msgAttachments"), function(msgAttachment){
         if (msgAttachment.attachmentID == attachmentID) {
-          retVal = that.bytesToSize(msgAttachment.attachmentSize,0);
+          retVal = Shared.bytesToSize(msgAttachment.attachmentSize,0);
         }
       });
       return "" + retVal + "";
@@ -270,32 +247,7 @@ define([
       .execute();
     },
 
-    bytesToSize: function(bytes, precision)
-    {  
-        var kilobyte = 1024;
-        var megabyte = kilobyte * 1024;
-        var gigabyte = megabyte * 1024;
-        var terabyte = gigabyte * 1024;
-       
-        if ((bytes >= 0) && (bytes < kilobyte)) {
-            return bytes + ' B';
-     
-        } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
-            return (bytes / kilobyte).toFixed(precision) + ' KB';
-     
-        } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
-            return (bytes / megabyte).toFixed(precision) + ' MB';
-     
-        } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
-            return (bytes / gigabyte).toFixed(precision) + ' GB';
-     
-        } else if (bytes >= terabyte) {
-            return (bytes / terabyte).toFixed(precision) + ' TB';
-     
-        } else {
-            return bytes + ' B';
-        }
-    },
+
 
   });
 

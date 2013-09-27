@@ -7,7 +7,8 @@ define([
   'text!templates/mail/detailMessageTemplate.html',
   'views/home/LoadingView',
   'collections/home/ContextMenuCollection',
-], function($, _, Backbone, Shared,MessagesCollection, detailMessageTemplate, LoadingView,ContextMenuCollection){
+  'views/mail/PreviewAttachmentMessageView',
+], function($, _, Backbone, Shared,MessagesCollection, detailMessageTemplate, LoadingView,ContextMenuCollection,PreviewAttachmentMessageView){
 
   var DetailMessageView = Backbone.View.extend({
 
@@ -39,6 +40,8 @@ define([
 
         messagesData.getMessagesInFolder(this.folderID,this.msgID,this.search,this.page).done(function(data){
 
+          var message = data.models[0];
+
           var data = {
             messages: data.models,
             _: _ ,
@@ -51,6 +54,8 @@ define([
           that.$el.html(compiledTemplate);
 
           $(elementID).empty().append(that.$el);
+
+          that.renderAttachments(message);
 
           Shared.menuView.renderContextMenu(1,{folderID: that.folderID, msgID: that.msgID});
 
@@ -66,6 +71,31 @@ define([
         }).execute();
       }
 
+    },
+
+    renderAttachments: function(message) {
+      var attachments = message.get("msgAttachments");
+      for (var i in attachments) {
+
+        //console.log(attachments[i]);
+
+        var attachment = attachments[i];
+
+        var preview = new PreviewAttachmentMessageView();
+
+        preview.fileID = attachment.attachmentID;
+        preview.fileName = attachment.attachmentName;
+        preview.fileSize = attachment.attachmentSize;
+        preview.fileEncoding = attachment.attachmentEncoding;
+        preview.fileIndex = attachment.attachmentIndex;
+        preview.msgID = message.get("msgID");
+        preview.folderID = message.get("folderID");
+        preview.fileData = '';
+
+        preview.previewType = 'detailmessage';
+
+        preview.render();
+      }
     },
 
     events:

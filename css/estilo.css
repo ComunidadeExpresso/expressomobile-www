@@ -1068,6 +1068,18 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
 .attachment img {
   height: 100%;
 }
+.attachmentPreview {
+  font-family: Verdana;
+  font-size: 12px;
+  color: #FFF;
+  position: absolute;
+  width: 160px;
+  height: 100px;
+  margin-top: 0px;
+  opacity:0.7;
+  filter:alpha(opacity=70); /* For IE8 and earlier */
+  z-index: 200;
+}
 .attachmentTitle {
   font-family: Verdana;
   font-size: 12px;
@@ -1088,8 +1100,9 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
   overflow: hidden;
 }
 .attachmentTitle .fileSize {
-  margin-top: 24px; 
+  margin-top: 28px; 
   margin-left: 10px; 
+  font-size: 10px;
   position: absolute;
 }
 .attachmentTitle .deleteAttachment {
