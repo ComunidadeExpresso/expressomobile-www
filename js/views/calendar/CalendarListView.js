@@ -20,6 +20,7 @@ define([
 		month: '',
 		day: '',
 		fullDay: false,
+		status: '',
 		data: {},
 		dayTitle: '',
 		container: $('#scroller'),
@@ -86,10 +87,9 @@ define([
 
 		listDayEvents: function(data)
 		{
-			if (!Shared.isSmartPhoneResolution() || !this.fullDay)
+			if (!Shared.isSmartPhoneResolution() || this.fullDay)
 			{
 				var calendarFullDayListView = new CalendarFullDayListView({el: $('#contentDetail')});
-				// var calendarFullDayListView = new CalendarFullDayListView();
 					calendarFullDayListView.year = this.year;
 					calendarFullDayListView.month = this.month;
 					calendarFullDayListView.day = this.day;
@@ -97,16 +97,15 @@ define([
 					calendarFullDayListView.dayTitle = this.dayTitle;
 					calendarFullDayListView.render();
 			}
-			// else
-			// {
+			else
+			{
 				var calendarEventsDayListView = new CalendarEventsDayListView({el: $('#eventsList')});
 					calendarEventsDayListView.year = this.year;
 					calendarEventsDayListView.month = this.month;
 					calendarEventsDayListView.day = this.day;
 					calendarEventsDayListView.data = data;
 					calendarEventsDayListView.render();
-
-			// }
+			}
 
 			this.loaded();
 		},
@@ -205,14 +204,17 @@ define([
 
 		loaded: function ()
 		{
-			if (Shared.scrollDetail != null) 
+			if (!Shared.isSmartPhoneResolution())
 			{
-				Shared.scrollDetail.destroy();
-				Shared.scrollDetail = null;
-			}
+				if (Shared.scrollDetail != null) 
+				{
+					Shared.scrollDetail.destroy();
+					Shared.scrollDetail = null;
+				}
 
-			Shared.scrollDetail = new iScroll('wrapperDetail');
-		
+				Shared.scrollDetail = new iScroll('wrapperDetail');
+			}
+			
 			if (Shared.scroll != null) 
 			{
 				Shared.scroll.destroy();
@@ -220,12 +222,23 @@ define([
 			}
 
 			Shared.scroll = new iScroll('wrapper');
-
 			Shared.scrollerRefresh();
 			Shared.menuView.renderContextMenu('calendar',{year: this.year, month: this.month, day: this.day});
 
 			$('#content .searchArea').remove();
 			$('#contentTitle').text('Agenda');
+
+			if (this.status == 'OK')
+			{
+				Shared.showMessage({
+					type: "success",
+					icon: 'icon-agenda',
+					title: 'Evento excluído com sucesso.',
+					description: '',
+					timeout: 3000,
+					elementID: Shared.isSmartPhoneResolution() ? '#message' : '#messageDetail',
+				});
+			}
 		},
 
 		clean: function ()

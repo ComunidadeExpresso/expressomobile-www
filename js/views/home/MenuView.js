@@ -234,8 +234,14 @@ define([
       if (menuID == 'newMessageWithCc') {
           this.context.collection = contextMenuCollection.getSendMessageMenuWithCC();
       }
-      if (menuID == 3) {
-          this.context.collection = contextMenuCollection.getContactsMenu();
+      if (menuID == 'personalContacts') {
+          this.context.collection = contextMenuCollection.getPersonalContactsMenu();
+      }
+      if (menuID == 'generalContacts') {
+          this.context.collection = contextMenuCollection.getGeneralContactsMenu();
+      }
+      if (menuID == 'detailsContact') {
+          this.context.collection = contextMenuCollection.getDetailsContactMenu(params.email);
       }
       if (menuID == 'calendar') {
           this.context.collection = contextMenuCollection.getCalendarMenu(params.year, params.month, params.day);
@@ -248,6 +254,9 @@ define([
       }
       if (menuID == 'calendarAddEventParticipant') {
           this.context.collection = contextMenuCollection.getCalendarAddEventParticipantMenu();
+      }
+      if (menuID == 'calendarDetailsEvent') {
+          this.context.collection = contextMenuCollection.getCalendarDetailsEventMenu(params.eventID, params.year, params.month, params.day);
       }
       this.context.render();
     },

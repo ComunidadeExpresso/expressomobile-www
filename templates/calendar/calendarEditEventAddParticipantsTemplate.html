@@ -1,5 +1,3 @@
-<a href="#" id="backToEditEvent">Voltar para inserção do evento</a>
-
 <% if (typeof(contacts) != 'undefined' && contacts.length > 0) { %>
 
 	<dl id="participantsList">
@@ -29,10 +27,10 @@
 
 					<li>
 						<%
-						var checked = _.contains(listParticipants, c.get('contactMails')[0]) ? "checked='checked'" : '';
+						var checked = _.contains(listParticipants, c.get('contactUIDNumber')) ? "checked='checked'" : '';
 						%>
 
-						<input type="checkbox" class="check css-checkbox" <%= checked %> name="<%= uid %>" id="<%= uid %>" value="<%= c.get('contactMails')[0] %>" />
+						<input type="checkbox" class="check css-checkbox" <%= checked %> name="<%= uid %>" id="<%= uid %>" data-name="<%=c.get('contactFullName')%>" value="<%= c.get('contactUIDNumber') %>" />
 						<label class="css-label" for="<%= uid %>"><%=c.get('contactFullName')%></label>
 					</li>					
 
@@ -44,14 +42,10 @@
 
 <% } else { %>
 
-	<% if (_.isObject(error)) { %>
-
-		<p class="erro"><%= error.message %></p>
-
-	<% } else { %>
+	<% if (!_.isObject(error)) { %>
 
 		<p class="erro">Nenhum registro encontrado</p>
-
+		
 	<% } %>
 
 <% } %>

@@ -7,40 +7,84 @@ define([
 	'views/home/LoadingView',
 	'text!templates/calendar/calendarDetailsTemplate.html',
 	'text!templates/master/detailContentTemplate.html',
-], function($, _, Backbone, Shared, EventModel, LoadingView, calendarDetailsTemplate, detailContentTemplate)
+	'text!templates/master/primaryContentTemplate.html',
+], function($, _, Backbone, Shared, EventModel, LoadingView, calendarDetailsTemplate, detailContentTemplate, primaryContentTemplate)
 {
 	var CalendarDetailsView = Backbone.View.extend(
 	{
 		el: $('#content'),
 		eventID: 0,
+		status: '',
+		year: '',
+		month: '',
+		day: '',
+
+		events: 
+		{
+			"click #contextMenu ul li a": "selectItem",
+		},
+
+		selectItem: function(e)
+		{
+			e.preventDefault();
+			console.log($(e.target).attr('data-action'));
+			console.log(this.eventID);
+		},
 
 		render: function()
 		{
 			var self = this;
-			var contentTitle = $('#contentTitle');
-			var container = $('#scroller');
+			var contentTitle;
+			var container;
+			var messageContainer;
 
 			if (!Shared.isSmartPhoneResolution())
 			{
-				// $('#contentDetail').html(_.template(detailContentTemplate));
 				this.$el = $('#contentDetail');
 				this.$el.html(_.template(detailContentTemplate));
 
 				contentTitle = $('#contentDetailTitle');
 				container = $('#scrollerDetail');
+				messageContainer = '#messageDetail';
 			}
 			else
+			{
+				this.$el = $('#content');
 				this.$el.html(_.template(primaryContentTemplate));
+
+				contentTitle = $('#contentTitle');
+				container = $('#scroller');
+				messageContainer = '#message';
+			}
 
 			var loadingView = new LoadingView({el: container});
 				loadingView.render();
 
 			var callback = function (data)
 			{
+				var date = data.event.get('eventDateStart').split('/');
+				var pad = "00";
+
+				this.year = date[2];
+				this.month = pad.substring(0, pad.length - ("" + date[1]).length) + ("" + date[1]);
+				this.day = pad.substring(0, pad.length - ("" + date[0]).length) + ("" + date[0]);
+
 				contentTitle.text(data.event.get('eventName'));
 
 				self.setElement(container.empty().append(_.template(calendarDetailsTemplate, data)));
-				self.loaded();
+				self.loaded(data.event.get('eventID'));
+
+				if (self.status == 'OK')
+				{
+					Shared.showMessage({
+						type: "success",
+						icon: 'icon-agenda',
+						title: 'Evento salvo com sucesso.',
+						description: '',
+						timeout: 3000,
+						elementID: messageContainer,
+					});
+				}
 			}
 
 			this.getEvent(this.eventID, callback, callback);
@@ -67,7 +111,7 @@ define([
 				});
 		},
 
-		loaded: function()
+		loaded: function(eventID)
 		{
 			$('#contentDetail .searchArea').remove();
 
@@ -93,10 +137,26 @@ define([
 			}
 
 			Shared.scrollerRefresh();
-			Shared.menuView.renderContextMenu('calendar',{});
+			Shared.menuView.renderContextMenu('calendarDetailsEvent',{ eventID: eventID, year: this.year, month: this.month, day: this.day });
 		},
 
-		initialize: function() { }
+		initialize: function() 
+		{
+			var pad = "00";
+			var today = new Date();
+
+			if (this.year == '' || this.year == undefined)
+				this.year = today.getFullYear();
+
+			if (this.month == '' || this.month == undefined)
+			{
+				this.month = today.getMonth() + 1; // Months are zero based;
+				this.month = pad.substring(0, pad.length - ("" + this.month).length) + ("" + this.month);
+			}
+
+			if (this.day == '' || this.day == undefined)
+				this.day = today.getDate();
+		}
 		
 	});
 

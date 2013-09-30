@@ -1,4 +1,5 @@
 <form id="addEvent">
+	<div id="formMessage"></div>
 	<ol>
 		<li>
 			<label for="eventType">Tipo *</label>
@@ -66,23 +67,21 @@
 			<a href="#" id="addParticipants" title="Adicionar participantes">Adicionar participantes</a>
 
 			<% 
-			var listParticipants = event.get('eventParticipants');
+			var listParticipantsID = event.get('eventParticipants');
 
-			console.log(listParticipants);
-
-			if (typeof(listParticipants) != 'undefined' && listParticipants.length > 0) 
+			if (typeof(listParticipantsID) != 'undefined' && listParticipantsID.length > 0 && listParticipantsID.length == listParticipants.length) 
 			{ 
 			%>
 				<ol>
 
-					<% _.each(listParticipants, function(participant) { 
-
-						var uid = (participant).split("@")[0]; 
+					<% _.each(listParticipantsID, function(pID) 
+					{ 
+						var participant = _.where(listParticipants, { participantID: pID });
 					%>
 
 						<li>
-							<input id="<%= uid %>" type="checkbox" class="css-checkbox" name="<%= uid %>" value="<%= participant %>" checked="checked" /> 
-							<label for="<%= uid %>" class="css-label"><%= participant %></label>
+							<input id="<%= pID %>" type="checkbox" class="css-checkbox eventParticipants" name="<%= pID %>" value="<%= pID %>" data-name="<%= participant[0].participantName %>" checked="checked" /> 
+							<label for="<%= pID %>" class="css-label"><%= participant[0].participantName %></label>
 						</li>
 
 					<% }); %>

@@ -5,74 +5,96 @@ define([
 	'shared',
 	'views/home/LoadingView',
 	'views/home/HomeView',
+	'text!templates/master/detailContentTemplate.html',
+	'text!templates/master/primaryContentTemplate.html',
 	'text!templates/contacts/detailsContactTemplate.html',
 	'collections/contacts/DetailsContactCollection',
 	'collections/home/ContextMenuCollection',
-], function($, _, Backbone, Shared, LoadingView, HomeView , DetailsContactTemplate, DetailsContactCollection, ContextMenuCollection)
+], function($, _, Backbone, Shared, LoadingView, HomeView, detailContentTemplate, primaryContentTemplate, DetailsContactTemplate, DetailsContactCollection, ContextMenuCollection)
 {
 	var DetailsContactView = Backbone.View.extend(
 	{
-		el: $("#mainAppPageContent"),
+		el: $("#content"),
 		secondViewName: '',
 		contactID: null,
 
 		render: function(data)
 		{
+			var self = this;
+			var contentTitle;
+			var container;
+			var messageContainer;
 
-			
+			if (!Shared.isSmartPhoneResolution())
+			{
+				this.$el = $('#contentDetail');
+				this.$el.html(_.template(detailContentTemplate));
 
-			var that = this;
-			var primaryElementID = "#content";
-			var detailElementID = "#contentDetail";
-			var data = { _: _ };
+				contentTitle = $('#contentDetailTitle');
+				container = $('#scrollerDetail');
+				messageContainer = '#messageDetail';
+			}
+			else
+			{
+				this.$el = $('#content');
+				this.$el.html(_.template(primaryContentTemplate));
 
-			$(detailElementID).html("");
+				contentTitle = $('#contentTitle');
+				container = $('#scroller');
+				messageContainer = '#message';
+			}
 
-			if (Shared.isSmartPhoneResolution())
-				detailElementID = "#content";
-
-			var loadingView = new LoadingView({el: $(detailElementID)});
+			var loadingView = new LoadingView({el: container});	
 				loadingView.render();
 
 			var done = function (data)
 			{
+				contentTitle.text(_.first(data.contacts).get('contactFullName'));
+
 				var contact = {contact: _.first(data.contacts), _: _};
 
-				var compiledTemplate = _.template(DetailsContactTemplate, contact);
-				$(detailElementID).html(compiledTemplate);
-				
-				that.loaded();			
+				container.empty().append(_.template(DetailsContactTemplate, contact));
+				self.setElement($('#mainAppPageContent'));
+				self.loaded((_.first(data.contacts).get('contactMails'))[0]);			
 			}
 
 			if (this.secondViewName == 'Personal')
 				this.getPersonalContactDetails(this.contactID, done, done)
 			else
 				this.getGeneralContactDetails(this.contactID, done, done)
-
-			// this.getContactDetails(this.contactID, this.secondViewName == 'Personal' ? '1' : '2', done, done);
-
-			Shared.menuView.renderContextMenu(3,{});
-
 		},
 
 		initialize: function() { },
 
-		loaded: function () 
+		loaded: function (pEmail) 
 		{
-			if (Shared.isSmartPhoneResolution())
+			if (!Shared.isSmartPhoneResolution())
 			{
-				$('#wrapperDetail').removeAttr('id').attr('id', 'wrapper');
-				$('#scrollerDetail').removeAttr('id').attr('id', 'scroller');
-
-				Shared.scrollDetail = new iScroll('wrapper');
+				if (Shared.scrollDetail != null) 
+				{
+					Shared.scrollDetail.destroy();
+					Shared.scrollDetail = null;
+				}
+				Shared.scrollDetail = new iScroll('wrapperDetail');
 			}
 			else
 			{
-				Shared.scrollDetail = new iScroll('wrapperDetail');
+				if (Shared.scroll != null) 
+				{
+					Shared.scroll.destroy();
+					Shared.scroll = null;
+				}
+				Shared.scroll = new iScroll('wrapper');
 			}
 
-			var homeView = new HomeView();
-			homeView.refreshWindow();
+			Shared.scrollerRefresh();
+			Shared.refreshDotDotDot();
+			Shared.menuView.renderContextMenu('detailsContact', { email: pEmail });
+
+			// if (this.secondViewName == 'General')
+			// 	Shared.menuView.renderContextMenu('generalContacts',{});
+			// else
+			// 	Shared.menuView.renderContextMenu('personalContacts',{});
 		},
 
 		getContactDetails: function (pContactID, pContactType, callbackSuccess, callbackFail)
@@ -106,7 +128,7 @@ define([
 		getGeneralContactDetails: function (pContactID, callbackSuccess, callbackFail)
 		{
 			var detailsContactCollection = new DetailsContactCollection();
-				detailsContactCollection.getGeneralContactDetails(pContactID)
+				detailsContactCollection.getContactDetails(pContactID)
 				.done(function (data) 
 				{
 					callbackSuccess({ contacts: data.models, _: _ });

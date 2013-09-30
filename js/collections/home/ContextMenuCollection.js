@@ -96,10 +96,27 @@ define([
         return retVal;
       },
 
-      getContactsMenu: function() {
+      getGeneralContactsMenu: function() {
         var menuItems = [
-            { route: "/Contacts/Personal", iconClass: 'context-catalogo-pessoal', title:"Contatos Pessoais"},
+            { route: "/Contacts/Personal", iconClass: 'context-catalogo-pessoal', title:"Contatos Pessoais"}
+          ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
+      },
+
+      getPersonalContactsMenu: function() {
+        var menuItems = [
             { route: "/Contacts/General", iconClass: 'context-catalogo-geral', title: "Catálogo Geral"}
+          ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
+      },
+
+      getDetailsContactMenu: function(email) {
+        var menuItems = [
+            { route: "/Mail/Message/New/" + email, title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
           ];
 
         this.createModelsFromArray(menuItems);
@@ -124,7 +141,7 @@ define([
           day = today.getDate();
 
         var menuItems = [
-            { route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, title:"Adicionar evento"}
+            { route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, title:"Adicionar evento", primary: true }
           ];
 
         this.createModelsFromArray(menuItems);
@@ -134,8 +151,37 @@ define([
       getCalendarAddEventMenu: function ()
       {
         var menuItems = [
-            { route: "/Calendar/Events/Save", title:"Salvar", iconClass : '', primary: true},
-            { route: "/Calendar/Events/AddParticipants", title:"Adicionar participantes", iconClass : '', primary: false}
+            // { route: "/Calendar/Events/Save", title:"Salvar", iconClass : '', primary: true},
+            { route: "", title:"Salvar", iconClass : '', primary: true},
+            // { route: "/Calendar/Events/AddParticipants", title:"Adicionar participantes", iconClass : '', primary: false}
+            { route: "", title:"Adicionar participantes", iconClass : 'context-catalogo-geral', primary: false, action: 'addParticipants'}
+            ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
+      },
+
+      getCalendarDetailsEventMenu: function (eventID, year, month, day)
+      {
+        var today = new Date();
+        var pad = "00";
+
+        if (year == '' || year == undefined)
+          year = today.getFullYear();
+
+        if (month == '' || month == undefined)
+        {
+          month = today.getMonth() + 1; // Months are zero based;
+          month = pad.substring(0, pad.length - ("" + month).length) + ("" + month);
+        }
+
+        if (day == '' || day == undefined)
+          day = today.getDate();
+
+        var menuItems = [
+            { route: "/Calendar/Events/Edit/" + eventID, title:"Editar evento", iconClass : '', primary: true},
+            { route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, title:"Adicionar evento", iconClass : '', primary: false, action: 'add'},
+            { route: "/Calendar/Events/Delete/" + eventID + "/" + year + "/" + month + "/" + day, title:"Excluir evento", iconClass : '', primary: false, action: 'delete'}
             ];
 
         this.createModelsFromArray(menuItems);
@@ -145,7 +191,7 @@ define([
       getCalendarAddEventParticipantMenu: function ()
       {
         var menuItems = [
-            { route: "/Calendar/Events/Participants/Save", title:"Salvar", iconClass : '', primary: true}
+            { route: "", title:"Salvar", iconClass : '', primary: true}
             ];
 
         this.createModelsFromArray(menuItems);

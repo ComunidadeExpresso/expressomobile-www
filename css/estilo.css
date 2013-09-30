@@ -285,6 +285,7 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
   body #page .main table#eventDetails tr td { border-bottom: 1px solid #CCCCCC; border-top: 1px #FFF solid; min-height: 60px; }
   body #page .main table#eventDetails tr td.item { border-left: 8px solid #3A87AD; color: #3A87AD; width: 120px; font-weight: bold; text-align: left; padding-left: 5px; }
   body #page .main table#eventDetails tr td.description { padding: 12px; color: #777777; font-size: 14px;}
+  body #page .main table#eventDetails tr td.description ul li { border: none; height: auto; color: #777777;  }
   body #page .main table#eventDetails tr td.busy { background-color: #F1F1F1; }
 
   body form#addEvent { padding: 0; }
@@ -293,7 +294,7 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
   body form#addEvent ol li.date ol li { width: 47%; margin: 0; display: inline; border: 0; }
   body form#addEvent ol li.participants { color: #777777; }
   body form#addEvent ol li.participants h4 { display: inline; font-weight: bold; }
-  body form#addEvent ol li.participants a { text-decoration: none; margin-left: 10px; color: #3A87AD; }
+  body form#addEvent ol li.participants a { text-decoration: none; margin: 21px 10px; color: #3A87AD; float: right; }
   body form#addEvent ol li.participants ol { margin: 35px 0 10px 15px; }
   body form#addEvent ol li.participants ol li { margin: 10px 0; border: 0; min-height: 0; }
   body form#addEvent ol li.participants ol li label { padding-top: 0; float: none; }
@@ -307,7 +308,7 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
   input[type=checkbox].css-checkbox { position: absolute; overflow: hidden; clip: rect(0 0 0 0); height: 1px; width: 1px; margin: -1px; padding: 0; border: 0; }
   input[type=checkbox].css-checkbox + label.css-label { padding-left: 25px !important; height: 20px; display: inline-block; line-height: 20px; background-repeat: no-repeat; background-position: 0 0; font-size: 15px; vertical-align: middle; cursor:pointer; }
   input[type=checkbox].css-checkbox:checked + label.css-label { background-position: 0 -20px; }
-  .css-label { background-image:url(../imgs/web-two-style.png); }
+  .css-label { background-image:url(../imgs/web-two-style.png); width: 90% !important; }
 
   /** Adicionar participantes **/
   body #page .main #contentDetail dl#participantsList { margin-top: 1px;  }
@@ -675,7 +676,7 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     color: #FFFFFF;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-    margin-top: 6px;
+    margin: 6px 6px 0 6px;
     height: 40px;
 }
 

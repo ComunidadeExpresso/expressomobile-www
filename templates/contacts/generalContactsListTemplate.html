@@ -22,7 +22,7 @@
 					<% } %>
 
 					<li id="<%=c.get('contactID')%>">
-						<a href="/Contacts/General/<%= c.getFirstEmailAddress() %>" title="<%=c.get('contactFullName')%>">
+						<a href="/Contacts/General/<%= c.get('contactUIDNumber') %>" title="<%=c.get('contactFullName')%>">
 
 							<% 
 							var contactID = decodeURIComponent(c.get('contactID'));

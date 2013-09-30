@@ -3,7 +3,8 @@ define([
 	'underscore',
 	'backbone',
 	'shared',
-	'text!templates/contacts/contactsListTemplate.html',
+	'text!templates/master/primaryContentTemplate.html',
+	'text!templates/master/detailContentTemplate.html',
 	'text!templates/contacts/generalContactsListTemplate.html',
 	'text!templates/contacts/personalContactsListTemplate.html',
 	'collections/home/ContextMenuCollection',
@@ -11,11 +12,10 @@ define([
 	'views/home/LoadingView',
 	'views/home/HomeView',
 	'collections/contacts/ContactsListCollection',
-], function($, _, Backbone, Shared, ContactsListTemplate, GeneralContactsListTemplate, PersonalContactsListTemplate, ContextMenuCollection, PictureImageContactView, LoadingView, HomeView, ContactsListCollection)
+], function($, _, Backbone, Shared, primaryContentTemplate, detailContentTemplate, GeneralContactsListTemplate, PersonalContactsListTemplate, ContextMenuCollection, PictureImageContactView, LoadingView, HomeView, ContactsListCollection)
 {
 	var ContactsListView = Backbone.View.extend(
 	{
-		el: $("#mainAppPageContent"),
 		searchLength: 0,
 		secondViewName: '',
 		currentView: null,
@@ -31,43 +31,51 @@ define([
 		render: function()
 		{
 			var that = this;
-			var primaryElementID = "#content";
-			var detailElementID = "#contentDetail";
-			var data = { _: _ };
 
-			$(detailElementID).html("");
+			if (!Shared.isSmartPhoneResolution())
+				$('#contentDetail').html(_.template(detailContentTemplate));
 
-			if (Shared.isSmartPhoneResolution())
-				detailElementID = "#content";
+			this.$el.html(_.template(primaryContentTemplate))
 
-			var compiledTemplate = _.template(ContactsListTemplate, data);
-			$(primaryElementID).html(compiledTemplate);
+			this.content = $('#content');
+			this.content.empty().append(this.$el);
 
-			var loadingView = new LoadingView({el: $('#scroller')});
+			var loadingView = new LoadingView({el: $('#scroller')});	
 				loadingView.render();
 
-			if (this.secondViewName == 'General') 
+			if (this.secondViewName == 'General')
 				this.listGeneralContacts('');
 			else 
 				this.listPersonalContacts('');
-
-			Shared.menuView.renderContextMenu(3,{});
-
-			this.loaded();			
 		},
 
 		initialize: function() 
 		{
+			$('#mainAppPageContent').off('keypress', '.searchField');
+
 			this.secondViewName = "Personal";
 		},
 
 		loaded: function () 
 		{
-			var that = this;
-			Shared.scroll = new iScroll('wrapper');
+			var top = $('.top').outerHeight(true);
+			var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
 
-			var homeView = new HomeView();
-			homeView.refreshWindow();
+			$('#wrapper').css('top', top + search);
+
+			if (Shared.scroll != null) 
+			{
+				Shared.scroll.destroy();
+				Shared.scroll = null;
+			}
+
+			Shared.scroll = new iScroll('wrapper');
+			Shared.scrollerRefresh();
+
+			if (this.secondViewName == 'General')
+				Shared.menuView.renderContextMenu('generalContacts',{});
+			else
+				Shared.menuView.renderContextMenu('personalContacts',{});
 		},
 
 		searchPersonalContacts: function (e)
@@ -109,22 +117,24 @@ define([
 
 		listPersonalContacts: function (pSearch)
 		{
+			var self = this;
+
 			$('#contentTitle').text('Contatos Pessoais');
-			$('#page').removeClass('generalContacts');
-			$('#page').addClass('personalContacts');
-			$('body').off('keypress', '.generalContacts .searchField');
+			$('.searchArea').removeClass('generalContacts');
+			$('.searchArea').addClass('personalContacts');
+			this.$el.off('keypress', '.generalContacts .searchField');
 			
 			var donePersonalContacts = function (data)
 			{
-		
-				if (data.error == undefined) {
-
-					if (data.contacts.length > 0) {
-
-						var template = _.template(PersonalContactsListTemplate, data);
-						$('#scroller').html(template);
-
-					} else {
+				if (data.error == undefined) 
+				{
+					if (data.contacts.length > 0) 
+					{
+						$('#message').empty();
+						$('#scroller').empty().append(_.template(PersonalContactsListTemplate, data));
+					} 
+					else 
+					{
 						Shared.showMessage({
 				            type: "error",
 				            icon: 'icon-contacts',
@@ -132,17 +142,20 @@ define([
 				            route: "",
 				            description: "",
 				            timeout: 0,
-				            elementID: "#scroller",
+				            elementID: "#message",
 				        });
-					}
 
-				} else {
-					$('#scroller').empty();
+				        $('#scroller').empty()
+					}
+				} 
+				else 
+				{
+					$('#scroller').empty()
 					Shared.handleErrors(data.error);					
 				}
 
-				Shared.refreshDotDotDot();
-				Shared.scrollerRefresh();
+				self.setElement(self.$el);
+				self.loaded();
 			};
 
 			this.listContacts(pSearch, '1', donePersonalContacts, donePersonalContacts);
@@ -150,52 +163,59 @@ define([
 
 		listGeneralContacts: function (pSearch)
 		{
+			var self = this;
+
 			this.personalContact = false;
 
 			$('#contentTitle').text('Catálogo Geral');
-			$('#page').removeClass('personalContacts');
-			$('#page').addClass('generalContacts');
-			$('body').off('keyup', '.personalContacts .searchField');
+			$('.searchArea').removeClass('personalContacts');
+			$('.searchArea').addClass('generalContacts');
+			this.$el.off('keyup', '.personalContacts .searchField');
 
 			var doneGeneralContacts = function (data)
 			{
-
-				if (data.error == undefined) {
-					var template = _.template(GeneralContactsListTemplate, data);
-					$('#scroller').html(template);
-				} else {
-
-					if (data.error.code == "1001") {
-			          Shared.showMessage({
-			            type: "chat-message",
-			            icon: 'icon-contacts',
-			            title: "Sua busca deve ser específica.",
-			            route: "",
-			            description: "Procure pelo nome e sobrenome.<br>Nenhum resultado será exibido caso a sua busca retorne mais do que 200 contatos.",
-			            timeout: 0,
-			            elementID: "#scroller",
-			          });
+				if (data.error == undefined) 
+				{
+					$('#message').empty();
+					$('#scroller').empty().append(_.template(GeneralContactsListTemplate, data));
+				} 
+				else 
+				{
+					if (data.error.code == "1001") 
+					{
+						Shared.showMessage({
+							type: "chat-message",
+							icon: 'icon-contacts',
+							title: "Sua busca deve ser específica.",
+							route: "",
+							description: "Procure pelo nome e sobrenome.<br>Nenhum resultado será exibido caso a sua busca retorne mais do que 200 contatos.",
+							timeout: 0,
+							elementID: "#message",
+						});
 			        }
 
-			        if (data.error.code == "1019") {
-			          Shared.showMessage({
-			            type: "error",
-			            icon: 'icon-contacts',
-			            title: "Nenhum Resultado Encontrado.",
-			            route: "",
-			            description: "Procure pelo nome e sobrenome.<br>Nenhum resultado será exibido caso a sua busca retorne mais do que 200 contatos.",
-			            timeout: 0,
-			            elementID: "#scroller",
-			          });
+			        if (data.error.code == "1019") 
+			        {
+						Shared.showMessage({
+							type: "error",
+							icon: 'icon-contacts',
+							title: "Nenhum Resultado Encontrado.",
+							route: "",
+							description: "Procure pelo nome e sobrenome.<br>Nenhum resultado será exibido caso a sua busca retorne mais do que 200 contatos.",
+							timeout: 0,
+							elementID: "#message",
+						});
 			        }
+
+			        $('#scroller').empty();
 				}
-				
 
 				var pictureImageContactView = new PictureImageContactView({el: $('.picture_image')});
 				pictureImageContactView.render(data);
 
-				Shared.refreshDotDotDot();
-				Shared.scrollerRefresh();
+				// self.setElement($('#mainAppPageContent'));
+				self.setElement(self.$el);
+				self.loaded();
 			};
 
 			this.listContacts(pSearch, '2', doneGeneralContacts, doneGeneralContacts);
@@ -221,31 +241,33 @@ define([
 		{
 			e.preventDefault();
 
-			// $('dl#contactsList dd ul li').removeAttr('class');
-			console.log($(e.target).parent());
-			$(e.target).parent().addClass('selected');
+			$('#contactsList ul li').removeAttr('class');
+			$(e.target).parents('li').addClass('selected');
 
 			Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
 		},
 
-		removeAccents: function(strAccents) {
+		removeAccents: function(strAccents) 
+		{
 			var strAccents = strAccents.split('');
 			var strAccentsOut = new Array();
 			var strAccentsLen = strAccents.length;
 			var accents = 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž';
 			var accentsOut = "AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz";
-			for (var y = 0; y < strAccentsLen; y++) {
-				if (accents.indexOf(strAccents[y]) != -1) {
+
+			for (var y = 0; y < strAccentsLen; y++) 
+			{
+				if (accents.indexOf(strAccents[y]) != -1) 
 					strAccentsOut[y] = accentsOut.substr(accents.indexOf(strAccents[y]), 1);
-				} else
+				else
 					strAccentsOut[y] = strAccents[y];
 			}
+
 			strAccentsOut = strAccentsOut.join('');
+
 			return strAccentsOut;
         },
-
 	});
 
 	return ContactsListView;
-  
 });

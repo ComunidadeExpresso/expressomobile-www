@@ -58,7 +58,10 @@ define([
     selectContextMenuItem: function(e){
       e.preventDefault();
 
-      Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
+      var href = e.currentTarget.getAttribute("href");
+
+      if (href != '')
+        Shared.router.navigate(href,{trigger: true});
       
       this.toggleMenu();
     },
