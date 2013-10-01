@@ -14,7 +14,7 @@ define([
 {
 	var CalendarFullDayListView = Backbone.View.extend(
 	{
-		el: $('#content'),
+		// el: $('#content'),
 		year: '',
 		month: '',
 		day: '',
@@ -34,16 +34,18 @@ define([
 
 			if (!Shared.isSmartPhoneResolution())
 			{
-				this.$el = $('#contentDetail');
+				// this.$el = $('#contentDetail');
 				this.$el.html(_.template(detailContentTemplate));
+				$('#contentDetail').empty().append(this.$el);
 
 				contentTitle = $('#contentDetailTitle');
 				container = $('#scrollerDetail');
 			}
 			else
 			{	
-				this.$el = $('#content');
+				// this.$el = $('#content');
 				this.$el.html(_.template(primaryContentTemplate));
+				$('#content').empty().append(this.$el);
 
 				contentTitle = $('#contentTitle');
 				container = $('#scroller');
@@ -109,7 +111,8 @@ define([
 
 				contentTitle.text($.datepicker.formatDate('DD, dd/mm/yy', new Date(self.year, self.month - 1, self.day)));
 				
-				self.setElement(container.empty().append(_.template(calendarFullDayListTemplate, newData)));
+				container.empty().append(_.template(calendarFullDayListTemplate, newData))
+
 				self.loaded();
 			}
 

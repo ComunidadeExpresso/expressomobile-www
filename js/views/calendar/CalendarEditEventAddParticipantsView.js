@@ -15,15 +15,15 @@ define([
 {
 	var CalendarEditEventAddParticipantsView = Backbone.View.extend(
 	{
-		el: $('#content'),
+		// el: $('#content'),
 		model: EventModel,
 		listParticipants: [],
 		events: 
 		{
 			"keypress .searchField": "searchGeneralContacts",
-			"click #backToEditEvent": "backToEditEvent",
+			// "click #backToEditEvent": "backToEditEvent",
 			"click .css-checkbox": "addParticipant",
-			"click #btn-primary-action": "backToEditEvent"
+			// "click #btn-primary-action": "backToEditEvent"
 		},
 
 		render: function ()
@@ -40,8 +40,9 @@ define([
 
 			if (!Shared.isSmartPhoneResolution())
 			{
-				this.$el = $('#contentDetail');
+				// this.$el = $('#contentDetail');
 				this.$el.html(_.template(detailContentTemplate));
+				$('#contentDetail').empty().append(this.$el);
 
 				contentTitle = $('#contentDetailTitle');
 				container = $('#scrollerDetail');
@@ -49,8 +50,9 @@ define([
 			}
 			else
 			{
-				this.$el = $('#content');
+				// this.$el = $('#content');
 				this.$el.html(_.template(primaryContentTemplate));
+				$('#content').empty().append(this.$el);
 
 				contentTitle = $('#contentTitle');
 				container = $('#scroller');
@@ -97,7 +99,7 @@ define([
 			        container.empty();
 				}
 
-				self.setElement($('#mainAppPageContent'));
+				// self.setElement($('#mainAppPageContent'));
 				self.loaded();
 			};
 
@@ -187,9 +189,9 @@ define([
 		{
 			e.preventDefault();
 
-			$('#mainAppPageContent').off('click', '#backToEditEvent');
+			// $('#mainAppPageContent').off('click', '#backToEditEvent');
 			$('#mainAppPageContent').off('click', '.css-checkbox');
-			$('#mainAppPageContent').off('click', '#btn-primary-action');
+			// $('#mainAppPageContent').off('click', '#btn-primary-action');
 			$('#mainAppPageContent').off('keypress', '.searchField');
 
 			this.view.render({model: this.model, listParticipants: this.listParticipants});

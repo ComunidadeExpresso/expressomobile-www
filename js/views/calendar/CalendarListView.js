@@ -15,7 +15,7 @@ define([
 {
 	var CalendarListView = Backbone.View.extend(
 	{
-		el: $('#content'),
+		// el: $('#content'),
 		year: '',
 		month: '',
 		day: '',
@@ -23,7 +23,7 @@ define([
 		status: '',
 		data: {},
 		dayTitle: '',
-		container: $('#scroller'),
+		// container: $('#scroller'),
 
 		render: function()
 		{
@@ -51,7 +51,10 @@ define([
 			var callback = function (data)
 			{
 				self.$el.html(_.template(primaryContentTemplate));
-				self.setElement($('#scroller').html(_.template(calendarTemplate)));
+				$('#content').empty().append(self.$el);
+				$('#scroller').html(_.template(calendarTemplate));
+
+				// self.setElement($('#scroller').html(_.template(calendarTemplate)));
 				self.renderDatePicker();
 				self.listDayEvents(data);
 				self.loaded();
@@ -92,7 +95,7 @@ define([
 		{
 			if (!Shared.isSmartPhoneResolution() || this.fullDay)
 			{
-				var calendarFullDayListView = new CalendarFullDayListView({el: $('#contentDetail')});
+				var calendarFullDayListView = new CalendarFullDayListView();
 					calendarFullDayListView.year = this.year;
 					calendarFullDayListView.month = this.month;
 					calendarFullDayListView.day = this.day;
@@ -102,7 +105,7 @@ define([
 			}
 			else
 			{
-				var calendarEventsDayListView = new CalendarEventsDayListView({el: $('#eventsList')});
+				var calendarEventsDayListView = new CalendarEventsDayListView();
 					calendarEventsDayListView.year = this.year;
 					calendarEventsDayListView.month = this.month;
 					calendarEventsDayListView.day = this.day;

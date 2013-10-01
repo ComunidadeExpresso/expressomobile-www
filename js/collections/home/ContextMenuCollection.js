@@ -150,11 +150,11 @@ define([
         return this;
       },
 
-      getCalendarAddEventMenu: function ()
+      getCalendarAddEventMenu: function (params)
       {
         var menuItems = [
             // { route: "/Calendar/Events/Save", title:"Salvar", iconClass : '', primary: true},
-            { route: "", title:"Salvar", iconClass : '', primary: true},
+            { route: "", callBack : params.sendCallBack, parentCallBack: params.parentCallBack, title:"Salvar", iconClass : '', primary: true},
             // { route: "/Calendar/Events/AddParticipants", title:"Adicionar participantes", iconClass : '', primary: false}
             { route: "", title:"Adicionar participantes", iconClass : 'context-catalogo-geral', primary: false, action: 'addParticipants'}
             ];

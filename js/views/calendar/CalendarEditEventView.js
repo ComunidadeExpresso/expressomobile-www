@@ -14,7 +14,7 @@ define([
 {
 	var CalendarEditEventView = Backbone.View.extend(
 	{
-		el: $('#content'),
+		// el: $('#content'),
 		eventID: 0,
 		model: EventModel,
 		listParticipants: [],
@@ -41,10 +41,10 @@ define([
 
 		events: 
 		{
-			"click #contextMenu ul li a": "addParticipants",
+			// "click #contextMenu ul li a": "addParticipants",
 			"click #addParticipants": "addParticipants",
 			"click .css-checkbox": "removeParticipant",
-			"click #btn-primary-action": "saveEvent"
+			// "click #btn-primary-action": "saveEvent"
 		},
 
 		onClick: function (e)
@@ -56,6 +56,8 @@ define([
 
 		render: function (options)
 		{
+			console.log('CalendarEditEventView');
+
 			var self = this;
 			var contentTitle;
 			var container;
@@ -76,16 +78,18 @@ define([
 
 			if (!Shared.isSmartPhoneResolution())
 			{
-				this.$el = $('#contentDetail');
+				// this.$el = $('#contentDetail');
 				this.$el.html(_.template(detailContentTemplate));
+				$('#contentDetail').empty().append(this.$el);
 
 				container = $('#scrollerDetail');
 				contentTitle = $('#contentDetailTitle');
 			}
 			else
 			{
-				this.$el = $('#content');
+				// this.$el = $('#content');
 				this.$el.html(_.template(primaryContentTemplate));
+				$('#content').empty().append(this.$el);
 
 				container = $('#scroller');
 				contentTitle = $('#contentTitle');
@@ -135,9 +139,8 @@ define([
 						var newData = {eventCategories: listCategorias, event: self.model, listParticipants: self.listParticipants, types: self.types, priorities: self.priorities};
 
 						container.html(_.template(calendarEditEventTemplate, newData));
-						self.setElement($('#mainAppPageContent'));
+						// self.setElement($('#mainAppPageContent'));
 						self.loaded();
-
 					}
 
 					self.getEvent(self.eventID, callbackGetEvent, callbackGetEvent);
@@ -147,7 +150,7 @@ define([
 					var newData = {eventCategories: listCategorias, event: self.model, listParticipants: self.listParticipants, types: self.types, priorities: self.priorities};
 
 					container.html(_.template(calendarEditEventTemplate, newData))
-					self.setElement($('#mainAppPageContent'));
+					// self.setElement($('#mainAppPageContent'));
 					self.loaded();
 				}
 
@@ -203,7 +206,12 @@ define([
 			}
 
 			Shared.scrollerRefresh();
-			Shared.menuView.renderContextMenu('calendarAddEvent',{});
+
+			var params = {};
+				params.sendCallBack = this.saveEvent;
+	      		params.parentCallBack = this;
+
+			Shared.menuView.renderContextMenu('calendarAddEvent', params);
 
 			$('#contentDetail .searchArea').remove();
 			$('#content .searchArea').remove();
@@ -276,9 +284,9 @@ define([
 				calendarEditEventAddParticipantsView.render();
 		},
 
-		saveEvent: function (e)
+		saveEvent: function ()
 		{
-			e.preventDefault();
+			// e.preventDefault();
 
 			var self = this;
 			var dateStart = ($('#eventDateStart').val()).split('-');
@@ -377,10 +385,10 @@ define([
 
 		cleanEvents: function ()
 		{
-			$('#mainAppPageContent').off('click', '#addParticipants');
-			$('#mainAppPageContent').off('click', '.css-checkbox');
-			$('#mainAppPageContent').off('click', '#btn-primary-action');
-			$('#mainAppPageContent').off('click', '#contextMenu ul li a');
+			// $('#mainAppPageContent').off('click', '#addParticipants');
+			// $('#mainAppPageContent').off('click', '.css-checkbox');
+			// $('#mainAppPageContent').off('click', '#btn-primary-action');
+			// $('#mainAppPageContent').off('click', '#contextMenu ul li a');
 		}
 	});
 

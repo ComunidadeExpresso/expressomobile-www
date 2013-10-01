@@ -10,7 +10,7 @@ define([
 {
 	var CalendarEventsDayListView = Backbone.View.extend(
 	{
-		el: $('#eventsList'),
+		// el: $('#eventsList'),
 		year: '',
 		month: '',
 		day: '',
@@ -38,6 +38,7 @@ define([
 			var newData = {events: events.models, year: this.year, month: this.month, day: this.day, _:_};
 
 			this.$el.html(_.template(calendarEventsDayListTemplate, newData));
+			$('#eventsList').empty().append(this.$el);
 		},
 
 		initialize: function() { },

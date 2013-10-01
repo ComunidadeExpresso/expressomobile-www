@@ -29,7 +29,6 @@ define([
       'Mail/Message/:secondViewName/:msgID/*folderID' : 'composeMessageView',
       'Mail/Message/:secondViewName/:emailTo' : 'composeMessageView',
       'Mail/Message/:secondViewName' : 'composeMessageView',
-      'Mail/Message/:secondViewName/:msgID/*folderID' : 'composeMessageView',
       'Mail/Messages/:msgID/*folderID' : 'detailMessageView',
       'Contacts' : 'contactsListView',
       'Contacts/:secondViewName' : 'contactsListView',
@@ -38,8 +37,8 @@ define([
       'Calendar/Events/Add/:year/:month/:day' : 'calendarAddEventView',
       'Calendar/Events/Edit/:eventID' : 'calendarEditEventView',
       'Calendar/Events/Delete/:eventID/:year/:month/:day' : 'calendarDeleteEventView',
-      'Calendar/Events/:eventID' : 'calendarDetailsView',
       'Calendar/Events/:eventID/:status' : 'calendarDetailsView',
+      'Calendar/Events/:eventID' : 'calendarDetailsView',
       'Calendar/:year/:month/:day/:status' : 'calendarListView',
       'Calendar/:year/:month/:day' : 'calendarListView',
       'Calendar' : 'calendarListView',
@@ -195,7 +194,7 @@ define([
 
     app_router.on('route:calendarListView', function (year, month, day, status) {
 
-      var calendarListView = new CalendarListView({el: $('#content')});
+      var calendarListView = new CalendarListView();
       calendarListView.year = year;
       calendarListView.month = month;
       calendarListView.day = day;

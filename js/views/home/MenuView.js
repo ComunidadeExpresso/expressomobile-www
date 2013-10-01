@@ -250,7 +250,7 @@ define([
           this.context.collection = contextMenuCollection.getMailSignatureMenu();
       } 
       if (menuID == 'calendarAddEvent') {
-          this.context.collection = contextMenuCollection.getCalendarAddEventMenu();
+          this.context.collection = contextMenuCollection.getCalendarAddEventMenu(params);
       }
       if (menuID == 'calendarAddEventParticipant') {
           this.context.collection = contextMenuCollection.getCalendarAddEventParticipantMenu();
