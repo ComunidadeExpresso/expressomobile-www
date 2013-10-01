@@ -114,7 +114,7 @@ define([
         pMessage.set("msgBody","");
         pMessage.clearFiles();
 
-        if (this.emailTo != '')
+        if ($.trim(this.emailTo) != '')
           pMessage.addRecipient("msgTo", this.emailTo, '');
 
         Shared.currentDraftMessage = pMessage;
