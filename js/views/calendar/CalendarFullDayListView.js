@@ -154,7 +154,7 @@ define([
 			}
 
 			Shared.scrollerRefresh();
-			Shared.menuView.renderContextMenu('calendar',{});
+			Shared.menuView.renderContextMenu('calendar',{year: this.year, month: this.month, day: this.day});
 		},
 
 		initialize: function() { },

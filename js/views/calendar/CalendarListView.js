@@ -41,7 +41,10 @@ define([
 			}
 
 			if (this.day == '' || this.day == undefined)
+			{
 				this.day = today.getDate();
+				this.day = pad.substring(0, pad.length - ("" + this.day).length) + ("" + this.day);
+			}
 
 			this.clean();
 

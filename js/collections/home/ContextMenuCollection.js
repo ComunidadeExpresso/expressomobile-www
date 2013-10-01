@@ -117,6 +117,8 @@ define([
       getDetailsContactMenu: function(email) {
         var menuItems = [
             { route: "/Mail/Message/New/" + email, title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
+            { route: "/Contacts/Personal", iconClass: 'context-catalogo-pessoal', title:"Contatos Pessoais"},
+            { route: "/Contacts/General", iconClass: 'context-catalogo-geral', title: "Catálogo Geral"}
           ];
 
         this.createModelsFromArray(menuItems);
