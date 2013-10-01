@@ -1,36 +1,29 @@
-<h2 id="contentTitle" class="ellipsis50"><%= contact.get('contactFullName') %></h2>
+<dl id="contactDetails">
 
-<div id="wrapperDetail" class="container">
-	<div id="scrollerDetail">
-		<dl id="contactDetails">
+	<% if (!_.isEmpty(contact.get('contactMails'))) { %>
+				
+		<dt>Contas de e-mail</dt>
+		<dd>
+			<ul>
+				<% _.each(contact.get('contactMails'), function (email) { %>
+					<li><%= email %></li>
+				<% }); %>
+			</ul>
+		</dd>
 
-			<% if (!_.isEmpty(contact.get('contactMails'))) { %>
-						
-				<dt>Contas de e-mail</dt>
-				<dd>
-					<ul>
-						<% _.each(contact.get('contactMails'), function (email) { %>
-							<li><%= email %></li>
-						<% }); %>
-					</ul>
-				</dd>
+	<% } %>
 
-			<% } %>
+	<% if (!_.isEmpty(contact.get('contactPhones')) && !_.isEmpty(_.first(contact.get('contactPhones')))) { %>
 
-			<% if (!_.isEmpty(contact.get('contactPhones')) && !_.isEmpty(_.first(contact.get('contactPhones')))) { %>
+		<dt>Telefones</dt>
+		<dd>
+			<ul>
+				<% _.each(contact.get('contactPhones'), function (phone) { %>
+					<li><%= phone %></li>
+				<% }); %>
+			</ul>
+		</dd>
 
-				<dt>Telefones</dt>
-				<dd>
-					<ul>
-						<% _.each(contact.get('contactPhones'), function (phone) { %>
-							<li><%= phone %></li>
-						<% }); %>
-					</ul>
-				</dd>
+	<% } %>
 
-			<% } %>
-
-		</dl>
-		
-	</div>
-</div>
+</dl>

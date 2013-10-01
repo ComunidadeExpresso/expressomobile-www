@@ -8,19 +8,22 @@ define([
 	'views/home/LoadingView',
 	'views/home/HomeView',
 	'text!templates/master/detailContentTemplate.html',
+	'text!templates/master/primaryContentTemplate.html',
 	'text!templates/calendar/calendarEditEventAddParticipantsTemplate.html',
 	'collections/contacts/ContactsListCollection',
-], function($, _, Backbone, Shared, EventModel, CalendarEditEventView, LoadingView, HomeView, detailContentTemplate, calendarEditEventAddParticipantsTemplate, ContactsListCollection)
+], function($, _, Backbone, Shared, EventModel, CalendarEditEventView, LoadingView, HomeView, detailContentTemplate, primaryContentTemplate, calendarEditEventAddParticipantsTemplate, ContactsListCollection)
 {
 	var CalendarEditEventAddParticipantsView = Backbone.View.extend(
 	{
 		el: $('#content'),
 		model: EventModel,
+		listParticipants: [],
 		events: 
 		{
 			"keypress .searchField": "searchGeneralContacts",
 			"click #backToEditEvent": "backToEditEvent",
-			"click .css-checkbox": "addParticipant"
+			"click .css-checkbox": "addParticipant",
+			"click #btn-primary-action": "backToEditEvent"
 		},
 
 		render: function ()
@@ -31,19 +34,28 @@ define([
 		listGeneralContacts: function (pSearch)
 		{
 			var self = this;
-			var contentTitle = $('#contentTitle');
-			var container = $('#scroller');
+			var contentTitle;
+			var container;
+			var messageContainer;
 
 			if (!Shared.isSmartPhoneResolution())
 			{
 				this.$el = $('#contentDetail');
 				this.$el.html(_.template(detailContentTemplate));
 
-				container = $('#scrollerDetail');
 				contentTitle = $('#contentDetailTitle');
+				container = $('#scrollerDetail');
+				messageContainer = '#messageDetail';
 			}
 			else
+			{
+				this.$el = $('#content');
 				this.$el.html(_.template(primaryContentTemplate));
+
+				contentTitle = $('#contentTitle');
+				container = $('#scroller');
+				messageContainer = '#message';
+			}
 
 			var loadingView = new LoadingView({el: container});	
 				loadingView.render();
@@ -52,8 +64,40 @@ define([
 
 			var callback = function (data)
 			{
-				container.empty().append(_.template(calendarEditEventAddParticipantsTemplate, data));
-				self.setElement(self.$el);
+				if (data.error == undefined)
+					container.empty().append(_.template(calendarEditEventAddParticipantsTemplate, data));
+				else 
+				{
+					if (data.error.code == "1001") 
+					{
+						Shared.showMessage({
+							type: "chat-message",
+							icon: 'icon-contacts',
+							title: "Sua busca deve ser específica.",
+							route: "",
+							description: "Procure pelo nome e sobrenome.<br>Nenhum resultado será exibido caso a sua busca retorne mais do que 200 contatos.",
+							timeout: 0,
+							elementID: messageContainer,
+						});
+			        }
+
+			        if (data.error.code == "1019") 
+			        {
+						Shared.showMessage({
+							type: "error",
+							icon: 'icon-contacts',
+							title: "Nenhum Resultado Encontrado.",
+							route: "",
+							description: "Procure pelo nome e sobrenome.<br>Nenhum resultado será exibido caso a sua busca retorne mais do que 200 contatos.",
+							timeout: 0,
+							elementID: messageContainer,
+						});
+			        }
+
+			        container.empty();
+				}
+
+				self.setElement($('#mainAppPageContent'));
 				self.loaded();
 			};
 
@@ -134,6 +178,7 @@ define([
 
 		initialize: function (options) 
 		{
+			this.listParticipants = options.listParticipants;
 			this.model = options.model;
 			this.view = options.view;
 		},
@@ -142,33 +187,42 @@ define([
 		{
 			e.preventDefault();
 
-			this.$el.off('click', '#backToEditEvent');
-			this.$el.off('click', '.css-checkbox');
-			this.$el.off('keypress', '.searchField');
+			$('#mainAppPageContent').off('click', '#backToEditEvent');
+			$('#mainAppPageContent').off('click', '.css-checkbox');
+			$('#mainAppPageContent').off('click', '#btn-primary-action');
+			$('#mainAppPageContent').off('keypress', '.searchField');
 
-			this.view.render({model: this.model});
+			this.view.render({model: this.model, listParticipants: this.listParticipants});
 		},
 
 		addParticipant: function (e)
 		{	
-			console.log('addParticipant');
-
-			var listParticipants = this.model.get('eventParticipants');
-			var participant = $(e.target).val();
-			var index = _.isEmpty(listParticipants) ? -1 : _.indexOf(listParticipants, participant);
+			var listParticipantsID = this.model.get('eventParticipants');
+			var listParticipants = this.listParticipants;
+			var id = $(e.target).val();
+			var name = $(e.target).attr('data-name');
+			var index = _.isEmpty(listParticipantsID) ? -1 : _.indexOf(listParticipantsID, id);
+			var indexNames = index == -1 ? -1 : _.indexOf(listParticipants, { participantID: id, participantName: name });
 
 			if ($(e.target).is(':checked'))
 			{
 				if (index == -1)
-					listParticipants.push(participant);
+				{
+					listParticipantsID.push(id);
+					listParticipants.push({ participantID: id, participantName: name });
+				}
 			}
 			else
 			{
 				if (index != -1)
-					listParticipants.splice(index, 1);
+				{
+					listParticipantsID.splice(index, 1);
+					listParticipants.splice(indexNames, 1);
+				}	
 			}
 
-			this.model.set({eventParticipants: listParticipants});
+			this.model.set({eventParticipants: listParticipantsID});
+			this.listParticipants = listParticipants;
 		}
 	});
 

@@ -14,6 +14,7 @@ define([
   var ComposeMessageView = Backbone.View.extend({
 
     secondViewName: '',
+    emailTo: '',
     msgID: '',
     folderID: '',
     currentMessage : '',
@@ -112,6 +113,9 @@ define([
         pMessage.set("msgBcc",[]);
         pMessage.set("msgBody","");
         pMessage.clearFiles();
+
+        if (this.emailTo != '')
+          pMessage.addRecipient("msgTo", this.emailTo, '');
 
         Shared.currentDraftMessage = pMessage;
 

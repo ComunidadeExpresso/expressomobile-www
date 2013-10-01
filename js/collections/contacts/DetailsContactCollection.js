@@ -60,7 +60,7 @@ define([
 	        return that;
 		},
 
-		getGeneralContactDetails: function(pContactID)
+		getGeneralContactDetails: function(pContactID, fields)
 		{	
 			var that = this;
 				that._data = {};
@@ -100,15 +100,8 @@ define([
 			var thatModel = ContactModel;
 			var data = this._data;
 
-
-			// var pContactID = JSON.stringify(pContactID);
-			console.log('getContactDetails');
-			console.log(pContactID);
-			console.log(typeof(pContactID));
-
 			this.api
 	        .resource('Catalog/Contacts')
-	        // .params({search:'',contactType:'2'})
 	        .params({search:'',contactID:pContactID,contactType:'2'})
 	        .done(function (result)
 	        {
@@ -123,8 +116,6 @@ define([
 	        })
 	        .fail( function (error) 
 	        {
-	        	console.log(error);
-
 				if (that._data.fail) 
 					that._data.fail(error); 
 	        })

@@ -8,15 +8,17 @@ define([
   'views/home/HomeView',
   'views/mail/DetailMessageView',
   'views/mail/ComposeMessageView',
+  'views/mail/AttachmentMessageView',
   'views/settings/SettingsListView',
   'views/contacts/ContactsListView',
   'views/contacts/DetailsContactView',
   'views/calendar/CalendarListView',
   'views/calendar/CalendarDetailsView',
   'views/calendar/CalendarEditEventView',
-  'views/calendar/CalendarSaveEventView',
+  'views/calendar/CalendarDeleteEventView',
+  'views/calendar/CalendarFullDayListView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarSaveEventView,ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, AttachmentMessageView,SettingsListView,ContactsListView,DetailsContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarDeleteEventView, CalendarFullDayListView, ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -25,17 +27,24 @@ define([
       'Home' : 'homeView',
       'Login' : 'loginView',
       'Mail/Folders/*folderID' : 'openFolderView',
+      'Mail/Message/:secondViewName/:msgID/*folderID' : 'composeMessageView',
+      'Mail/Message/:secondViewName/:emailTo' : 'composeMessageView',
       'Mail/Message/:secondViewName' : 'composeMessageView',
       'Mail/Message/:secondViewName/:msgID/*folderID' : 'composeMessageView',
+      // 'Mail/Message/Attachment/:attachmentID/:attachmentName/:attachmentEncoding/:attachmentIndex/:msgID/*folderID' : 'attachmentMessageView',
+      'Mail/Message/Attachment/*attachmentString' : 'attachmentMessageView',
+      'Mail/Message/DownloadAttachment/*attachmentString' : 'attachmentMessageDownload',
       'Mail/Messages/:msgID/*folderID' : 'detailMessageView',
       'Contacts' : 'contactsListView',
       'Contacts/:secondViewName' : 'contactsListView',
       'Contacts/:secondViewName/:contactID' : 'detailsContactView',
-      'Calendar/Events/Save' : 'calendarSaveEventView',
+      'Calendar/FullDay/:year/:month/:day' : 'calendarFullDayView',
       'Calendar/Events/Add/:year/:month/:day' : 'calendarAddEventView',
       'Calendar/Events/Edit/:eventID' : 'calendarEditEventView',
-      'Calendar/FullDay/:year/:month/:day' : 'calendarFullDayView',
+      'Calendar/Events/Delete/:eventID/:year/:month/:day' : 'calendarDeleteEventView',
       'Calendar/Events/:eventID' : 'calendarDetailsView',
+      'Calendar/Events/:eventID/:status' : 'calendarDetailsView',
+      'Calendar/:year/:month/:day/:status' : 'calendarListView',
       'Calendar/:year/:month/:day' : 'calendarListView',
       'Calendar' : 'calendarListView',
       'Chat' : 'chatListView',
@@ -65,6 +74,7 @@ define([
 
     app_router.on('route:openFolderView', function (PfolderID) {
 
+      if (!Shared.newMessageIntent) {
         var homeView = new HomeView({folderID: PfolderID});
         Shared.menuView.closeMenu();
         homeView.loadMessagesInFolder(PfolderID,'');
@@ -74,6 +84,10 @@ define([
         } else {
           Shared.menuView.selectMenu(0);
         }
+      } else {
+        Shared.newMessageIntent = false;
+        Shared.router.navigate("/Mail/Message/New",{ trigger: true });
+      }
       
       
 
@@ -142,6 +156,49 @@ define([
   
     });
 
+    app_router.on('route:composeMessageView', function (secondViewName, emailTo) {
+
+      var composeMessageView = new ComposeMessageView();
+      composeMessageView.secondViewName = secondViewName;
+      composeMessageView.emailTo = emailTo;
+      composeMessageView.render();
+      Shared.menuView.closeMenu();
+  
+    });
+
+    app_router.on('route:attachmentMessageView', function (attachmentString) {
+
+      var arrParams = attachmentString.split("=-=");
+
+      // attachmentID,attachmentName,attachmentEncoding,attachmentIndex,msgID,folderID
+
+      var attachmentMessageView = new AttachmentMessageView();
+      attachmentMessageView.attachmentID = arrParams[0];
+      attachmentMessageView.attachmentName = arrParams[1];
+      attachmentMessageView.attachmentEncoding = arrParams[2];
+      attachmentMessageView.attachmentIndex = arrParams[3];
+      attachmentMessageView.msgID = arrParams[4];
+      attachmentMessageView.folderID = arrParams[5];
+      attachmentMessageView.render();
+      Shared.menuView.closeMenu();
+  
+    });
+
+    app_router.on('route:attachmentMessageDownload', function (attachmentString) {
+
+      var arrParams = attachmentString.split("=-=");
+
+      var attachmentMessageView = new AttachmentMessageView();
+      attachmentMessageView.attachmentID = arrParams[0];
+      attachmentMessageView.attachmentName = arrParams[1];
+      attachmentMessageView.attachmentEncoding = arrParams[2];
+      attachmentMessageView.attachmentIndex = arrParams[3];
+      attachmentMessageView.msgID = arrParams[4];
+      attachmentMessageView.folderID = arrParams[5];
+      attachmentMessageView.download();
+      Shared.menuView.closeMenu();
+  
+    });
 
     app_router.on('route:settingsListView', function (secondViewName) {
 
@@ -174,13 +231,14 @@ define([
   
     });
 
-    app_router.on('route:calendarListView', function (year, month, day) {
+    app_router.on('route:calendarListView', function (year, month, day, status) {
 
       var calendarListView = new CalendarListView({el: $('#content')});
       calendarListView.year = year;
       calendarListView.month = month;
       calendarListView.day = day;
       calendarListView.fullDay = false;
+      calendarListView.status = status;
       calendarListView.render();
 
       Shared.menuView.selectMenu(2);
@@ -189,22 +247,23 @@ define([
 
     app_router.on('route:calendarFullDayView', function (year, month, day) {
 
-      var calendarView = new CalendarView();
-      calendarView.year = year;
-      calendarView.month = month;
-      calendarView.day = day;
-      calendarView.fullDay = true;
+      var calendarFullDayListView = new CalendarFullDayListView();
+      calendarFullDayListView.year = year;
+      calendarFullDayListView.month = month;
+      calendarFullDayListView.day = day;
+      calendarFullDayListView.fullDay = true;
       
-      calendarView.render();
+      calendarFullDayListView.render();
 
       Shared.menuView.selectMenu(2);
   
     });
 
-    app_router.on('route:calendarDetailsView', function (eventID) {
+    app_router.on('route:calendarDetailsView', function (eventID, status) {
 
       var calendarDetailsView = new CalendarDetailsView();
       calendarDetailsView.eventID = eventID;
+      calendarDetailsView.status = status;
       calendarDetailsView.render();
 
       Shared.menuView.selectMenu(2);
@@ -214,7 +273,7 @@ define([
     app_router.on('route:calendarEditEventView', function (eventID) {
 
       var calendarEditEventView = new CalendarEditEventView();
-      // calendarEditEventView.eventID = eventID;
+      calendarEditEventView.eventID = eventID;
       calendarEditEventView.render();
 
       Shared.menuView.selectMenu(2);
@@ -227,16 +286,21 @@ define([
           // calendarAddEventView.year = year;
           // calendarAddEventView.month = month;
           // calendarAddEventView.day = day;
+          // calendarAddEventView.listParticipants = [];
           calendarAddEventView.render();
 
       Shared.menuView.selectMenu(2);
   
     });
 
-    app_router.on('route:calendarSaveEventView', function () {
+    app_router.on('route:calendarDeleteEventView', function (eventID, year, month, day) {
 
-      var calendarSaveEventView = new CalendarSaveEventView();
-      calendarSaveEventView.render();
+      var calendarDeleteEventView = new CalendarDeleteEventView();
+      calendarDeleteEventView.eventID = eventID;
+      calendarDeleteEventView.year = year;
+      calendarDeleteEventView.month = month;
+      calendarDeleteEventView.day = day;
+      calendarDeleteEventView.render();
 
       Shared.menuView.selectMenu(2);
     });

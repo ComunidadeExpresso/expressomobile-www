@@ -103,7 +103,7 @@ define ([
 		getEventParticipants: function (callback)
 		{
 			var listParticipants = this.get('eventParticipants');
-			var listUidNumbers = [];
+			var listUidNumbers = []; 
 			var that = this;
 
 			for (var i in listParticipants)
@@ -150,8 +150,6 @@ define ([
 
 		saveEvent: function (params)
 		{
-			console.log(params);
-
 			var that = this;
 
 			this.api
@@ -159,21 +157,35 @@ define ([
 			.params(params)
 			.done(function (result)
 			{
-				console.log('saveEvent > done');
-				console.log(result)
-
 				var thisModel = new EventModel(result.events[0]);
-	        		that.set(result.events[0]);
-	        		// that.getEventParticipants();
 
 		        if (that.done)
-	        		that.done(that);
+	        		that.done(thisModel);
 			})
 			.fail( function (error) 
 			{
-				console.log('saveEvent > error');
-				console.log(error);
+				if (that.fail)
+		        		that.fail(error);
+			})
+			.execute();
 
+			return that;
+		},
+
+		deleteEvent: function (pEventID)
+		{
+			var that = this;
+
+			this.api
+			.resource('Calendar/DelEvent')
+			.params({ eventID: pEventID })
+			.done(function (result)
+			{
+		        if (that.done)
+	        		that.done(result);
+			})
+			.fail( function (error) 
+			{
 				if (that.fail)
 		        		that.fail(error);
 			})
