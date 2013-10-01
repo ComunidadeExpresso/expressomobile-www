@@ -84,10 +84,18 @@ define([
       this.loaded();
     },
 
-    renderContextMenu: function() {
+    getContextMenuParams: function() {
       var params = {};
       params.sendCallBack = this.sendMessage;
+      params.addCcBccCallBack = this.addCcBcc;
+      params.removeCcBccCallBack = this.removeCcBcc;
       params.parentCallBack = this;
+      return params;
+    },
+
+    renderContextMenu: function() {
+      
+      var params = this.getContextMenuParams();
       if ($("#msgCcRow").hasClass("hidden")) {
         Shared.menuView.renderContextMenu('newMessage',params);
       } else {
@@ -107,16 +115,30 @@ define([
 
       var onSendMessage = function(result) {
 
-        var res = JSON.stringify(result);
-      
-        var message = {
-          type: "success",
-          icon: 'icon-email',
-          title: "Mensagem enviada com sucesso!",
-          description: "",
-          elementID: "#pageMessage",
-        }
+        var res = JSON.parse(result);
 
+        if (res.error == undefined) {
+          var message = {
+            type: "success",
+            icon: 'icon-email',
+            title: "Mensagem enviada com sucesso!",
+            description: "",
+            elementID: "#pageMessage",
+          }
+
+        } else {
+
+          var message = {
+            type: "error",
+            icon: 'icon-email',
+            title: "Sua Mensagem não pode ser enviada!",
+            description: "",
+            elementID: "#pageMessage",
+          }
+
+        }
+      
+        
         Shared.showMessage(message);
 
         Shared.router.navigate("/Mail/Folders/INBOX",{ trigger: true });
@@ -357,8 +379,6 @@ define([
 
       if (this.secondViewName == "Forward") {
         
-        
-
         var ForwardOnGetMessage = function(result) {
 
           console.log(result);
@@ -387,16 +407,18 @@ define([
 
       }
 
-      if (this.secondViewName == "AddCcBcc") {
-        this.toggleCCBcc();
-        Shared.menuView.renderContextMenu('newMessageWithCc',{});
-      }
+    },
 
-      if (this.secondViewName == "RemoveCcBcc") {
-        this.toggleCCBcc();
-        Shared.menuView.renderContextMenu('newMessage',{});
-      }
+    addCcBcc: function(thisView) {
+      thisView.toggleCCBcc();
+      var params = thisView.getContextMenuParams();
+      Shared.menuView.renderContextMenu('newMessageWithCc',params);
+    },
 
+    removeCcBcc: function(thisView) {
+      thisView.toggleCCBcc();
+      var params = thisView.getContextMenuParams();
+      Shared.menuView.renderContextMenu('newMessage',params);
     },
 
     events: {
@@ -568,7 +590,10 @@ define([
     getNewMessageModel: function() {
 
       //LOAD TEMP FILES
-      var tempFiles = Shared.currentDraftMessage.get("files");
+      var tempFiles = {};
+      if (Shared.currentDraftMessage) {
+        tempFiles = Shared.currentDraftMessage.get("files");
+      }
 
       var msgTo = this.getMessageStringForRecipient("msgTo");
       var msgSubject = $("#msgSubjectInput").val();
@@ -596,7 +621,7 @@ define([
       // $('.attachmentImage').each(function(i, obj) {
       //   var src = $(obj).attr('src').substr($(obj).attr('src').indexOf(bstr)+bstr.length);
       //   mModel.addFile(src,'Anexo ' + (i + 1) + '.png',"base64");
-      // }); 
+      // });
 
       return mModel;
     },

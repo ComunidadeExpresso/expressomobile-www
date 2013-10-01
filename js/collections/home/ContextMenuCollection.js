@@ -43,11 +43,11 @@ define([
 
       getDetailMessageMenu: function(folderID,msgID) {
         var menuItems = [
-            { route: "/Mail/Message/New", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
-            { route: "/Mail/Message/ReplyMessage/" + msgID + "/" + folderID, iconClass : 'context-reply', title: "Responder"},
-            { route: "/Mail/Message/ReplyToAll/" + msgID + "/" + folderID, iconClass : 'context-reply-all', title: "Responder p/ Todos"},
-            { route: "/Mail/Message/Forward/" + msgID + "/" + folderID, iconClass : 'context-forward', title: "Encaminhar"},
-            { route: "/Mail/Message/DelMessage/" + msgID + "/" + folderID, iconClass : 'context-delete-message', title: "Excluir"},
+            { route: "/Mail/Message/New", id: "0", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
+            { route: "/Mail/Message/ReplyMessage/" + msgID + "/" + folderID, id: "1", iconClass : 'context-reply', title: "Responder"},
+            { route: "/Mail/Message/ReplyToAll/" + msgID + "/" + folderID, id: "2", iconClass : 'context-reply-all', title: "Responder p/ Todos"},
+            { route: "/Mail/Message/Forward/" + msgID + "/" + folderID, id: "3", iconClass : 'context-forward', title: "Encaminhar"},
+            { route: "/Mail/Message/DelMessage/" + msgID + "/" + folderID, id: "4", iconClass : 'context-delete-message', title: "Excluir"},
           ];
 
         this.createModelsFromArray(menuItems);
@@ -56,8 +56,8 @@ define([
 
       getSendMessageMenu: function(params) {
         var menuItems = [
-            { route: "", callBack : params.sendCallBack, parentCallBack: params.parentCallBack , title:"Enviar", iconClass : '', primary: true},
-            { route: "/Mail/Message/AddCcBcc", title:"Adicionar CC/BCC", iconClass : '', primary: false}
+            { route: "#", id: "0", callBack : params.sendCallBack, parentCallBack: params.parentCallBack , title:"Enviar", iconClass : '', primary: true},
+            { route: "#", id: "1", callBack : params.addCcBccCallBack, parentCallBack: params.parentCallBack ,title:"Adicionar CC/BCC", iconClass : '', primary: false}
             ];
 
         var takePicture = {route: "/Mail/Message/AttachPicture", title: "Tirar Foto", iconClass: '', primary: false};
@@ -72,8 +72,8 @@ define([
 
       getSendMessageMenuWithCC: function(params) {
         var menuItems = [
-            { route: "", callBack : params.sendCallBack, parentCallBack: params.parentCallBack , title:"Enviar", iconClass : '', primary: true},
-            { route: "/Mail/Message/RemoveCcBcc", title:"Remover CC/BCC", iconClass : '', primary: false}
+            { route: "#", id: "0", callBack : params.sendCallBack, parentCallBack: params.parentCallBack , title:"Enviar", iconClass : '', primary: true},
+            { route: "#", id: "2", callBack : params.removeCcBccCallBack, parentCallBack: params.parentCallBack , title:"Remover CC/BCC", iconClass : '', primary: false}
             ];
 
         var takePicture = {route: "/Mail/Message/AttachPicture", title: "Tirar Foto", iconClass: '', primary: false};
@@ -90,6 +90,16 @@ define([
         var retVal = false;
         for (var i in this.models) {
           if (this.models[i].get('primary') == true) {
+            retVal = this.models[i];
+          }
+        }
+        return retVal;
+      },
+
+      getActionById: function(actID) {
+        var retVal = false;
+        for (var i in this.models) {
+          if (this.models[i].get('id') == actID) {
             retVal = this.models[i];
           }
         }

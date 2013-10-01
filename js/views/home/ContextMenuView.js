@@ -62,8 +62,23 @@ define([
 
       var href = e.currentTarget.getAttribute("href");
 
-      if (href != '')
+      var id = e.currentTarget.getAttribute("id");
+
+      if (href != '#') {
         Shared.router.navigate(href,{trigger: true});
+      } else {
+
+        var context = this.collection.getActionById(id);
+
+        console.log(id);
+        console.log(context);
+
+        this.callBack = context.get("callBack");
+        this.parentCallBack = context.get("parentCallBack");
+
+        this.callBack(this.parentCallBack);
+
+      }
       
       this.toggleMenu();
     },
@@ -77,14 +92,13 @@ define([
 
       this.closeMenu();
 
-      if (this.primaryAction != '') {
+      if (this.primaryAction != '#') {
         Shared.router.navigate(this.primaryAction,{trigger: true});
       } else {
         //if (this.callBack != '') {
           var primary = this.collection.getPrimaryAction();
           console.log(primary.get("parentCallBack"));
           this.callBack( this.parentCallBack);
-
         //}
       }
 

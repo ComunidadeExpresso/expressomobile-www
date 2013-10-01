@@ -11,7 +11,7 @@
 	<ul>
 		<% _.each(menuItems, function(menuItem){ %>
 			<% if (!menuItem.get("primary")) { %>
-				<li><a href="<%=menuItem.get("route")%>" <% if (menuItem.get('action') != undefined) { %>data-action="<%= menuItem.get('action') %>"<% } %> title="<%=menuItem.get("title")%>"><div class="context-icon <%=menuItem.get("iconClass")%>"></div><%=menuItem.get("title")%></a></li>
+				<li><a id="<%=menuItem.get("id")%>" href="<%=menuItem.get("route")%>" <% if (menuItem.get('action') != undefined) { %>data-action="<%= menuItem.get('action') %>"<% } %> title="<%=menuItem.get("title")%>"><div class="context-icon <%=menuItem.get("iconClass")%>"></div><%=menuItem.get("title")%></a></li>
 			<% } %>
 		<% }); %>
 	</ul>

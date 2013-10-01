@@ -9,6 +9,7 @@ define([
   	// Default attributes for the message.
     defaults: {
         route: "",
+        id: "",
         title: "",
         iconClass: "",
         callBack: "",
