@@ -27,7 +27,7 @@ define([
       'Login' : 'loginView',
       'Mail/Folders/*folderID' : 'openFolderView',
       'Mail/Message/:secondViewName/:msgID/*folderID' : 'composeMessageView',
-      'Mail/Message/:secondViewName/:emailTo' : 'composeMessageView',
+      'Mail/Message/:secondViewName/:emailTo' : 'composeMessageTo',
       'Mail/Message/:secondViewName' : 'composeMessageView',
       'Mail/Messages/:msgID/*folderID' : 'detailMessageView',
       'Contacts' : 'contactsListView',
@@ -151,7 +151,7 @@ define([
   
     });
 
-    app_router.on('route:composeMessageView', function (secondViewName, emailTo) {
+    app_router.on('route:composeMessageTo', function (secondViewName, emailTo) {
 
       var composeMessageView = new ComposeMessageView();
       composeMessageView.secondViewName = secondViewName;
