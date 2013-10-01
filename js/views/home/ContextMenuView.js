@@ -16,6 +16,8 @@ define([
     profile: null,
     collection: null,
     primaryAction: '',
+    callBack: '',
+    parentCallBack: '',
 
     render: function(){
 
@@ -77,7 +79,14 @@ define([
 
       if (this.primaryAction != '') {
         Shared.router.navigate(this.primaryAction,{trigger: true});
-      } 
+      } else {
+        //if (this.callBack != '') {
+          var primary = this.collection.getPrimaryAction();
+          console.log(primary.get("parentCallBack"));
+          this.callBack( this.parentCallBack);
+
+        //}
+      }
 
     },
 
@@ -86,6 +95,8 @@ define([
       var primary = this.collection.getPrimaryAction();
       if (primary) {
         this.primaryAction = primary.get("route");
+        this.callBack = primary.get("callBack");
+        this.parentCallBack = primary.get("parentCallBack");
         $("#btn-primary-action").removeAttr("class");
         if (primary.get("iconClass") != '') {
           $("#btn-primary-action").attr('class', 'btn btn-context ' + primary.get("iconClass"));

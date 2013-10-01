@@ -54,9 +54,9 @@ define([
         return this;
       },
 
-      getSendMessageMenu: function(folderID,msgID) {
+      getSendMessageMenu: function(params) {
         var menuItems = [
-            { route: "/Mail/Message/Send", title:"Enviar", iconClass : '', primary: true},
+            { route: "", callBack : params.sendCallBack, parentCallBack: params.parentCallBack , title:"Enviar", iconClass : '', primary: true},
             { route: "/Mail/Message/AddCcBcc", title:"Adicionar CC/BCC", iconClass : '', primary: false}
             ];
 
@@ -70,9 +70,9 @@ define([
         return this;
       },
 
-      getSendMessageMenuWithCC: function(folderID,msgID) {
+      getSendMessageMenuWithCC: function(params) {
         var menuItems = [
-            { route: "/Mail/Message/Send", title:"Enviar", iconClass : '', primary: true},
+            { route: "", callBack : params.sendCallBack, parentCallBack: params.parentCallBack , title:"Enviar", iconClass : '', primary: true},
             { route: "/Mail/Message/RemoveCcBcc", title:"Remover CC/BCC", iconClass : '', primary: false}
             ];
 

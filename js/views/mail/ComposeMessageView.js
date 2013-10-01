@@ -85,11 +85,67 @@ define([
     },
 
     renderContextMenu: function() {
+      var params = {};
+      params.sendCallBack = this.sendMessage;
+      params.parentCallBack = this;
       if ($("#msgCcRow").hasClass("hidden")) {
-        Shared.menuView.renderContextMenu('newMessage',{});
+        Shared.menuView.renderContextMenu('newMessage',params);
       } else {
-        Shared.menuView.renderContextMenu('newMessageWithCc',{});
+        Shared.menuView.renderContextMenu('newMessageWithCc',params);
       }
+    },
+
+    sendMessage: function(thisView) {
+
+      var that = thisView;
+
+      var elementID = "#contentDetail";
+
+      if (Shared.isSmartPhoneResolution()) {
+        elementID = "#content";
+      }
+
+      var onSendMessage = function(result) {
+
+        var res = JSON.stringify(result);
+      
+        var message = {
+          type: "success",
+          icon: 'icon-email',
+          title: "Mensagem enviada com sucesso!",
+          description: "",
+          elementID: "#pageMessage",
+        }
+
+        Shared.showMessage(message);
+
+        Shared.router.navigate("/Mail/Folders/INBOX",{ trigger: true });
+
+      };
+
+      var onFailSendMessage = function(error) {
+
+        var message = {
+          type: "error",
+          icon: 'icon-email',
+          title: "Ocorreu um erro ao enviar a mensagem!",
+          description: error.message,
+          elementID: "#pageMessage",
+        }
+
+        Shared.showMessage(message);
+
+        Shared.router.navigate("/Mail/Folders/INBOX",{ trigger: true });
+        
+      };
+
+      var Message = thisView.getNewMessageModel();
+
+      var loadingView = new LoadingView({ el: $(elementID) });
+      loadingView.render();
+
+      Message.send(onSendMessage,onFailSendMessage);
+
     },
 
     
@@ -123,50 +179,11 @@ define([
 
       }
 
-      if (this.secondViewName == "Send") {
+      // if (this.secondViewName == "Send") {
 
-        var that = this;
+      //   this.sendMessage();
 
-        var onSendMessage = function(result) {
-        
-          var message = {
-            type: "success",
-            icon: 'icon-email',
-            title: "Mensagem enviada com sucesso!",
-            description: "",
-            elementID: "#pageMessage",
-          }
-
-          Shared.showMessage(message);
-
-          Shared.router.navigate("/Mail/Folders/INBOX",{ trigger: true });
-
-        };
-
-        var onFailSendMessage = function(error) {
-
-          var message = {
-            type: "error",
-            icon: 'icon-email',
-            title: "Ocorreu um erro ao enviar a mensagem!",
-            description: error.message,
-            elementID: "#pageMessage",
-          }
-
-          Shared.showMessage(message);
-
-          Shared.router.navigate("/Mail/Folders/INBOX",{ trigger: true });
-          
-        };
-
-        var Message = this.getNewMessageModel();
-
-        var loadingView = new LoadingView({ el: $(elementID) });
-        loadingView.render();
-
-        Message.send(onSendMessage,onFailSendMessage);
-
-      }
+      // }
 
       var uploadPicture = function(imageData) {
 

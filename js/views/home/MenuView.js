@@ -229,10 +229,10 @@ define([
         this.context.collection = contextMenuCollection.getMessagesListMenu(params.folderID);
       }
       if (menuID == 'newMessage') {
-          this.context.collection = contextMenuCollection.getSendMessageMenu();
+          this.context.collection = contextMenuCollection.getSendMessageMenu(params);
       }
       if (menuID == 'newMessageWithCc') {
-          this.context.collection = contextMenuCollection.getSendMessageMenuWithCC();
+          this.context.collection = contextMenuCollection.getSendMessageMenuWithCC(params);
       }
       if (menuID == 'personalContacts') {
           this.context.collection = contextMenuCollection.getPersonalContactsMenu();

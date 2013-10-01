@@ -11,6 +11,8 @@ define([
         route: "",
         title: "",
         iconClass: "",
+        callBack: "",
+        parentCallBack: "",
         primary: false,
     },
 
