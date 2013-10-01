@@ -52,7 +52,6 @@ define([
       "touchend .touchDownloadAttachmentLink" : "download",
       "click .downloadAttachmentLink" : "download",
       "click .deleteAttachmentLink" : "deleteAttachment",
-      //"click .attachmentPreview" : "preview",
     },
 
     
@@ -197,7 +196,6 @@ define([
     downloadBrowser: function(params,result) {
 
       var base64 = this.base64ArrayBuffer(result);
-
       this.showImage(base64);
       
       var name = params.attachmentName;
@@ -277,8 +275,6 @@ define([
     download: function() {
 
       var that = this; 
-
-      //alert('download');
 
       this.getFileData(function(params,result) {
 
