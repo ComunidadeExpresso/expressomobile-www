@@ -14,7 +14,6 @@ define([
 {
 	var CalendarFullDayListView = Backbone.View.extend(
 	{
-		// el: $('#content'),
 		year: '',
 		month: '',
 		day: '',
@@ -34,7 +33,6 @@ define([
 
 			if (!Shared.isSmartPhoneResolution())
 			{
-				// this.$el = $('#contentDetail');
 				this.$el.html(_.template(detailContentTemplate));
 				$('#contentDetail').empty().append(this.$el);
 
@@ -43,7 +41,6 @@ define([
 			}
 			else
 			{	
-				// this.$el = $('#content');
 				this.$el.html(_.template(primaryContentTemplate));
 				$('#content').empty().append(this.$el);
 

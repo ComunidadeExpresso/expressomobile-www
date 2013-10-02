@@ -15,7 +15,6 @@ define([
 {
 	var CalendarListView = Backbone.View.extend(
 	{
-		// el: $('#content'),
 		year: '',
 		month: '',
 		day: '',
@@ -23,7 +22,6 @@ define([
 		status: '',
 		data: {},
 		dayTitle: '',
-		// container: $('#scroller'),
 
 		render: function()
 		{
@@ -54,7 +52,6 @@ define([
 				$('#content').empty().append(self.$el);
 				$('#scroller').html(_.template(calendarTemplate));
 
-				// self.setElement($('#scroller').html(_.template(calendarTemplate)));
 				self.renderDatePicker();
 				self.listDayEvents(data);
 				self.loaded();
@@ -128,7 +125,6 @@ define([
 			var callback = function (data)
 			{
 				self.refreshDatePicker();
-				// self.listDayEvents();
 			}
 
 			var pad = "00";
@@ -167,7 +163,6 @@ define([
 		refreshDatePicker: function ()
 		{
 			$('#agenda').datepicker("refresh");
-			// this.dayTitle = $.datepicker.formatDate('DD, dd/mm/yy', new Date());
 		},
 
 		renderDatePicker: function () 

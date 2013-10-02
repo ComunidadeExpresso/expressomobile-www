@@ -253,7 +253,7 @@ define([
           this.context.collection = contextMenuCollection.getCalendarAddEventMenu(params);
       }
       if (menuID == 'calendarAddEventParticipant') {
-          this.context.collection = contextMenuCollection.getCalendarAddEventParticipantMenu();
+          this.context.collection = contextMenuCollection.getCalendarAddEventParticipantMenu(params);
       }
       if (menuID == 'calendarDetailsEvent') {
           this.context.collection = contextMenuCollection.getCalendarDetailsEventMenu(params.eventID, params.year, params.month, params.day);

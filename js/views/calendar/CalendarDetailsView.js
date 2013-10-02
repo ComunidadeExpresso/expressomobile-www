@@ -12,7 +12,6 @@ define([
 {
 	var CalendarDetailsView = Backbone.View.extend(
 	{
-		// el: $('#content'),
 		eventID: 0,
 		status: '',
 		year: '',
@@ -40,7 +39,6 @@ define([
 
 			if (!Shared.isSmartPhoneResolution())
 			{
-				// this.$el = $('#contentDetail');
 				this.$el.html(_.template(detailContentTemplate));
 				$('#contentDetail').empty().append(this.$el);
 
@@ -50,7 +48,6 @@ define([
 			}
 			else
 			{
-				// this.$el = $('#content');
 				this.$el.html(_.template(primaryContentTemplate));
 				$('#content').empty().append(this.$el);
 
@@ -73,7 +70,7 @@ define([
 
 				contentTitle.text(data.event.get('eventName'));
 				container.empty().append(_.template(calendarDetailsTemplate, data))
-				// self.setElement(container.empty().append(_.template(calendarDetailsTemplate, data)));
+
 				self.loaded(data.event.get('eventID'));
 
 				if (self.status == 'OK')
@@ -115,7 +112,7 @@ define([
 
 		loaded: function(eventID)
 		{
-			$('#contentDetail .searchArea').remove();
+			$('.searchArea').remove();
 
 			if (!Shared.isSmartPhoneResolution())
 			{

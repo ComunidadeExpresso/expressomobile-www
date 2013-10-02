@@ -14,7 +14,6 @@ define([
 {
 	var CalendarEditEventView = Backbone.View.extend(
 	{
-		// el: $('#content'),
 		eventID: 0,
 		model: EventModel,
 		listParticipants: [],
@@ -41,23 +40,12 @@ define([
 
 		events: 
 		{
-			// "click #contextMenu ul li a": "addParticipants",
 			"click #addParticipants": "addParticipants",
-			"click .css-checkbox": "removeParticipant",
-			// "click #btn-primary-action": "saveEvent"
-		},
-
-		onClick: function (e)
-		{
-			e.preventDefault();
-
-			console.log('onClick');
+			"click .css-checkbox": "removeParticipant"
 		},
 
 		render: function (options)
 		{
-			console.log('CalendarEditEventView');
-
 			var self = this;
 			var contentTitle;
 			var container;
@@ -68,7 +56,7 @@ define([
 					this.model = options.model;
 
 				if (options.listParticipants != undefined)
-					this.listParticipants = options.listParticipants;					
+					this.listParticipants = options.listParticipants;
 			}
 			else
 			{
@@ -78,7 +66,6 @@ define([
 
 			if (!Shared.isSmartPhoneResolution())
 			{
-				// this.$el = $('#contentDetail');
 				this.$el.html(_.template(detailContentTemplate));
 				$('#contentDetail').empty().append(this.$el);
 
@@ -87,7 +74,6 @@ define([
 			}
 			else
 			{
-				// this.$el = $('#content');
 				this.$el.html(_.template(primaryContentTemplate));
 				$('#content').empty().append(this.$el);
 
@@ -139,7 +125,7 @@ define([
 						var newData = {eventCategories: listCategorias, event: self.model, listParticipants: self.listParticipants, types: self.types, priorities: self.priorities};
 
 						container.html(_.template(calendarEditEventTemplate, newData));
-						// self.setElement($('#mainAppPageContent'));
+						self.setElement(self.$el);
 						self.loaded();
 					}
 
@@ -150,7 +136,7 @@ define([
 					var newData = {eventCategories: listCategorias, event: self.model, listParticipants: self.listParticipants, types: self.types, priorities: self.priorities};
 
 					container.html(_.template(calendarEditEventTemplate, newData))
-					// self.setElement($('#mainAppPageContent'));
+					self.setElement(self.$el);
 					self.loaded();
 				}
 
@@ -208,7 +194,8 @@ define([
 			Shared.scrollerRefresh();
 
 			var params = {};
-				params.sendCallBack = this.saveEvent;
+				params.saveCallBack = this.saveEvent;
+				params.addParticipantsCallBack = this.addParticipants;
 	      		params.parentCallBack = this;
 
 			Shared.menuView.renderContextMenu('calendarAddEvent', params);
@@ -256,11 +243,13 @@ define([
 				});
 		},
 
-		addParticipants: function (e)
+		addParticipants: function (obj)
 		{
-			e.preventDefault();
-
-			this.cleanEvents();
+			if (obj.target)
+			{
+				obj.preventDefault();
+				obj = this;
+			}
 
 			var attrs = {
 				eventDateStart: $('#eventDateStart').val(),
@@ -278,17 +267,20 @@ define([
 				eventExParticipants: $('#eventExParticipants').val(),
 			};
 
-			this.model.set(attrs);
+			obj.model.set(attrs);
 
-			var calendarEditEventAddParticipantsView = new CalendarEditEventAddParticipantsView({ listParticipants: this.listParticipants, model: this.model, view: new CalendarEditEventView()});
+			var calendarEditEventAddParticipantsView = new CalendarEditEventAddParticipantsView({ listParticipants: obj.listParticipants, model: obj.model, view: new CalendarEditEventView()});
 				calendarEditEventAddParticipantsView.render();
 		},
 
-		saveEvent: function ()
+		saveEvent: function (obj)
 		{
-			// e.preventDefault();
+			if (obj.target)
+			{
+				obj.preventDefault();
+				obj = this;
+			}
 
-			var self = this;
 			var dateStart = ($('#eventDateStart').val()).split('-');
 			var dateEnd = ($('#eventDateEnd').val()).split('-');
 			var participants = $('.css-checkbox.eventParticipants').map(function() { return $(this).val(); }).toArray();
@@ -300,19 +292,18 @@ define([
 				eventID: $('#eventID').val(),
 				eventType: $('#eventType').val(),
 				eventCategoryID: $('#eventCategoryID').val(),
-		        eventName: $('#eventName').val(),
-		        eventDescription: $('#eventDescription').val(),
-		        eventLocation: $('#eventLocation').val(),
+				eventName: $('#eventName').val(),
+				eventDescription: $('#eventDescription').val(),
+				eventLocation: $('#eventLocation').val(),
 				eventPriority: $('#eventPriority').val(),
 				eventOwnerIsParticipant: '1',
-		        eventParticipants: participants.join(),
-		        eventExParticipants: $('#eventExParticipants').val(),
+				eventParticipants: participants.join(),
+				eventExParticipants: $('#eventExParticipants').val(),
 			};
 
 			var callbackSucess = function (data)
 			{
-				self.cleanEvents();
-				self.listParticipants = [];
+				obj.listParticipants = [];
 
 				if (data.event != undefined)
 					Shared.router.navigate('/Calendar/Events/' + data.event.get('eventID') + '/OK', {trigger: true});
@@ -343,7 +334,7 @@ define([
 				});
 			}
 
-			this.save(attrs, callbackSucess, callbackFail);
+			obj.save(attrs, callbackSucess, callbackFail);
 		},
 
 		save: function (params, callbackSucess, callbackFail)
@@ -371,7 +362,13 @@ define([
 			var id = $(e.target).val();
 			var name = $(e.target).attr('data-name');
 			var index = _.indexOf(listParticipantsID, id);
-			var indexNames = _.indexOf(listParticipants, { participantID: id, participantName: name });
+			var indexNames = index;
+
+			_.each(listParticipants, function (participant, i) 
+			{
+				if (participant.participantID == id && participant.participantName == name)
+					indexNames = i; 
+			});
 
 			if (index != -1)
 			{
@@ -381,14 +378,6 @@ define([
 			}
 
 			this.model.set({eventParticipants: listParticipantsID});
-		},
-
-		cleanEvents: function ()
-		{
-			// $('#mainAppPageContent').off('click', '#addParticipants');
-			// $('#mainAppPageContent').off('click', '.css-checkbox');
-			// $('#mainAppPageContent').off('click', '#btn-primary-action');
-			// $('#mainAppPageContent').off('click', '#contextMenu ul li a');
 		}
 	});
 

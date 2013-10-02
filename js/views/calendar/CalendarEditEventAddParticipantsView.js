@@ -15,15 +15,12 @@ define([
 {
 	var CalendarEditEventAddParticipantsView = Backbone.View.extend(
 	{
-		// el: $('#content'),
 		model: EventModel,
 		listParticipants: [],
 		events: 
 		{
 			"keypress .searchField": "searchGeneralContacts",
-			// "click #backToEditEvent": "backToEditEvent",
 			"click .css-checkbox": "addParticipant",
-			// "click #btn-primary-action": "backToEditEvent"
 		},
 
 		render: function ()
@@ -40,7 +37,6 @@ define([
 
 			if (!Shared.isSmartPhoneResolution())
 			{
-				// this.$el = $('#contentDetail');
 				this.$el.html(_.template(detailContentTemplate));
 				$('#contentDetail').empty().append(this.$el);
 
@@ -50,7 +46,6 @@ define([
 			}
 			else
 			{
-				// this.$el = $('#content');
 				this.$el.html(_.template(primaryContentTemplate));
 				$('#content').empty().append(this.$el);
 
@@ -99,7 +94,7 @@ define([
 			        container.empty();
 				}
 
-				// self.setElement($('#mainAppPageContent'));
+				self.setElement(self.$el);
 				self.loaded();
 			};
 
@@ -175,7 +170,12 @@ define([
 
 			Shared.scrollerRefresh();
 			Shared.refreshDotDotDot();
-			Shared.menuView.renderContextMenu('calendarAddEventParticipant',{});
+
+			var params = {};
+				params.saveCallBack = this.backToEditEvent;
+	      		params.parentCallBack = this;
+
+			Shared.menuView.renderContextMenu('calendarAddEventParticipant', params);
 		},
 
 		initialize: function (options) 
@@ -185,16 +185,15 @@ define([
 			this.view = options.view;
 		},
 
-		backToEditEvent: function (e)
+		backToEditEvent: function (obj)
 		{
-			e.preventDefault();
+			if (obj.target)
+			{
+				obj.preventDefault();
+				obj = this;
+			}
 
-			// $('#mainAppPageContent').off('click', '#backToEditEvent');
-			$('#mainAppPageContent').off('click', '.css-checkbox');
-			// $('#mainAppPageContent').off('click', '#btn-primary-action');
-			$('#mainAppPageContent').off('keypress', '.searchField');
-
-			this.view.render({model: this.model, listParticipants: this.listParticipants});
+			obj.view.render({model: obj.model, listParticipants: obj.listParticipants});
 		},
 
 		addParticipant: function (e)
@@ -204,7 +203,13 @@ define([
 			var id = $(e.target).val();
 			var name = $(e.target).attr('data-name');
 			var index = _.isEmpty(listParticipantsID) ? -1 : _.indexOf(listParticipantsID, id);
-			var indexNames = index == -1 ? -1 : _.indexOf(listParticipants, { participantID: id, participantName: name });
+			var indexNames = index;
+
+			_.each(listParticipants, function (participant, i) 
+			{
+				if (participant.participantID == id && participant.participantName == name)
+					indexNames = i; 
+			});
 
 			if ($(e.target).is(':checked'))
 			{

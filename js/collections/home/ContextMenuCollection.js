@@ -168,9 +168,9 @@ define([
       {
         var menuItems = [
             // { route: "/Calendar/Events/Save", title:"Salvar", iconClass : '', primary: true},
-            { route: "", callBack : params.sendCallBack, parentCallBack: params.parentCallBack, title:"Salvar", iconClass : '', primary: true},
+            { route: "#", id: "0", callBack : params.saveCallBack, parentCallBack: params.parentCallBack, title:"Salvar", iconClass : '', primary: true},
             // { route: "/Calendar/Events/AddParticipants", title:"Adicionar participantes", iconClass : '', primary: false}
-            { route: "", title:"Adicionar participantes", iconClass : 'context-catalogo-geral', primary: false, action: 'addParticipants'}
+            { route: "#", id: "1", callBack : params.addParticipantsCallBack, parentCallBack: params.parentCallBack, title:"Adicionar participantes", iconClass : 'context-catalogo-geral', primary: false, action: 'addParticipants'}
             ];
 
         this.createModelsFromArray(menuItems);
@@ -195,19 +195,19 @@ define([
           day = today.getDate();
 
         var menuItems = [
-            { route: "/Calendar/Events/Edit/" + eventID, title:"Editar evento", iconClass : '', primary: true},
-            { route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, title:"Adicionar evento", iconClass : '', primary: false, action: 'add'},
-            { route: "/Calendar/Events/Delete/" + eventID + "/" + year + "/" + month + "/" + day, title:"Excluir evento", iconClass : '', primary: false, action: 'delete'}
+            { route: "/Calendar/Events/Edit/" + eventID, id: "0", title:"Editar evento", iconClass : '', primary: true},
+            { route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, id: "1", title:"Adicionar evento", iconClass : '', primary: false, action: 'add'},
+            { route: "/Calendar/Events/Delete/" + eventID + "/" + year + "/" + month + "/" + day, id: "2", title:"Excluir evento", iconClass : '', primary: false, action: 'delete'}
             ];
 
         this.createModelsFromArray(menuItems);
         return this;
       },
 
-      getCalendarAddEventParticipantMenu: function ()
+      getCalendarAddEventParticipantMenu: function (params)
       {
         var menuItems = [
-            { route: "", title:"Salvar", iconClass : '', primary: true}
+            { route: "#", id: "0", callBack : params.saveCallBack, parentCallBack: params.parentCallBack, title:"Salvar", iconClass : '', primary: true}
             ];
 
         this.createModelsFromArray(menuItems);

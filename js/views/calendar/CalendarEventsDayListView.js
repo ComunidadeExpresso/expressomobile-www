@@ -10,7 +10,6 @@ define([
 {
 	var CalendarEventsDayListView = Backbone.View.extend(
 	{
-		// el: $('#eventsList'),
 		year: '',
 		month: '',
 		day: '',
