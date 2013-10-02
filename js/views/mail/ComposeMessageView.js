@@ -89,6 +89,8 @@ define([
       params.sendCallBack = this.sendMessage;
       params.addCcBccCallBack = this.addCcBcc;
       params.removeCcBccCallBack = this.removeCcBcc;
+      params.takePictureCallBack = this.takePicture;
+      params.selectPictureCallBack = this.selectPicture;
       params.parentCallBack = this;
       return params;
     },
@@ -170,6 +172,71 @@ define([
 
     },
 
+    onFailUploadPicture: function(message) {
+       Shared.showMessage({
+          type: "warning",
+          icon: 'icon-email',
+          title: "Não foi possível adicionar a foto aos anexos!",
+          description: "",
+          elementID: "#pageMessage",
+        });
+    },
+
+    uploadPicture: function(imageData) {
+
+      var that = Shared.currentView;
+
+      that.showAttachments();
+
+      var fileID = Shared.currentDraftMessage.getQtdFiles();
+
+      that.prependAttachmentImage(fileID,'Foto ' + fileID + ".png",'','base64',imageData);
+
+      Shared.currentDraftMessage.addFile(fileID,imageData,'Foto ' + fileID + ".png","base64");
+
+      that.renderContextMenu();
+    },
+
+    selectPicture: function(thisView) {
+
+        if ((Shared.isPhonegap()) && (navigator.camera != undefined)) {
+
+          Shared.currentView = thisView;
+
+          navigator.camera.getPicture(thisView.uploadPicture, thisView.onFailUploadPicture, { quality: 60, 
+            destinationType: Camera.DestinationType.DATA_URL, sourceType: Camera.PictureSourceType.PHOTOLIBRARY }); 
+        } else {
+          Shared.showMessage({
+            type: "error",
+            icon: 'icon-email',
+            title: "Seu dispositivo não possui câmera!",
+            description: "",
+            elementID: "#pageMessage",
+          });
+        }
+    },
+
+    takePicture: function(thisView) {
+
+
+      if ((Shared.isPhonegap()) && (navigator.camera != undefined)) {
+
+          Shared.currentView = thisView;
+
+          navigator.camera.getPicture(thisView.uploadPicture, thisView.onFailUploadPicture, { quality: 60, 
+            destinationType: Camera.DestinationType.DATA_URL }); 
+        } else {
+          Shared.showMessage({
+            type: "error",
+            icon: 'icon-email',
+            title: "Seu dispositivo não possui câmera!",
+            description: "",
+            elementID: "#pageMessage",
+          });
+        }
+
+    },
+
     
 
     render: function(){
@@ -207,50 +274,17 @@ define([
 
       // }
 
-      var uploadPicture = function(imageData) {
+      
 
-        that.showAttachments();
+      // if (this.secondViewName == "AttachPicture") {
 
-        var fileID = Shared.currentDraftMessage.getQtdFiles();
-
-        that.prependAttachmentImage(fileID,'Foto ' + fileID + ".png",'','base64',imageData);
-
-        Shared.currentDraftMessage.addFile(fileID,imageData,'Foto ' + fileID + ".png","base64");
-
-        that.renderContextMenu();
-
-      };
-      var onFailUploadPicture = function onFail(message) {
-          Shared.showMessage({
-            type: "error",
-            icon: 'icon-email',
-            title: "Não foi possível adicionar a foto aos anexos!",
-            description: "",
-            elementID: "#pageMessage",
-          });
-      };
-
-      if (this.secondViewName == "AttachPicture") {
-
-        if ((Shared.isPhonegap()) && (navigator.camera != undefined)) {
-
-          navigator.camera.getPicture(uploadPicture, onFailUploadPicture, { quality: 60, 
-            destinationType: Camera.DestinationType.DATA_URL }); 
-        } else {
-          alert("Seu dispositivo não possui câmera!");
-        }
-      }
+        
+      // }
 
       if (this.secondViewName == "AttachGalleryPicture") {
 
         
-        if ((Shared.isPhonegap()) && (navigator.camera != undefined)) {
-
-          navigator.camera.getPicture(uploadPicture, onFailUploadPicture, { quality: 60, 
-            destinationType: Camera.DestinationType.DATA_URL, sourceType: Camera.PictureSourceType.PHOTOLIBRARY }); 
-        } else {
-          alert("Seu dispositivo não possui câmera!");
-        }
+        
       }
 
       if (this.secondViewName == "DelMessage") {

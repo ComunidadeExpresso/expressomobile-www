@@ -60,10 +60,12 @@ define([
             { route: "#", id: "1", callBack : params.addCcBccCallBack, parentCallBack: params.parentCallBack ,title:"Adicionar CC/BCC", iconClass : '', primary: false}
             ];
 
-        var takePicture = {route: "/Mail/Message/AttachPicture", title: "Tirar Foto", iconClass: '', primary: false};
+        var takePicture = {route: "#", id:"3", callBack : params.takePictureCallBack, parentCallBack: params.parentCallBack , title: "Tirar Foto", iconClass: '', primary: false};
+        var selectPicture = {route: "#", id:"4", callBack : params.selectPictureCallBack, parentCallBack: params.parentCallBack , title: "Escolher Foto", iconClass: '', primary: false};
 
         if (Shared.isPhonegap()) {
           menuItems.push(takePicture);
+          menuItems.push(selectPicture);
         }
 
         this.createModelsFromArray(menuItems);
@@ -76,10 +78,12 @@ define([
             { route: "#", id: "2", callBack : params.removeCcBccCallBack, parentCallBack: params.parentCallBack , title:"Remover CC/BCC", iconClass : '', primary: false}
             ];
 
-        var takePicture = {route: "/Mail/Message/AttachPicture", title: "Tirar Foto", iconClass: '', primary: false};
+        var takePicture = {route: "#", id:"3", callBack : params.takePictureCallBack, parentCallBack: params.parentCallBack , title: "Tirar Foto", iconClass: '', primary: false};
+        var selectPicture = {route: "#", id:"4", callBack : params.selectPictureCallBack, parentCallBack: params.parentCallBack , title: "Escolher Foto", iconClass: '', primary: false};
 
         if (Shared.api.phoneGap()) {
           menuItems.push(takePicture);
+          menuItems.push(selectPicture);
         }
 
         this.createModelsFromArray(menuItems);
