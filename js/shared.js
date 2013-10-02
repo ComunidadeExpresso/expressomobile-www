@@ -11,6 +11,7 @@ define([
   var Shared = {};
 
   Shared.appVersion = "1.0";
+  Shared.context = "/api/";
 
   Shared.settings = {};
 

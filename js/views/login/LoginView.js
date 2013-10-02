@@ -56,7 +56,7 @@ define([
       if (isPhoneGap) {
         Shared.api.context(serverURL).crossdomain(serverURL);
       } else {
-        Shared.api.context("/api/").crossdomain(serverURL);
+        Shared.api.context(Shared.context).crossdomain(serverURL);
       }
 
       var errors = false;

@@ -66,7 +66,7 @@ define([
           if (expressoValue.phoneGap) {
             Shared.api.context(expressoValue.serverAPI).crossdomain(expressoValue.serverAPI);
           } else {
-            Shared.api.context("/api/").crossdomain(expressoValue.serverAPI);
+            Shared.api.context(Shared.context).crossdomain(expressoValue.serverAPI);
           }
 
         }
