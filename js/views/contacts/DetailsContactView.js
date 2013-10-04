@@ -14,7 +14,6 @@ define([
 {
 	var DetailsContactView = Backbone.View.extend(
 	{
-		el: $("#content"),
 		secondViewName: '',
 		contactID: null,
 
@@ -27,8 +26,8 @@ define([
 
 			if (!Shared.isSmartPhoneResolution())
 			{
-				this.$el = $('#contentDetail');
 				this.$el.html(_.template(detailContentTemplate));
+				$('#contentDetail').empty().append(this.$el);
 
 				contentTitle = $('#contentDetailTitle');
 				container = $('#scrollerDetail');
@@ -36,8 +35,8 @@ define([
 			}
 			else
 			{
-				this.$el = $('#content');
 				this.$el.html(_.template(primaryContentTemplate));
+				$('#content').empty().append(this.$el);
 
 				contentTitle = $('#contentTitle');
 				container = $('#scroller');
@@ -54,7 +53,6 @@ define([
 				var contact = {contact: _.first(data.contacts), _: _};
 
 				container.empty().append(_.template(DetailsContactTemplate, contact));
-				self.setElement($('#mainAppPageContent'));
 				self.loaded((_.first(data.contacts).get('contactMails'))[0]);			
 			}
 
@@ -90,11 +88,6 @@ define([
 			Shared.scrollerRefresh();
 			Shared.refreshDotDotDot();
 			Shared.menuView.renderContextMenu('detailsContact', { email: pEmail });
-
-			// if (this.secondViewName == 'General')
-			// 	Shared.menuView.renderContextMenu('generalContacts',{});
-			// else
-			// 	Shared.menuView.renderContextMenu('personalContacts',{});
 		},
 
 		getContactDetails: function (pContactID, pContactType, callbackSuccess, callbackFail)

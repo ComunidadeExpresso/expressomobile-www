@@ -61,6 +61,8 @@ define([
 
 			var callback = function (data)
 			{
+				// Valida se o proprietário do evento é o usuário logado para dar permissão de edição e exclusão.
+				var isOwner = data.event.get('eventOwner').get('contactUIDNumber') == Shared.profile.contactUIDNumber;
 				var date = data.event.get('eventDateStart').split('/');
 				var pad = "00";
 
@@ -68,10 +70,12 @@ define([
 				this.month = pad.substring(0, pad.length - ("" + date[1]).length) + ("" + date[1]);
 				this.day = pad.substring(0, pad.length - ("" + date[0]).length) + ("" + date[0]);
 
+				data.event.set({ eventPriority: self.getPriority(data.event.get('eventPriority'))});
+
 				contentTitle.text(data.event.get('eventName'));
 				container.empty().append(_.template(calendarDetailsTemplate, data))
 
-				self.loaded(data.event.get('eventID'));
+				self.loaded(data.event.get('eventID'), isOwner);
 
 				if (self.status == 'OK')
 				{
@@ -110,7 +114,7 @@ define([
 				});
 		},
 
-		loaded: function(eventID)
+		loaded: function(eventID, isOwner)
 		{
 			$('.searchArea').remove();
 
@@ -136,7 +140,7 @@ define([
 			}
 
 			Shared.scrollerRefresh();
-			Shared.menuView.renderContextMenu('calendarDetailsEvent',{ eventID: eventID, year: this.year, month: this.month, day: this.day });
+			Shared.menuView.renderContextMenu('calendarDetailsEvent',{ isOwner: isOwner, eventID: eventID, year: this.year, month: this.month, day: this.day });
 		},
 
 		initialize: function() 
@@ -155,6 +159,16 @@ define([
 
 			if (this.day == '' || this.day == undefined)
 				this.day = today.getDate();
+		},
+
+		getPriority: function (priority)
+		{
+			var listPriorities = ['', 'Baixo', 'Normal', 'Alto'];
+			
+			if (priority == '')
+				return "Nenhum";
+			else
+				return listPriorities[priority];
 		}
 		
 	});

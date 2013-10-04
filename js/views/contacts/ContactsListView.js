@@ -30,15 +30,25 @@ define([
 
 		render: function()
 		{
-			var that = this;
+			this.$el.html(_.template(primaryContentTemplate));
+			$('#content').empty().append(this.$el);
 
 			if (!Shared.isSmartPhoneResolution())
+			{
 				$('#contentDetail').html(_.template(detailContentTemplate));
+				$('#contentDetail .searchArea').remove();
+				$('#contentDetailTitle').text('Exibir contato');
 
-			this.$el.html(_.template(primaryContentTemplate))
-
-			this.content = $('#content');
-			this.content.empty().append(this.$el);
+				Shared.showMessage({
+					type: "chat-message",
+					icon: 'icon-contacts',
+					title: "Selecione um contato para exibir as informações",
+					route: "",
+					description: "",
+					timeout: 0,
+					elementID: "#messageDetail",
+				});
+			}
 
 			var loadingView = new LoadingView({el: $('#scroller')});	
 				loadingView.render();
@@ -49,12 +59,7 @@ define([
 				this.listPersonalContacts('');
 		},
 
-		initialize: function() 
-		{
-			$('#mainAppPageContent').off('keypress', '.searchField');
-
-			this.secondViewName = "Personal";
-		},
+		initialize: function() { },
 
 		loaded: function () 
 		{
@@ -73,9 +78,9 @@ define([
 			Shared.scrollerRefresh();
 
 			if (this.secondViewName == 'General')
-				Shared.menuView.renderContextMenu('generalContacts',{});
+				Shared.menuView.renderContextMenu('generalContacts', {});
 			else
-				Shared.menuView.renderContextMenu('personalContacts',{});
+				Shared.menuView.renderContextMenu('personalContacts', {});
 		},
 
 		searchPersonalContacts: function (e)
@@ -122,7 +127,6 @@ define([
 			$('#contentTitle').text('Contatos Pessoais');
 			$('.searchArea').removeClass('generalContacts');
 			$('.searchArea').addClass('personalContacts');
-			this.$el.off('keypress', '.generalContacts .searchField');
 			
 			var donePersonalContacts = function (data)
 			{
@@ -170,7 +174,6 @@ define([
 			$('#contentTitle').text('Catálogo Geral');
 			$('.searchArea').removeClass('personalContacts');
 			$('.searchArea').addClass('generalContacts');
-			this.$el.off('keyup', '.personalContacts .searchField');
 
 			var doneGeneralContacts = function (data)
 			{
@@ -213,7 +216,6 @@ define([
 				var pictureImageContactView = new PictureImageContactView({el: $('.picture_image')});
 				pictureImageContactView.render(data);
 
-				// self.setElement($('#mainAppPageContent'));
 				self.setElement(self.$el);
 				self.loaded();
 			};

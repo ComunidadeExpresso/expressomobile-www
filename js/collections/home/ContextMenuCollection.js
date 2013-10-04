@@ -130,9 +130,9 @@ define([
 
       getDetailsContactMenu: function(email) {
         var menuItems = [
-            { route: "/Mail/Message/New/" + email, title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
-            { route: "/Contacts/Personal", iconClass: 'context-catalogo-pessoal', title:"Contatos Pessoais"},
-            { route: "/Contacts/General", iconClass: 'context-catalogo-geral', title: "Catálogo Geral"}
+            { route: "/Mail/Message/New/" + email, id: '0', title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
+            { route: "/Contacts/Personal", iconClass: 'context-catalogo-pessoal', id: '1', title:"Contatos Pessoais"},
+            { route: "/Contacts/General", iconClass: 'context-catalogo-geral', id: '2', title: "Catálogo Geral"}
           ];
 
         this.createModelsFromArray(menuItems);
@@ -177,7 +177,7 @@ define([
         return this;
       },
 
-      getCalendarDetailsEventMenu: function (eventID, year, month, day)
+      getCalendarDetailsEventMenu: function (isOwner, eventID, year, month, day)
       {
         var today = new Date();
         var pad = "00";
@@ -194,13 +194,16 @@ define([
         if (day == '' || day == undefined)
           day = today.getDate();
 
-        var menuItems = [
-            { route: "/Calendar/Events/Edit/" + eventID, id: "0", title:"Editar evento", iconClass : '', primary: true},
-            { route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, id: "1", title:"Adicionar evento", iconClass : '', primary: false, action: 'add'},
-            { route: "/Calendar/Events/Delete/" + eventID + "/" + year + "/" + month + "/" + day, id: "2", title:"Excluir evento", iconClass : '', primary: false, action: 'delete'}
-            ];
+        var menuItems = [{ route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, id: "0", title:"Adicionar evento", iconClass : '', primary: false, action: 'add'}];
+
+        if (isOwner)
+        {
+          menuItems.push({ route: "/Calendar/Events/Edit/" + eventID, id: "1", title:"Editar evento", iconClass : '', primary: true});
+          menuItems.push({ route: "/Calendar/Events/Delete/" + eventID + "/" + year + "/" + month + "/" + day, id: "2", title:"Excluir evento", iconClass : '', primary: false, action: 'delete'});
+        }
 
         this.createModelsFromArray(menuItems);
+
         return this;
       },
 

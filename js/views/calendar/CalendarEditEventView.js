@@ -298,7 +298,7 @@ define([
 				eventPriority: $('#eventPriority').val(),
 				eventOwnerIsParticipant: '1',
 				eventParticipants: participants.join(),
-				eventExParticipants: $('#eventExParticipants').val(),
+				eventExternalParticipants: $('#eventExParticipants').val(),
 			};
 
 			var callbackSucess = function (data)

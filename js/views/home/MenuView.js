@@ -256,7 +256,7 @@ define([
           this.context.collection = contextMenuCollection.getCalendarAddEventParticipantMenu(params);
       }
       if (menuID == 'calendarDetailsEvent') {
-          this.context.collection = contextMenuCollection.getCalendarDetailsEventMenu(params.eventID, params.year, params.month, params.day);
+          this.context.collection = contextMenuCollection.getCalendarDetailsEventMenu(params.isOwner, params.eventID, params.year, params.month, params.day);
       }
       this.context.render();
     },

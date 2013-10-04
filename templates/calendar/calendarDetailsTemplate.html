@@ -1,7 +1,7 @@
 <table id="eventDetails"> 
 	<tr>
 		<td class="item">
-			Início
+			In&iacute;cio
 		</td>
 		<td class="description">
 			<%= event.get('eventDateStart') %> - <%= event.get('eventTimeStart') %>
@@ -9,7 +9,7 @@
 	</tr> 
 	<tr>
 		<td class="item">
-			Término
+			T&eacute;rmino
 		</td>
 		<td class="description">
 			<%= event.get('eventDateEnd') %> - <%= event.get('eventTimeEnd') %>
@@ -28,7 +28,7 @@
 			Prioridade
 		</td>
 		<td class="description">
-			<%= event.getPriority() %>
+			<%= event.get('eventPriority') %>
 		</td>
 	</tr>
 	<tr>
@@ -73,7 +73,7 @@
 	</tr>  
 	<tr>
 		<td class="item">
-			Descrição
+			Descri&ccedil;&atilde;o
 		</td>
 		<td class="description">
 			<%= event.get('eventDescription') %>

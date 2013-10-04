@@ -71,19 +71,11 @@ define ([
 			.params({eventID: pEventID})
 	        .done(function (result)
 	        {
-	        	// var thisModel = new EventModel(result.events[0]);
-	        		that.set(result.events[0]);
-	        		that.getEventOwner();
-	        		// that.getEventParticipants();
-
-		        // if (that.done)
-	        	// 	that.done(that);
+				that.set(result.events[0]);
+				that.getEventOwner();
 	        })
 	        .fail( function (error) 
 	        {
-	        	console.log('getEvent');
-				console.log(error);
-
 				if (that.fail)
 	        		that.fail(error);
 	        })
