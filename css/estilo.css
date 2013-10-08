@@ -68,7 +68,7 @@ body #menu #personalInfo .personalData span { display: block; }
 body #menu #personalInfo .personalData span.name { font-size: 15px; }
 body #menu #personalInfo .personalData span.email { font-size: 13px;}
 body #menu #personalInfo .personalData #quota {  }
-body #menu #personalInfo .personalData #quota .bar { font-size: 11px; display: inline;  height: 14px; width: 200px; border: 1px #444444 solid; display: inline-block; background-color: #FFF; }
+body #menu #personalInfo .personalData #quota .bar { font-size: 11px; display: inline;  height: 14px; width: 170px; border: 1px #444444 solid; display: inline-block; background-color: #FFF; }
 body #menu #personalInfo .personalData #quota .bar div.usedQuota { background-color: #ABC6E1; height: 14px; }
 body #menu #personalInfo .personalData #quota .bar span { background: transparent; width: 170px; text-align: center; color: #000; margin-top: -14px; }
 /*body #menu dl { height: 100%; }*/
@@ -171,6 +171,7 @@ body #menu dl dd ul#myFolders li a span .badge.badge-info { float: right; }
   background: url("../imgs/icon-adicionar-contato-pessoal-30x30.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
+
 
 
 /** Menu de contexto **/
@@ -683,13 +684,73 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
 .btn-compose {
     background: url("../imgs/icon-nova-mensagem-30x30.png") no-repeat scroll center center;
     background-color: #006DCC;
-    background-repeat: repeat-x;
+    background-repeat: no-repeat;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     color: #FFFFFF;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
     min-width: 40px;
     height: 40px;
 }
+
+.btn-add-event {
+    background: url("../imgs/icon-adicionar-evento-30x30.png") no-repeat scroll center center;
+    background-color: #006DCC;
+    background-repeat: no-repeat;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    min-width: 40px;
+    height: 40px;
+}
+
+.btn-save-event {
+    background: url("../imgs/icon-salvar-agenda-30x30.png") no-repeat scroll center center;
+    background-color: #006DCC;
+    background-repeat: no-repeat;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    min-width: 40px;
+    height: 40px;
+}
+.btn-add-contact-agenda {
+  background: url("../imgs/icon-adicionar-participante-agenda-30x30.png") no-repeat scroll center center;
+  background-color: #006DCC;
+  background-repeat: no-repeat;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  color: #FFFFFF;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  min-width: 40px;
+  height: 40px;
+}
+
+.icon-add-contact-agenda {
+  background: url("../imgs/icon-adicionar-participante-agenda-30x30.png") no-repeat scroll center center;
+
+}
+
+.icon-take-picture {
+  background: url("../imgs/icon-tirar-foto-30x30.png") no-repeat scroll center center;
+
+}
+
+.icon-select-picture {
+  background: url("../imgs/icon-escolher-foto-30x30.png") no-repeat scroll center center;
+
+}
+
+.icon-add-ccbcc {
+  background: url("../imgs/icon-adicionar-ccbcc-30x30.png") no-repeat scroll center center;
+
+}
+
+
+.icon-remove-ccbcc {
+  background: url("../imgs/icon-remover-ccbcc-30x30.png") no-repeat scroll center center;
+
+}
+
+
 
 .context-icon {
   float: left;
@@ -909,7 +970,25 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
   float: right;
   margin-right: 25px;
   margin-top: 5px;
-  background: url("../imgs/icon-add.png") no-repeat scroll center center;
+  
+  background-repeat: no-repeat;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  color: #FFFFFF;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  min-width: 40px;
+  height: 40px;
+
+  background-color: #006DCC;
+  background-repeat: repeat-x;
+  
+  color: #FFFFFF;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+
+  background: url("../imgs/icon-adicionar-ccbcc-30x30.png") no-repeat scroll center center;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  background-color: #006DCC;
+
 }
 
 .btn-right {

@@ -57,11 +57,11 @@ define([
       getSendMessageMenu: function(params) {
         var menuItems = [
             { route: "#", id: "0", callBack : params.sendCallBack, parentCallBack: params.parentCallBack , title:"Enviar", iconClass : '', primary: true},
-            { route: "#", id: "1", callBack : params.addCcBccCallBack, parentCallBack: params.parentCallBack ,title:"Adicionar CC/BCC", iconClass : '', primary: false}
+            { route: "#", id: "1", callBack : params.addCcBccCallBack, parentCallBack: params.parentCallBack ,title:"Adicionar CC/BCC", iconClass : 'icon-add-ccbcc', primary: false}
             ];
 
-        var takePicture = {route: "#", id:"3", callBack : params.takePictureCallBack, parentCallBack: params.parentCallBack , title: "Tirar Foto", iconClass: '', primary: false};
-        var selectPicture = {route: "#", id:"4", callBack : params.selectPictureCallBack, parentCallBack: params.parentCallBack , title: "Escolher Foto", iconClass: '', primary: false};
+        var takePicture = {route: "#", id:"3", callBack : params.takePictureCallBack, parentCallBack: params.parentCallBack , title: "Tirar Foto", iconClass: 'icon-take-picture', primary: false};
+        var selectPicture = {route: "#", id:"4", callBack : params.selectPictureCallBack, parentCallBack: params.parentCallBack , title: "Escolher Foto", iconClass: 'icon-select-picture', primary: false};
 
         if (Shared.isPhonegap()) {
           menuItems.push(takePicture);
@@ -75,11 +75,11 @@ define([
       getSendMessageMenuWithCC: function(params) {
         var menuItems = [
             { route: "#", id: "0", callBack : params.sendCallBack, parentCallBack: params.parentCallBack , title:"Enviar", iconClass : '', primary: true},
-            { route: "#", id: "2", callBack : params.removeCcBccCallBack, parentCallBack: params.parentCallBack , title:"Remover CC/BCC", iconClass : '', primary: false}
+            { route: "#", id: "2", callBack : params.removeCcBccCallBack, parentCallBack: params.parentCallBack , title:"Remover CC/BCC", iconClass : 'icon-remove-ccbcc', primary: false}
             ];
 
-        var takePicture = {route: "#", id:"3", callBack : params.takePictureCallBack, parentCallBack: params.parentCallBack , title: "Tirar Foto", iconClass: '', primary: false};
-        var selectPicture = {route: "#", id:"4", callBack : params.selectPictureCallBack, parentCallBack: params.parentCallBack , title: "Escolher Foto", iconClass: '', primary: false};
+        var takePicture = {route: "#", id:"3", callBack : params.takePictureCallBack, parentCallBack: params.parentCallBack , title: "Tirar Foto", iconClass: 'icon-take-picture', primary: false};
+        var selectPicture = {route: "#", id:"4", callBack : params.selectPictureCallBack, parentCallBack: params.parentCallBack , title: "Escolher Foto", iconClass: 'icon-select-picture', primary: false};
 
         if (Shared.api.phoneGap()) {
           menuItems.push(takePicture);
@@ -157,7 +157,7 @@ define([
           day = today.getDate();
 
         var menuItems = [
-            { route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, title:"Adicionar evento", primary: true }
+            { route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, title:"Adicionar evento", iconClass: 'btn-add-event', primary: true }
           ];
 
         this.createModelsFromArray(menuItems);
@@ -168,9 +168,9 @@ define([
       {
         var menuItems = [
             // { route: "/Calendar/Events/Save", title:"Salvar", iconClass : '', primary: true},
-            { route: "#", id: "0", callBack : params.saveCallBack, parentCallBack: params.parentCallBack, title:"Salvar", iconClass : '', primary: true},
+            { route: "#", id: "0", callBack : params.saveCallBack, parentCallBack: params.parentCallBack, title:"Salvar", iconClass : 'btn-save-event', primary: true},
             // { route: "/Calendar/Events/AddParticipants", title:"Adicionar participantes", iconClass : '', primary: false}
-            { route: "#", id: "1", callBack : params.addParticipantsCallBack, parentCallBack: params.parentCallBack, title:"Adicionar participantes", iconClass : 'context-catalogo-geral', primary: false, action: 'addParticipants'}
+            { route: "#", id: "1", callBack : params.addParticipantsCallBack, parentCallBack: params.parentCallBack, title:"Adicionar participantes", iconClass : 'icon-add-contact-agenda', primary: false, action: 'addParticipants'}
             ];
 
         this.createModelsFromArray(menuItems);
@@ -210,7 +210,7 @@ define([
       getCalendarAddEventParticipantMenu: function (params)
       {
         var menuItems = [
-            { route: "#", id: "0", callBack : params.saveCallBack, parentCallBack: params.parentCallBack, title:"Salvar", iconClass : '', primary: true}
+            { route: "#", id: "0", callBack : params.saveCallBack, parentCallBack: params.parentCallBack, title:"Salvar", iconClass : 'btn-add-contact-agenda', primary: true}
             ];
 
         this.createModelsFromArray(menuItems);
