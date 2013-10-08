@@ -19,19 +19,15 @@
 							<dd>
 								<ul>
 
-					<%
-					} 
-					
-					var uid = (c.get('contactMails')[0]).split("@")[0]; 
-					%>
+					<% } %>
 
 					<li>
 						<%
 						var checked = _.contains(listParticipants, c.get('contactUIDNumber')) ? "checked='checked'" : '';
 						%>
 
-						<input type="checkbox" class="check css-checkbox" <%= checked %> name="<%= uid %>" id="<%= uid %>" data-name="<%=c.get('contactFullName')%>" value="<%= c.get('contactUIDNumber') %>" />
-						<label class="css-label" for="<%= uid %>"><%=c.get('contactFullName')%></label>
+						<input type="checkbox" class="check css-checkbox" <%= checked %> name="<%= c.get('contactUIDNumber') %>" id="<%= c.get('contactUIDNumber') %>" data-name="<%=c.get('contactFullName')%>" value="<%= c.get('contactUIDNumber') %>" />
+						<label class="css-label" for="<%= c.get('contactUIDNumber') %>"><%=c.get('contactFullName')%></label>
 					</li>					
 
 				<% }); %>
