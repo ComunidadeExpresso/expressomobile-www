@@ -70,7 +70,7 @@ body #menu #personalInfo .personalData span.email { font-size: 13px;}
 body #menu #personalInfo .personalData #quota {  }
 body #menu #personalInfo .personalData #quota .bar { font-size: 11px; display: inline;  height: 14px; width: 200px; border: 1px #444444 solid; display: inline-block; background-color: #FFF; }
 body #menu #personalInfo .personalData #quota .bar div.usedQuota { background-color: #ABC6E1; height: 14px; }
-body #menu #personalInfo .personalData #quota .bar span { background: transparent; width: 200px; text-align: center; color: #000; margin-top: -14px; }
+body #menu #personalInfo .personalData #quota .bar span { background: transparent; width: 170px; text-align: center; color: #000; margin-top: -14px; }
 /*body #menu dl { height: 100%; }*/
 body #menu dl dt { background-color: #2C2C2C; color: #EFEFEF; height: 20px; padding: 5px; line-height: 20px; font-size: 20px; }
 body #menu dl dd ul li a { height: 32px; color: #CCCCCC; text-decoration: none; display: block; padding: 8px 10px; margin: 0 20px 0 10px; font-weight: bold; }

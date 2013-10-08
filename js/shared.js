@@ -312,24 +312,28 @@ document.addEventListener('touchmove', function (e) { e.preventDefault(); }, fal
 document.addEventListener('deviceready', function () {
 
   Shared.api.phoneGap(true);
+  Shared.api.android(Shared.isAndroid());
 
-  Shared.api.createPhoneGapDatabase();
+  if (Shared.isAndroid()) {
+      Shared.api.createPhoneGapDatabase();
 
-  if (window.plugins.webintent != undefined) {
-    window.plugins.webintent.getExtra("android.intent.extra.STREAM", function (url) {
+      if (window.plugins.webintent != undefined) {
+        window.plugins.webintent.getExtra("android.intent.extra.STREAM", function (url) {
 
-      Shared.newMessageIntent = true;
-      alert(url);
-      Shared.newMessageFiles = eval(url);
+          Shared.newMessageIntent = true;
+          alert(url);
+          Shared.newMessageFiles = eval(url);
 
-      
+          
 
-    }, function() {
+        }, function() {
 
-    });
+        });
 
-  } else {
-    //SEM WEBINTENT.
+      } else {
+        //SEM WEBINTENT.
+      }
+
   }
 
 });
