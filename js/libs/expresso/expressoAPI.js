@@ -94,6 +94,8 @@ define([
 
 		var _phoneGap = false;
 
+		var _android = false;
+
 		//USED IN PHONEGAP DATABASE
 		var _db;
 		var _tempData;
@@ -134,6 +136,12 @@ define([
 		this.phoneGap = function(value) {
 			if(value == undefined) return _phoneGap;
 			_phoneGap = value;
+			return this;
+		};
+
+		this.android = function(value) {
+			if(value == undefined) return _android;
+			_android = value;
 			return this;
 		};
 
@@ -246,7 +254,7 @@ define([
 
 
 		this.setLocalStorageValue = function(c_name,value) {
-			if (_phoneGap) {
+			if (_phoneGap && _android) {
 				_tempName = c_name;
 				_tempData = value;
 				_db.transaction(this.updatePhonegapDatabase, this.errorCB, this.successCB);
@@ -259,7 +267,7 @@ define([
 
 		this.getLocalStorageValue =  function(name,successCallBack) {
 
-			if (_phoneGap) {
+			if (_phoneGap && _android) {
 				_tempName = name;
 				_tempCallback = successCallBack;
 
@@ -310,10 +318,11 @@ define([
 		};
 
 		this.createPhoneGapDatabase = function() {
-			_db = window.openDatabase("expresso", "1.0", "Expresso Mobile", 200000);
-		    _db.transaction(this.populatePhoneGapDatabase, this.errorCB, this.successCB);
-
-		    _db.transaction(this.getPhonegapDatabaseValue, this.errorCB, this.successCB);
+			if (_phoneGap && _android) {
+				_db = window.openDatabase("expresso", "1.0", "Expresso Mobile", 200000);
+			    _db.transaction(this.populatePhoneGapDatabase, this.errorCB, this.successCB);
+			    _db.transaction(this.getPhonegapDatabaseValue, this.errorCB, this.successCB);
+		    }
 		};
 
 		this.readCookie =  function(name) {  
@@ -422,15 +431,17 @@ define([
 			var networkError = { error: { code: 100, message: "Verifique sua conexão com a Internet."} };
 			var networkTimeoutError = { error: { code: 100, message: "Esgotou-se o tempo limite da solicitação."} };
 
-			if (_phoneGap) {
+			if (_phoneGap && _android) {
 				var networkState = navigator.connection.type;
 			    if (networkState == Connection.NONE){
 					if (_data[this.id()].fail) _data[this.id()].fail(networkError);
 			    }
 			} else {
-				var online = navigator.onLine;
-				if (!online) {
-					if (_data[this.id()].fail) _data[this.id()].fail(networkError);
+				if (!_phoneGap) {
+					var online = navigator.onLine;
+					if (!online) {
+						if (_data[this.id()].fail) _data[this.id()].fail(networkError);
+					}
 				}
 				
 			}
