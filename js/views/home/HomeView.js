@@ -207,6 +207,10 @@ define([
 
         var top = $('.top').outerHeight(true);
 
+        if (!Shared.isAndroid() && Shared.isPhonegap()) {
+          top = top + 20;
+        }
+
         var search = $('#content .searchArea').outerHeight(true) == null ? 0 : $('#content .searchArea').outerHeight(true);
         
         // Verify screen width to define device type

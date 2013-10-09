@@ -330,7 +330,8 @@ define([
 					title: message,
 					description: description,
 					timeout: 5000,
-					elementID: Shared.isSmartPhoneResolution() ? '#message' : '#messageDetail',
+					animate: false,
+					elementID: Shared.isSmartPhoneResolution() ? '#pageMessage' : '#pageMessage',
 				});
 			}
 

@@ -13,6 +13,7 @@ define([
     msgRoute: '',
     msgIcon: '',
     elementID : '',
+    animate: true,
     timeout: 3000,
 
     render: function(){
@@ -39,13 +40,23 @@ define([
 
       $(this.elementID).empty().append(this.$el);
 
+      if (this.animate) {
+        $(this.elementID).attr("style","position: absolute; top: -" + $(this.elementID).outerHeight() + "px; width: 100%;");
 
-      $(this.elementID).attr("style","position: relative; top: -53px; width: 100%;");
-      $(this.elementID).animate({top: -$(this.elementID).outerHeight()}, 500);
+        var mTop = $('#mainAppPageContent').css("margin-top");
+
+        mTop = mTop.split("px");
+
+        console.log(mTop);
+        $(this.elementID).animate({top: (parseInt(mTop[0], 0) * -1) }, 500);
+      } else {
+        $(this.elementID).attr("style","top: 0px");
+      }
+
+
+      
 
       var that = this;
-
-
 
       if (that.timeout > 0) {
         setTimeout(function() {

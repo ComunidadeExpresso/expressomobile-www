@@ -1,5 +1,5 @@
 <% _.each(messages, function(message){ %>
-<h2 class="ellipsis50"><span class="subtitle-detail-text"><%=message.get("msgDate")%>&nbsp;(<%=message.getTimeAgo()%>)</span><%= message.get("msgSubject") %></h2>
+<h2 class="ellipsis50"><span class="subtitle-detail-text"><%=message.getTimeAgo()%></span><%= message.get("msgSubject") %></h2>
 <article id="wrapperDetail" class="container">
   <div id="scrollerDetail">
     <table id="messageDetails"> 
@@ -46,7 +46,15 @@
             <% } %>
           </td>
         </tr> 
-        <% if (message.get("msgCc")) {  %>
+      <tr>
+          <td class="item">
+            Data:
+          </td>
+          <td class="description" colspan="2">
+            <%=message.get("msgDate")%>&nbsp;(<%=message.getTimeAgo()%>)
+          </td>
+        </tr> 
+        <% if (message.get("msgCc").length) {  %>
         <tr>
           <td class="item">
             Cc:
@@ -65,7 +73,7 @@
           </td>
         </tr> 
         <% } %>
-        <% if (message.get("msgBcc")) {  %>
+        <% if (message.get("msgBcc").length) {  %>
         <tr>
           <td class="item">
             Bcc:

@@ -28,6 +28,10 @@ define([
           //   "mailAddress": ""
           // }
         ],
+        msgCc: [
+        ],
+        msgBcc: [
+        ],
         msgSubject: "",
         msgHasAttachments: "",
         msgFlagged: "",
@@ -143,6 +147,21 @@ define([
 
     htmlEncode: function(text) {
       return $('<div/>').text(text).html();
+    },
+
+    removeRecipient: function(fieldName,email) {
+      var msgRecipient = this.get(fieldName);
+
+      var newMsgRecipient = [];
+
+      for (var i = 0, f; recipient = msgRecipient[i]; i++) {
+        if (recipient.mailAddress != email) {
+          newMsgRecipient.push(recipient);
+        }
+      }
+    
+
+      this.set(fieldName,newMsgRecipient);
     },
 
     addRecipient: function(fieldName,email,fullName) {

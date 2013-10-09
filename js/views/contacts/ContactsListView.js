@@ -46,6 +46,7 @@ define([
 					route: "",
 					description: "",
 					timeout: 0,
+					animate: false,
 					elementID: "#messageDetail",
 				});
 			}
@@ -193,6 +194,7 @@ define([
 							route: "",
 							description: "Procure pelo nome e sobrenome.<br>Nenhum resultado será exibido caso a sua busca retorne mais do que 200 contatos.",
 							timeout: 0,
+							animate: false,
 							elementID: "#message",
 						});
 			        }
@@ -206,6 +208,7 @@ define([
 							route: "",
 							description: "Procure pelo nome e sobrenome.<br>Nenhum resultado será exibido caso a sua busca retorne mais do que 200 contatos.",
 							timeout: 0,
+							animate: false,
 							elementID: "#message",
 						});
 			        }

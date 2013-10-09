@@ -314,7 +314,7 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
   /** Adicionar participantes **/
   body #page .main #contentDetail dl#participantsList { margin-top: 1px;  }
   body #page .main dl#participantsList dt { font-size: 16px; color: #FFFFFF; padding: 10px; border-bottom: 1px #FFFFFF solid; font-weight: bold; background-color: #3A87AD; }
-  body #page .main dl#participantsList dd ul li { vertical-align: middle; height: 50px; line-height: 50px; padding: 0 10px; color: #777777; border-bottom: 1px solid #CCCCCC; border-top: 1px solid #FFFFFF; font-size: 14px; text-align: left; }
+  body #page .main dl#participantsList dd ul li { vertical-align: middle; height: 60px; line-height: 50px; padding: 0 10px; color: #777777; border-bottom: 1px solid #CCCCCC; border-top: 1px solid #FFFFFF; font-size: 14px; text-align: left; }
   body #page .main dl#participantsList dd ul li input.check { float: right; margin-top: 18px; }
   body #page .main dl#participantsList dd ul li a { text-decoration: none; color: #777777; font-weight: bold; }
 
@@ -1026,8 +1026,8 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
   width: 100%;
   color: #fff;
   padding: 10px;
-  position: absolute;
-  animation: animate-bg 5s linear infinite;
+  position: relative;
+  animation: animate-bg 5s linear infinite; 
 }  
 
 .chat-message {

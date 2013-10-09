@@ -4,19 +4,19 @@ define([
 	'backbone',
 	'shared',
 	'models/calendar/EventModel',
-	'views/calendar/CalendarEditEventView',
 	'views/home/LoadingView',
-	'views/home/HomeView',
 	'text!templates/master/detailContentTemplate.html',
 	'text!templates/master/primaryContentTemplate.html',
 	'text!templates/calendar/calendarEditEventAddParticipantsTemplate.html',
 	'collections/contacts/ContactsListCollection',
-], function($, _, Backbone, Shared, EventModel, CalendarEditEventView, LoadingView, HomeView, detailContentTemplate, primaryContentTemplate, calendarEditEventAddParticipantsTemplate, ContactsListCollection)
+], function($, _, Backbone, Shared, EventModel, LoadingView, detailContentTemplate, primaryContentTemplate, calendarEditEventAddParticipantsTemplate, ContactsListCollection)
 {
 	var CalendarEditEventAddParticipantsView = Backbone.View.extend(
 	{
 		model: EventModel,
 		listParticipants: [],
+		senderName: 'calendar',
+
 		events: 
 		{
 			"keypress .searchField": "searchGeneralContacts",
@@ -74,6 +74,7 @@ define([
 							route: "",
 							description: "Procure pelo nome e sobrenome.<br>Nenhum resultado será exibido caso a sua busca retorne mais do que 200 contatos.",
 							timeout: 0,
+							animate: false,
 							elementID: messageContainer,
 						});
 			        }
@@ -87,6 +88,7 @@ define([
 							route: "",
 							description: "Procure pelo nome e sobrenome.<br>Nenhum resultado será exibido caso a sua busca retorne mais do que 200 contatos.",
 							timeout: 0,
+							animate: false,
 							elementID: messageContainer,
 						});
 			        }
@@ -110,6 +112,7 @@ define([
 				.done(function (data) 
 				{
 					callbackSuccess({ contacts: data.models, search: pSearch, listParticipants: self.model.get('eventParticipants'), _: _ });
+
 				})
 				.fail(function (data) 
 				{
@@ -193,7 +196,12 @@ define([
 				obj = this;
 			}
 
-			obj.view.render({model: obj.model, listParticipants: obj.listParticipants});
+			if (obj.senderName == 'compose') {
+				obj.view.addContactToField({model: obj.model , listParticipants: obj.listParticipants });
+			} else {
+				obj.view.render({model: obj.model, listParticipants: obj.listParticipants});
+			}
+
 		},
 
 		addParticipant: function (e)
@@ -202,6 +210,7 @@ define([
 			var listParticipants = this.listParticipants;
 			var id = $(e.target).val();
 			var name = $(e.target).attr('data-name');
+			var mail = $(e.target).attr('data-mail');
 			var index = _.isEmpty(listParticipantsID) ? -1 : _.indexOf(listParticipantsID, id);
 			var indexNames = index;
 
@@ -216,7 +225,7 @@ define([
 				if (index == -1)
 				{
 					listParticipantsID.push(id);
-					listParticipants.push({ participantID: id, participantName: name });
+					listParticipants.push({ participantID: id, participantName: name, participantMail: mail });
 				}
 			}
 			else

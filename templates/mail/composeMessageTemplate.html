@@ -7,11 +7,11 @@
 		          Para:
 		        </td>
 		        <td class="descriptionCompose">
-		        	<div class='icon-add'></div>
+		        	<div id="addMsgToField" class='icon-add'></div>
 		        	<div id="msgToRecipients">
 						<% if (message.get("msgTo")) {  %>
 		                  	<% _.each(message.get("msgTo"), function(msgRecipient){ %>
-		                  		<div class="recipientmsgTo">
+		                  		<div class="recipientmsgTo" data-mail="<%=msgRecipient.mailAddress%>">
 				                    <span class="badge badge-write-message">
 				                    <% if ($.trim(msgRecipient.fullName) != '') { %> 
 				                      <%=$.trim(msgRecipient.fullName)%>
@@ -28,16 +28,16 @@
 	                <div class="clear"></div>
 		        </td>
 	    	</tr>
-		    <tr id="msgCcRow" class="hidden">
+		    <tr id="msgCcRow" <% if (message.get("msgCc").length == 0) {  %>class="hidden"<% } %>>
 		        <td class="item">
 		          Cc:
 		        </td>
 		        <td class="descriptionCompose">
-		        	<div class='icon-add'></div>
+		        	<div id="addMsgCcField" class='icon-add'></div>
 		        	<div id="msgCcRecipients">
 						<% if (message.get("msgCc")) {  %>
 		                  	<% _.each(message.get("msgCc"), function(msgRecipient){ %>
-		                  		<div class="recipientmsgCc">
+		                  		<div class="recipientmsgCc" data-mail="<%=msgRecipient.mailAddress%>">
 				                    <span class="badge badge-write-message">
 				                    <% if ($.trim(msgRecipient.fullName) != '') { %> 
 				                      <%=$.trim(msgRecipient.fullName)%>
@@ -55,16 +55,16 @@
 	                <div class="clear"></div>
 		        </td>
 	    	</tr>
-	    	<tr id="msgBccRow" class="hidden">
+	    	<tr id="msgBccRow" <% if (message.get("msgBcc").length == 0) {  %>class="hidden"<% } %>>
 		        <td class="item">
 		          Bcc:
 		        </td>
 		        <td class="descriptionCompose">
-		        	<div class='icon-add'></div>
+		        	<div id="addMsgBccField" class='icon-add'></div>
 		        	<div id="msgBccRecipients">
 						<% if (message.get("msgBcc")) {  %>
 		                  	<% _.each(message.get("msgBcc"), function(msgRecipient){ %>
-		                  		<div class="recipientmsgBcc">
+		                  		<div class="recipientmsgBcc" data-mail="<%=msgRecipient.mailAddress%>">
 				                    <span class="badge badge-write-message">
 				                    <% if ($.trim(msgRecipient.fullName) != '') { %> 
 				                      <%=$.trim(msgRecipient.fullName)%>

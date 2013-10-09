@@ -3,13 +3,15 @@ define([
   'underscore',
   'backbone',
   'shared',
+  'views/calendar/CalendarEditEventAddParticipantsView',
   'text!templates/mail/composeMessageTemplate.html',
   'models/mail/MessagesModel',
   'collections/mail/MessagesCollection',
   'collections/home/ContextMenuCollection',
   'views/mail/PreviewAttachmentMessageView',
   'views/home/LoadingView',
-], function($, _, Backbone, Shared, composeMessageTemplate,MessagesModel,MessagesCollection,ContextMenuCollection,PreviewAttachmentMessageView,LoadingView){
+
+], function($, _, Backbone, Shared, CalendarEditEventAddParticipantsView ,composeMessageTemplate,MessagesModel,MessagesCollection,ContextMenuCollection,PreviewAttachmentMessageView,LoadingView){
 
   var ComposeMessageView = Backbone.View.extend({
 
@@ -18,6 +20,15 @@ define([
     msgID: '',
     folderID: '',
     currentMessage : '',
+
+    addContactToField: function(params) {
+
+      for (var i = 0, f; participant = params.listParticipants[i]; i++) {
+        params.model.addRecipient(params.model.get("currentField"), participant.participantMail, participant.participantName);
+      }
+
+      this.renderComposeMessage(params.model);
+    },
 
     renderComposeMessage: function(pMessage) {
       var elementID = "#contentDetail";
@@ -268,25 +279,6 @@ define([
 
       }
 
-      // if (this.secondViewName == "Send") {
-
-      //   this.sendMessage();
-
-      // }
-
-      
-
-      // if (this.secondViewName == "AttachPicture") {
-
-        
-      // }
-
-      if (this.secondViewName == "AttachGalleryPicture") {
-
-        
-        
-      }
-
       if (this.secondViewName == "DelMessage") {
 
         var loadingView = new LoadingView({ el: $(elementID) });
@@ -465,6 +457,64 @@ define([
       "click #msgCcRow" : "focusRecipientCc",
       "click #msgBccRow" : "focusRecipientBcc",
       "click #msgSubjectRow" : "focusSubject",
+      "click #addMsgToField" : "addMsgToField",
+      "click #addMsgCcField" : "addMsgCcField",
+      "click #addMsgBccField" : "addMsgBccField",
+    },
+
+    addMsgToField: function(e) {
+
+      var obj = Shared.currentDraftMessage;
+
+      var attrs = {
+        currentField: "msgTo",
+        eventParticipants: [],
+        listParticipants: [],
+      }
+
+      obj.set(attrs);
+
+      this.updateCurrentDraftMessage();
+
+      var calendarEditEventAddParticipantsView = new CalendarEditEventAddParticipantsView({ listParticipants: [], model: obj, view: new ComposeMessageView(), senderName: 'compose' });
+      calendarEditEventAddParticipantsView.senderName = 'compose';
+        calendarEditEventAddParticipantsView.render();
+    },
+
+    addMsgCcField: function(e) {
+      var obj = Shared.currentDraftMessage;
+
+      var attrs = {
+        currentField: "msgCc",
+        eventParticipants: [],
+        listParticipants: [],
+      }
+
+      obj.set(attrs);
+
+      this.updateCurrentDraftMessage();
+
+      var calendarEditEventAddParticipantsView = new CalendarEditEventAddParticipantsView({ listParticipants: [], model: obj, view: new ComposeMessageView(), senderName: 'compose' });
+      calendarEditEventAddParticipantsView.senderName = 'compose';
+        calendarEditEventAddParticipantsView.render();
+    },
+
+    addMsgBccField: function(e) {
+      var obj = Shared.currentDraftMessage;
+
+      var attrs = {
+        currentField: "msgBcc",
+        eventParticipants: [],
+        listParticipants: [],
+      }
+
+      obj.set(attrs);
+
+      this.updateCurrentDraftMessage();
+
+      var calendarEditEventAddParticipantsView = new CalendarEditEventAddParticipantsView({ listParticipants: [], model: obj, view: new ComposeMessageView(), senderName: 'compose' });
+      calendarEditEventAddParticipantsView.senderName = 'compose';
+        calendarEditEventAddParticipantsView.render();
     },
 
     updateSubject: function(e) {
@@ -547,15 +597,16 @@ define([
           this.prependEmailRecipientBadgeToDiv(prefix,"#" + prefix + "Recipients",val);
         } else {
           if ( (e.which == 13 && !e.shiftKey && val == "") ) {
-            // console.log("focus");
             $("#" + nextOrder + "Input").focus();
 
           }
         }
       }
       if ( (e.which == 8) && ($.trim(val) == "") ) {
-        //var value = $("#msgToRecipients div:last-child");
+        console.log($("#" + prefix + "Recipients div:last-child").attr("data-mail"));
+        Shared.currentDraftMessage.removeRecipient(prefix,$("#" + prefix + "Recipients div:last-child").attr("data-mail"));
         $("#" + prefix + "Recipients div:last-child").remove();
+        
       }
     },
 
@@ -578,7 +629,7 @@ define([
 
     prependEmailRecipientBadgeToDiv: function(prefix,divID,emailRecipient) {
 
-      var div = $("<div />").addClass("recipient" + prefix);
+      var div = $("<div />").addClass("recipient" + prefix).attr("data-mail",emailRecipient);
 
       var span = $("<span />").addClass("badge").addClass("badge-write-message").html(emailRecipient);
 
@@ -619,6 +670,11 @@ define([
 
     updateCurrentMessage: function() {
 
+    },
+
+    updateCurrentDraftMessage: function() {
+      var model = this.getNewMessageModel();
+      Shared.currentDraftMessage = model;
     },
 
     getNewMessageModel: function() {

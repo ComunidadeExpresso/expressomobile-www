@@ -145,6 +145,9 @@ define([
     messageView.msgRoute = message.route;
     messageView.msgIcon = message.icon;
     messageView.timeout = message.timeout;
+    if (message.animate == false) {
+      messageView.animate = false;
+    }
     messageView.render();
   };
 
