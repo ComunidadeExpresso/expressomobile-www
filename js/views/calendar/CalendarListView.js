@@ -225,6 +225,7 @@ define([
 			Shared.scroll = new iScroll('wrapper');
 			Shared.scrollerRefresh();
 			Shared.menuView.renderContextMenu('calendar',{year: this.year, month: this.month, day: this.day});
+			Shared.setDefaultIMListeners();
 
 			$('#content .searchArea').remove();
 			$('#contentTitle').text('Agenda');
