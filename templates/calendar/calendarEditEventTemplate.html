@@ -21,25 +21,27 @@
 			<label for="eventDescription">Descri&ccedil;&atilde;o</label>
 			<textarea name="eventDescription" id="eventDescription" placeholder="Descri&ccedil;&atilde;o completa"><%= event.get('eventDescription') %></textarea>
 		</li>
-		<li>
-			<label for="eventCategoryID">Categoria</label>
-			<select name="eventCategoryID" id="eventCategoryID">
+		<li class="itens">
+			<label for="eventCategoryID">Categoria *</label>
 
-				<% if (typeof(eventCategories) != 'undefined' && eventCategories.length > 0) { %>
-
+			<% if (typeof(eventCategories) != 'undefined' && eventCategories.length > 0) 
+			{ 
+				var listCategoriesSelected = (event.get('eventCategoryID')).split(',');
+				%>
+				<ol>
 					<% _.each(eventCategories, function(e) { %>
 
-						<option value="<%= e.get('eventCategoryID') %>" <%= (e.get('eventCategoryID') == event.get('eventCategoryID')) ? 'selected="selected"' : '' %>><%= e.get('eventCategoryName') %></option>
+						<li>
+							<input id="<%= e.get('eventCategoryID') %>" type="checkbox" class="css-checkbox eventCategories" name="<%= e.get('eventCategoryID') %>" value="<%= e.get('eventCategoryID') %>" data-name="<%= e.get('eventCategoryName') %>" <%= (_.contains(listCategoriesSelected, e.get('eventCategoryID'))) ? 'checked="checked"' : '' %> /> 
+							<label for="<%= e.get('eventCategoryID') %>" class="css-label"><%= e.get('eventCategoryName') %></label>
+						</li>
 
 					<% }); %>
 
-				<% } else { %>
+				</ol>
 
-					<option>Selecione...</option>
+			<% } %>
 
-				<% } %>
-
-			</select>
 		</li>
 		<li>
 			<label for="eventLocation">Localiza&ccedil;&atilde;o</label>
@@ -61,7 +63,7 @@
 			<label for="eventTimeEnd">Hora final *</label>
 			<input type="time" name="eventTimeEnd" id="eventTimeEnd" placeholder="Hora final" value="<%= event.get('eventTimeEnd') %>" />
 		</li>
-		<li class="participants">
+		<li class="itens">
 			<!-- <h4>Participantes:</h4> -->
 			<label for="participantes">Participantes</label>
 			<a href="#" id="addParticipants" title="Adicionar participantes">Adicionar participantes</a>

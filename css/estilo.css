@@ -293,12 +293,12 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
   body form#addEvent ol li { min-height: 60px; border-left: 8px solid #3A87AD; border-bottom: 1px #CCC solid; border-top: 1px #FFF solid; }
   body form#addEvent ol li label { padding-top: 20px; color: #3A87AD; width: 120px; font-weight: bold; text-align: left; padding-left: 5px; }
   body form#addEvent ol li.date ol li { width: 47%; margin: 0; display: inline; border: 0; }
-  body form#addEvent ol li.participants { color: #777777; }
-  body form#addEvent ol li.participants h4 { display: inline; font-weight: bold; }
-  body form#addEvent ol li.participants a { text-decoration: none; margin: 21px 10px; color: #3A87AD; float: right; }
-  body form#addEvent ol li.participants ol { margin: 35px 0 10px 15px; }
-  body form#addEvent ol li.participants ol li { margin: 10px 0; border: 0; min-height: 0; }
-  body form#addEvent ol li.participants ol li label { padding-top: 0; float: none; }
+  body form#addEvent ol li.itens { color: #777777; }
+  body form#addEvent ol li.itens h4 { display: inline; font-weight: bold; }
+  body form#addEvent ol li.itens a { text-decoration: none; margin: 21px 10px; color: #3A87AD; float: right; }
+  body form#addEvent ol li.itens ol { margin: 55px 0 10px 15px; }
+  body form#addEvent ol li.itens ol li { margin: 10px 0; border: 0; min-height: 0; }
+  body form#addEvent ol li.itens ol li label { padding-top: 0; float: none; }
   body form#addEvent ol li label { float: left; width: 150px; }
 
   body form#addEvent input[type=text], body form#addEvent input[type=date], body form#addEvent input[type=time], body form#addEvent select, body form#addEvent textarea { /*border: 1px #CCC solid*/ border: 0; width: auto; margin: 10px 0;  padding: 10px 5px; font-size: 16px; /*border-radius: 3px 3px 3px 3px;*/ color: #777777; /*background-color: #F1F1F1;*/ }

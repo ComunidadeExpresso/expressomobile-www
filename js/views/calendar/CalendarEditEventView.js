@@ -251,6 +251,7 @@ define([
 				obj = this;
 			}
 
+			var categoriesSelected = $('.css-checkbox.eventCategories').map(function () { if ($(this).is(':checked')) return $(this).val(); }).toArray().join(',');
 			var attrs = {
 				eventDateStart: $('#eventDateStart').val(),
 				eventTimeStart: $('#eventTimeStart').val(),
@@ -258,7 +259,7 @@ define([
 				eventTimeEnd: $('#eventTimeEnd').val(),
 				eventID: $('#eventID').val(),
 				eventType: $('#eventType').val(),
-				eventCategoryID: $('#eventCategoryID').val(),
+				eventCategoryID: categoriesSelected,
 				eventName: $('#eventName').val(),
 				eventDescription: $('#eventDescription').val(),
 				eventLocation: $('#eventLocation').val(),
@@ -284,6 +285,7 @@ define([
 			var dateStart = ($('#eventDateStart').val()).split('-');
 			var dateEnd = ($('#eventDateEnd').val()).split('-');
 			var participants = $('.css-checkbox.eventParticipants').map(function() { return $(this).val(); }).toArray();
+			var categoriesSelected = $('.css-checkbox.eventCategories').map(function () { if ($(this).is(':checked')) return $(this).val(); }).toArray().join(',');
 			var attrs = {
 				eventDateStart: dateStart[2] + '/' + dateStart[1] + '/' + dateStart[0],
 				eventTimeStart: $('#eventTimeStart').val(),
@@ -291,7 +293,7 @@ define([
 				eventTimeEnd: $('#eventTimeEnd').val(),
 				eventID: $('#eventID').val(),
 				eventType: $('#eventType').val(),
-				eventCategoryID: $('#eventCategoryID').val(),
+				eventCategoryID: categoriesSelected,
 				eventName: $('#eventName').val(),
 				eventDescription: $('#eventDescription').val(),
 				eventLocation: $('#eventLocation').val(),
