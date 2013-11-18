@@ -2,7 +2,7 @@ define([
   'underscore',
   'backbone',
   'shared',
-  'models/mail/FoldersModel'
+  'models/mail/FoldersModel',
 ], function(_, Backbone, Shared, FoldersModel){
 
   var FoldersCollection = Backbone.Collection.extend({

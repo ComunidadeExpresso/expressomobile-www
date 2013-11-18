@@ -7,11 +7,12 @@ define([
   'backbone',
   'shared',
   'collections/mail/MessagesCollection',
+  'collections/home/ServersCollection',
   'views/mail/MessagesListView',
   'views/mail/DetailMessageView',
   'views/home/MenuView',
   'text!templates/home/homeTemplate.html'
-], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, MessagesCollection, MessagesListView, DetailMessageView, MenuView, homeTemplate){
+], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, MessagesCollection, ServersCollection, MessagesListView, DetailMessageView, MenuView, homeTemplate){
 
   var HomeView = Backbone.View.extend({
     el: $("#mainAppPageContent"),
@@ -47,6 +48,8 @@ define([
       this.$el.html(homeTemplate);
 
       var that = this;
+
+
 
 
       Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
@@ -204,25 +207,24 @@ define([
 
     loaded: function () 
     {
+      
+      var top = $('.top').outerHeight(true);
 
-        var top = $('.top').outerHeight(true);
+      if (!Shared.isAndroid() && Shared.isPhonegap()) {
+        top = top + 20;
+      }
 
-        if (!Shared.isAndroid() && Shared.isPhonegap()) {
-          top = top + 20;
-        }
+      var search = $('#content .searchArea').outerHeight(true) == null ? 0 : $('#content .searchArea').outerHeight(true);
+      
+      // Verify screen width to define device type
+      this.deviceType(Shared.isSmartPhoneResolution());
 
-        var search = $('#content .searchArea').outerHeight(true) == null ? 0 : $('#content .searchArea').outerHeight(true);
-        
-        // Verify screen width to define device type
-        this.deviceType(Shared.isSmartPhoneResolution());
+      Shared.refreshDotDotDot();
 
-        Shared.refreshDotDotDot();
+      $('body').height($(window).height() - top);
+      $('#wrapper').css('top', top + search);
 
-        $('body').height($(window).height() - top);
-        $('#wrapper').css('top', top + search);
-
-        
-        //Shared.scrollDetail = new iScroll('wrapperDetail');
+      //Shared.scrollDetail = new iScroll('wrapperDetail');
         
     }
 

@@ -10,15 +10,40 @@ define([
   'views/home/HomeView',
   'expressoIM',
   'collections/home/ExpressoCollection',
-], function($, _, Backbone, Shared, MessagesModel, MessagesCollection, loginTemplate,LoadingView,HomeView,expressoIM,ExpressoCollection){
+  'collections/home/ServersCollection',
+], function($, _, Backbone, Shared, MessagesModel, MessagesCollection, loginTemplate,LoadingView,HomeView,expressoIM,ExpressoCollection,ServersCollection){
 
   var LoginView = Backbone.View.extend({
 
     render: function(){
 
-      this.$el.html(loginTemplate);
-      this.$el.attr("style","top: -53px; position: relative;");
-      $("#mainAppPageContent").empty().append(this.$el);
+
+      var collection = new ServersCollection();
+
+      var that = this;
+
+      collection.done(function (data) {
+
+        var newData = {
+          servers: data.models,
+          _: _
+        }
+
+        var compiledTemplate = _.template( loginTemplate, newData );
+
+        that.$el.html(compiledTemplate);
+        that.$el.attr("style","top: -53px; position: relative;");
+        $("#mainAppPageContent").empty().append(that.$el);
+
+      })
+      .fail(function (error) {
+        console.log("ERRO");
+        Shared.handleErrors(error);
+      })
+      .getServers();
+
+
+      
 
     },
     events: {
