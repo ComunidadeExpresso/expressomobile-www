@@ -8,6 +8,7 @@ define([
   'views/home/HomeView',
   'views/mail/DetailMessageView',
   'views/mail/ComposeMessageView',
+  'views/mail/EditFolderView',
   'views/settings/SettingsListView',
   'views/contacts/ContactsListView',
   'views/contacts/DetailsContactView',
@@ -17,7 +18,7 @@ define([
   'views/calendar/CalendarDeleteEventView',
   'views/calendar/CalendarFullDayListView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, SettingsListView,ContactsListView,DetailsContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarDeleteEventView, CalendarFullDayListView, ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, EditFolderView, SettingsListView,ContactsListView,DetailsContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarDeleteEventView, CalendarFullDayListView, ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -25,6 +26,7 @@ define([
 
       'Home' : 'homeView',
       'Login' : 'loginView',
+      'Mail/Folder/New' : 'newFolderView',
       'Mail/Folders/*folderID' : 'openFolderView',
       'Mail/Message/:secondViewName/:msgID/*folderID' : 'composeMessageView',
       'Mail/Message/:secondViewName/:emailTo' : 'composeMessageTo',
@@ -65,6 +67,18 @@ define([
      
         var homeView = new HomeView();
         homeView.render();
+    });
+
+    app_router.on('route:newFolderView', function (PfolderID) {
+
+      console.log("route:newFolderView");
+
+      var editFolderView = new EditFolderView();
+      editFolderView.action = "addFolder";
+      editFolderView.render();
+
+      Shared.menuView.closeMenu();
+
     });
 
     app_router.on('route:openFolderView', function (PfolderID) {
