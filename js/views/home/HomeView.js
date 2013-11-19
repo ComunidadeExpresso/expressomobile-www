@@ -49,20 +49,21 @@ define([
 
       var that = this;
 
-
-
-
       Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
         if (expressoValue != null) {
 
+          Shared.profile = expressoValue.profile;
+
           var userName = expressoValue.username;
           var passwd = expressoValue.password;
 
-          Shared.im
-          .username(userName)
-          .password(passwd)
-          .connect();
+          if (Shared.userHasModule("chat")) {
+            Shared.im
+            .username(userName)
+            .password(passwd)
+            .connect();
+          }
 
           Shared.api.phoneGap(expressoValue.phoneGap);
 
@@ -79,19 +80,33 @@ define([
         that.menuView.profile = that.profile;
         that.menuView.render();
        
-        
-
         Shared.setDefaultIMListeners();
-
-
 
         if (!Shared.newMessageIntent) {
 
-          that.menuView.selectMenu(1);
 
-          that.loadMessagesInFolder(that.folderID,that.search);
+          if (Shared.userHasModule("mail")) {
+            that.menuView.selectMenu(1);
+            that.loadMessagesInFolder(that.folderID,that.search);
+            that.loaded();
 
-          that.loaded();
+          } else {
+
+            if (Shared.userHasModule("calendar")) {
+              that.menuView.selectMenu(2);
+              Shared.router.navigate("/Calendar",{ trigger: true });
+            } else {
+              if (Shared.userHasModule("catalog")) {
+                that.menuView.selectMenu(3);
+                Shared.router.navigate("/Catalog",{ trigger: true });
+              } else {
+                if (Shared.userHasModule("chat")) {
+                  that.menuView.selectMenu(4);
+                  Shared.router.navigate("/Chat",{ trigger: true });
+                }
+              }
+            } 
+          }
 
         } else {
 

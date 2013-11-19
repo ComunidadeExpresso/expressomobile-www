@@ -21,18 +21,15 @@
 					<li><a href="/Settings/ChangePassword" class="settinsLink">Alterar senha</a></li>
 				</ul>
 			</dd>
-			<dt>Outras configura&ccedil;&otilde;es</dt>
+			<% if (Shared.userHasModule("mail")) { %>
+			<dt>Configura&ccedil;&otilde;es do Email</dt>
 			<dd>
 				<ul>
 					<li><a href="/Settings/ResultsPerPage" class="settinsLink">Resultados por p&aacute;gina</a></li>
-				</ul>
-			</dd>
-			<dt>Escrever mensagens</dt>
-			<dd>
-				<ul>
 					<li><a href="/Settings/MailSignature" class="settinsLink">Assinatura de e-mail</a></li>
 				</ul>
 			</dd>
+			<% } %>
 			<dt>Expresso</dt>
 			<dd>
 				<ul>

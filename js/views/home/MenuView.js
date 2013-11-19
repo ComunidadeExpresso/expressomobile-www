@@ -10,7 +10,8 @@ define([
   'text!templates/home/menuTemplate.html',
   'views/home/ContextMenuView',
   'collections/home/ContextMenuCollection',
-], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, FoldersMenuListView, menuTemplate,ContextMenuView,ContextMenuCollection){
+  'collections/home/MenuItemsCollection',
+], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, FoldersMenuListView, menuTemplate,ContextMenuView,ContextMenuCollection,MenuItemsCollection){
 
   var MenuView = Backbone.View.extend({
     el: $("#scrollerMenu"),
@@ -25,10 +26,7 @@ define([
 
     render: function(){
 
-      //if (_.isNull(this.profile)) {
 
-
-        console.log('renderMenu');
         //UPDATE PROFILE
         //GERALMENTE O PROFILE É ENVIAOD PELO MENU-VIEW PORÉM SE O USUÁRIO REALIZAR O RELOAD DA PÁGINA
         //ENTÃO SERÁ NECESSÁRIO RECARREGÁ-LO DO LOCALSTORAGE
@@ -49,10 +47,16 @@ define([
 
           }
 
+          var menuItemsCollection = new MenuItemsCollection();
+
+          var itemsMenu = menuItemsCollection.getMenuItems(Shared.profile.contactApps);
+
 
           var data = {
             user: that.profile,
-            _: _ 
+            menuItems: itemsMenu, 
+            _: _,
+            Shared: Shared
           };
 
           var compiledTemplate = _.template( menuTemplate, data );
@@ -76,12 +80,12 @@ define([
 
           that.context = new ContextMenuView();
 
-          var foldersMenuListView = new FoldersMenuListView();
-          foldersMenuListView.render();
+          if (Shared.userHasModule("mail")) {
+            var foldersMenuListView = new FoldersMenuListView();
+            foldersMenuListView.render();
+          }
 
         });
-
-      //}
 
     },
 

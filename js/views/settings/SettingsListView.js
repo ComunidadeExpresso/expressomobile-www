@@ -94,7 +94,8 @@ define([
               _: _,
               user: user,
               auth: Shared.api.auth(),
-              automaticLogin: Shared.settings.automaticLogin
+              automaticLogin: Shared.settings.automaticLogin,
+              Shared: Shared
             };
 
             var compiledTemplate = _.template( settingsListTemplate, newData );

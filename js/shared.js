@@ -26,7 +26,6 @@ define([
   Shared.scrollDetail = null;
   Shared.scroll = null;
   Shared.scrollMenu = null;
-
   
 
   Shared.im = expressoIM;
@@ -280,6 +279,21 @@ define([
 
   Shared.api.id(0);
   Shared.api.debug(false);
+
+
+  Shared.userHasModule = function(moduleName) {
+    var retVal = false;
+    var a = Shared.profile.contactApps;
+    a.push("settings"); //EVERYONE HAS ACCESS TO SETTINGS.
+    a.push("chat"); //TODO - CHAT MODULE IS NOT COMMING FROM THE API YET.
+    //a = ["mail","chat","settings"]; //USE THIS IF YOU WANT TO TEST SPECIFC MODULES WILL WORK INDIVIDUALY
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] === moduleName) {
+        retVal = true;
+      }
+    }
+    return retVal;
+  };
 
   Shared.userHasAuth = function() {
     Shared.api.getLocalStorageValue("expresso",function(expressoValue) {   

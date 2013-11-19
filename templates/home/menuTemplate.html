@@ -4,6 +4,7 @@
     <div id="userPicture" class="userPicture"></div>
     <div class="personalData">
       <span id="userName" class="name"><% if (!_.isNull(user.contactFullName)) { %><%=user.contactFullName%><% } %></span>
+      <% if (Shared.userHasModule("mail")) { %>
       <span id="userEmail" class="email"><% if (!_.isNull(user.contactMails[0])) { %><%=user.contactMails[0]%><% } %></span>
       <div id="quota">
         
@@ -13,6 +14,7 @@
         </div>
 
       </div>
+      <% } %>
     </div>
   </div>
 
@@ -21,53 +23,25 @@
     <dt>Menu</dt>
     <dd>
       <ul id="mainMenu">
-        <li class="inbox">
-          <a href="/Mail/Folders/INBOX" class="menuLink">
-            <span>Caixa de Entrada</span>
-            <div class="icon icon-email"></div>
-          </a>
-        </li>
-        <li class="calendar">
-          <a href="/Calendar" class="menuLink">
-            <span>Agenda</span>
-            <div class="icon icon-agenda"></div>
-          </a>
-        </li>
-        <li class="contacts">
-          <a href="/Contacts/Personal" class="menuLink">
-            <span>Contatos</span>
-            <div class="icon icon-contacts"></div>
-          </a>
-        </li>
-        <li class="chat">
-          <a href="/Chat" class="menuLink">
-            <span><div id="badge_chat" class="badge badge-chat hidden"></div>Chat</span>
-            <div class="icon icon-jabber"></div>
-
-          </a>
-        </li>
-        <li class="settings">
-          <a href="/Settings" class="menuLink">
-            <span>Prefer&ecirc;ncias</span>
-            <div class="icon icon-settings"></div>
-          </a>
-        </li>
-        <li class="logout">
-          <a href="/Logout" class="menuLink">
-            <span>Sair</span>
-            <div class="icon icon-logout"></div>
-          </a>
-        </li>
+        <% _.each(menuItems, function(menuItem){ %>
+          <li class="<%=menuItem.get("menuClass")%>">
+            <a href="<%=menuItem.get("menuRoute")%>" class="menuLink">
+              <span><% if (menuItem.get("menuHasBadge")) { %><div id="badge_chat" class="badge badge-chat hidden"></div><% } %><%=menuItem.get("menuTitle")%></span>
+              <div class="icon <%=menuItem.get("menuIconClass")%>"></div>
+            </a>
+          </li>
+        <% }); %>
       </ul>
     </dd>
 
+    <% if (Shared.userHasModule("mail")) { %>
     <dt>Minhas Pastas</dt>
     <dd>
       <ul id="myFolders">
         
       </ul>
     </dd>
-    
+    <% } %>
   </dl>
 
 </div>
