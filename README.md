@@ -15,17 +15,18 @@ Desenvolvedores do Aplicativo
 	- Rafael Katayama Gobara
 
 
-Desenvolvedores API
+Desenvolvedores da API
 	
 	- Alexandre Luiz Correia
 	- Alexandre Rocha Wendling
 	- Anderson Tadayuki Saikawa
 	- Jair Gonçalves Pereira Jr
 	- Nilton Emilio Buhrer Neto
-	- Rafael Katayama Gobara			
+	- Rafael Katayama Gobara
 
 
 Biliotecas utilizadas
+	
 	- Bacbkone
 	- RequireJS
 	- Underscore
