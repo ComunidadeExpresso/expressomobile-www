@@ -1,14 +1,24 @@
-EXPRESSO-MINI - WWW
+EXPRESSO MOBILE - WWW
 ===
 
-Este projeto está na fase final de desenvolvimento, o código ainda não deve ser utilizado em servidores de produção. 
+Este projeto está na fase final de desenvolvimento, o código ainda NÃO deve ser utilizado em servidores de produção. 
 
-Expresso Mini desenvolvido em HTML5, realizando chamadas para a API do Expresso.
+Este repositório é um dos 3 repositórios que fazem parte do projeto do novo Expresso Mobile que está sendo desenvolvido em HTML5 e realiza chamadas para a API do Expresso. 
 
+	1 - expressomobile-www 
+		Repositório que contém a parte comum WEB e HTML5 para os outros dois repositórios.
+
+	2 - expressomobile-ios 
+		Repositório que contém todo o código fonte em OBJECTIVE-C para a plataforma iOS, mas também tem como sub-projeto o repositório expressomobile-www.
+
+	2 - expressomobile-android 
+		Repositório que contém todo o código fonte em Java para a plataforma Android, mas também tem como sub-projeto o repositório expressomobile-www.
+
+		
 Projeto desenvolvido por:
     CELEPAR - Companhia de Tecnologia da Informação e Comunicação do Estado do Paraná
 
-Desenvolvedores do Aplicativo
+Desenvolvedores dos Aplicativos
 
 	- Alexandre Rocha Wendling
 	- Jair Gonçalves Pereira Jr
@@ -41,13 +51,11 @@ Biliotecas utilizadas
 
 Como Utilizar como uma Instalação do Expresso Mini
 
-	Este projeto é um dos 3 projetos que fazem parte do Expresso Mobile. 
+	Para utilizar este código fonte como sendo uma instalação do Expresso Mobile WEB, seu servidor precisa ter o Expresso e uma API instalada.
 
-	Para utilizar este código fonte como sendo uma instalação do Expresso Mini, seu servidor precisa ter o Expresso e uma API instalada.
+	1 - git clone https://github.com/ComunidadeExpresso/expressomobile-www.git
 
-	1 - git clone https://github.com/expressomobile/www.git
+	2 - (opcional) Renomeie o arquivo servers.json.config para servers.json (Se não for renomeado o sistema irá buscar a lista de servidores cadastrados diretamente do site da comunidade Expresso Livre)
 
-	2 - Renomeie o arquivo servers.json.config para servers.json 
-
-	3 - Altere o conteúdo do arquivo servers.json para conter as informações do(s) seu(s) servidor(es), Não altere as chaves ou o formato do JSON, apenas os valores.
+	3 - (opcional) Altere o conteúdo do arquivo servers.json para conter as informações do(s) seu(s) servidor(es), Não altere as chaves ou o formato do JSON, apenas os valores.
 
