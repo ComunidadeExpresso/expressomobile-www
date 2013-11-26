@@ -27,12 +27,19 @@ define([
 
       var that = this;
 
-      var beforeRenderCallback = function() {
+      var beforeRenderCallback = function(colection) {
         var newData = {
           folderID: that.folderID,
           currentFolder: that.currentFolder,
+          collection: colection,
           _: _ 
         };
+
+        if (!colection.length) {
+          if (Shared.isTabletResolution()) {
+            $("#contentDetail").html("<h2>Nenhuma mensagem foi selecionada...</h2>");
+          }
+        }
 
         var compiledTemplate = _.template( messagesListTemplate, newData );
 
@@ -44,7 +51,7 @@ define([
       
 
       var doneFunction = function() { 
-        console.log('HasDone'); 
+
 
         if (Shared.isTabletResolution()) {
            that.selectFirstMessage(); 
@@ -119,7 +126,7 @@ define([
                     that.collection = data.models;
 
                     if (beforeRenderCallback) {
-                      beforeRenderCallback();
+                      beforeRenderCallback(that.collection);
                     }
 
                     var messagesListItemsView = new MessagesListItemsView({ el: $("#scrollerList"), collection: data , parentFolders: that.parentFolders });

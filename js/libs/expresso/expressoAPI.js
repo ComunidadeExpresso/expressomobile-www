@@ -245,7 +245,9 @@ define([
 				    for (var i=0; i<len; i++){
 				    	//console.log("Row = " + i + " ID = " + results.rows.item(i).id + " Data =  " + results.rows.item(i).data);
 				    	that._tempResult = results.rows.item(i).data;
-				    	that._tempCallback(JSON.parse(that._tempResult));
+				    	if (that._tempCallback != undefined) {
+				    		that._tempCallback(JSON.parse(that._tempResult));
+				    	}
 				    }
 				}
 			}
@@ -267,11 +269,13 @@ define([
 
 		this.getLocalStorageValue =  function(name,successCallBack) {
 
-			if (_phoneGap && _android) {
-				_tempName = name;
-				_tempCallback = successCallBack;
+			var that = this;
 
-				_db.transaction(this.getPhonegapDatabaseValue, this.errorCB);
+			if (_phoneGap && _android) {
+				that._tempName = name;
+				that._tempCallback = successCallBack;
+
+				_db.transaction(this.getPhonegapDatabaseValue, this.errorCB,successCallBack);
 
 			} else {
 

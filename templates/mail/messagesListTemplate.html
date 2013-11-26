@@ -6,11 +6,15 @@
 <div id="wrapper" class="container">
   <div id="scroller">
   	<div id="pullDown">
-	  <span class="pullDownIcon"></span><span class="pullDownLabel">Puxe para baixo para atualizar</span>
+	  	<span class="pullDownIcon"></span><span class="pullDownLabel"><% if (collection.length) { %>Puxe para baixo para atualizar<% } %></span>
 	</div>
-	<ul id="scrollerList"></ul>
+	<ul id="scrollerList">
+
+	</ul>
 	<div id="pullUp">
-	  <span class="pullUpIcon"></span><span class="pullUpLabel">Puxe para cima para carregar mais...</span>
+	  <span class="pullUpIcon"></span><span class="pullUpLabel">
+	  <% if (!collection.length) { %>Esta pasta está vazia.<% } else { %>Puxe para cima para carregar mais...<% } %></span>
 	</div>
+	
   </div>
 </div>

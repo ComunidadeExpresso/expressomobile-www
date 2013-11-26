@@ -115,6 +115,12 @@ body #menu dl dd ul#mainMenu li a .icon { width: 40px; height: 32px; }
   background-size: 40px 32px;
 }
 
+.icon-add-folder { 
+  border-radius: 5px;
+  background: url("../imgs/icon-adicionar-pasta-90x72.png") no-repeat scroll center center;
+  background-size: 40px 32px;
+}
+
 
 body #menu dl dd ul#myFolders li { border-bottom: 1px #EFEFEF solid; }
 /*body #menu dl dd ul#myFolders li a { height: 32px; text-decoration: none; }*/
@@ -166,10 +172,12 @@ body #menu dl dd ul#myFolders li a span .badge.badge-info { float: right; }
   background: url("../imgs/icon-pasta-compartilhada-30x30.png") no-repeat scroll center center;
 }
 
-.icon-add-folder {
-  border-radius: 5px;
-  background: url("../imgs/icon-adicionar-contato-pessoal-30x30.png") no-repeat scroll center center;
-  background-size: 40px 32px;
+.context-add-folder {
+  background: url("../imgs/icon-adicionar-pasta-30x30.png") no-repeat scroll center center;
+}
+
+.context-del-folder {
+  background: url("../imgs/icon-excluir-pasta-30x30.png") no-repeat scroll center center;
 }
 
 

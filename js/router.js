@@ -26,7 +26,7 @@ define([
 
       'Home' : 'homeView',
       'Login' : 'loginView',
-      'Mail/Folder/New' : 'newFolderView',
+      'Mail/Folder/New/*PfolderID' : 'newFolderView',
       'Mail/Folders/*folderID' : 'openFolderView',
       'Mail/Message/:secondViewName/:msgID/*folderID' : 'composeMessageView',
       'Mail/Message/:secondViewName/:emailTo' : 'composeMessageTo',
@@ -71,10 +71,13 @@ define([
 
     app_router.on('route:newFolderView', function (PfolderID) {
 
-      console.log("route:newFolderView");
+      if (PfolderID == undefined) {
+        PfolderID = "INBOX";
+      }
 
       var editFolderView = new EditFolderView();
       editFolderView.action = "addFolder";
+      editFolderView.parentFolderID = PfolderID;
       editFolderView.render();
 
       Shared.menuView.closeMenu();

@@ -41,6 +41,15 @@ define([
         return this;
       },
 
+      getEditFolderMenu: function(params) {
+        var menuItems = [
+            { route: "#", id: "0", callBack : params.saveCallBack, parentCallBack: params.parentCallBack, title:"Salvar", primary: true}
+          ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
+      },
+
       getDetailMessageMenu: function(folderID,msgID) {
         var menuItems = [
             { route: "/Mail/Message/New", id: "0", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
@@ -48,6 +57,7 @@ define([
             { route: "/Mail/Message/ReplyToAll/" + msgID + "/" + folderID, id: "2", iconClass : 'context-reply-all', title: "Responder p/ Todos"},
             { route: "/Mail/Message/Forward/" + msgID + "/" + folderID, id: "3", iconClass : 'context-forward', title: "Encaminhar"},
             { route: "/Mail/Message/DelMessage/" + msgID + "/" + folderID, id: "4", iconClass : 'context-delete-message', title: "Excluir"},
+            { route: "/Mail/Folder/New/" + folderID, id: "5", iconClass : 'context-add-folder', title: "Adicionar Pasta"},
           ];
 
         this.createModelsFromArray(menuItems);

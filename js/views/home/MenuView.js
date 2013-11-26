@@ -19,6 +19,7 @@ define([
     menuOpen: false,
     profile: null,
     context: null,
+    folderMenuLV: null,
 
     initialize:function() {
       this.context = new ContextMenuView();
@@ -81,15 +82,19 @@ define([
           that.context = new ContextMenuView();
 
           if (Shared.userHasModule("mail")) {
-            var foldersMenuListView = new FoldersMenuListView();
-            foldersMenuListView.render();
+            that.folderMenuLV = new FoldersMenuListView();
+            that.folderMenuLV.render();
+
           }
 
         });
 
     },
 
-
+    refreshFolders: function() {
+      this.folderMenuLV = new FoldersMenuListView();
+      this.folderMenuLV.render();
+    }, 
 
     setQuota: function (used,total) {
 
@@ -261,6 +266,9 @@ define([
       }
       if (menuID == 'calendarDetailsEvent') {
           this.context.collection = contextMenuCollection.getCalendarDetailsEventMenu(params.isOwner, params.eventID, params.year, params.month, params.day);
+      }
+      if (menuID == 'editFolder') {
+          this.context.collection = contextMenuCollection.getEditFolderMenu(params);
       }
       this.context.render();
     },

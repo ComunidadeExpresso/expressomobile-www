@@ -58,6 +58,34 @@ define([
         return result;
       },
 
+      addFolder: function(PfolderName,PparentFolderID) {
+        var that = this;
+
+        that._data = {};
+
+        var thatModel = FoldersModel;
+
+        var data = this._data;
+
+        this.api
+        .resource('/Mail/AddFolder')
+        .params({folderName:PfolderName,parentFolderID:PparentFolderID})
+        .done(function(result){
+
+          if (that._data.done) { 
+            that._data.done(result); 
+          }
+        })
+        .fail( function (error) {
+          if (that._data.fail) { 
+            that._data.fail(error); 
+          }
+        });
+
+        return that;
+
+      },
+
       getFolders : function(PfolderID,Psearch) {
 
         var that = this;

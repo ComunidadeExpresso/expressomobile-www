@@ -23,6 +23,8 @@ define([
 
   Shared.timeoutDelay = 500;
 
+  Shared.forceSmartPhoneResolution = false;
+
   Shared.scrollDetail = null;
   Shared.scroll = null;
   Shared.scrollMenu = null;
@@ -151,12 +153,12 @@ define([
   };
 
   Shared.deviceType = function(smartphone) {
-    if (smartphone) {
+    if (smartphone || Shared.forceSmartPhoneResolution) {
       $('body').addClass('smartphone');
-      $('#pageHeader').addClass('smartphone');
+      //$('#pageHeader').addClass('smartphone');
     } else { 
       $('body').removeAttr('class');
-      $('#pageHeader').removeClass('smartphone');
+      //$('#pageHeader').removeClass('smartphone');
     }
   };
 
@@ -255,8 +257,6 @@ define([
     var onMessageFunction = function (message) { 
       Shared.menuView.setChatBadge(Shared.im.qtdUnreadMessages());
 
-      console.log(message);
-
       var message = {
         type: "chat-message",
         icon: 'icon-jabber',
@@ -285,7 +285,7 @@ define([
     var retVal = false;
     var a = Shared.profile.contactApps;
     a.push("settings"); //EVERYONE HAS ACCESS TO SETTINGS.
-    a.push("chat"); //TODO - CHAT MODULE IS NOT COMMING FROM THE API YET.
+    //a.push("chat"); //TODO - CHAT MODULE IS NOT COMMING FROM THE API YET.
     //a = ["mail","chat","settings"]; //USE THIS IF YOU WANT TO TEST SPECIFC MODULES WILL WORK INDIVIDUALY
     for (var i = 0; i < a.length; i++) {
       if (a[i] === moduleName) {

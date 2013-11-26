@@ -188,8 +188,6 @@ define([
     },
 
     refreshWindow: function() {
-      //alert('refreshWindow()');
-
 
       var top = $('.top').outerHeight(true);
       var chat = $('.chatArea').outerHeight(true) == null ? 0 : $('.chatArea').outerHeight(true);
@@ -198,10 +196,7 @@ define([
       var searchDetail = $('#contentDetail .searchArea').outerHeight(true) == null ? 0 : $('#contentDetail .searchArea').outerHeight(true);
       
       // Verify screen width to define device type
-      if (Shared.isSmartPhoneResolution())
-        $('body').addClass('smartphone');
-      else 
-        $('body').removeAttr('class');
+      Shared.deviceType(Shared.isSmartPhoneResolution());
 
       $('body').height($(window).height() - top);
       $('#wrapper').css('top', top + search);
@@ -209,15 +204,6 @@ define([
 
       Shared.scrollerRefresh();
       Shared.refreshDotDotDot();
-    },
-
-    // Define device type
-    deviceType: function(smartphone)
-    {
-      if (smartphone)
-        $('body').addClass('smartphone');
-      else 
-        $('body').removeAttr('class');
     },
 
     loaded: function () 
@@ -232,15 +218,13 @@ define([
       var search = $('#content .searchArea').outerHeight(true) == null ? 0 : $('#content .searchArea').outerHeight(true);
       
       // Verify screen width to define device type
-      this.deviceType(Shared.isSmartPhoneResolution());
+      Shared.deviceType(Shared.isSmartPhoneResolution());
 
       Shared.refreshDotDotDot();
 
       $('body').height($(window).height() - top);
       $('#wrapper').css('top', top + search);
-
-      //Shared.scrollDetail = new iScroll('wrapperDetail');
-        
+      
     }
 
   });
