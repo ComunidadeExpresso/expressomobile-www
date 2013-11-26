@@ -463,6 +463,10 @@ define([
 			
 			jQuery.ajax(conf).done(function(response) {
 
+				if ((!response.result) && (!response.error)) {
+					response = JSON.parse(response);
+				}
+
 				if (response && response.result) {
 					if (_debug) {
 						console.log('ExpressoAPI - DONE callback');

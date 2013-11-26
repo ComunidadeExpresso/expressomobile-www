@@ -72,10 +72,6 @@ define([
 
       var serverURL = $("#serverURL").val();
 
-      //var isPhoneGap = $("#isPhoneGap").is(':checked');
-
-      //Shared.api.phoneGap(isPhoneGap);
-
       var isPhoneGap = Shared.api.phoneGap();
 
       if (isPhoneGap) {
@@ -130,6 +126,8 @@ define([
             phoneGap: isPhoneGap,
             serverAPI: serverURL
           };
+
+          Shared.profile = expressoValues.profile;
 
           Shared.api.setLocalStorageValue("expresso",expressoValues);
 

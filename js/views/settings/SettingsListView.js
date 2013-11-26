@@ -87,12 +87,9 @@ define([
 
         setTimeout(function() {
 
-          Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
-            var user = expressoValue.profile;
-
             var newData = {
               _: _,
-              user: user,
+              user: Shared.profile,
               auth: Shared.api.auth(),
               automaticLogin: Shared.settings.automaticLogin,
               Shared: Shared
@@ -104,9 +101,6 @@ define([
 
             that.loaded();
 
-
-          });
-          
 
         },Shared.timeoutDelay);
 
