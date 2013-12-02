@@ -39,6 +39,14 @@
 
 <% } else { %>
 
+	<ul id="events">
+		<li>
+			<a href="/Calendar/FullDay/<%= year + '/' + month + '/' + day %>" title="Ver evento" class="see_all">
+				<span class="complete">Ver tudo</span>
+			</a>
+		</li>
+	</ul>
 	<p class="noEvent">Nenhum evento agendado</p>
+
 
 <% } %>
