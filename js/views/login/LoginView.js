@@ -42,9 +42,6 @@ define([
       })
       .getServers();
 
-
-      
-
     },
     events: {
       'click #btn-login' : 'loginUser',

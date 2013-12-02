@@ -9,7 +9,6 @@ define([
 ], function($, _, Backbone, Shared, FoldersCollection, foldersMenuListTemplate,LoadingView){
 
   var FoldersMenuListView = Backbone.View.extend({
-    el: $("#myFolders"),
 
     folderID: "INBOX",
     search: "",
@@ -23,7 +22,15 @@ define([
  
     },
 
-    
+    events: {
+      "click .listFolderMenuItemLink": "selectFolderMenuItem",
+    },
+
+    selectFolderMenuItem: function(e){
+      e.preventDefault();
+      console.log("selectFolderMenuItem");
+      Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
+    },
 
     getFolders: function (folderIDValue,searchValue) {
 
@@ -43,7 +50,9 @@ define([
 
         var compiledTemplate = _.template( foldersMenuListTemplate, newData );
 
-        $("#myFolders").html( compiledTemplate ); 
+        that.$el.html(compiledTemplate);
+        $("#myFolders").empty().append(that.$el);
+
 
         Shared.menuView.setQuota(data.diskSizeUsed,data.diskSizeLimit);
 

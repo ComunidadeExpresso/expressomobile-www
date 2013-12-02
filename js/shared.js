@@ -23,8 +23,6 @@ define([
 
   Shared.timeoutDelay = 500;
 
-  Shared.forceSmartPhoneResolution = false;
-
   Shared.scrollDetail = null;
   Shared.scroll = null;
   Shared.scrollMenu = null;
@@ -153,7 +151,7 @@ define([
   };
 
   Shared.deviceType = function(smartphone) {
-    if (smartphone || Shared.forceSmartPhoneResolution) {
+    if (smartphone) {
       $('body').addClass('smartphone');
       //$('#pageHeader').addClass('smartphone');
     } else { 

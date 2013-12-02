@@ -58,6 +58,34 @@ define([
         return result;
       },
 
+      renameFolder: function(PfolderName,PfolderID) {
+        var that = this;
+
+        that._data = {};
+
+        var thatModel = FoldersModel;
+
+        var data = this._data;
+
+        this.api
+        .resource('/Mail/RenameFolder')
+        .params({folderName:PfolderName,folderID:PfolderID})
+        .done(function(result){
+
+          if (that._data.done) { 
+            that._data.done(result); 
+          }
+        })
+        .fail( function (error) {
+          if (that._data.fail) { 
+            that._data.fail(error); 
+          }
+        });
+
+        return that;
+
+      },
+
       addFolder: function(PfolderName,PparentFolderID) {
         var that = this;
 
@@ -70,6 +98,34 @@ define([
         this.api
         .resource('/Mail/AddFolder')
         .params({folderName:PfolderName,parentFolderID:PparentFolderID})
+        .done(function(result){
+
+          if (that._data.done) { 
+            that._data.done(result); 
+          }
+        })
+        .fail( function (error) {
+          if (that._data.fail) { 
+            that._data.fail(error); 
+          }
+        });
+
+        return that;
+
+      },
+
+      deleteFolder: function(PfolderID) {
+        var that = this;
+
+        that._data = {};
+
+        var thatModel = FoldersModel;
+
+        var data = this._data;
+
+        this.api
+        .resource('/Mail/DelFolder')
+        .params({folderID:PfolderID})
         .done(function(result){
 
           if (that._data.done) { 
@@ -115,6 +171,8 @@ define([
           that.diskSizeUsed = result.diskSizeUsed;
           that.diskSizeLimit = result.diskSizeLimit;
           that.diskSizePercent = result.diskSizePercent;
+
+          Shared.folders = that;
 
           if (that._data.done) { 
             that._data.done(that); 

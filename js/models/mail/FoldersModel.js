@@ -21,20 +21,13 @@ define([
 
     initialize: function() {
     	this.api = Shared.api;
-    	this.readResource = '/Mail/Folders';
-		  this.updateResource = '/Mail/RenameFolder';
-		  this.createResource = '/Mail/AddFolder';
-		  this.deleteResource = '/Mail/DelFolder';
     },
 
     
     route: function() {
-      return '/Mail/Folders/' + this.get("folderID");
+      return '/Mail/Folders/' + this.get("folderID") + '#';
     },
 
-    listItemID: function() {
-      //return 'Mail_Message_ListItem_' + this.get("folderID") + "_" + this.get("msgID");
-    }
     
 
 

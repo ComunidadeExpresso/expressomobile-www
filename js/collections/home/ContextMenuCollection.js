@@ -22,11 +22,32 @@ define([
         }
       },
 
-      getMessagesListMenu: function(folderID) {
-        var menuItems = [
-            { route: "/Mail/Message/New", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
-            { route: "/Mail/Folder/New", title: "Nova Pasta", primary: false}
-          ];
+      getMessagesListMenu: function(folderID,folderName,folderType,qtdMessages) {
+
+        var menuItems = [];
+
+        var newMessage = { route: "/Mail/Message/New", id: "1", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true};
+        var addFolder = { route: "/Mail/AddFolder/" + folderID + "", id: "2", iconClass : 'context-add-folder', title: "Adicionar Pasta"};
+        var renameFolder = { route: "/Mail/RenameFolder/" + folderID + "", id: "3", iconClass : 'context-rename-folder', title: "Renomear Pasta"};
+        var deleteFolder = { route: "/Mail/DeleteFolder/" + folderID + "", id: "4", iconClass : 'context-del-folder', title: "Excluir Pasta"};
+
+        menuItems.push(newMessage);
+
+
+        console.log("folderType");
+        console.log(folderType);
+        console.log(qtdMessages);
+
+        //ONLY CAN ADD SUBFOLDERS OR RENAME IF THE FOLDER TYPE IS 5 (PERSONAL FOLDER)
+        if (folderType == 5) {
+          menuItems.push(addFolder);
+          menuItems.push(renameFolder);
+
+          //CAN ONLY DELETE FOLDERS IF THE FOLDER HAS NO MESSAGES
+          if (qtdMessages == 0) {
+            menuItems.push(deleteFolder);
+          }
+        }
 
         this.createModelsFromArray(menuItems);
         return this;
@@ -50,16 +71,39 @@ define([
         return this;
       },
 
-      getDetailMessageMenu: function(folderID,msgID) {
-        var menuItems = [
-            { route: "/Mail/Message/New", id: "0", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
-            { route: "/Mail/Message/ReplyMessage/" + msgID + "/" + folderID, id: "1", iconClass : 'context-reply', title: "Responder"},
-            { route: "/Mail/Message/ReplyToAll/" + msgID + "/" + folderID, id: "2", iconClass : 'context-reply-all', title: "Responder p/ Todos"},
-            { route: "/Mail/Message/Forward/" + msgID + "/" + folderID, id: "3", iconClass : 'context-forward', title: "Encaminhar"},
-            { route: "/Mail/Message/DelMessage/" + msgID + "/" + folderID, id: "4", iconClass : 'context-delete-message', title: "Excluir"},
-            { route: "/Mail/Folder/New/" + folderID, id: "5", iconClass : 'context-add-folder', title: "Adicionar Pasta"},
-          ];
+      getDetailMessageMenu: function(folderID,msgID,folderType,qtdMessages) {
 
+        var menuItems = [];
+
+        var newMessage = { route: "/Mail/Message/New", id: "0", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true};
+        var replyMessage = { route: "/Mail/Message/ReplyMessage/" + msgID + "/" + folderID, id: "1", iconClass : 'context-reply', title: "Responder"};
+        var replyMessageToAll = { route: "/Mail/Message/ReplyToAll/" + msgID + "/" + folderID, id: "2", iconClass : 'context-reply-all', title: "Responder p/ Todos"};
+        var forwardMessage = { route: "/Mail/Message/Forward/" + msgID + "/" + folderID, id: "3", iconClass : 'context-forward', title: "Encaminhar"};
+        var deleteMessage = { route: "/Mail/Message/DelMessage/" + msgID + "/" + folderID, id: "4", iconClass : 'context-delete-message', title: "Excluir"};
+        var addFolder = { route: "/Mail/AddFolder/" + folderID + "", id: "5", iconClass : 'context-add-folder', title: "Adicionar Pasta"};
+        var renameFolder = { route: "/Mail/RenameFolder/" + folderID + "", id: "6", iconClass : 'context-rename-folder', title: "Renomear Pasta"};
+        var deleteFolder = { route: "/Mail/DeleteFolder/" + folderID + "", id: "7", iconClass : 'context-del-folder', title: "Excluir Pasta"};
+
+        menuItems.push(newMessage);
+
+        if (msgID != 0) {
+          menuItems.push(replyMessage);
+          menuItems.push(replyMessageToAll);
+          menuItems.push(forwardMessage);
+          menuItems.push(deleteMessage);
+        }
+
+        //ONLY CAN ADD SUBFOLDERS OR RENAME IF THE FOLDER TYPE IS 5 (PERSONAL FOLDER)
+        if (folderType == 5) {
+          menuItems.push(addFolder);
+          menuItems.push(renameFolder);
+
+          //CAN ONLY DELETE FOLDERS IF THE FOLDER HAS NO MESSAGES
+          if (qtdMessages == 0) {
+            menuItems.push(deleteFolder);
+          }
+        }
+        
         this.createModelsFromArray(menuItems);
         return this;
       },

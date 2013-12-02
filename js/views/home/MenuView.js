@@ -231,11 +231,11 @@ define([
 
       this.context = new ContextMenuView();
       var contextMenuCollection = new ContextMenuCollection();
-      if (menuID == 1) {
-          this.context.collection = contextMenuCollection.getDetailMessageMenu(params.folderID,params.msgID);
+      if (menuID == 'detailMessage') {
+          this.context.collection = contextMenuCollection.getDetailMessageMenu(params.folderID,params.msgID,params.folderType,params.qtdMessages);
       }
       if (menuID == 'messageList') { 
-        this.context.collection = contextMenuCollection.getMessagesListMenu(params.folderID);
+        this.context.collection = contextMenuCollection.getMessagesListMenu(params.folderID,params.folderName,params.folderType,params.qtdMessages);
       }
       if (menuID == 'newMessage') {
           this.context.collection = contextMenuCollection.getSendMessageMenu(params);

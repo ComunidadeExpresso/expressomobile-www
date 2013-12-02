@@ -9,7 +9,6 @@ define([
 
   var EditFolderView = Backbone.View.extend({
 
-    parentFolderID: "",
     action: "addFolder",
     folderID: "",
     folderName : "Nova Pasta",
@@ -19,10 +18,50 @@ define([
 
       this.elementID = "#content";
 
+      
+
+      if (this.action == "renameFolder") { 
+        title = "Renomear Pasta";
+
+        var foldersCol =  new FoldersCollection();
+
+        var that = this;
+
+        foldersCol.getFolders(this.folderID,this.search).done( function (foldersData) {
+
+
+          var currentFolder = foldersData.getFolderByID(that.folderID);
+
+          that.folderName = currentFolder.get("folderName");
+
+          that.renderView();
+
+
+        }).fail(function(result){
+
+          Shared.handleErrors(result.error);
+
+          $(that.elementID).empty();
+
+          $(that.detailElementID).empty();
+
+          return false;
+        })
+        .execute();
+
+      } else {
+        this.renderView();
+      }
+
+      
+
+    },
+
+    renderView: function() {
       var title = "";
 
       if (this.action == "addFolder") { 
-        title = "Nova Pasta";
+        title = "Adicionar Pasta";
       }
 
       if (this.action == "renameFolder") { 
@@ -47,13 +86,9 @@ define([
       params.saveCallBack = this.saveFolder;
       params.parentCallBack = this;
 
-      Shared.forceSmartPhoneResolution = true;
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-
       Shared.menuView.renderContextMenu('editFolder', params);
 
       this.loaded();
-
     },
 
     saveFolder: function() {
@@ -62,9 +97,9 @@ define([
       var folderID = $("#folderID").val();
       var parentFolderID = $("#parentFolderID").val();
 
-      if (folderAction == "addFolder") { 
+      var foldersCol =  new FoldersCollection();
 
-        var foldersCol =  new FoldersCollection();
+      if (folderAction == "addFolder") { 
 
         foldersCol.addFolder(folderName,parentFolderID).done(function (result) {
 
@@ -80,22 +115,64 @@ define([
 
           Shared.showMessage(message);
 
-          Shared.forceSmartPhoneResolution = false;
           Shared.deviceType(Shared.isSmartPhoneResolution());
 
           Shared.menuView.refreshFolders();
 
-          Shared.router.navigate("/Mail/Folders/" + result.folderID ,{ trigger: true });
+          Shared.router.navigate("/Mail/Folders/" + result.folderID + "#",{ trigger: true });
 
         }).fail(function (result) {
 
           var message = {
-              type: "error",
-              icon: 'icon-email',
-              title: "Não foi possível adicionar esta pasta!",
-              description: "",
-              elementID: "#pageMessage",
-            }
+            type: "error",
+            icon: 'icon-email',
+            title: "Não foi possível adicionar esta pasta!",
+            description: "",
+            elementID: "#pageMessage",
+          }
+
+          if (result.error.code == "1011") { 
+            message.title = "Não foi possível adicionar uma pasta com esse nome!";
+          } 
+
+          if (result.error.code == "1011") { 
+            message.title = "Não foi possível adicionar uma pasta com esse nome!";
+          } 
+
+          Shared.showMessage(message);
+          
+        }).execute();
+
+      }
+
+      if (folderAction == "renameFolder") { 
+        foldersCol.renameFolder(folderName,folderID).done(function (result) {
+
+          var message = {
+            type: "success",
+            icon: 'icon-email',
+            title: "Pasta renomeada com sucesso!",
+            description: "",
+            elementID: "#pageMessage",
+          }
+
+          Shared.showMessage(message);
+
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+
+          Shared.menuView.refreshFolders();
+
+          Shared.router.navigate("/Mail/Folders/" + result.folderID + "#",{ trigger: true });
+
+        }).fail(function (result) {
+
+          var message = {
+            type: "error",
+            icon: 'icon-email',
+            title: "Não foi possível renomear esta pasta!",
+            description: "",
+            elementID: "#pageMessage",
+          }
 
           if (result.error.code == "1011") { 
             message.title = "Não foi possível adicionar uma pasta com esse nome!";
@@ -109,11 +186,48 @@ define([
 
     },
 
+    deleteFolder: function(folderID) {
+
+      var foldersCol =  new FoldersCollection();
+
+      foldersCol.deleteFolder(folderID).done(function(result) { 
+
+        var message = {
+          type: "success",
+          icon: 'icon-email',
+          title: "A pasta foi excluída com sucesso!",
+          description: "",
+          elementID: "#pageMessage",
+        }
+
+        Shared.showMessage(message);
+        Shared.menuView.refreshFolders();
+
+        Shared.router.navigate("/Mail/Folders/INBOX#",{ trigger: true }); 
+
+      }).fail(function (result) {
+
+        var message = {
+          type: "error",
+          icon: 'icon-email',
+          title: "Não foi possível excluir esta pasta!",
+          description: "",
+          elementID: "#pageMessage",
+        }
+
+        Shared.showMessage(message);
+        
+      }).execute();
+
+    },
+
     loaded: function () 
     {
 
       var that = this;
       Shared.scrollDetail = new iScroll('wrapperDetail');
+
+      Shared.deviceType(true);
 
     }
   });

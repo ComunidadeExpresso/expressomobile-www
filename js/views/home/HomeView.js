@@ -176,6 +176,7 @@ define([
 
     selectFolderItem: function(e){
       e.preventDefault();
+      console.log("selectFolderItem");
       Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
     },
 

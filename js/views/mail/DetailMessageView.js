@@ -42,6 +42,8 @@ define([
 
           var message = data.models[0];
 
+          var qtdMessages = data.models.length;
+
           var data = {
             messages: data.models,
             _: _ ,
@@ -57,7 +59,14 @@ define([
 
           that.renderAttachments(message);
 
-          Shared.menuView.renderContextMenu(1,{folderID: that.folderID, msgID: that.msgID});
+          var currentFolder = Shared.folders.getFolderByID(that.folderID);
+          var folderType = 5;
+
+          if (currentFolder.get != undefined) {
+            folderType = currentFolder.get("folderType");
+          }
+
+          Shared.menuView.renderContextMenu('detailMessage',{folderID: that.folderID, msgID: that.msgID, folderType: folderType, qtdMessages: qtdMessages });
 
           that.loaded();
 
@@ -74,27 +83,32 @@ define([
     },
 
     renderAttachments: function(message) {
-      var attachments = message.get("msgAttachments");
-      for (var i in attachments) {
 
-        //console.log(attachments[i]);
+      if (message != undefined) {
+        
+        var attachments = message.get("msgAttachments");
+        for (var i in attachments) {
 
-        var attachment = attachments[i];
+          //console.log(attachments[i]);
 
-        var preview = new PreviewAttachmentMessageView();
+          var attachment = attachments[i];
 
-        preview.fileID = attachment.attachmentID;
-        preview.fileName = attachment.attachmentName;
-        preview.fileSize = attachment.attachmentSize;
-        preview.fileEncoding = attachment.attachmentEncoding;
-        preview.fileIndex = attachment.attachmentIndex;
-        preview.msgID = message.get("msgID");
-        preview.folderID = message.get("folderID");
-        preview.fileData = '';
+          var preview = new PreviewAttachmentMessageView();
 
-        preview.previewType = 'detailmessage';
+          preview.fileID = attachment.attachmentID;
+          preview.fileName = attachment.attachmentName;
+          preview.fileSize = attachment.attachmentSize;
+          preview.fileEncoding = attachment.attachmentEncoding;
+          preview.fileIndex = attachment.attachmentIndex;
+          preview.msgID = message.get("msgID");
+          preview.folderID = message.get("folderID");
+          preview.fileData = '';
 
-        preview.render();
+          preview.previewType = 'detailmessage';
+
+          preview.render();
+        }
+
       }
     },
 

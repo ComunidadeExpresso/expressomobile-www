@@ -26,12 +26,14 @@ define([
 
       'Home' : 'homeView',
       'Login' : 'loginView',
-      'Mail/Folder/New/*PfolderID' : 'newFolderView',
-      'Mail/Folders/*folderID' : 'openFolderView',
+      'Mail/AddFolder/*PfolderID' : 'newFolderView',
+      'Mail/RenameFolder/*PfolderID' : 'renameFolderView',
+      'Mail/DeleteFolder/*PfolderID' : 'deleteFolderView',
       'Mail/Message/:secondViewName/:msgID/*folderID' : 'composeMessageView',
       'Mail/Message/:secondViewName/:emailTo' : 'composeMessageTo',
       'Mail/Message/:secondViewName' : 'composeMessageView',
       'Mail/Messages/:msgID/*folderID' : 'detailMessageView',
+      'Mail/Folders/*folderID' : 'openFolderView',
       'Contacts' : 'contactsListView',
       'Contacts/:secondViewName' : 'contactsListView',
       'Contacts/:secondViewName/:contactID' : 'detailsContactView',
@@ -75,6 +77,8 @@ define([
         PfolderID = "INBOX";
       }
 
+      PfolderID = PfolderID.replace("#","");
+
       var editFolderView = new EditFolderView();
       editFolderView.action = "addFolder";
       editFolderView.parentFolderID = PfolderID;
@@ -84,7 +88,39 @@ define([
 
     });
 
+    app_router.on('route:renameFolderView', function (PfolderID) {
+
+      if (PfolderID == undefined) {
+        PfolderID = "INBOX";
+      }
+
+      PfolderID = PfolderID.replace("#","");
+
+      var editFolderView = new EditFolderView();
+      editFolderView.action = "renameFolder";
+      editFolderView.folderID = PfolderID;
+      editFolderView.render();
+
+      Shared.menuView.closeMenu();
+
+    });
+
+    app_router.on('route:deleteFolderView', function (PfolderID) {
+
+      PfolderID = PfolderID.replace("#","");
+
+      var editFolderView = new EditFolderView();
+      editFolderView.deleteFolder(PfolderID);
+
+      Shared.menuView.closeMenu();
+
+      
+
+    });
+
     app_router.on('route:openFolderView', function (PfolderID) {
+
+      PfolderID = PfolderID.replace("#","");
 
       if (!Shared.newMessageIntent) {
         var homeView = new HomeView({folderID: PfolderID});
@@ -101,6 +137,7 @@ define([
         Shared.router.navigate("/Mail/Message/New",{ trigger: true });
       }
       
+      Shared.deviceType(Shared.isSmartPhoneResolution());
       
 
     });
@@ -109,7 +146,7 @@ define([
 
        var loginView = new LoginView();
        loginView.render();
-  
+
     });
 
     app_router.on('route:logoutView', function (actions) {
@@ -154,6 +191,8 @@ define([
       detailMessageView.render();
 
       Shared.menuView.closeMenu();
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
   
     });
 
@@ -165,6 +204,8 @@ define([
       composeMessageView.folderID = folderID;
       composeMessageView.render();
       Shared.menuView.closeMenu();
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
   
     });
 
@@ -175,6 +216,8 @@ define([
       composeMessageView.emailTo = emailTo;
       composeMessageView.render();
       Shared.menuView.closeMenu();
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
   
     });
 
@@ -185,6 +228,8 @@ define([
       settingsListView.render();
 
       Shared.menuView.selectMenu(5);
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
   
     });
 
@@ -195,6 +240,8 @@ define([
       contactsListView.render();
 
       Shared.menuView.selectMenu(3);
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
   
     });
 
@@ -206,6 +253,8 @@ define([
       detailsContactView.render();
 
       Shared.menuView.selectMenu(3);
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
   
     });
 
@@ -220,6 +269,8 @@ define([
       calendarListView.render();
 
       Shared.menuView.selectMenu(2);
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
   
     });
 
@@ -234,6 +285,8 @@ define([
       calendarFullDayListView.render();
 
       Shared.menuView.selectMenu(2);
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
   
     });
 
@@ -245,6 +298,8 @@ define([
       calendarDetailsView.render();
 
       Shared.menuView.selectMenu(2);
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
   
     });
 
@@ -255,6 +310,8 @@ define([
       calendarEditEventView.render();
 
       Shared.menuView.selectMenu(2);
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
   
     });
 
@@ -268,6 +325,8 @@ define([
           calendarAddEventView.render();
 
       Shared.menuView.selectMenu(2);
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
   
     });
 
@@ -281,6 +340,8 @@ define([
       calendarDeleteEventView.render();
 
       Shared.menuView.selectMenu(2);
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
     });
 
     app_router.on('route:chatListView', function (secondViewName) {
@@ -290,6 +351,7 @@ define([
       chatListView.render();
 
       Shared.menuView.selectMenu(4);
+      Shared.deviceType(Shared.isSmartPhoneResolution());
   
     });
 

@@ -36,9 +36,11 @@ define([
         };
 
         if (!colection.length) {
+
           if (Shared.isTabletResolution()) {
-            $("#contentDetail").html("<h2>Nenhuma mensagem foi selecionada...</h2>");
+            Shared.router.navigate("/Mail/Messages/0/" + that.folderID + "#", {trigger: true});
           }
+
         }
 
         var compiledTemplate = _.template( messagesListTemplate, newData );
@@ -52,27 +54,24 @@ define([
 
       var doneFunction = function() { 
 
-
         if (Shared.isTabletResolution()) {
            that.selectFirstMessage(); 
         }
 
+        Shared.setDefaultIMListeners();
+
+        Shared.menuView.renderContextMenu('messageList',{folderID: that.folderID, folderName: that.currentFolder.folderName, folderType: that.currentFolder.get("folderType"), qtdMessages: 0});
+
         that.loaded(); 
       };
 
-      var loadingView = new LoadingView({ el: $("#content") });
+      var loadingView = new LoadingView({ el: $(this.elementID) });
       loadingView.render();
 
-      var loadingView = new LoadingView({ el: $("#contentDetail") });
+      var loadingView = new LoadingView({ el: $(this.detailElementID) });
       loadingView.render();
 
       that.getMessages(that.folderID,that.search,that.page,false,beforeRenderCallback,doneFunction);
-
-      Shared.setDefaultIMListeners();
-
-      Shared.setCurrentView(1,this);
-
-      Shared.menuView.renderContextMenu('messageList',{folderID: that.folderID});
 
     },
 
