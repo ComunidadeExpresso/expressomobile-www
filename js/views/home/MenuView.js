@@ -270,6 +270,9 @@ define([
       if (menuID == 'editFolder') {
           this.context.collection = contextMenuCollection.getEditFolderMenu(params);
       }
+      if (menuID == 'support') {
+          this.context.collection = contextMenuCollection.getSupportMenu(params);
+      }
       this.context.render();
     },
 

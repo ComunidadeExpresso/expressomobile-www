@@ -44,6 +44,9 @@ define([
         if (this.secondViewName == "Support") {
            var secondView = new SettingsSupportListView({ el: $(detailElementID) });
         }
+        // if (this.secondViewName == "SendSupportFeedback") {
+        //    var secondView = new SettingsSupportListView({ el: $(detailElementID) });
+        // }
         if (this.secondViewName == "About") {
            var secondView = new SettingsAboutListView({ el: $(detailElementID) });
         }
@@ -59,7 +62,6 @@ define([
         }
         if (this.secondViewName == "MailSignature") {
            var secondView = new SettingsMailSignatureListView({ el: $(detailElementID) });
-           
         }
 
         if (this.secondViewName == "SaveMailSignature") {
@@ -127,20 +129,20 @@ define([
 
       // //BUG INTENTIONALY LEFT TO REPRODUCE AN INVALID AUTH.
 
-      Shared.api
-      .resource('Logout')
-      .done(function(result){
+      // Shared.api
+      // .resource('Logout')
+      // .done(function(result){
 
-        alert('logout');
+      //   alert('logout');
         
-      })
-      .fail(function(error){
+      // })
+      // .fail(function(error){
 
-        Shared.handleErrors(error);
+      //   Shared.handleErrors(error);
         
-        return false;
-      })
-      .execute();
+      //   return false;
+      // })
+      // .execute();
 
       // Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
