@@ -35,17 +35,16 @@ define ([
 			return this;
 		},
 
-		getImagePicture: function (pContactID)
+		getImagePicture: function (pContactID, pContactType)
 		{
 			var that = this;
 
 			this.api
 			.resource('Catalog/ContactPicture')
-			.params({contactID:pContactID,contactType:'2'})
+			.params({contactID:pContactID,contactType:pContactType})
 	        .done(function (result)
 	        {
 	        	var thisModel = new ContactPictureImageModel(result.contacts[0]);
-	        		// that.set(thisModel);
 
 		        if (that.done)
 	        		that.done(thisModel);

@@ -240,7 +240,7 @@ body #page .main dl#contactsList dd ul li { height: 71px; }
 body #page .main dl#contactsList dd ul li a { height: 71px; }
 body #page .main dl#contactsList dd ul li a div.picture_image { height: 61px; width: 46px; margin-top: 5px; float: left; }
 body #page .main dl#contactsList dd ul li a div.picture_image img { height: 61px; width: 46px; /*margin-top: 5px; float: left;*/ }
-body #page .main dl#contactsList.general dd ul li a div.info { margin-left: 61px; }
+body #page .main dl#contactsList dd ul li a div.info { margin-left: 61px; }
 body #page .main dl#contactsList dd ul li a div.info span { display: block; line-height: normal; margin-left: 0 }
 body #page .main dl#contactsList dd ul li a div.info span.name { font-size: 14px; padding-top: 18px;  }
 body #page .main dl#contactsList dd ul li a div.info span.email { font-size: 13px; }

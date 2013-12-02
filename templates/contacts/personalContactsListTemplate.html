@@ -23,6 +23,12 @@
 
 					<li id="<%=c.get('contactID')%>">
 						<a href="/Contacts/Personal/<%= c.get('contactID') %>" title="<%=c.get('contactFullName')%>">
+
+							<% 
+							var id = c.get('contactID');
+							%>
+
+							<div id="picture_contact_<%= id %>" class="picture_image"></div>
 							<div class="info">
 								<span class="name"><%=c.get('contactFullName')%></span>
 								<span class="email"><%=c.getFirstEmailAddress()%></span>

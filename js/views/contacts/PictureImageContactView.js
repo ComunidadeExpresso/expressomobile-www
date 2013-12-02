@@ -15,9 +15,16 @@
 			var done = function (value)
 			{
 				var contactID = decodeURIComponent(value.contact.get('contactID'));
-				var queryUID = contactID.split(",")[0]; 
-				var uid = queryUID.split("=");
-				var id = uid[1].replace(".", "___");
+				var id;
+
+				if (parseInt(contactID) != NaN && parseInt(contactID) % 1 == 0)
+					id = contactID;
+				else
+				{
+					var queryUID = contactID.split(",")[0]; 
+					var uid = queryUID.split("=");
+					id = uid[1].replace(".", "___");
+				}
 
 				$('#picture_contact_' + id + ' img').attr('src', 'data:image/gif;base64,' + value.contact.get('contactImagePicture'));
 			}
@@ -29,9 +36,9 @@
 					this.getContactPictureImage(data.contacts[i].get('contactID'), done, done);	
 				}
 			}
-			
+
 			var compiledTemplate = _.template(PictureImageContactTemplate);
-			$('.picture_image').html(compiledTemplate);
+			this.$el.html(compiledTemplate);
 
 			this.loaded();			
 		},
@@ -42,8 +49,13 @@
 
 		getContactPictureImage: function (pContactID, callbackSuccess, callbackFail)
 		{
+			var pContactType = '2';
+
+			if (parseInt(pContactID) != NaN && parseInt(pContactID) % 1 == 0)
+				pContactType = '1';
+
 			var contactPictureImageModel = new ContactPictureImageModel();
-				contactPictureImageModel.getImagePicture(pContactID)
+				contactPictureImageModel.getImagePicture(pContactID, pContactType)
 				.done(function (data) 
 				{
 					callbackSuccess({ contact: data, _: _ });

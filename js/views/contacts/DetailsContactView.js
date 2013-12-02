@@ -5,12 +5,14 @@ define([
 	'shared',
 	'views/home/LoadingView',
 	'views/home/HomeView',
+	'views/contacts/PictureImageContactView',
 	'text!templates/master/detailContentTemplate.html',
 	'text!templates/master/primaryContentTemplate.html',
 	'text!templates/contacts/detailsContactTemplate.html',
 	'collections/contacts/DetailsContactCollection',
 	'collections/home/ContextMenuCollection',
-], function($, _, Backbone, Shared, LoadingView, HomeView, detailContentTemplate, primaryContentTemplate, DetailsContactTemplate, DetailsContactCollection, ContextMenuCollection)
+	'models/contacts/ContactPictureImageModel',
+], function($, _, Backbone, Shared, LoadingView, HomeView, PictureImageContactView, detailContentTemplate, primaryContentTemplate, DetailsContactTemplate, DetailsContactCollection, ContextMenuCollection, ContactPictureImageModel)
 {
 	var DetailsContactView = Backbone.View.extend(
 	{
@@ -53,7 +55,14 @@ define([
 				var contact = {contact: _.first(data.contacts), _: _};
 
 				container.empty().append(_.template(DetailsContactTemplate, contact));
+
 				self.loaded((_.first(data.contacts).get('contactMails'))[0]);			
+
+				var pictureImageContactView = new PictureImageContactView({el: $('.details_picture_image')});
+					pictureImageContactView.render(data);
+
+				$('.details_picture_image').css('margin', '0 10px');
+				$('.details_picture_image img').css('width', '80px').css('height', '106px');
 			}
 
 			if (this.secondViewName == 'Personal')

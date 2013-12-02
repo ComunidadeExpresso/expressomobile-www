@@ -38,17 +38,6 @@ define([
 				$('#contentDetail').html(_.template(detailContentTemplate));
 				$('#contentDetail .searchArea').remove();
 				$('#contentDetailTitle').text('Exibir contato');
-
-				Shared.showMessage({
-					type: "chat-message",
-					icon: 'icon-contacts',
-					title: "Selecione um contato para exibir as informações",
-					route: "",
-					description: "",
-					timeout: 0,
-					animate: false,
-					elementID: "#messageDetail",
-				});
 			}
 
 			var loadingView = new LoadingView({el: $('#scroller')});	
@@ -137,6 +126,8 @@ define([
 					{
 						$('#message').empty();
 						$('#scroller').empty().append(_.template(PersonalContactsListTemplate, data));
+
+						self.openFirstContact(data.contacts[0].get('contactID'), 'Personal');
 					} 
 					else 
 					{
@@ -161,6 +152,9 @@ define([
 
 				self.setElement(self.$el);
 				self.loaded();
+
+				var pictureImageContactView = new PictureImageContactView({el: $('.picture_image')});
+				pictureImageContactView.render(data);
 			};
 
 			this.listContacts(pSearch, '1', donePersonalContacts, donePersonalContacts);
@@ -182,6 +176,9 @@ define([
 				{
 					$('#message').empty();
 					$('#scroller').empty().append(_.template(GeneralContactsListTemplate, data));
+
+					if (data.contacts.length > 0) 
+						self.openFirstContact(data.contacts[0].get('contactUIDNumber'), 'General');
 				} 
 				else 
 				{
@@ -216,11 +213,11 @@ define([
 			        $('#scroller').empty();
 				}
 
-				var pictureImageContactView = new PictureImageContactView({el: $('.picture_image')});
-				pictureImageContactView.render(data);
-
 				self.setElement(self.$el);
 				self.loaded();
+
+				var pictureImageContactView = new PictureImageContactView({el: $('.picture_image')});
+				pictureImageContactView.render(data);
 			};
 
 			this.listContacts(pSearch, '2', doneGeneralContacts, doneGeneralContacts);
@@ -250,6 +247,17 @@ define([
 			$(e.target).parents('li').addClass('selected');
 
 			Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
+		},
+
+		openFirstContact: function (contactID, contactType)
+		{
+			if (!Shared.isSmartPhoneResolution())
+			{
+				$('#contactsList ul li').removeAttr('class');
+				$('#' + contactID).addClass('selected');
+
+				Shared.router.navigate('/Contacts/' + contactType + '/' + contactID, {trigger: true});
+			}
 		},
 
 		removeAccents: function(strAccents) 
