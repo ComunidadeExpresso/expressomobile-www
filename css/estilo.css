@@ -215,8 +215,10 @@ body form { font-size: 16px; padding: 15px; }
   body #emailSignature ol li textarea { width: 100%; height: 300px; font-size: 16px; border: 0px; border-color: #FFF; }
 
   /** Preferências > Suporte / Sugestões **/
-  body form#support ol li { margin: 15px 25px 15px 15px; }
-  body form#support ol li textarea { width: 100%; height: 150px; }
+  body #support ol li { margin: 15px 25px 15px 15px; }
+  body #support ol li textarea { width: 100%; height: 300px; font-size: 16px; border: 0px; border-color: #FFF; }
+/*  body form#support ol li { margin: 15px 25px 15px 15px; }
+  body form#support ol li textarea { width: 100%; height: 150px; }*/
 
   /** Preferências > Sobre o expresso **/
   /*body dl#aboutExpresso { margin: 15px 25px; }*/

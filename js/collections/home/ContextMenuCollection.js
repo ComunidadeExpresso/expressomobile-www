@@ -53,9 +53,18 @@ define([
         return this;
       },
 
-      getMailSignatureMenu: function(folderID) {
+      getMailSignatureMenu: function() {
         var menuItems = [
             { route: "/Settings/SaveMailSignature", title:"Salvar", primary: true}
+          ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
+      },
+
+      getSupportMenu: function(params) {
+        var menuItems = [
+            { route: "#", id: "0", callBack : params.saveCallBack, parentCallBack: params.parentCallBack, title:"Enviar", primary: true}
           ];
 
         this.createModelsFromArray(menuItems);

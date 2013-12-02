@@ -53,9 +53,6 @@ define([
         $(this.elementID).attr("style","top: 0px");
       }
 
-
-      
-
       var that = this;
 
       if (that.timeout > 0) {
