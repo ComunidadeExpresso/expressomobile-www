@@ -140,7 +140,6 @@ define([
       var contentDetailWidth = $("#contentDetail").width();
 
       if ((contentBodyWidth + 15) >= contentDetailWidth) {
-        console.log("bigger");
         $("#scrollerDetail").width(contentBodyWidth + 15);
       }
 

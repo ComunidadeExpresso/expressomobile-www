@@ -745,7 +745,15 @@ define([
 
       this.refreshWindowHeight();
 
-      Shared.scrollDetail = new iScroll('wrapperDetail');
+      var msgBodyInput = $("#msgBodyInput").width();
+      var contentDetailWidth = $("#contentDetail").width();
+
+      if ((msgBodyInput + 13) >= contentDetailWidth) {
+        $("#scrollerDetail").width(msgBodyInput + 13);
+      }
+
+      Shared.scrollDetail = new iScroll('wrapperDetail',{vScroll:true, hScroll:true, hScrollBar: true, vScrollBar: true, zoom: true });
+
     }
   });
 
