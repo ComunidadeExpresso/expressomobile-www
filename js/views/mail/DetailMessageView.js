@@ -136,8 +136,15 @@ define([
       $('body').height($(window).height() - top);
       $('#wrapper').css('top', top + search);
 
-      Shared.scrollDetail = new iScroll('wrapperDetail',{vScroll:true, hScroll:true, hScrollBar: true, vScrollBar: true , zoom: true });
+      var contentBodyWidth = $("#contentMessageBody").width();
+      var contentDetailWidth = $("#contentDetail").width();
 
+      if ((contentBodyWidth + 15) >= contentDetailWidth) {
+        console.log("bigger");
+        $("#scrollerDetail").width(contentBodyWidth + 15);
+      }
+
+      Shared.scrollDetail = new iScroll('wrapperDetail',{vScroll:true, hScroll:true, hScrollBar: true, vScrollBar: true, zoom: true });
 
       Shared.refreshDotDotDot();
       Shared.scrollerRefresh();
