@@ -127,7 +127,7 @@ define([
 						$('#message').empty();
 						$('#scroller').empty().append(_.template(PersonalContactsListTemplate, data));
 
-						self.openFirstContact(data.contacts[0].get('contactID'), 'Personal');
+						self.openFirstContact(data.contacts[0].get('contactID'), data.contacts[0].get('contactID'), 'Personal');
 					} 
 					else 
 					{
@@ -178,7 +178,7 @@ define([
 					$('#scroller').empty().append(_.template(GeneralContactsListTemplate, data));
 
 					if (data.contacts.length > 0) 
-						self.openFirstContact(data.contacts[0].get('contactUIDNumber'), 'General');
+						self.openFirstContact(data.contacts[0].get('contactUIDNumber'), data.contacts[0].get('contactID'), 'General');
 				} 
 				else 
 				{
@@ -249,14 +249,26 @@ define([
 			Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
 		},
 
-		openFirstContact: function (contactID, contactType)
+		openFirstContact: function (contactUIDNumber, contactID, contactType)
 		{
+			console.log(contactID);
 			if (!Shared.isSmartPhoneResolution())
 			{
-				$('#contactsList ul li').removeAttr('class');
-				$('#' + contactID).addClass('selected');
+				if (parseInt(contactID) != NaN && parseInt(contactID) % 1 == 0)
+					id = contactID;
+				else
+				{
+					// id = contactID;
+					contactID = decodeURIComponent(contactID);
+					var queryUID = contactID.split(",")[0]; 
+					var uid = queryUID.split("=");
+					id = uid[1].replace(".", "___");
+				}
 
-				Shared.router.navigate('/Contacts/' + contactType + '/' + contactID, {trigger: true});
+				$('#contactsList ul li').removeAttr('class');
+				$('#' + id).addClass('selected');
+
+				Shared.router.navigate('/Contacts/' + contactType + '/' + contactUIDNumber, {trigger: true});
 			}
 		},
 

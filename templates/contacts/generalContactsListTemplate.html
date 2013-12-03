@@ -21,15 +21,16 @@
 
 					<% } %>
 
-					<li id="<%=c.get('contactID')%>">
+					<% 
+					var contactID = decodeURIComponent(c.get('contactID'));
+					var queryUID = contactID.split(",")[0]; 
+					var uid = queryUID.split("=");
+					var id = uid[1].replace(".", "___");
+					%>
+
+					<li id="<%=id%>">
 						<a href="/Contacts/General/<%= c.get('contactUIDNumber') %>" title="<%=c.get('contactFullName')%>">
 
-							<% 
-							var contactID = decodeURIComponent(c.get('contactID'));
-							var queryUID = contactID.split(",")[0]; 
-							var uid = queryUID.split("=");
-							var id = uid[1].replace(".", "___");
-							%>
 
 							<div id="picture_contact_<%= id %>" class="picture_image"></div>
 							<div class="info">
