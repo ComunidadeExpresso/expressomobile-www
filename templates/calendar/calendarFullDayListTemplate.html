@@ -4,7 +4,6 @@ var endTime = new Date(year, month - 1, day, 23, 30, 0);
 %>
 <table id="eventsTable"> 
 
-
 	<% while (startTime.getTime() <= endTime.getTime()) { %>
 
 		<%
@@ -38,17 +37,52 @@ var endTime = new Date(year, month - 1, day, 23, 30, 0);
 		%>
 
 		<tr>
+
+			<% if (time == '00:00') { %>
+
+				<td class="period" rowspan="13">
+					<div>MADRUGADA<Adiv>
+				</td>
+			
+			<% } %>
+
+			<% if (time == '06:30') { %>
+
+				<td class="period" rowspan="12">
+					<div>MANH&Atilde;</div>
+				</td>
+			
+			<% } %>
+
+			<% if (time == '12:30') { %>
+
+				<td class="period" rowspan="12">
+					<div>TARDE</div>
+				</td>
+			
+			<% } %>
+
+			<% if (time == '18:30') { %>
+
+				<td class="period noborder" rowspan="12">
+					<div>NOITE</div>
+				</td>
+			
+			<% } %>
+
 			<td class="hourly">
 				<%= time %>
 			</td>
 			<td class="<%= tdClass %>"<%= tdRowSpan %>>
+
 				<% if (description != '' && eventID != 0) { %>
 					<a href="/Calendar/Events/<%= eventID %>" title="Ver detalhes">
 						<%= description %>
 					</a>
 				<% } %>
+				
 			</td>
-		</tr> 		
+		</tr>
 
 		<% startTime.setMinutes(startTime.getMinutes() + 30); %>
 

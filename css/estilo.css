@@ -290,6 +290,18 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
   body #page .main table#eventsTable { width: 100%; font-size: 16px; border-spacing: 0; margin-top: 1px; }
   body #page .main table#eventsTable tr { height: 60px; }
   body #page .main table#eventsTable tr td { border-bottom: 1px solid #CCCCCC; /*border-top: 1px #FFF solid;*/ height: 60px; }
+  body #page .main table#eventsTable tr td.period { width: 5px; color: #777777; border-bottom: 3px #777777 solid; }
+  body #page .main table#eventsTable tr td.period.noborder { border-bottom: 0; }
+  body #page .main table#eventsTable tr td.period div {
+    letter-spacing: 3px;
+    font-weight: bold;
+    width: 45px;
+    -moz-transform: rotate(-90.0deg);  /* FF3.5+ */
+    -o-transform: rotate(-90.0deg);  /* Opera 10.5 */
+    -webkit-transform: rotate(-90.0deg);  /* Saf3.1+, Chrome */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083);  /* IE6,IE7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)"; /* IE8 */
+  }
   body #page .main table#eventsTable tr td.hourly { border-left: 8px solid #3A87AD; color: #3A87AD; width: 60px; font-weight: bold; text-align: center; }
   body #page .main table#eventsTable tr td.description a { padding: 12px; color: #777777; font-size: 14px; text-decoration: none; display: block; height: 100%; }
   body #page .main table#eventsTable tr td.busy { background-color: #F1F1F1; }
