@@ -26,6 +26,8 @@ define([
   Shared.scrollDetail = null;
   Shared.scroll = null;
   Shared.scrollMenu = null;
+
+  Shared.forceSmartPhoneResolution = false;
   
 
   Shared.im = expressoIM;
@@ -49,7 +51,11 @@ define([
 
   //CHECKS IF THE DEVICE IS AN SMARTPHONE OR AN TABLET RESOLUTION
   Shared.isTabletResolution = function() {
-    return ($(window).width() >= 720);
+    var retVal = ($(window).width() >= 720);
+    if (Shared.forceSmartPhoneResolution) {
+      retVal = false;
+    }
+    return retVal;
   };
   Shared.isSmartPhoneResolution = function() {
     return !Shared.isTabletResolution();

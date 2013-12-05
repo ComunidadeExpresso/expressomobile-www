@@ -188,23 +188,36 @@ define([
       this.menuView.context.toggleMenu();
     },
 
+
     refreshWindow: function() {
 
-      var top = $('.top').outerHeight(true);
-      var chat = $('.chatArea').outerHeight(true) == null ? 0 : $('.chatArea').outerHeight(true);
+      var that = this;
 
-      var search = $('#content .searchArea').outerHeight(true) == null ? 0 : $('#content .searchArea').outerHeight(true);
-      var searchDetail = $('#contentDetail .searchArea').outerHeight(true) == null ? 0 : $('#contentDetail .searchArea').outerHeight(true);
-      
-      // Verify screen width to define device type
-      Shared.deviceType(Shared.isSmartPhoneResolution());
+      var doneResizing = function() {
+        var top = $('.top').outerHeight(true);
+        var chat = $('.chatArea').outerHeight(true) == null ? 0 : $('.chatArea').outerHeight(true);
 
-      $('body').height($(window).height() - top);
-      $('#wrapper').css('top', top + search);
-      $('#wrapperDetail').css('top', top + chat + searchDetail);
+        var search = $('#content .searchArea').outerHeight(true) == null ? 0 : $('#content .searchArea').outerHeight(true);
+        var searchDetail = $('#contentDetail .searchArea').outerHeight(true) == null ? 0 : $('#contentDetail .searchArea').outerHeight(true);
+        
+        if (Shared.forceSmartPhoneResolution == false) {
+          if (Shared.isSmartPhoneResolution()) {
+            Shared.forceSmartPhoneResolution = true;
+          }
+        }
 
-      Shared.scrollerRefresh();
-      Shared.refreshDotDotDot();
+        Shared.deviceType(Shared.forceSmartPhoneResolution);
+
+        $('body').height($(window).height() - top);
+        $('#wrapper').css('top', top + search);
+        $('#wrapperDetail').css('top', top + chat + searchDetail);
+
+        Shared.scrollerRefresh();
+        Shared.refreshDotDotDot();
+      }
+
+      clearTimeout(this.idResize);
+      this.idResize = setTimeout(doneResizing, 500);
     },
 
     loaded: function () 
@@ -219,7 +232,7 @@ define([
       var search = $('#content .searchArea').outerHeight(true) == null ? 0 : $('#content .searchArea').outerHeight(true);
       
       // Verify screen width to define device type
-      Shared.deviceType(Shared.isSmartPhoneResolution());
+      Shared.deviceType(Shared.forceSmartPhoneResolution);
 
       Shared.refreshDotDotDot();
 
