@@ -27,20 +27,28 @@ define([
         params.model.addRecipient(params.model.get("currentField"), participant.participantMail, participant.participantName);
       }
 
-      this.renderComposeMessage(params.model);
+      this.renderComposeMessage(params.model,false);
     },
 
-    renderComposeMessage: function(pMessage) {
+    renderComposeMessage: function(pMessage,signature,forwardString) {
       var elementID = "#contentDetail";
 
       if (Shared.isSmartPhoneResolution()) {
         elementID = "#content";
       }
 
+      var withSignature = true;
+
+      if (signature == false) {
+        withSignature = false;
+      }
+
       var newData = {
         _: _,
         message: pMessage,
         isDesktop: Shared.isDesktop(),
+        withSignature: withSignature,
+        msgForwardString: forwardString
       };
 
       var compiledTemplate = _.template( composeMessageTemplate, newData );
@@ -302,6 +310,9 @@ define([
           if (Shared.isTabletResolution()) {
             $("#" + mModel.listItemID()).remove();
 
+            $("#scrollerList li:first").addClass("selected");
+
+          } else {
             Shared.router.navigate("/Mail/Folders/" + that.folderID,{ trigger: true });
           }
 
@@ -336,7 +347,7 @@ define([
 
           var from = newMessage.get("msgFrom");
           var msgTo = newMessage.get("msgTo");
-          var msgCc = newMessage.get("msgCc");
+          var msgCc = newMessage.get("msgCC");
           var msgBcc = newMessage.get("msgBcc");
 
           newMessage.set("msgTo",[]);
@@ -345,7 +356,9 @@ define([
 
           newMessage.addRecipient("msgTo",from.mailAddress, from.fullName);
           for (var i in msgTo) {
-            newMessage.addRecipient("msgCc",msgTo[i].mailAddress,msgTo[i].fullName);
+            if (msgTo[i].mailAddress != from.mailAddress) {
+              newMessage.addRecipient("msgCc",msgTo[i].mailAddress,msgTo[i].fullName);
+            }
           }
           for (var i in msgCc) {
             newMessage.addRecipient("msgCc",msgCc[i].mailAddress,msgCc[i].fullName);
@@ -353,9 +366,10 @@ define([
           
           newMessage.set("msgSubject","Re: " + newMessage.get("msgSubject"));
 
-          that.renderComposeMessage(newMessage);
+          Shared.currentDraftMessage = newMessage;
 
-          
+          that.renderComposeMessage(newMessage,true,result.models[0].get("msgFrom").mailAddress);
+
         };
         var ReplyOnGetMessageFailed = function() {
           
@@ -371,8 +385,6 @@ define([
       }
 
       if (this.secondViewName == "ReplyMessage") {
-        
-        
 
         var ReplyOnGetMessage = function(result) {
 
@@ -386,7 +398,9 @@ define([
           newMessage.addRecipient("msgTo",from.mailAddress, from.fullName);
           newMessage.set("msgSubject","Re: " + newMessage.get("msgSubject"));
 
-          that.renderComposeMessage(newMessage);
+          Shared.currentDraftMessage = newMessage;
+
+          that.renderComposeMessage(newMessage,true,result.models[0].get("msgFrom").mailAddress);
 
           
         };
@@ -416,7 +430,9 @@ define([
           newMessage.set("msgBcc",[]);
           newMessage.set("msgSubject","Fwd: " + newMessage.get("msgSubject"));
 
-          that.renderComposeMessage(newMessage);
+          Shared.currentDraftMessage = newMessage;
+
+          that.renderComposeMessage(newMessage,true,result.models[0].get("msgFrom").mailAddress);
 
           
         };
@@ -460,10 +476,35 @@ define([
       "click #addMsgToField" : "addMsgToField",
       "click #addMsgCcField" : "addMsgCcField",
       "click #addMsgBccField" : "addMsgBccField",
+      "dblclick .recipientmsgTo" : "removeRecipientMsgTo",
+      "dblclick .recipientmsgCc" : "removeRecipientMsgCc",
+      "dblclick .recipientmsgBcc" : "removeRecipientMsgBcc",
+      "touch .recipientmsgTo" : "removeRecipientMsgTo",
+      "touch .recipientmsgCc" : "removeRecipientMsgCc",
+      "touch .recipientmsgBcc" : "removeRecipientMsgBcc",
+    },
+
+    removeRecipientMsgTo: function(e) {
+      var email = $(e.currentTarget).attr("data-mail");
+      $(e.currentTarget).remove();
+      Shared.currentDraftMessage.removeRecipient("msgTo",email);
+    },
+
+    removeRecipientMsgCc: function(e) {
+      var email = $(e.currentTarget).attr("data-mail");
+      $(e.currentTarget).remove();
+      Shared.currentDraftMessage.removeRecipient("msgCc",email);
+    },
+
+    removeRecipientMsgBcc: function(e) {
+      var email = $(e.currentTarget).attr("data-mail");
+      $(e.currentTarget).remove();
+      Shared.currentDraftMessage.removeRecipient("msgBcc",email);
     },
 
     addMsgToField: function(e) {
 
+      this.updateCurrentDraftMessage();
       var obj = Shared.currentDraftMessage;
 
       var attrs = {
@@ -474,14 +515,15 @@ define([
 
       obj.set(attrs);
 
-      this.updateCurrentDraftMessage();
-
       var calendarEditEventAddParticipantsView = new CalendarEditEventAddParticipantsView({ listParticipants: [], model: obj, view: new ComposeMessageView(), senderName: 'compose' });
       calendarEditEventAddParticipantsView.senderName = 'compose';
-        calendarEditEventAddParticipantsView.render();
+      calendarEditEventAddParticipantsView.render();
     },
 
     addMsgCcField: function(e) {
+
+      this.updateCurrentDraftMessage();
+
       var obj = Shared.currentDraftMessage;
 
       var attrs = {
@@ -492,14 +534,15 @@ define([
 
       obj.set(attrs);
 
-      this.updateCurrentDraftMessage();
-
       var calendarEditEventAddParticipantsView = new CalendarEditEventAddParticipantsView({ listParticipants: [], model: obj, view: new ComposeMessageView(), senderName: 'compose' });
       calendarEditEventAddParticipantsView.senderName = 'compose';
-        calendarEditEventAddParticipantsView.render();
+      calendarEditEventAddParticipantsView.render();
     },
 
     addMsgBccField: function(e) {
+
+      this.updateCurrentDraftMessage();
+      
       var obj = Shared.currentDraftMessage;
 
       var attrs = {
@@ -510,11 +553,9 @@ define([
 
       obj.set(attrs);
 
-      this.updateCurrentDraftMessage();
-
       var calendarEditEventAddParticipantsView = new CalendarEditEventAddParticipantsView({ listParticipants: [], model: obj, view: new ComposeMessageView(), senderName: 'compose' });
       calendarEditEventAddParticipantsView.senderName = 'compose';
-        calendarEditEventAddParticipantsView.render();
+      calendarEditEventAddParticipantsView.render();
     },
 
     updateSubject: function(e) {
@@ -589,7 +630,7 @@ define([
         nextOrder = "msgBody";
       }
 
-      console.log($(e.currentTarget).attr("id"));
+      // console.log($(e.currentTarget).attr("id"));
 
       if ( (e.which == 13 && !e.shiftKey) || (e.which == 32) || (e.which == 9) || (e.which == 188) ) {
         if (this.validateEmail($.trim(val))) {
@@ -603,7 +644,7 @@ define([
         }
       }
       if ( (e.which == 8) && ($.trim(val) == "") ) {
-        console.log($("#" + prefix + "Recipients div:last-child").attr("data-mail"));
+        // console.log("remove: " + $("#" + prefix + "Recipients div:last-child").attr("data-mail"));
         Shared.currentDraftMessage.removeRecipient(prefix,$("#" + prefix + "Recipients div:last-child").attr("data-mail"));
         $("#" + prefix + "Recipients div:last-child").remove();
         
@@ -638,6 +679,8 @@ define([
       span.appendTo(div)
       input.appendTo(div);
 
+      Shared.currentDraftMessage.addRecipient(prefix,emailRecipient,"");
+
       div.appendTo($(divID));
 
     },
@@ -656,7 +699,10 @@ define([
           string = string + ", ";
         }
       });
-      string = string + ", " + $("#" + prefix + "Input").val();
+      if ($("#" + prefix + "Input").val() != "") {
+        string = string + ", " + $("#" + prefix + "Input").val();
+      }
+      // var res = string.substring(0,string.length - 2);
       return string;
     },
 
@@ -668,11 +714,23 @@ define([
     //   return pMessage;
     // },
 
-    updateCurrentMessage: function() {
+    restoreDraftMessage: function() {
+
+      console.log("restoreDraftMessage");
+      var draft = Shared.currentDraftMessage;
+
+      var subject = draft.get("msgSubject");
+      if (subject != "") {
+        $("#msgSubjectTitle").html(draft.get("msgSubject"));
+      }
+      $("#msgSubjectInput").val(subject);
+
+      $("#msgBodyInput").html(draft.get("msgBody"));
 
     },
 
     updateCurrentDraftMessage: function() {
+      console.log("updateCurrentDraftMessage");
       var model = this.getNewMessageModel();
       Shared.currentDraftMessage = model;
     },
@@ -692,6 +750,9 @@ define([
       var msgBody = $("#msgBodyInput").html();
 
       var message = { 
+        "msgTo" : Shared.currentDraftMessage.get("msgTo"),
+        "msgCc" : Shared.currentDraftMessage.get("msgCc"),
+        "msgBcc" : Shared.currentDraftMessage.get("msgBcc"),
         "msgToString" : msgTo,
         "msgCcString" : msgCc,
         "msgBccString" : msgBcc,
@@ -760,7 +821,4 @@ define([
   return ComposeMessageView;
   
 });
-
-
-
 

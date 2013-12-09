@@ -30,6 +30,8 @@ define([
         ],
         msgCc: [
         ],
+        msgCC: [
+        ],
         msgBcc: [
         ],
         msgSubject: "",
@@ -113,21 +115,54 @@ define([
       return "" + retVal + "";
     },
 
-    getMessageBody: function(signature) {
-      //console.log("getMessageBody");
-      // var tmp = document.createElement("DIV");
-      // tmp.innerHTML = this.get("msgBody");
-      // var retString = tmp.textContent || tmp.innerText || "";
-      var retString = this.get("msgBody");
+    getMessageBody: function(signature,forwardString) {
+
+      var msgBody = this.get("msgBody");
+      var retString = "";
       if (signature == true) {
-        retString = this.getUserSignature() + retString;
+        retString = "\n\n" + this.getUserSignature() + "\n\n";
+        if (forwardString != undefined) {
+          retString = retString + this.getForwardMessageString(forwardString);
+          retString = retString + "<div style='width: 100%; border-left: 2px solid #000; margin-left: 20px;'><div style='margin: 20px;'>" + msgBody + "</div></div>";
+        }
+        retString = this.nl2br(retString);
+      } else {
+        retString = msgBody;
       }
-      //console.log(retString);
+
+      return retString;
+    },
+
+    getForwardMessageString: function(message) {
+      var date = this.get("msgDate");
+      var retString = "Em " + date + ", &lt;" + message + "&gt; escreveu: \n\n";
       return retString;
     },
 
     getUserSignature: function() {
       return Shared.settings.mailSignature;
+    },
+
+    nl2br: function(str, is_xhtml) {
+      // http://kevin.vanzonneveld.net
+      // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+      // +   improved by: Philip Peterson
+      // +   improved by: Onno Marsman
+      // +   improved by: Atli Þór
+      // +   bugfixed by: Onno Marsman
+      // +      input by: Brett Zamir (http://brett-zamir.me)
+      // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+      // +   improved by: Brett Zamir (http://brett-zamir.me)
+      // +   improved by: Maximusya
+      // *     example 1: nl2br('Kevin\nvan\nZonneveld');
+      // *     returns 1: 'Kevin<br />\nvan<br />\nZonneveld'
+      // *     example 2: nl2br("\nOne\nTwo\n\nThree\n", false);
+      // *     returns 2: '<br>\nOne<br>\nTwo<br>\n<br>\nThree<br>\n'
+      // *     example 3: nl2br("\nOne\nTwo\n\nThree\n", true);
+      // *     returns 3: '<br />\nOne<br />\nTwo<br />\n<br />\nThree<br />\n'
+      var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br ' + '/>' : '<br>'; // Adjust comment to avoid issue on phpjs.org display
+
+      return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '');
     },
 
     getEmailStringForMessageRecipient: function(emailRecipient) {
@@ -159,8 +194,10 @@ define([
           newMsgRecipient.push(recipient);
         }
       }
-    
 
+      console.log(fieldName);
+      console.log(newMsgRecipient);
+  
       this.set(fieldName,newMsgRecipient);
     },
 
@@ -220,8 +257,8 @@ define([
 
       var params = {
         msgTo:this.get("msgToString"),
-        msgCc:this.get("msgCcString"),
-        msgBcc:this.get("msgBccString"),
+        msgCcTo:this.get("msgCcString"),
+        msgBccTo:this.get("msgBccString"),
         msgSubject:this.get("msgSubject"),
         msgBody:this.get("msgBody"),
         msgType:this.get("msgType")

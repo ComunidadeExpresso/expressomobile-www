@@ -35,40 +35,49 @@
           </td>
           <td class="description" colspan="2">
             <% if (message.get("msgTo")) {  %>
-              <% _.each(message.get("msgTo"), function(msgRecipient){ %>
-                <span class="badge badge-write-message">
-                <% if ($.trim(msgRecipient.fullName) != '') { %> 
-                  <%=$.trim(msgRecipient.fullName)%>
-                <% } else { %>
-                  <%=msgRecipient.mailAddress%>
-                <% } %>
-                </span>
-              <% }); %>
+              <% if (message.get("msgTo").length >= 3) { %>
+                <div style="float: right;">
+                  <a href="#" class="showMoreMsgTo">e mais <%=(message.get("msgTo").length - 3)%> pessoas...</a>
+                </div>
+              <% } %>
+                <% var qtdMsgTo = 1; %>
+                <% _.each(message.get("msgTo"), function(msgRecipient){ %>
+                    <span class="detailMsgTo badge badge-write-message <% if (qtdMsgTo >= 4) { %>hidden<% } %>">
+                      
+                    <% if ($.trim(msgRecipient.fullName) != '') { %> 
+                      <%=$.trim(msgRecipient.fullName)%>
+                    <% } else { %>
+                      <%=msgRecipient.mailAddress%>
+                    <% } %>
+                    
+                    </span>
+                    <% qtdMsgTo = qtdMsgTo + 1; %>
+                <% }); %>
             <% } %>
           </td>
         </tr> 
-      <tr>
-          <td class="item">
-            Data:
-          </td>
-          <td class="description" colspan="2">
-            <%=message.get("msgDate")%>&nbsp;(<%=message.getTimeAgo()%>)
-          </td>
-        </tr> 
-        <% if (message.get("msgCc").length) {  %>
+      
+        <% if (message.get("msgCC").length) {  %>
         <tr>
           <td class="item">
             Cc:
           </td>
           <td class="description" colspan="2">
-              <% _.each(message.get("msgCc"), function(msgRecipientCc){ %>
-                <span class="badge badge-write-message">
+              <% if (message.get("msgCC").length >= 3) { %>
+                <div style="float: right;">
+                  <a href="#" class="showMoreMsgCc">e mais <%=(message.get("msgCC").length - 3)%> pessoas...</a>
+                </div>
+              <% } %>
+              <% var qtdMsgCc = 1; %>
+              <% _.each(message.get("msgCC"), function(msgRecipientCc){ %>
+                <span class="detailMsgCc badge badge-write-message <% if (qtdMsgCc >= 4) { %>hidden<% } %>">
                 <% if ($.trim(msgRecipientCc.fullName) != '') { %> 
                   <%=$.trim(msgRecipientCc.fullName)%>
                 <% } else { %>
                   <%=msgRecipientCc.mailAddress%>
                 <% } %>
                 </span>
+                <% qtdMsgCc = qtdMsgCc + 1; %>
               <% }); %>
             
           </td>
@@ -93,6 +102,14 @@
         </tr> 
         <% } %>
       </div>
+      <tr>
+        <td class="item">
+          Data:
+        </td>
+        <td class="description" colspan="2">
+          <%=message.get("msgDate")%>&nbsp;(<%=message.getTimeAgo()%>)
+        </td>
+      </tr> 
       <% if (message.get("msgAttachments")) {  %>
       <tr>
         <td class="item">

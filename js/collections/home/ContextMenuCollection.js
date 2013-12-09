@@ -29,7 +29,7 @@ define([
         var newMessage = { route: "/Mail/Message/New", id: "1", title:"Nova Mensagem", iconClass : 'btn-compose', primary: true};
         var addFolder = { route: "/Mail/AddFolder/" + folderID + "", id: "2", iconClass : 'context-add-folder', title: "Adicionar Pasta"};
         var renameFolder = { route: "/Mail/RenameFolder/" + folderID + "", id: "3", iconClass : 'context-rename-folder', title: "Renomear Pasta"};
-        var deleteFolder = { route: "/Mail/DeleteFolder/" + folderID + "", id: "4", iconClass : 'context-del-folder', title: "Excluir Pasta"};
+        var deleteFolder = { route: "/Mail/DeleteFolder/" + folderID + "", id: "4", iconClass : 'context-del-folder', title: "Apagar Pasta"};
 
         menuItems.push(newMessage);
 
@@ -88,10 +88,10 @@ define([
         var replyMessage = { route: "/Mail/Message/ReplyMessage/" + msgID + "/" + folderID, id: "1", iconClass : 'context-reply', title: "Responder"};
         var replyMessageToAll = { route: "/Mail/Message/ReplyToAll/" + msgID + "/" + folderID, id: "2", iconClass : 'context-reply-all', title: "Responder p/ Todos"};
         var forwardMessage = { route: "/Mail/Message/Forward/" + msgID + "/" + folderID, id: "3", iconClass : 'context-forward', title: "Encaminhar"};
-        var deleteMessage = { route: "/Mail/Message/DelMessage/" + msgID + "/" + folderID, id: "4", iconClass : 'context-delete-message', title: "Excluir"};
+        var deleteMessage = { route: "/Mail/Message/DelMessage/" + msgID + "/" + folderID, id: "4", iconClass : 'context-delete-message', title: "Apagar Mensagem"};
         var addFolder = { route: "/Mail/AddFolder/" + folderID + "", id: "5", iconClass : 'context-add-folder', title: "Adicionar Pasta"};
         var renameFolder = { route: "/Mail/RenameFolder/" + folderID + "", id: "6", iconClass : 'context-rename-folder', title: "Renomear Pasta"};
-        var deleteFolder = { route: "/Mail/DeleteFolder/" + folderID + "", id: "7", iconClass : 'context-del-folder', title: "Excluir Pasta"};
+        var deleteFolder = { route: "/Mail/DeleteFolder/" + folderID + "", id: "7", iconClass : 'context-del-folder', title: "Apagar Pasta"};
 
         menuItems.push(newMessage);
 

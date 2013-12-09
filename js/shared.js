@@ -361,6 +361,8 @@ document.addEventListener('deviceready', function () {
 
   var exitFunction = function(){
 
+    //alert("exit");
+
     Shared.api.getLocalStorageValue("expresso",function(expressoValue) {   
 
       if (expressoValue != null) {
@@ -378,12 +380,23 @@ document.addEventListener('deviceready', function () {
 
     
   };
-  
-  if(window.onpagehide || window.onpagehide === null){
-     window.addEventListener('pagehide', exitFunction, false);
-  } else {
-     window.addEventListener('unload', exitFunction, false);
-  }
+
+    if(window.onpagehide || window.onpagehide === null){
+       window.addEventListener('pagehide', exitFunction, false);
+    } else {
+       window.addEventListener('unload', exitFunction, false);
+    }
+
+    window.onunload=exitFunction;
+
+    window.onbeforeunload = function () {
+
+      exitFunction();
+
+      //return  "Are you sure want to LOGOUT the session ?";
+    }; 
+
+
 
   //Shared.router is created in App.js
 

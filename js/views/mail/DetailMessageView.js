@@ -114,7 +114,20 @@ define([
 
     events:
     {
-      'click .attachmentLink': 'openAttachment'
+      'click .attachmentLink': 'openAttachment',
+      'click .showMoreMsgTo' : 'showMoreMsgTo',
+      'click .showMoreMsgCc' : 'showMoreMsgCc',
+      
+    },
+
+    showMoreMsgTo: function(e) { 
+      $(".detailMsgTo").removeClass("hidden");
+      $(".showMoreMsgTo").addClass("hidden");
+    },
+
+    showMoreMsgCc: function(e) { 
+      $(".detailMsgCc").removeClass("hidden");
+      $(".showMoreMsgCc").addClass("hidden");
     },
 
     openAttachment: function(e) {
@@ -140,7 +153,7 @@ define([
       var contentDetailWidth = $("#contentDetail").width();
 
       if ((contentBodyWidth + 15) >= contentDetailWidth) {
-        $("#scrollerDetail").width(contentBodyWidth + 15);
+        $("#scrollerDetail").width(contentBodyWidth + 10);
       }
 
       Shared.scrollDetail = new iScroll('wrapperDetail',{vScroll:true, hScroll:true, hScrollBar: true, vScrollBar: true, zoom: true });

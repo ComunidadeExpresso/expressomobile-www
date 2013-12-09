@@ -8,7 +8,7 @@ ul, ol { list-style: none; }
 .clear { clear: both; }
 .hidden { display: none !important; }
 
-body #page { position: relative; height: 100%; width: 100%; background-color: #FFF; } 
+body #page { position: relative; height: 100%; width: 100%; background-color: #FFF; z-index: 150; } 
 /*body #page.menuExpanded { margin-left: auto; }
 body.smartphone #page.menuExpanded { margin-left: auto; }*/
 
@@ -1238,5 +1238,17 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
 
 .attachment-arquivo-background {
   background: url('../imgs/icon-anexo-arquivo-160x150.png');
+}
+
+.recipientmsgTo {
+  cursor: pointer;
+}
+
+.recipientmsgCc {
+  cursor: pointer;
+}
+
+.recipientmsgBcc {
+  cursor: pointer;
 }
 

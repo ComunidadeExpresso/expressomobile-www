@@ -189,7 +189,13 @@ define([
         width = propWidth;
 
       $('#menu').addClass('expanded').css('width', width);
-      $('#page').css('margin-left', width);
+      if (Shared.isDesktop()) {
+        $( "#page" ).animate({"margin-left": width}, 500);
+      } else {
+        $('#page').css('margin-left', width);
+      }
+      
+      //
 
       if (Shared.scrollMenu == null) {
         this.loaded();
@@ -201,9 +207,17 @@ define([
     closeMenu: function()
     {
       this.menuOpen = false;
-      $('#menu').removeClass('expanded').removeAttr('style');
-      $('#page').removeAttr('style');
-      $('#page').css('margin-left', '0');
+
+      if (Shared.isDesktop()) {
+        $( "#page" ).animate({"margin-left": '0'}, 500, "linear",function() { 
+          $('#menu').removeClass('expanded').removeAttr('style');
+          $('#page').removeAttr('style');
+        });
+      } else {
+        $('#menu').removeClass('expanded').removeAttr('style');
+        $('#page').removeAttr('style');
+        $('#page').css('margin-left', '0');
+      }
     },
 
     loaded: function () 
