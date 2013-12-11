@@ -22,6 +22,7 @@ define([
 		status: '',
 		data: {},
 		dayTitle: '',
+		onlyDatePicker: false,
 
 		render: function()
 		{
@@ -53,7 +54,10 @@ define([
 				$('#scroller').html(_.template(calendarTemplate));
 
 				self.renderDatePicker();
-				self.listDayEvents(data);
+
+				if (self.onlyDatePicker === false)
+					self.listDayEvents(data);
+
 				self.loaded();
 			}
 
@@ -205,7 +209,7 @@ define([
 
 		loaded: function ()
 		{
-			if (!Shared.isSmartPhoneResolution())
+			if (!Shared.isSmartPhoneResolution() && this.onlyDatePicker === false)
 			{
 				if (Shared.scrollDetail != null) 
 				{
@@ -248,7 +252,7 @@ define([
 			var contentLoadingView = new LoadingView({el: $('#content')});
 				contentLoadingView.render();
 
-			if (!Shared.isSmartPhoneResolution())
+			if (!Shared.isSmartPhoneResolution() && this.onlyDatePicker === false)
 			{
 				var contentDetailLoadingView = new LoadingView({el: $('#contentDetail')});
 					contentDetailLoadingView.render();

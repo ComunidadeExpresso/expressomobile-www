@@ -5,10 +5,11 @@ define([
 	'shared',
 	'models/calendar/EventModel',
 	'views/home/LoadingView',
+	'views/calendar/CalendarListView',
 	'text!templates/calendar/calendarDetailsTemplate.html',
 	'text!templates/master/detailContentTemplate.html',
 	'text!templates/master/primaryContentTemplate.html',
-], function($, _, Backbone, Shared, EventModel, LoadingView, calendarDetailsTemplate, detailContentTemplate, primaryContentTemplate)
+], function($, _, Backbone, Shared, EventModel, LoadingView, CalendarListView, calendarDetailsTemplate, detailContentTemplate, primaryContentTemplate)
 {
 	var CalendarDetailsView = Backbone.View.extend(
 	{
@@ -26,8 +27,6 @@ define([
 		selectItem: function(e)
 		{
 			e.preventDefault();
-			console.log($(e.target).attr('data-action'));
-			console.log(this.eventID);
 		},
 
 		render: function()
@@ -66,14 +65,11 @@ define([
 				var date = data.event.get('eventDateStart').split('/');
 				var pad = "00";
 
-				this.year = date[2];
-				this.month = pad.substring(0, pad.length - ("" + date[1]).length) + ("" + date[1]);
-				this.day = pad.substring(0, pad.length - ("" + date[0]).length) + ("" + date[0]);
+				self.year = date[2];
+				self.month = pad.substring(0, pad.length - ("" + date[1]).length) + ("" + date[1]);
+				self.day = pad.substring(0, pad.length - ("" + date[0]).length) + ("" + date[0]);
 
 				data.event.set({ eventPriority: self.getPriority(data.event.get('eventPriority'))});
-
-				contentTitle.text(data.event.get('eventName'));
-				container.empty().append(_.template(calendarDetailsTemplate, data))
 
 				self.loaded(data.event.get('eventID'), isOwner);
 
@@ -87,7 +83,21 @@ define([
 						timeout: 3000,
 						elementID: messageContainer,
 					});
+
+					// Atualiza o calendário de eventos para tablets e desktop
+					if (!Shared.isSmartPhoneResolution())
+					{
+						var calendarListView = new CalendarListView();
+						calendarListView.year = self.year;
+						calendarListView.month = self.month;
+						calendarListView.day = self.day;
+						calendarListView.onlyDatePicker = true;
+						calendarListView.render();
+					}
 				}
+
+				contentTitle.text(data.event.get('eventName'));
+				container.empty().append(_.template(calendarDetailsTemplate, data))
 			}
 
 			this.getEvent(this.eventID, callback, callback);
