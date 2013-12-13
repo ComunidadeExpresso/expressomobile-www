@@ -104,7 +104,7 @@ define ([
 			var pContactID = JSON.stringify(listUidNumbers);
 
 			var detailsContactCollection = new DetailsContactCollection();
-				detailsContactCollection.getContactDetails(pContactID)
+				detailsContactCollection.getGeneralContactDetails(pContactID)
 				.done (function (data) 
 				{
 					that.set({eventParticipantsLdap: data.models});
@@ -124,7 +124,7 @@ define ([
 			var that = this;
 
 			var detailsContactCollection = new DetailsContactCollection();
-				detailsContactCollection.getContactDetails(this.get('eventOwner'))
+				detailsContactCollection.getGeneralContactDetails(this.get('eventOwner'))
 				.done (function (data) 
 				{
 					that.set({eventOwner: data.models[0]});
