@@ -12,13 +12,14 @@ define([
   'views/settings/SettingsListView',
   'views/contacts/ContactsListView',
   'views/contacts/DetailsContactView',
+  'views/contacts/AddContactView',
   'views/calendar/CalendarListView',
   'views/calendar/CalendarDetailsView',
   'views/calendar/CalendarEditEventView',
   'views/calendar/CalendarDeleteEventView',
   'views/calendar/CalendarFullDayListView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, EditFolderView, SettingsListView,ContactsListView,DetailsContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarDeleteEventView, CalendarFullDayListView, ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, EditFolderView, SettingsListView,ContactsListView,DetailsContactView, AddContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarDeleteEventView, CalendarFullDayListView, ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -35,8 +36,10 @@ define([
       'Mail/Messages/:msgID/*folderID' : 'detailMessageView',
       'Mail/Folders/*folderID' : 'openFolderView',
       'Contacts' : 'contactsListView',
-      'Contacts/:secondViewName' : 'contactsListView',
+      'Contacts/Add/:contactID' : 'addContactView',
+      'Contacts/:secondViewName/:contactID/:status' : 'detailsContactView',
       'Contacts/:secondViewName/:contactID' : 'detailsContactView',
+      'Contacts/:secondViewName' : 'contactsListView',
       'Calendar/FullDay/:year/:month/:day' : 'calendarFullDayView',
       'Calendar/Events/Add/:year/:month/:day' : 'calendarAddEventView',
       'Calendar/Events/Edit/:eventID' : 'calendarEditEventView',
@@ -245,17 +248,30 @@ define([
   
     });
 
-    app_router.on('route:detailsContactView', function (secondViewName, contactID) {
+    app_router.on('route:detailsContactView', function (secondViewName, contactID, status) {
 
       detailsContactView = new DetailsContactView();
       detailsContactView.secondViewName = secondViewName;
       detailsContactView.contactID = contactID;
+      detailsContactView.status = status;
       detailsContactView.render();
 
       Shared.menuView.selectMenu(3);
 
       Shared.deviceType(Shared.isSmartPhoneResolution());
   
+    });
+
+    app_router.on('route:addContactView', function (contactID, email) {
+
+      addContactView = new AddContactView();
+      addContactView.contactID = contactID;
+      addContactView.email = email;
+      addContactView.render();
+
+      Shared.menuView.selectMenu(3);
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
     });
 
     app_router.on('route:calendarListView', function (year, month, day, status) {

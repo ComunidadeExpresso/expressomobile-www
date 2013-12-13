@@ -82,6 +82,28 @@ define ([
 		getFirstEmailAddress: function()
 		{
 			return this.get('contactMails')[0];
+		},
+
+		addContact: function (params)
+		{
+			var that = this;
+
+			this.api
+			.resource('Catalog/ContactAdd')
+			.params(params)
+			.done(function (result)
+			{
+				if (that.done)
+	        		that.done(result);
+			})
+			.fail( function (error) 
+			{
+				if (that.fail)
+		        		that.fail(error);
+			})
+			.execute();
+
+			return that;
 		}
 	});
 

@@ -18,9 +18,12 @@ define([
 	{
 		secondViewName: '',
 		contactID: null,
+		status: null,
 
 		render: function(data)
 		{
+			console.log(this.status);
+
 			var self = this;
 			var contentTitle;
 			var container;
@@ -53,16 +56,58 @@ define([
 				contentTitle.text(_.first(data.contacts).get('contactFullName'));
 
 				var contact = {contact: _.first(data.contacts), _: _};
+				var contactID = this.secondViewName == 'Personal' ? _.first(data.contacts).get('contactID') : _.first(data.contacts).get('contactUIDNumber');
 
 				container.empty().append(_.template(DetailsContactTemplate, contact));
-
-				self.loaded((_.first(data.contacts).get('contactMails'))[0]);			
+				self.loaded((_.first(data.contacts).get('contactMails'))[0], contactID);
 
 				var pictureImageContactView = new PictureImageContactView({el: $('.details_picture_image')});
 					pictureImageContactView.render(data);
 
 				$('.details_picture_image').css('margin', '0 10px');
 				$('.details_picture_image img').css('width', '80px').css('height', '106px');
+
+				if (self.status == 'OK')
+				{
+					Shared.showMessage({
+							type: "success",
+							icon: 'icon-agenda',
+							title: 'Contato adicionado ao catálogo pessoal com sucesso.',
+							description: '',
+							timeout: 3000,
+							elementID: messageContainer
+						});
+				}
+				else if (!isNaN(parseInt(self.status)))
+				{
+					var error = '';
+					switch (self.status)
+					{
+						case '1052':
+						case '1055':
+							error = 'Endereço de e-mail inválido.';
+							break;
+
+						case '1053':
+							error = 'Contato já existe no catálogo pessoal.';
+							break;
+
+						default:
+						case '1054':
+							error = 'Não foi possível adicionar o contato no catálogo pessoal. Por favor, tente novamente.';
+							break;
+					}
+
+					Shared.showMessage({
+						type: "error",
+						icon: 'icon-agenda',
+						title: error,
+						description: '',
+						timeout: 3000,
+						animate: false,
+						elementID: messageContainer
+					});
+				}
 			}
 
 			if (this.secondViewName == 'Personal')
@@ -73,7 +118,7 @@ define([
 
 		initialize: function() { },
 
-		loaded: function (pEmail) 
+		loaded: function (pEmail, pContactID) 
 		{
 			if (!Shared.isSmartPhoneResolution())
 			{
@@ -94,23 +139,11 @@ define([
 				Shared.scroll = new iScroll('wrapper');
 			}
 
+			$('#contentDetail .searchArea').remove();
+
 			Shared.scrollerRefresh();
 			Shared.refreshDotDotDot();
-			Shared.menuView.renderContextMenu('detailsContact', { email: pEmail });
-		},
-
-		getContactDetails: function (pContactID, pContactType, callbackSuccess, callbackFail)
-		{
-			var detailsContactCollection = new DetailsContactCollection();
-				detailsContactCollection.getContactDetails(pContactID, pContactType)
-				.done(function (data) 
-				{
-					callbackSuccess({ contacts: data.models, _: _ });
-				})
-				.fail(function (data) 
-				{
-					callbackFail({ error: data.error, _: _ });
-				});
+			Shared.menuView.renderContextMenu('detailsContact', { email: pEmail, contactID: pContactID, contactType: this.secondViewName });
 		},
 
 		getPersonalContactDetails: function (pContactID, callbackSuccess, callbackFail)
@@ -130,7 +163,7 @@ define([
 		getGeneralContactDetails: function (pContactID, callbackSuccess, callbackFail)
 		{
 			var detailsContactCollection = new DetailsContactCollection();
-				detailsContactCollection.getContactDetails(pContactID)
+				detailsContactCollection.getGeneralContactDetails(pContactID)
 				.done(function (data) 
 				{
 					callbackSuccess({ contacts: data.models, _: _ });

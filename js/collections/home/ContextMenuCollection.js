@@ -191,12 +191,17 @@ define([
         return this;
       },
 
-      getDetailsContactMenu: function(email) {
+      getDetailsContactMenu: function(email, contactID, contactType) {
         var menuItems = [
             { route: "/Mail/Message/New/" + email, id: '0', title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
             { route: "/Contacts/Personal", iconClass: 'context-catalogo-pessoal', id: '1', title:"Contatos Pessoais"},
             { route: "/Contacts/General", iconClass: 'context-catalogo-geral', id: '2', title: "Catálogo Geral"}
           ];
+
+        if (contactType == 'General')
+          menuItems.push({ route: "/Contacts/Add/" + contactID, id: "3", title:"Adicionar nos contatos pessoais", iconClass : 'icon-add-contact-agenda' });
+        // else
+        //   menuItems.push({ route: "/Contacts/Del/" + contactID, id: "3", title:"Remover dos contatos pessoais" });
 
         this.createModelsFromArray(menuItems);
         return this;

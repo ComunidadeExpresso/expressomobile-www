@@ -264,7 +264,7 @@ define([
           this.context.collection = contextMenuCollection.getGeneralContactsMenu();
       }
       if (menuID == 'detailsContact') {
-          this.context.collection = contextMenuCollection.getDetailsContactMenu(params.email);
+          this.context.collection = contextMenuCollection.getDetailsContactMenu(params.email, params.contactID, params.contactType);
       }
       if (menuID == 'calendar') {
           this.context.collection = contextMenuCollection.getCalendarMenu(params.year, params.month, params.day);
