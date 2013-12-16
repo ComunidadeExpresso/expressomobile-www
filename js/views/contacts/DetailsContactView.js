@@ -22,8 +22,6 @@ define([
 
 		render: function(data)
 		{
-			console.log(this.status);
-
 			var self = this;
 			var contentTitle;
 			var container;
@@ -36,7 +34,7 @@ define([
 
 				contentTitle = $('#contentDetailTitle');
 				container = $('#scrollerDetail');
-				messageContainer = '#messageDetail';
+				messageContainer = '#pageMessage';
 			}
 			else
 			{
@@ -45,7 +43,7 @@ define([
 
 				contentTitle = $('#contentTitle');
 				container = $('#scroller');
-				messageContainer = '#message';
+				messageContainer = '#pageMessage';
 			}
 
 			var loadingView = new LoadingView({el: container});	
@@ -56,7 +54,7 @@ define([
 				contentTitle.text(_.first(data.contacts).get('contactFullName'));
 
 				var contact = {contact: _.first(data.contacts), _: _};
-				var contactID = this.secondViewName == 'Personal' ? _.first(data.contacts).get('contactID') : _.first(data.contacts).get('contactUIDNumber');
+				var contactID = self.secondViewName == 'Personal' ? _.first(data.contacts).get('contactID') : _.first(data.contacts).get('contactUIDNumber');
 
 				container.empty().append(_.template(DetailsContactTemplate, contact));
 				self.loaded((_.first(data.contacts).get('contactMails'))[0], contactID);
@@ -69,10 +67,17 @@ define([
 
 				if (self.status == 'OK')
 				{
+					var message = '';
+
+					if (self.secondViewName == 'Personal')
+						message = 'Contato removido do catálogo pessoal com sucesso.';
+					else
+						message = 'Contato adicionado ao catálogo pessoal com sucesso.';
+
 					Shared.showMessage({
 							type: "success",
 							icon: 'icon-agenda',
-							title: 'Contato adicionado ao catálogo pessoal com sucesso.',
+							title: message,
 							description: '',
 							timeout: 3000,
 							elementID: messageContainer
@@ -92,6 +97,10 @@ define([
 							error = 'Contato já existe no catálogo pessoal.';
 							break;
 
+						case '1056':
+							error = 'Erro ao excluir o contato. O ID  está vazio ou é inválido.';
+							break;
+
 						default:
 						case '1054':
 							error = 'Não foi possível adicionar o contato no catálogo pessoal. Por favor, tente novamente.';
@@ -104,7 +113,6 @@ define([
 						title: error,
 						description: '',
 						timeout: 3000,
-						animate: false,
 						elementID: messageContainer
 					});
 				}

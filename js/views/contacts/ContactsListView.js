@@ -18,6 +18,7 @@ define([
 	{
 		searchLength: 0,
 		secondViewName: '',
+		status: null,
 		currentView: null,
 		arrayContacts: {},
 
@@ -37,7 +38,7 @@ define([
 			{
 				$('#contentDetail').html(_.template(detailContentTemplate));
 				$('#contentDetail .searchArea').remove();
-				$('#contentDetailTitle').text('Exibir contato');
+				// $('#contentDetailTitle').text('Exibir contato');
 			}
 
 			var loadingView = new LoadingView({el: $('#scroller')});	
@@ -251,7 +252,6 @@ define([
 
 		openFirstContact: function (contactUIDNumber, contactID, contactType)
 		{
-			console.log(contactID);
 			if (!Shared.isSmartPhoneResolution())
 			{
 				if (parseInt(contactID) != NaN && parseInt(contactID) % 1 == 0)
@@ -268,7 +268,10 @@ define([
 				$('#contactsList ul li').removeAttr('class');
 				$('#' + id).addClass('selected');
 
-				Shared.router.navigate('/Contacts/' + contactType + '/' + contactUIDNumber, {trigger: true});
+				if (this.status != null)
+					Shared.router.navigate('/Contacts/' + contactType + '/' + contactUIDNumber + '/OK', {trigger: true});
+				else
+					Shared.router.navigate('/Contacts/' + contactType + '/' + contactUIDNumber, {trigger: true});
 			}
 		},
 

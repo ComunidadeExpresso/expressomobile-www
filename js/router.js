@@ -13,13 +13,14 @@ define([
   'views/contacts/ContactsListView',
   'views/contacts/DetailsContactView',
   'views/contacts/AddContactView',
+  'views/contacts/DeleteContactView',
   'views/calendar/CalendarListView',
   'views/calendar/CalendarDetailsView',
   'views/calendar/CalendarEditEventView',
   'views/calendar/CalendarDeleteEventView',
   'views/calendar/CalendarFullDayListView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, EditFolderView, SettingsListView,ContactsListView,DetailsContactView, AddContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarDeleteEventView, CalendarFullDayListView, ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, EditFolderView, SettingsListView,ContactsListView,DetailsContactView, AddContactView, DeleteContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarDeleteEventView, CalendarFullDayListView, ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -37,6 +38,8 @@ define([
       'Mail/Folders/*folderID' : 'openFolderView',
       'Contacts' : 'contactsListView',
       'Contacts/Add/:contactID' : 'addContactView',
+      'Contacts/Delete/:contactID' : 'deleteContactView',
+      'Contacts/:secondViewName/OK' : 'deleteContactsListView',
       'Contacts/:secondViewName/:contactID/:status' : 'detailsContactView',
       'Contacts/:secondViewName/:contactID' : 'detailsContactView',
       'Contacts/:secondViewName' : 'contactsListView',
@@ -52,7 +55,7 @@ define([
       'Chat' : 'chatListView',
       'Chat/:secondViewName' : 'chatListView',
       'Settings' : 'settingsListView',
-      'Settings/:secondViewName' : 'settingsListView',
+      'Settings/:secondViewName' : 'settingsLsitView',
       'Logout' : 'logoutView',
       'ContextMenu' : 'contextMenuView',
       '*actions': 'defaultAction'
@@ -236,10 +239,24 @@ define([
   
     });
 
-    app_router.on('route:contactsListView', function (secondViewName) {
+    app_router.on('route:contactsListView', function (secondViewName, status) {
 
       contactsListView = new ContactsListView();
       contactsListView.secondViewName = secondViewName;
+      contactsListView.status = status;
+      contactsListView.render();
+
+      Shared.menuView.selectMenu(3);
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
+  
+    });
+
+    app_router.on('route:deleteContactsListView', function (secondViewName) {
+
+      contactsListView = new ContactsListView();
+      contactsListView.secondViewName = secondViewName;
+      contactsListView.status = 'OK';
       contactsListView.render();
 
       Shared.menuView.selectMenu(3);
@@ -268,6 +285,17 @@ define([
       addContactView.contactID = contactID;
       addContactView.email = email;
       addContactView.render();
+
+      Shared.menuView.selectMenu(3);
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
+    });
+
+    app_router.on('route:deleteContactView', function (contactID) {
+
+      deleteContactView = new DeleteContactView();
+      deleteContactView.contactID = contactID;
+      deleteContactView.render();
 
       Shared.menuView.selectMenu(3);
 

@@ -104,6 +104,28 @@ define ([
 			.execute();
 
 			return that;
+		},
+
+		deleteContact: function (params)
+		{
+			var that = this;
+
+			this.api
+			.resource('Catalog/ContactDelete')
+			.params(params)
+			.done(function (result)
+			{
+				if (that.done)
+	        		that.done(result);
+			})
+			.fail( function (error) 
+			{
+				if (that.fail)
+		        		that.fail(error);
+			})
+			.execute();
+
+			return that;
 		}
 	});
 
