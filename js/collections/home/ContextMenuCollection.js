@@ -199,9 +199,9 @@ define([
           ];
 
         if (contactType == 'General')
-          menuItems.push({ route: "/Contacts/Add/" + contactID, id: "3", title:"Adicionar nos contatos pessoais", iconClass : 'icon-add-contact-agenda' });
+          menuItems.push({ route: "/Contacts/Add/" + contactID, id: "3", title:"Adicionar nos contatos pessoais", iconClass : 'icon-add-contact-personal' });
         else
-          menuItems.push({ route: "/Contacts/Delete/" + contactID, id: "3", title:"Remover dos contatos pessoais" });
+          menuItems.push({ route: "/Contacts/Delete/" + contactID, id: "3", title:"Remover dos contatos pessoais", iconClass: 'icon-delete-contact-personal' });
 
         this.createModelsFromArray(menuItems);
         return this;

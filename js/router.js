@@ -55,7 +55,7 @@ define([
       'Chat' : 'chatListView',
       'Chat/:secondViewName' : 'chatListView',
       'Settings' : 'settingsListView',
-      'Settings/:secondViewName' : 'settingsLsitView',
+      'Settings/:secondViewName' : 'settingsListView',
       'Logout' : 'logoutView',
       'ContextMenu' : 'contextMenuView',
       '*actions': 'defaultAction'
@@ -239,11 +239,10 @@ define([
   
     });
 
-    app_router.on('route:contactsListView', function (secondViewName, status) {
+    app_router.on('route:contactsListView', function (secondViewName) {
 
       contactsListView = new ContactsListView();
       contactsListView.secondViewName = secondViewName;
-      contactsListView.status = status;
       contactsListView.render();
 
       Shared.menuView.selectMenu(3);
