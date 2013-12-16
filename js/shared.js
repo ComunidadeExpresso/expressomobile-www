@@ -6,7 +6,8 @@ define([
   'expressoAPI',
   'expressoIM',
   'views/home/UserMessageView',
-], function($, _, Backbone,expressoAPI,expressoIM,UserMessageView) {
+  'expressoService',
+], function($, _, Backbone,expressoAPI,expressoIM,UserMessageView,expressoService) {
   
   var Shared = {};
 
@@ -32,6 +33,7 @@ define([
 
   Shared.im = expressoIM;
   Shared.api = expressoAPI;
+  Shared.service = expressoService;
 
   Shared.contentView = null;
   Shared.detailView = null;
@@ -315,6 +317,10 @@ define([
           //alert("auth:" + authValue);
 
           Shared.api.auth(authValue);
+
+          if (Shared.isAndroid()) {
+            Shared.service.setConfig("http://api.expresso.pr.gov.br/",authValue);
+          }
           
         }
 
@@ -324,7 +330,6 @@ define([
   };
 
   Shared.userHasAuth();
-  
 
 
 document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
@@ -336,6 +341,9 @@ document.addEventListener('deviceready', function () {
   Shared.api.android(Shared.isAndroid());
 
   if (Shared.isAndroid()) {
+
+      Shared.service.service = cordova.require('cordova/plugin/ExpressoService');
+      
       Shared.api.createPhoneGapDatabase();
 
       if (window.plugins.webintent != undefined) {
@@ -346,6 +354,15 @@ document.addEventListener('deviceready', function () {
           Shared.newMessageFiles = eval(url);
 
           
+
+        }, function() {
+
+        });
+
+        window.plugins.webintent.getExtra("android.intent.action.VIEW", function (url) {
+
+          alert("view");
+          alert(url);
 
         }, function() {
 

@@ -210,7 +210,7 @@ define([
 
       if (Shared.isDesktop()) {
         $( "#page" ).animate({"margin-left": '0'}, 500, "linear",function() { 
-          $('#menu').removeClass('expanded').removeAttr('style');
+          //$('#menu').removeClass('expanded').removeAttr('style');
           $('#page').removeAttr('style');
         });
       } else {

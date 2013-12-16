@@ -175,7 +175,7 @@ define([
 
       getGeneralContactsMenu: function() {
         var menuItems = [
-            { route: "/Contacts/Personal", iconClass: 'context-catalogo-pessoal', title:"Contatos Pessoais"}
+            { route: "/Contacts/Personal", iconClass: 'btn-catalogo-pessoal', title:"Contatos Pessoais", primary: true}
           ];
 
         this.createModelsFromArray(menuItems);
@@ -184,7 +184,7 @@ define([
 
       getPersonalContactsMenu: function() {
         var menuItems = [
-            { route: "/Contacts/General", iconClass: 'context-catalogo-geral', title: "Catálogo Geral"}
+            { route: "/Contacts/General", iconClass: 'btn-catalogo-geral', title: "Catálogo Geral", primary: true}
           ];
 
         this.createModelsFromArray(menuItems);

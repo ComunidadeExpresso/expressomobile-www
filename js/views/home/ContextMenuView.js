@@ -46,15 +46,28 @@ define([
 
     },
 
+
+    clickMainAppPageContent: function(e) {
+
+       if (!$('#contextMenu').hasClass("hidden")) {
+        if (!Shared.contextMenulastHasHiddenClass) {
+          $('#contextMenu').addClass("hidden");
+        }
+       }
+       Shared.contextMenulastHasHiddenClass = $('#contextMenu').hasClass("hidden");
+
+    },
+
     initialize : function ( options ) {
-
-
+       $(window).off("click");
+       $(window).on("click",this.clickMainAppPageContent);
+       Shared.lastHasClass = true;
     },
 
     events: {
       "click #contextMenuButton": "toggleMenu",
       "click #btn-primary-action": "routeToPrimaryAction",
-      "click #contextMenu ul li a": "selectContextMenuItem"
+      "click #contextMenu ul li a": "selectContextMenuItem",
     },
 
     selectContextMenuItem: function(e){
@@ -70,9 +83,6 @@ define([
 
         var context = this.collection.getActionById(id);
 
-        console.log(id);
-        console.log(context);
-
         this.callBack = context.get("callBack");
         this.parentCallBack = context.get("parentCallBack");
 
@@ -85,11 +95,7 @@ define([
 
     routeToPrimaryAction: function(e){
 
-      console.log("routeToPrimaryAction");
-      console.log(this.primaryAction);
-
       e.preventDefault();
-
       this.closeMenu();
 
       if (this.primaryAction != '#') {
@@ -132,7 +138,8 @@ define([
     },
 
     toggleMenu: function () {
-      if (this.menuOpen) {
+
+      if (!$('#contextMenu').hasClass("hidden")) {
         this.closeMenu();
       } else {
         this.openMenu();

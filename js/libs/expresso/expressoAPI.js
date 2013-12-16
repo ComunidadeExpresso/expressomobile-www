@@ -26,9 +26,8 @@ define([
 			send: function( headers, completeCallback ) {
 				jqXHR = new XMLHttpRequest();
 				jqXHR.open( options.type, options.url, true );
-				console.log('url: '+(options.url));
-				console.log('type: '+(options.type));
-				var boundary = 'AaB03x';
+
+				var boundary = 'AaB03x03923248232482';
 				var body = '';
 				var data = {
 					id: options.id,

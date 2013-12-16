@@ -35,6 +35,8 @@ define([
       //SALVA A VIEW DO MENU NO SHARED
       Shared.menuView = mView;
 
+      // 
+
     },
 
     remove: function() {
@@ -147,7 +149,9 @@ define([
       "click .listFolderItemLink": "selectFolderItem",
       "click .menuLink": "selectMenuItem",
       "click .listItemLink": "selectListItem",
+      "click body": 'clickMainAppPageContent',
     },
+
 
 	selectListItem: function(e){
 
@@ -230,6 +234,11 @@ define([
       }
 
       var search = $('#content .searchArea').outerHeight(true) == null ? 0 : $('#content .searchArea').outerHeight(true);
+
+      var isSmartPhoneResolution = ($(window).width() < 720);
+      if (isSmartPhoneResolution) {
+        Shared.forceSmartPhoneResolution = true;
+      }
       
       // Verify screen width to define device type
       Shared.deviceType(Shared.forceSmartPhoneResolution);

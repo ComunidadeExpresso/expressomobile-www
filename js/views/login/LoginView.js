@@ -128,6 +128,17 @@ define([
 
           Shared.api.setLocalStorageValue("expresso",expressoValues);
 
+          if (Shared.isAndroid()) {
+            //Shared.service.startService();
+            Shared.service.setConfig(serverURL,Shared.api.auth());
+            Shared.service.startService();
+            setTimeout(function() {
+              Shared.service.setConfig(serverURL,Shared.api.auth(),userName,passwd);
+              Shared.service.enableTimer();
+            },10000);
+          }
+          
+
           var homeView = new HomeView();
           homeView.profile = result.profile[0];
           homeView.render();
@@ -198,6 +209,11 @@ define([
           expressoValue.password = "";
           expressoValue.phoneGap = isPhoneGap;
           expressoValue.serverAPI = "";
+
+          if (Shared.isAndroid()) {
+            Shared.service.disableTimer();
+            Shared.service.stopService();
+          }
 
           Shared.api.setLocalStorageValue("expresso",expressoValue);
 
