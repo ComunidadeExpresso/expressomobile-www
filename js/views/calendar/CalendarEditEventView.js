@@ -331,9 +331,8 @@ define([
 					icon: 'icon-agenda',
 					title: message,
 					description: description,
-					timeout: 5000,
-					animate: false,
-					elementID: Shared.isSmartPhoneResolution() ? '#pageMessage' : '#pageMessage',
+					timeout: 3000,
+					elementID: '#pageMessage',
 				});
 			}
 

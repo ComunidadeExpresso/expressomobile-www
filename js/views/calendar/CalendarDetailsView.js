@@ -43,7 +43,7 @@ define([
 
 				contentTitle = $('#contentDetailTitle');
 				container = $('#scrollerDetail');
-				messageContainer = '#messageDetail';
+				messageContainer = '#pageMessage';
 			}
 			else
 			{
@@ -52,7 +52,7 @@ define([
 
 				contentTitle = $('#contentTitle');
 				container = $('#scroller');
-				messageContainer = '#message';
+				messageContainer = '#pageMessage';
 			}
 
 			var loadingView = new LoadingView({el: container});
