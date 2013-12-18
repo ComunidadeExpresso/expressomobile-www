@@ -34,8 +34,7 @@ define([
       'Mail/Message/:secondViewName/:msgID/*folderID' : 'composeMessageView',
       'Mail/Message/:secondViewName/:emailTo' : 'composeMessageTo',
       'Mail/Message/:secondViewName' : 'composeMessageView',
-      'Mail/Messages/:msgID/*folderID' : 'detailMessageView',
-      'Mail/Folders/*folderID' : 'openFolderView',
+      'Mail/Messages/:forceReload/:msgID/*folderID' : 'detailMessageView',
       'Contacts' : 'contactsListView',
       'Contacts/Add/:contactID' : 'addContactView',
       'Contacts/Delete/:contactID' : 'deleteContactView',
@@ -120,33 +119,8 @@ define([
 
       Shared.menuView.closeMenu();
 
-      
-
     });
 
-    app_router.on('route:openFolderView', function (PfolderID) {
-
-      PfolderID = PfolderID.replace("#","");
-
-      if (!Shared.newMessageIntent) {
-        var homeView = new HomeView({folderID: PfolderID});
-        Shared.menuView.closeMenu();
-        homeView.loadMessagesInFolder(PfolderID,'');
-
-        if (PfolderID == 'INBOX') {
-          Shared.menuView.selectMenu(1);
-        } else {
-          Shared.menuView.selectMenu(0);
-        }
-      } else {
-        Shared.newMessageIntent = false;
-        Shared.router.navigate("/Mail/Message/New",{ trigger: true });
-      }
-      
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-      
-
-    });
 
     app_router.on('route:loginView', function (actions) {
 
@@ -180,7 +154,7 @@ define([
 
       });
 
-      if (Shared.api.auth()) {
+      if ((Shared.api.auth()) || (Shared.gotoRoute != false)) {
         app_router.navigate("Home",{ trigger: true });
       } else {
         app_router.navigate("Login",{ trigger: true });
@@ -188,8 +162,23 @@ define([
 
     });
 
-    app_router.on('route:detailMessageView', function (msgID,folderID) {
+    app_router.on('route:detailMessageView', function (PforceReload,PmsgID,PfolderID) {
 
+      PfolderID = PfolderID.replace("#","");
+
+      var homeView = new HomeView({folderID: PfolderID});
+      Shared.menuView.closeMenu();
+      homeView.loadMessagesInFolder(PfolderID,'',PmsgID,PforceReload);
+
+      if (PfolderID == 'INBOX') {
+        Shared.menuView.selectMenu(1);
+      } else {
+        Shared.menuView.selectMenu(0);
+      }
+
+      Shared.deviceType(Shared.isSmartPhoneResolution());
+
+/*
       var detailMessageView = new DetailMessageView();
       detailMessageView.folderID = folderID;
       detailMessageView.msgID = msgID;
@@ -198,7 +187,8 @@ define([
 
       Shared.menuView.closeMenu();
 
-      Shared.deviceType(Shared.isSmartPhoneResolution());
+      Shared.deviceType(Shared.isSmartPhoneResolution()); 
+*/
   
     });
 

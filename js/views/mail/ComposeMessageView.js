@@ -21,6 +21,7 @@ define([
     folderID: '',
     currentMessage : '',
 
+
     addContactToField: function(params) {
 
       for (var i = 0, f; participant = params.listParticipants[i]; i++) {
@@ -162,7 +163,7 @@ define([
         
         Shared.showMessage(message);
 
-        Shared.router.navigate("/Mail/Folders/INBOX",{ trigger: true });
+        Shared.router.navigate("/Mail/Messages/1/0/INBOX",{ trigger: true });
 
       };
 
@@ -178,7 +179,7 @@ define([
 
         Shared.showMessage(message);
 
-        Shared.router.navigate("/Mail/Folders/INBOX",{ trigger: true });
+        Shared.router.navigate("/Mail/Messages/1/0/INBOX",{ trigger: true });
         
       };
 
@@ -313,7 +314,7 @@ define([
             $("#scrollerList li:first").addClass("selected");
 
           } else {
-            Shared.router.navigate("/Mail/Folders/" + that.folderID,{ trigger: true });
+            Shared.router.navigate("/Mail/Messages/1/0/" + that.folderID + "#",{ trigger: true });
           }
 
         };
@@ -327,7 +328,7 @@ define([
             elementID: "#pageMessage",
           });
 
-          Shared.router.navigate("/Mail/Folders/" + that.folderID,{ trigger: true });
+          Shared.router.navigate("/Mail/Messages/1/0/" + that.folderID + "#",{ trigger: true });
         };
 
         var message = { msgID: this.msgID, folderID: this.folderID};
@@ -789,7 +790,7 @@ define([
     },
 
     refreshWindowHeight: function() {
-      var top = $('.top').outerHeight(true);
+      var top = $('.topHeader').outerHeight(true);
       var search = $('#composeMessageHeader').outerHeight(true) == null ? 0 : $('#composeMessageHeader').outerHeight(true);
       $('#msgBody').height($(window).height() - top - search);
 

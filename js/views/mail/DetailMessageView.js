@@ -59,11 +59,13 @@ define([
 
           that.renderAttachments(message);
 
-          var currentFolder = Shared.folders.getFolderByID(that.folderID);
           var folderType = 5;
-
-          if (currentFolder.get != undefined) {
-            folderType = currentFolder.get("folderType");
+          if (Shared.folders != undefined) {
+            var currentFolder = Shared.folders.getFolderByID(that.folderID);
+          
+            if (currentFolder.get != undefined) {
+              folderType = currentFolder.get("folderType");
+            }
           }
 
           Shared.menuView.renderContextMenu('detailMessage',{folderID: that.folderID, msgID: that.msgID, folderType: folderType, qtdMessages: qtdMessages });
@@ -143,7 +145,7 @@ define([
         Shared.scrollDetail = null;
       }
 
-      var top = $('.top').outerHeight(true);
+      var top = $('.topHeader').outerHeight(true);
       var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
       
       $('body').height($(window).height() - top);

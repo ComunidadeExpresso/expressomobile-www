@@ -27,8 +27,11 @@
     </a>
   </li>
 <% }); %>
-<% _.each(messages, function(message){ %>
-  <li id="<%=message.listItemID()%>"> 
+<% 
+
+  _.each(messages, function(message){ 
+   %>
+  <li id="<%=message.listItemID()%>" <% if (message.get("msgID") == msgIDSelected) { %>class="selected"<%} %>> 
     <a href="<%=message.route()%>" class="listItemLink">
       <div class="msg-list-images">
         <span class="ellipsis14" style="text-align: right; margin: 5px; font-size: 10px;"><%=message.getTimeAgo()%></span>

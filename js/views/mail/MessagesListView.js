@@ -7,8 +7,9 @@ define([
   'views/mail/MessagesListItemsView',
   'collections/mail/FoldersCollection',
   'collections/mail/MessagesCollection',
-  'views/home/LoadingView'
-], function($, _, Backbone, Shared, messagesListTemplate, MessagesListItemsView, FoldersCollection, MessagesCollection,LoadingView){
+  'views/home/LoadingView',
+  'views/mail/DetailMessageView',
+], function($, _, Backbone, Shared, messagesListTemplate, MessagesListItemsView, FoldersCollection, MessagesCollection,LoadingView,DetailMessageView){
 
   var MessagesListView = Backbone.View.extend({
 
@@ -18,8 +19,10 @@ define([
     detailElementID: "#contentDetail",
     folderID: 'INBOX',
     msgID: '',
+    forceReload: "0",
     search: '',
     page: 1,
+    doneRoute: '',
 
     render: function(){
 
@@ -30,6 +33,7 @@ define([
       var beforeRenderCallback = function(colection) {
         var newData = {
           folderID: that.folderID,
+          msgID: that.msgID,
           currentFolder: that.currentFolder,
           collection: colection,
           _: _ 
@@ -38,7 +42,7 @@ define([
         if (!colection.length) {
 
           if (Shared.isTabletResolution()) {
-            Shared.router.navigate("/Mail/Messages/0/" + that.folderID + "#", {trigger: true});
+            Shared.router.navigate("/Mail/Messages/0/0/" + that.folderID + "#", {trigger: true});
           }
 
         }
@@ -54,8 +58,17 @@ define([
 
       var doneFunction = function() { 
 
-        if (Shared.isTabletResolution()) {
-           that.selectFirstMessage(); 
+        if ( ((Shared.isTabletResolution()) && (that.forceReload == "1")) || ( (!Shared.isTabletResolution()) && (Shared.gotoRoute != false)) ) {
+
+          if (that.msgID != undefined) {
+
+            var detailMessageView = new DetailMessageView();
+            detailMessageView.folderID = that.folderID;
+            detailMessageView.msgID = that.msgID;
+
+            detailMessageView.render();
+          }
+
         }
 
         Shared.setDefaultIMListeners();
@@ -65,13 +78,33 @@ define([
         that.loaded(); 
       };
 
-      var loadingView = new LoadingView({ el: $(this.elementID) });
-      loadingView.render();
 
-      var loadingView = new LoadingView({ el: $(this.detailElementID) });
-      loadingView.render();
+      //FORCERELOAD IS A PARAMETER THAT FORCES THE PAGE TO BE RELOADED FULLY ON TABLET RESOLUTION OR DEPENDING ON USER INTERACTION WITH THE PAGE.
+      //IN SMARTPHONE RESOLUTION THE FORCERELOAD IS USED TO NOT RELOAD ALL THE PAGE AND ONLY LOADS THE NECESSARY AREA OF THE PAGE.
+      if (this.forceReload == "1") {
 
-      that.getMessages(that.folderID,that.search,that.page,false,beforeRenderCallback,doneFunction);
+          var loadingView = new LoadingView({ el: $(this.elementID) });
+          loadingView.render();
+
+          var loadingView = new LoadingView({ el: $(this.detailElementID) });
+          loadingView.render();
+
+          that.getMessages(that.folderID,that.search,that.page,false,beforeRenderCallback,doneFunction);
+
+      } else {
+
+        var loadingView = new LoadingView({ el: $(this.detailElementID) });
+        loadingView.render();
+
+        var detailMessageView = new DetailMessageView();
+        detailMessageView.folderID = that.folderID;
+        detailMessageView.msgID = that.msgID;
+
+        detailMessageView.render();
+
+      }
+
+      
 
     },
 
@@ -99,7 +132,7 @@ define([
       if (firstMessage) {
         $("#" + firstMessage.listItemID()).addClass("selected");
         Shared.router.navigate(firstMessage.route(),{trigger: true});
-      } 
+      }
     },
 
     getMessages: function(pFolderID,pSearch,pPage,appendAtEnd,beforeRenderCallback,doneCallback)
@@ -135,13 +168,22 @@ define([
                       messagesListItemsView.parentFolders = [];
                     }
                     
+                    if (that.msgID == "") {
+                      if (data.length) {
+                        that.msgID = data.models[0].get("msgID"); 
+                      }
+                    }
+                    messagesListItemsView.msgIDSelected = that.msgID;
+                    console.log("msgIDSelected");
+                    console.log(that.msgID);
+
                     messagesListItemsView.render(appendAtEnd);
 
                     if (doneCallback) {
                       doneCallback();
                     }
 
-                    var top = $('.top').outerHeight(true);
+                    var top = $('.topHeader').outerHeight(true);
                     var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
                     
                     $('body').height($(window).height() - top);

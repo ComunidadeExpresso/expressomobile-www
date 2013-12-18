@@ -25,7 +25,7 @@ define([
 
     
     route: function() {
-      return '/Mail/Folders/' + this.get("folderID") + '#';
+      return '/Mail/Messages/1/0/' + this.get("folderID") + '#';
     },
 
     

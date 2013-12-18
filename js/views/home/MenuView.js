@@ -48,6 +48,7 @@ define([
 
           }
 
+
           var menuItemsCollection = new MenuItemsCollection();
 
           var itemsMenu = menuItemsCollection.getMenuItems(Shared.profile.contactApps);
@@ -72,7 +73,7 @@ define([
             if (result.contacts[0].contactImagePicture != "") {
               $("#userPicture").css("background-image","url('data:image/gif;base64," + result.contacts[0].contactImagePicture + "')");
               $("#userPicture").css("background-size","46px 61px");
-            } 
+            }
           })
           .fail(function(error) {
             Shared.handleErrors(error);
@@ -189,13 +190,7 @@ define([
         width = propWidth;
 
       $('#menu').addClass('expanded').css('width', width);
-      if (Shared.isDesktop()) {
-        $( "#page" ).animate({"margin-left": width}, 500);
-      } else {
-        $('#page').css('margin-left', width);
-      }
-      
-      //
+      $('#page').css('margin-left', width);
 
       if (Shared.scrollMenu == null) {
         this.loaded();
@@ -207,17 +202,10 @@ define([
     closeMenu: function()
     {
       this.menuOpen = false;
+      $('#menu').removeClass('expanded').removeAttr('style');
+      $('#page').removeAttr('style');
+      $('#page').css('margin-left', '0');
 
-      if (Shared.isDesktop()) {
-        $( "#page" ).animate({"margin-left": '0'}, 500, "linear",function() { 
-          //$('#menu').removeClass('expanded').removeAttr('style');
-          $('#page').removeAttr('style');
-        });
-      } else {
-        $('#menu').removeClass('expanded').removeAttr('style');
-        $('#page').removeAttr('style');
-        $('#page').css('margin-left', '0');
-      }
     },
 
     loaded: function () 

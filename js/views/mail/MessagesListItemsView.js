@@ -9,6 +9,7 @@ define([
   var MessagesListItemsView = Backbone.View.extend({
 
     parentFolders : [],
+    msgIDSelected: "",
 
     render: function(nextPage){
 
@@ -17,6 +18,7 @@ define([
       var data = {
         parentFolders: this.parentFolders,
         messages: this.collection.models,
+        msgIDSelected : this.msgIDSelected,
         _: _ 
       };
 

@@ -119,7 +119,7 @@ define([
 
           Shared.menuView.refreshFolders();
 
-          Shared.router.navigate("/Mail/Folders/" + result.folderID + "#",{ trigger: true });
+          Shared.router.navigate("/Mail/Messages/1/0/" + result.folderID + "#",{ trigger: true });
 
         }).fail(function (result) {
 
@@ -162,7 +162,7 @@ define([
 
           Shared.menuView.refreshFolders();
 
-          Shared.router.navigate("/Mail/Folders/" + result.folderID + "#",{ trigger: true });
+          Shared.router.navigate("/Mail/Messages/1/0/" + result.folderID + "#",{ trigger: true });
 
         }).fail(function (result) {
 
@@ -203,7 +203,7 @@ define([
         Shared.showMessage(message);
         Shared.menuView.refreshFolders();
 
-        Shared.router.navigate("/Mail/Folders/INBOX#",{ trigger: true }); 
+        Shared.router.navigate("/Mail/Messages/1/0/INBOX#",{ trigger: true }); 
 
       }).fail(function (result) {
 

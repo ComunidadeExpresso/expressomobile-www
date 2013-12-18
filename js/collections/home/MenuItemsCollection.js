@@ -18,7 +18,7 @@ define([
 
     getInboxMenuItem: function() {
         var menuItem = {menuTitle: "Caixa de Entrada",
-                        menuRoute: "/Mail/Folders/INBOX",
+                        menuRoute: "/Mail/Messages/1/0/INBOX#",
                         menuClass: "inbox",
                         menuIconClass: "icon-email"};
         var model = new MenuItemModel(menuItem);
