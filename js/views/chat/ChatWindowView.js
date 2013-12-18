@@ -61,7 +61,7 @@ define([
 
       this.loaded();
       
-      var top = $('.top').outerHeight(true);
+      var top = $('.topHeader').outerHeight(true);
       var chat = $('.chatArea').outerHeight(true) == null ? 0 : $('.chatArea').outerHeight(true);
       
       $('body').height($(window).height() - top);

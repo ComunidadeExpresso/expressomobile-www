@@ -145,7 +145,7 @@ define([
 
 		loaded: function () 
 		{ 
-			var top = $('.top').outerHeight(true);
+			var top = $('.topHeader').outerHeight(true);
 			var search = $('.searchArea').outerHeight(true) == null ? 0 : $('.searchArea').outerHeight(true);
 
 			if (!Shared.isSmartPhoneResolution())

@@ -12,10 +12,10 @@ body #page { position: relative; height: 100%; width: 100%; background-color: #F
 /*body #page.menuExpanded { margin-left: auto; }
 body.smartphone #page.menuExpanded { margin-left: auto; }*/
 
-body #page .top { position: absolute; height: 53px; width: 100%; top: -53px; background: url("../imgs/icon.png") no-repeat scroll center center #F1F1F1; border-bottom: 1px solid #E5E5E5; }
+body #page .topHeader { position: absolute; height: 53px; width: 100%; top: -53px; background: url("../imgs/icon.png") no-repeat scroll center center #F1F1F1; border-bottom: 1px solid #E5E5E5; }
 body #page .smartphone { position: absolute; height: 53px; width: 100%; top: -53px; background: url("../imgs/icon-logo-top.png") no-repeat scroll center center #F1F1F1; border-bottom: 1px solid #E5E5E5; }
-body #page .top .topButtons li { float: left; }
-body #page .top .topButtons li a { height: 53px; width: 53px; display: block; color: transparent; text-shadow: none; font: 0px/0 a; }
+body #page .topHeader .topButtons li { float: left; }
+body #page .topHeader .topButtons li a { height: 53px; width: 53px; display: block; color: transparent; text-shadow: none; font: 0px/0 a; }
 	.topButtons .menu { background: url("../imgs/menu.png") no-repeat scroll 0 0 transparent; }
 	.topButtons .voltar { background: url("../imgs/menu.png") no-repeat scroll 0 0 transparent; }
 	.topButtons .contextMenu { background: url("../imgs/context_menu.png") no-repeat scroll 0 0 transparent; }
@@ -187,9 +187,9 @@ body #menu dl dd ul#myFolders li a span .badge.badge-info { float: right; }
 
 
 /** Menu de contexto **/
-body #page .top #contextMenu { background-color: #333333; width: 240px; position: absolute; top: 53px; right: 0; z-index: 9999; }
-body #page .top #contextMenu ul li { border-bottom: 1px solid #2C2C2C; }
-body #page .top #contextMenu ul li a { color: #EFEFEF; text-decoration: none; display: block; padding: 15px 10px; width: 200px; }
+body #page .topHeader #contextMenu { background-color: #333333; width: 240px; position: absolute; top: 53px; right: 0; z-index: 9999; }
+body #page .topHeader #contextMenu ul li { border-bottom: 1px solid #2C2C2C; }
+body #page .topHeader #contextMenu ul li a { color: #EFEFEF; text-decoration: none; display: block; padding: 15px 10px; width: 200px; }
 
 
 /** Preferências **/

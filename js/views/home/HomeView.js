@@ -18,6 +18,7 @@ define([
     el: $("#mainAppPageContent"),
 
     folderID: 'INBOX',
+    msgID: '0',
     search: '',
     page: '1',
     profile: null,
@@ -84,38 +85,51 @@ define([
        
         Shared.setDefaultIMListeners();
 
-        if (!Shared.newMessageIntent) {
+        
+         if (Shared.gotoRoute == false) {
+          if (!Shared.newMessageIntent) {
 
 
-          if (Shared.userHasModule("mail")) {
-            that.menuView.selectMenu(1);
-            that.loadMessagesInFolder(that.folderID,that.search);
-            that.loaded();
+            if (Shared.userHasModule("mail")) {
+              that.menuView.selectMenu(1);
+              that.loadMessagesInFolder(that.folderID,that.search,'','1');
+              that.loaded();
+
+            } else {
+
+              if (Shared.userHasModule("calendar")) {
+                that.menuView.selectMenu(2);
+                Shared.router.navigate("/Calendar",{ trigger: true });
+              } else {
+                if (Shared.userHasModule("catalog")) {
+                  that.menuView.selectMenu(3);
+                  Shared.router.navigate("/Catalog",{ trigger: true });
+                } else {
+                  if (Shared.userHasModule("chat")) {
+                    that.menuView.selectMenu(4);
+                    Shared.router.navigate("/Chat",{ trigger: true });
+                  }
+                }
+              } 
+            }
 
           } else {
 
-            if (Shared.userHasModule("calendar")) {
-              that.menuView.selectMenu(2);
-              Shared.router.navigate("/Calendar",{ trigger: true });
-            } else {
-              if (Shared.userHasModule("catalog")) {
-                that.menuView.selectMenu(3);
-                Shared.router.navigate("/Catalog",{ trigger: true });
-              } else {
-                if (Shared.userHasModule("chat")) {
-                  that.menuView.selectMenu(4);
-                  Shared.router.navigate("/Chat",{ trigger: true });
-                }
-              }
-            } 
+            that.loaded();
+            
+            Shared.newMessageIntent = false;
+            Shared.router.navigate("/Mail/Message/New",{ trigger: true });
           }
 
         } else {
 
+          console.log("gotoRoute: " + Shared.gotoRoute);
+
+          Shared.router.navigate(Shared.gotoRoute,{ trigger: true });
+
+          Shared.gotoRoute = false;
+
           that.loaded();
-          
-          Shared.newMessageIntent = false;
-          Shared.router.navigate("/Mail/Message/New",{ trigger: true });
         }
 
         $('#page').touchwipe(
@@ -135,13 +149,18 @@ define([
 
       });
       
-      
     },
 
-    loadMessagesInFolder: function(Pfolder,Psearch) {
-      var messagesListView = new MessagesListView({ folderID: Pfolder, search: Psearch, page: this.page });
+    loadMessagesInFolder: function(Pfolder,Psearch,PmsgID,PforceReload) {
+
+      this.msgID = PmsgID;
+
+      var messagesListView = new MessagesListView({ folderID: Pfolder, search: Psearch, page: this.page, msgID: PmsgID });
       messagesListView.folderID = Pfolder;
+      messagesListView.msgID = PmsgID;
+      messagesListView.forceReload = PforceReload;
       messagesListView.render();
+      
     },
 
     events: {
@@ -198,7 +217,7 @@ define([
       var that = this;
 
       var doneResizing = function() {
-        var top = $('.top').outerHeight(true);
+        var top = $('.topHeader').outerHeight(true);
         var chat = $('.chatArea').outerHeight(true) == null ? 0 : $('.chatArea').outerHeight(true);
 
         var search = $('#content .searchArea').outerHeight(true) == null ? 0 : $('#content .searchArea').outerHeight(true);
@@ -227,7 +246,13 @@ define([
     loaded: function () 
     {
       
-      var top = $('.top').outerHeight(true);
+      if (Shared.gotoRoute != false) {
+        
+        Shared.router.navigate(Shared.gotoRoute,{ trigger: true });
+        Shared.gotoRoute = false;
+      }
+
+      var top = $('.topHeader').outerHeight(true);
 
       if (!Shared.isAndroid() && Shared.isPhonegap()) {
         top = top + 20;
