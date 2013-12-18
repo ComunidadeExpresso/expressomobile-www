@@ -9,49 +9,67 @@ define([
 		var service;
 
 		this.startService = function() {
-			this.service.startService(	function(r){handleSuccess(r)},
-										function(e){handleError(e)});
+			var that = this;
+			this.service.startService(	function(r){ that.handleSuccess(r)},
+										function(e){ that.handleError(e)});
 		};
 
 		this.stopService = function() {
- 			this.service.stopService(	function(r){handleSuccess(r)},
-										function(e){handleError(e)});
+			var that = this;
+ 			this.service.stopService(	function(r){ that.handleSuccess(r)},
+										function(e){ that.handleError(e)});
 		};
 
 		this.enableTimer = function() {
+			var that = this;
 			// VERIFY NEW MESSAGES EVERY 5 MINUTES - 300000
 			this.service.enableTimer(	60000, 
-										function(r){handleSuccess(r)},
-										function(e){handleError(e)});
+										function(r){ that.handleSuccess(r)},
+										function(e){ that.handleError(e)});
 		};
 
 		this.disableTimer = function() {
- 			this.service.disableTimer(	function(r){handleSuccess(r)},
-										function(e){handleError(e)});
+			var that = this;
+ 			this.service.disableTimer(	function(r){ that.handleSuccess(r)},
+										function(e){ that.handleError(e)});
 		};
 		 			
 		this.registerForBootStart = function() {
-			this.service.registerForBootStart(	function(r){handleSuccess(r)},
-												function(e){handleError(e)});
+			var that = this;
+			this.service.registerForBootStart(	function(r){ that.handleSuccess(r)},
+												function(e){ that.handleError(e)});
 		};
 
 		this.deregisterForBootStart = function() {
-			this.service.deregisterForBootStart(	function(r){handleSuccess(r)},
-													function(e){handleError(e)});
+			var that = this;
+			this.service.deregisterForBootStart(	function(r){ that.handleSuccess(r)},
+													function(e){ that.handleError(e)});
 		};
 
 		this.registerForUpdates = function() {
-			this.service.registerForUpdates(	function(r){handleSuccess(r)},
-												function(e){handleError(e)});
+			var that = this;
+			this.service.registerForUpdates(	function(r){ that.handleSuccess(r)},
+												function(e){ that.handleError(e)});
 		};
 
 		this.deregisterForUpdates = function() {
-			this.service.deregisterForUpdates(	function(r){handleSuccess(r)},
-												function(e){handleError(e)});
+			var that = this;
+			this.service.deregisterForUpdates(	function(r){ that.handleSuccess(r)},
+												function(e){ that.handleError(e)});
+		};
+
+		this.handleSuccess = function(r) {
+
+		};
+
+		this.handleError = function(e) {
+
 		};
 
 		this.setConfig = function(apiURL,auth,username,password) {
 
+			var that = this;
+			
 			var config = { 
 				"auth" : auth,
 				"apiURL" : apiURL,
@@ -60,8 +78,8 @@ define([
 			};
 		
 			this.service.setConfiguration(	config,
-											function(r){handleSuccess(r)},
-											function(e){handleError(e)});
+											function(r){ that.handleSuccess(r)},
+											function(e){ that.handleError(e)});
 		};
 
 	}
