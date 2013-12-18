@@ -581,7 +581,7 @@
 		{
 			if ( typeof window.console.log != 'undefined' )
 			{
-				window.console.log( m );
+				//window.console.log( m );
 			}
 		}
 		return false;

@@ -12,7 +12,7 @@ require.config({
     expressoService: 'libs/expresso/expressoService',
     jqueryui: 'libs/jquery-ui/js/jquery-ui-1.10.3.custom.min',
     jquery_touchwipe: 'libs/jquery.touchwipe/jquery.touchwipe.min',
-    jquery_dotdotdot: 'libs/jquery.dotdotdot/jquery.dotdotdot.min',
+    jquery_dotdotdot: 'libs/jquery.dotdotdot/jquery.dotdotdot',
     jquery_xmpp: 'libs/jquery.xmpp/jquery.xmpp',
     moment: 'libs/moment/moment.min',
     json2: 'libs/json/json2',
