@@ -750,6 +750,16 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
   height: 40px;
 }
 
+.icon-add-event {
+  background: url("../imgs/icon-adicionar-evento-30x30.png") no-repeat scroll center center;
+
+}
+
+.icon-delete-event {
+  background: url("../imgs/icon-excluir-evento-30x30.png") no-repeat scroll center center;
+
+}
+
 .icon-add-contact-agenda {
   background: url("../imgs/icon-adicionar-participante-agenda-30x30.png") no-repeat scroll center center;
 
