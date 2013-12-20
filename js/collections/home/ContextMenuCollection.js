@@ -265,12 +265,17 @@ define([
         if (day == '' || day == undefined)
           day = today.getDate();
 
-        var menuItems = [{ route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, id: "0", title:"Adicionar evento", iconClass : 'btn-add-event', primary: false, action: 'add'}];
+        var menuItems = [];
 
         if (isOwner)
         {
           menuItems.push({ route: "/Calendar/Events/Edit/" + eventID, id: "1", title:"Editar evento", iconClass : '', primary: true});
-          menuItems.push({ route: "/Calendar/Events/Delete/" + eventID + "/" + year + "/" + month + "/" + day, id: "2", title:"Excluir evento", iconClass : '', primary: false, action: 'delete'});
+          menuItems.push({ route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, id: "0", title:"Adicionar evento", iconClass : '', primary: false, action: 'add', iconClass: 'icon-add-event'});
+          menuItems.push({ route: "/Calendar/Events/Delete/" + eventID + "/" + year + "/" + month + "/" + day, id: "2", title:"Excluir evento", iconClass : '', primary: false, action: 'delete', iconClass: 'icon-delete-event'});
+        }
+        else
+        {
+          menuItems.push({ route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, id: "0", title:"Adicionar evento", iconClass : '', primary: true, action: 'add', iconClass: 'btn-add-event'});
         }
 
         this.createModelsFromArray(menuItems);

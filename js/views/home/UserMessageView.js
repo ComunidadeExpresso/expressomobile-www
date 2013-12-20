@@ -47,7 +47,6 @@ define([
 
         mTop = mTop.split("px");
 
-        console.log(mTop);
         $(this.elementID).animate({top: (parseInt(mTop[0], 0) * -1) }, 500);
       } else {
         $(this.elementID).attr("style","top: 0px");
