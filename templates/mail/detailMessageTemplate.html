@@ -35,7 +35,7 @@
           </td>
           <td class="description" colspan="2">
             <% if (message.get("msgTo")) {  %>
-              <% if (message.get("msgTo").length >= 3) { %>
+              <% if (message.get("msgTo").length > 3) { %>
                 <div style="float: right;">
                   <a href="#" class="showMoreMsgTo">e mais <%=(message.get("msgTo").length - 3)%> pessoas...</a>
                 </div>
@@ -63,7 +63,7 @@
             Cc:
           </td>
           <td class="description" colspan="2">
-              <% if (message.get("msgCC").length >= 3) { %>
+              <% if (message.get("msgCC").length > 3) { %>
                 <div style="float: right;">
                   <a href="#" class="showMoreMsgCc">e mais <%=(message.get("msgCC").length - 3)%> pessoas...</a>
                 </div>

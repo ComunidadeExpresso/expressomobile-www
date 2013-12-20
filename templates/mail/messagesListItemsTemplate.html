@@ -46,7 +46,7 @@
         <% } %>
         <div class="clear"></div>
       </div>
-      <% if (message.get("msgSeen") == '0') { %>
+      <% if ((message.get("msgSeen") == '0') && (message.get("msgID") != msgIDSelected)) { %>
         <div id="<%=message.listItemID()%>_unread" class="msg-unread"></div>
       <% } %>
       <h3 class="ellipsis20"><%= message.get("msgSubject") %></h3>

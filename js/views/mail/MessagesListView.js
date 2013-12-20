@@ -114,7 +114,6 @@ define([
 
     searchMessage: function (e) {
       if(e.which == 13 && !e.shiftKey){
-        console.log("searchField");
         this.search = $('#searchField').val();
 
         pullDownEl = document.getElementById('pullDown');
@@ -168,14 +167,12 @@ define([
                       messagesListItemsView.parentFolders = [];
                     }
                     
-                    if (that.msgID == "") {
+                    if ((that.msgID == "") || (that.msgID == "0"))  {
                       if (data.length) {
                         that.msgID = data.models[0].get("msgID"); 
                       }
                     }
                     messagesListItemsView.msgIDSelected = that.msgID;
-                    console.log("msgIDSelected");
-                    console.log(that.msgID);
 
                     messagesListItemsView.render(appendAtEnd);
 
@@ -223,7 +220,6 @@ define([
 
     pullDownAction: function () 
     {
-      console.log('pullDownAction');
       this.page = 1;
       this.getMessages(this.folderID,this.search,this.page,false);
     },

@@ -203,7 +203,10 @@ define([
       Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
     },
 
-    toggleMenu: function() {
+    toggleMenu: function(e) {
+      if (e != undefined) {
+        e.preventDefault();
+      }
       this.menuView.toggleMenu();
     },
 

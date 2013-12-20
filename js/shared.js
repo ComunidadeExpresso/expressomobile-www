@@ -39,8 +39,8 @@ define([
   Shared.detailView = null;
 
   //USED WHEN THE ANDROID SEND FILES AND OPENS A NEW COMPOSE MESSAGE.
+  Shared.gotoRoute = false;
   Shared.newMessageIntent = false;
-  Shared.gotoRoute = false; //"/Mail/Messages/1/3203/INBOX#";
   Shared.newMessageFiles = true;
 
 
@@ -204,6 +204,9 @@ define([
 
   Shared.handleErrors = function(error,preferences) {
 
+    console.log("handleErrors");
+    console.log(error);
+
     if (error.code == 100) {
       if (preferences != undefined) {
 
@@ -330,7 +333,6 @@ define([
   Shared.userHasAuth();
 
 
-
 document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 
   // deviceready is PhoneGap's init event
@@ -352,33 +354,16 @@ document.addEventListener('deviceready', function () {
           alert(url);
           Shared.newMessageFiles = eval(url);
 
+          
 
         }, function() {
 
         });
 
-        window.plugins.webintent.hasExtra("AUTH", function (hasAuth) {
+        window.plugins.webintent.getExtra("android.intent.action.VIEW", function (url) {
 
-          if (hasAuth) {
-
-            window.plugins.webintent.getExtra("AUTH", function (authValue) {
-
-              Shared.api.auth(authValue);
-
-              window.plugins.webintent.getExtra("URL", function (url) {
-
-                alert(url);
-                Shared.gotoRoute = url;
-
-              }, function() {
-
-              });
-
-            }, function() {
-
-            });
- 
-          }
+          alert("view");
+          alert(url);
 
         }, function() {
 
@@ -398,7 +383,6 @@ document.addEventListener('deviceready', function () {
 
       if (expressoValue != null) {
         if (expressoValue.auth != "") { 
-          
           window.location.href = "/Home";
         } else {
           window.location.href = "/Login";
@@ -426,6 +410,7 @@ document.addEventListener('deviceready', function () {
 
       //return  "Are you sure want to LOGOUT the session ?";
     }; 
+
 
 
   //Shared.router is created in App.js

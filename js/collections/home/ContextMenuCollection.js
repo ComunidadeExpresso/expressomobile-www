@@ -33,11 +33,6 @@ define([
 
         menuItems.push(newMessage);
 
-
-        console.log("folderType");
-        console.log(folderType);
-        console.log(qtdMessages);
-
         //ONLY CAN ADD SUBFOLDERS OR RENAME IF THE FOLDER TYPE IS 5 (PERSONAL FOLDER)
         if (folderType == 5) {
           menuItems.push(addFolder);
@@ -47,6 +42,10 @@ define([
           if (qtdMessages == 0) {
             menuItems.push(deleteFolder);
           }
+        }
+
+        if (folderType == 0) {
+          menuItems.push(addFolder);
         }
 
         this.createModelsFromArray(menuItems);
@@ -111,6 +110,10 @@ define([
           if (qtdMessages == 0) {
             menuItems.push(deleteFolder);
           }
+        }
+
+        if (folderType == 0) {
+          menuItems.push(addFolder);
         }
         
         this.createModelsFromArray(menuItems);
@@ -262,7 +265,7 @@ define([
         if (day == '' || day == undefined)
           day = today.getDate();
 
-        var menuItems = [{ route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, id: "0", title:"Adicionar evento", iconClass : '', primary: false, action: 'add'}];
+        var menuItems = [{ route: "/Calendar/Events/Add/" + year + "/" + month + "/" + day, id: "0", title:"Adicionar evento", iconClass : 'btn-add-event', primary: false, action: 'add'}];
 
         if (isOwner)
         {

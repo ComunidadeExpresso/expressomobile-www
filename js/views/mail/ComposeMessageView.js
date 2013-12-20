@@ -309,12 +309,38 @@ define([
           var mModel = new MessagesModel(message);
 
           if (Shared.isTabletResolution()) {
-            $("#" + mModel.listItemID()).remove();
 
-            $("#scrollerList li:first").addClass("selected");
+            $("#" + mModel.listItemID()).animate({
+              opacity: 0.25,
+              height: "toggle"
+            }, 1000, function() {
+
+              $("#" + mModel.listItemID()).remove();
+              $("#scrollerList li:first").addClass("selected");
+              $("#" + mModel.listItemID()).animate({
+                opacity: 1,
+                height: "toggle"
+              }, 1000, function() { });
+
+              var messageID = 0;
+              var forceReload = 0;
+              if ($("#scrollerList li:first").length !== 0) {
+                var selectedItemID = $("#scrollerList li:first").attr('id').split("_");
+                messageID = selectedItemID[selectedItemID.length - 1];
+              }
+
+              if (messageID == undefined) {
+                messageID = 0;
+                forceReload = 1;
+              }
+
+              Shared.router.navigate("/Mail/Messages/" + forceReload + "/" +  messageID + "/" + that.folderID,{ trigger: true });
+
+            });
+            
 
           } else {
-            Shared.router.navigate("/Mail/Messages/1/0/" + that.folderID + "#",{ trigger: true });
+            Shared.router.navigate("/Mail/Messages/1/0/" + that.folderID,{ trigger: true });
           }
 
         };

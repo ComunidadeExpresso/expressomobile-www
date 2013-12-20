@@ -18,8 +18,6 @@ define([
 
       this.elementID = "#content";
 
-      
-
       if (this.action == "renameFolder") { 
         title = "Renomear Pasta";
 

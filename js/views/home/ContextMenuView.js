@@ -137,8 +137,11 @@ define([
       $("#contextMenu").html("");
     },
 
-    toggleMenu: function () {
+    toggleMenu: function (e) {
 
+      if (e != undefined) {
+        e.preventDefault();
+      }
       if (!$('#contextMenu').hasClass("hidden")) {
         this.closeMenu();
       } else {

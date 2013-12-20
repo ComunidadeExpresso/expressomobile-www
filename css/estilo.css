@@ -1284,3 +1284,9 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
   cursor: pointer;
 }
 
+.showMoreMsgTo {
+  text-decoration: none;
+  color: #0000FF;
+  font-weight: bold;
+}
+

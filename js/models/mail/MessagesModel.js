@@ -89,7 +89,7 @@ define([
     },
 
     listItemID: function() {
-      return 'Mail_Message_ListItem_' + this.get("folderID").split('/').join('_') + "_" + this.get("msgID");
+      return 'Mail_Message_ListItem_' + this.get("folderID").split('/').join('_').split(' ').join('_') + "_" + this.get("msgID");
     },
 
     getEmailsRecipientsInArray: function(fieldName) {

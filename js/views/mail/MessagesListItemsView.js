@@ -22,9 +22,6 @@ define([
         _: _ 
       };
 
-      console.log("parentFolders");
-      console.log(that.parentFolders);
-
       var compiledTemplate = _.template( messagesListItemsTemplate, data );
       if (nextPage) {
         $("#scrollerList").append( compiledTemplate );
