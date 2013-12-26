@@ -319,7 +319,6 @@ define([
               $("#scrollerList li:first").addClass("selected");
               $("#" + mModel.listItemID()).animate({
                 opacity: 1,
-                height: "toggle"
               }, 1000, function() { });
 
               var messageID = 0;
@@ -415,8 +414,6 @@ define([
 
         var ReplyOnGetMessage = function(result) {
 
-          console.log(result);
-
           var newMessage = result.models[0];
 
           var from = newMessage.get("msgFrom");
@@ -447,8 +444,6 @@ define([
       if (this.secondViewName == "Forward") {
         
         var ForwardOnGetMessage = function(result) {
-
-          console.log(result);
 
           var newMessage = result.models[0];
 
@@ -623,7 +618,6 @@ define([
     addRecipientTo: function(e) {
       var val = $(e.currentTarget).val();
 
-      //console.log(e.which);
       //13 - ENTER
       //32 - ESPAÇO 
       //9 - TAB
@@ -657,7 +651,6 @@ define([
         nextOrder = "msgBody";
       }
 
-      // console.log($(e.currentTarget).attr("id"));
 
       if ( (e.which == 13 && !e.shiftKey) || (e.which == 32) || (e.which == 9) || (e.which == 188) ) {
         if (this.validateEmail($.trim(val))) {
@@ -671,7 +664,6 @@ define([
         }
       }
       if ( (e.which == 8) && ($.trim(val) == "") ) {
-        // console.log("remove: " + $("#" + prefix + "Recipients div:last-child").attr("data-mail"));
         Shared.currentDraftMessage.removeRecipient(prefix,$("#" + prefix + "Recipients div:last-child").attr("data-mail"));
         $("#" + prefix + "Recipients div:last-child").remove();
         
@@ -743,7 +735,6 @@ define([
 
     restoreDraftMessage: function() {
 
-      console.log("restoreDraftMessage");
       var draft = Shared.currentDraftMessage;
 
       var subject = draft.get("msgSubject");
@@ -757,7 +748,6 @@ define([
     },
 
     updateCurrentDraftMessage: function() {
-      console.log("updateCurrentDraftMessage");
       var model = this.getNewMessageModel();
       Shared.currentDraftMessage = model;
     },

@@ -2,11 +2,11 @@
 <article id="wrapperDetail" class="container">
 	<div id="scrollerDetail">
 		<table id="messageDetails"> 
-	        <tr id="msgToRow">
-		        <td class="item">
+	        <tr id="msgToRow detailRow">
+		        <td class="item detailCol">
 		          Para:
 		        </td>
-		        <td class="descriptionCompose">
+		        <td class="descriptionCompose detailCol">
 		        	<div id="addMsgToField" class='icon-add'></div>
 		        	<div id="msgToRecipients">
 						<% if (message.get("msgTo")) {  %>
@@ -28,11 +28,11 @@
 	                <div class="clear"></div>
 		        </td>
 	    	</tr>
-		    <tr id="msgCcRow" <% if (message.get("msgCc").length == 0) {  %>class="hidden"<% } %>>
-		        <td class="item">
+		    <tr id="msgCcRow" class="detailRow <% if (message.get("msgCc").length == 0) {  %>hidden<% } %>">
+		        <td class="item detailCol">
 		          Cc:
 		        </td>
-		        <td class="descriptionCompose">
+		        <td class="descriptionCompose detailCol">
 		        	<div id="addMsgCcField" class='icon-add'></div>
 		        	<div id="msgCcRecipients">
 						<% if (message.get("msgCc")) {  %>
@@ -56,10 +56,10 @@
 		        </td>
 	    	</tr>
 	    	<tr id="msgBccRow" <% if (message.get("msgBcc").length == 0) {  %>class="hidden"<% } %>>
-		        <td class="item">
+		        <td class="item detailCol">
 		          Bcc:
 		        </td>
-		        <td class="descriptionCompose">
+		        <td class="descriptionCompose detailCol">
 		        	<div id="addMsgBccField" class='icon-add'></div>
 		        	<div id="msgBccRecipients">
 						<% if (message.get("msgBcc")) {  %>
@@ -83,19 +83,19 @@
 		        </td>
 	    	</tr>
 	    	<tr id="msgSubjectRow">
-		        <td class="item">
+		        <td class="item detailCol">
 		          Assunto:
 		        </td>
-		        <td class="descriptionCompose">
+		        <td class="descriptionCompose detailCol">
 		        	<input type="text" id="msgSubjectInput" name="msgSubject" class="inputMessage" value="<%=message.get("msgSubject")%>" autocorrect="off" autocapitalize="off" style="width: 70%;">
 		        </td>
 	    	</tr>
-	    	<tr id="msgAttachmentsRow" class="hidden">
+	    	<tr id="msgAttachmentsRow" class="hidden detailRow">
 	    	<!-- <tr id="msgAttachmentsRow"> -->
-		        <td class="item">
+		        <td class="item detailCol">
 		          Anexos:
 		        </td>
-		        <td class="descriptionCompose">
+		        <td class="descriptionCompose detailCol">
 		        	
 		        	<div id="msgAttachmentsRecipients">
 		        		
@@ -109,8 +109,8 @@
 		        </td>
 	    	</tr>
 	    	
-	    	<tr id="msgBodyRow">
-	    		<td class="itemBody" colspan="2">
+	    	<tr id="msgBodyRow detailRow">
+	    		<td class="itemBody detailCol" colspan="2">
 	    			<div id="msgBodyInput" class="messageBodyInput" style="width: 100%;" contenteditable="true"><%=message.getMessageBody(withSignature,msgForwardString)%></div>
 	    		</td>
 	    	</tr>

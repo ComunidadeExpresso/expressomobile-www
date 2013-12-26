@@ -942,8 +942,8 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
 
 /** Mensagens - Detalhes da Mensagem **/
 body #page .main table#messageDetails { width: 100%; font-size: 16px; border-spacing: 0; margin-top: 1px; }
-body #page .main table#messageDetails tr { height: 60px; }
-body #page .main table#messageDetails tr td { border-bottom: 1px solid #CCCCCC; border-top: 1px #FFF solid; min-height: 60px; }
+body #page .main table#messageDetails tr.detailRow { height: 60px; }
+body #page .main table#messageDetails tr td.detailCol { border-bottom: 1px solid #CCCCCC; border-top: 1px #FFF solid; min-height: 60px; }
 body #page .main table#messageDetails tr td.item { border-left: 8px solid #3A87AD; color: #3A87AD; width: 50px; font-weight: bold; text-align: left; padding-left: 5px; }
 body #page .main table#messageDetails tr td.description { padding: 12px; color: #777777; font-size: 14px;}
 body #page .main table#messageDetails tr td.descriptionCompose { padding: 0px; color: #777777; font-size: 14px;}

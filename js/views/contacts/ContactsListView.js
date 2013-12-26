@@ -139,6 +139,7 @@ define([
 				            route: "",
 				            description: "",
 				            timeout: 0,
+				            animate: false,
 				            elementID: "#message",
 				        });
 

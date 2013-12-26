@@ -4,16 +4,16 @@
 <article id="wrapperDetail" class="container">
   <div id="scrollerDetail">
     <table id="messageDetails"> 
-      <tr>
-        <td class="item">
+      <tr class="detailRow">
+        <td class="item detailCol">
           De:
         </td>
-        <td class="description">
+        <td class="description detailCol">
           <span class="badge badge-write-message">
              <%= message.get("msgFrom").mailAddress %>
           </span>
         </td>
-        <td>
+        <td class="detailCol">
           <div class="msg-list-images" style="width: 150px;">
             <% if (message.get("msgHasAttachments") == '1') { %>
             <div class="msg-attachments"></div>
@@ -29,11 +29,11 @@
         </td>
       </tr> 
       <div id="msgDetails" class="hidden">
-        <tr>
-          <td class="item">
+        <tr class="detailRow">
+          <td class="item detailCol">
             Para:
           </td>
-          <td class="description" colspan="2">
+          <td class="description detailCol" colspan="2">
             <% if (message.get("msgTo")) {  %>
               <% if (message.get("msgTo").length > 3) { %>
                 <div style="float: right;">
@@ -58,11 +58,11 @@
         </tr> 
       
         <% if (message.get("msgCC").length) {  %>
-        <tr>
-          <td class="item">
+        <tr class="detailRow">
+          <td class="item detailCol">
             Cc:
           </td>
-          <td class="description" colspan="2">
+          <td class="description detailCol" colspan="2">
               <% if (message.get("msgCC").length > 3) { %>
                 <div style="float: right;">
                   <a href="#" class="showMoreMsgCc">e mais <%=(message.get("msgCC").length - 3)%> pessoas...</a>
@@ -84,11 +84,11 @@
         </tr> 
         <% } %>
         <% if (message.get("msgBcc").length) {  %>
-        <tr>
-          <td class="item">
+        <tr class="detailRow">
+          <td class="item detailCol">
             Bcc:
           </td>
-          <td class="description" colspan="2">
+          <td class="description detailCol" colspan="2">
               <% _.each(message.get("msgBcc"), function(msgRecipientBcc){ %>
                 <span class="badge badge-write-message">
                 <% if ($.trim(msgRecipientBcc.fullName) != '') { %> 
@@ -102,20 +102,20 @@
         </tr> 
         <% } %>
       </div>
-      <tr>
-        <td class="item">
+      <tr class="detailRow">
+        <td class="item detailCol">
           Data:
         </td>
-        <td class="description" colspan="2">
+        <td class="description detailCol" colspan="2">
           <%=message.get("msgDate")%>&nbsp;(<%=message.getTimeAgo()%>)
         </td>
       </tr> 
       <% if (message.get("msgAttachments")) {  %>
-      <tr>
-        <td class="item">
+      <tr class="detailRow">
+        <td class="item detailCol">
           Anexos:
         </td>
-        <td class="description" colspan="2">
+        <td class="description detailCol" colspan="2">
             <div id="msgAttachmentsRecipients">
 
             </div>
@@ -123,8 +123,8 @@
         </td>
       </tr> 
       <% } %>
-      <tr>
-        <td id="contentMessageBody" class="itemBody" colspan="3">
+      <tr class="detailRow">
+        <td id="contentMessageBody" class="itemBody detailCol" colspan="3">
           <%=message.getMessageBody(false)%>
         </td>
       </tr> 
