@@ -41,9 +41,9 @@ define([
 
 				for ( var i in options.params ) {
                     body += "--" + boundary + "\r\n";
-                    body += "Content-Disposition: form-data; name='params["+i+"]'\r\n";
+                    body += "Content-Disposition: form-data; name=\"params["+i+"]\"\r\n";
                     body += "Content-Type: text/plain; charset=UTF-8 \r\n\r\n";
-                    body += unescape(encodeURIComponent(options.params[i]));
+                    body += unescape(encodeURIComponent(options.params[i].replace(/'/g, '&#39;').replace(/\t/g,'')));
                     body += "\r\n";
                 }
 

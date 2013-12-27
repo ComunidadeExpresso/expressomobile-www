@@ -28,6 +28,16 @@ define([
 	        this.model = ContactModel;
 		},
 
+		getContactByID: function(contactID) {
+			var retVal = false;
+	        for (var i in this.models) {
+	          if (this.models[i].get('contactID') == contactID) {
+	            retVal = this.models[i];
+	          }
+	        }
+	        return retVal;
+		},
+
 		getContacts: function (pSearch, pContactType)
 		{	
 			var that = this;

@@ -1314,5 +1314,48 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
 
 
 
+/* AUTO COMPLETE */
+ul.autocomplete {
+  position:absolute;
+  background-color:white;
+  border:1px solid #999;
+  width:100%;
+  list-style:none;
+  font-size:16px;
+  overflow-x:hidden;
+  overflow-y:auto;
+  clear:both;}
 
+ul.autocomplete li {
+  cursor:pointer;
+  margin:0;
+  padding:10px;
+}
+
+ul.autocomplete li span.emailInfo {
+  cursor:pointer;
+  margin:0;
+  padding:10px;
+  font-size: 12px;
+  float: right;
+}
+
+ul.autocomplete li.selected {
+  background-color:#3A87AD; color: #FFF; font-weight: bold; 
+}
+
+ul.autocomplete li.selected span.emailInfo {
+  cursor:pointer;
+  margin:0;
+  padding:10px;
+  font-size: 12px;
+  float: right;
+}
+
+.shadow {
+  -moz-box-shadow: 1px 1px 2px #999;
+  -webkit-box-shadow: 1px 1px 2px #999;
+  box-shadow: 1px 1px 2px #999;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=135, Color='#999999')";
+  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=135, Color='#999999');}
 

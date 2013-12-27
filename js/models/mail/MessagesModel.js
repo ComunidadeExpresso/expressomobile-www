@@ -118,14 +118,17 @@ define([
     getMessageBody: function(signature,forwardString) {
 
       var msgBody = this.get("msgBody");
+      msgBody = this.nl2br(msgBody,'');
       var retString = "";
       if (signature == true) {
         retString = "\n\n" + this.getUserSignature() + "\n\n";
+        
         if (forwardString != undefined) {
           retString = retString + this.getForwardMessageString(forwardString);
-          retString = retString + "<div style='width: 100%; border-left: 2px solid #000; margin-left: 20px;'><div style='margin: 20px;'>" + msgBody + "</div></div>";
+          retString = this.nl2br(retString,'<br>');
+          retString = retString + "<div style='width: 100%; border-left: 2px solid #000; margin-left: 10px;'><div style='margin: 10px;'>" + msgBody + "</div></div>";
         }
-        retString = this.nl2br(retString);
+        
       } else {
         retString = msgBody;
       }
@@ -143,7 +146,7 @@ define([
       return Shared.settings.mailSignature;
     },
 
-    nl2br: function(str, is_xhtml) {
+    nl2br: function(str, breakTag) {
       // http://kevin.vanzonneveld.net
       // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
       // +   improved by: Philip Peterson
@@ -160,7 +163,10 @@ define([
       // *     returns 2: '<br>\nOne<br>\nTwo<br>\n<br>\nThree<br>\n'
       // *     example 3: nl2br("\nOne\nTwo\n\nThree\n", true);
       // *     returns 3: '<br />\nOne<br />\nTwo<br />\n<br />\nThree<br />\n'
-      var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br ' + '/>' : '<br>'; // Adjust comment to avoid issue on phpjs.org display
+      if (breakTag == undefined) {
+        breakTag = '<br>';
+      }
+      //var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br ' + '/>' : '<br>'; // Adjust comment to avoid issue on phpjs.org display
 
       return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '');
     },
@@ -194,9 +200,6 @@ define([
           newMsgRecipient.push(recipient);
         }
       }
-
-      console.log(fieldName);
-      console.log(newMsgRecipient);
   
       this.set(fieldName,newMsgRecipient);
     },

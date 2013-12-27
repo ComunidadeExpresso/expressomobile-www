@@ -14,6 +14,7 @@ require.config({
     jquery_touchwipe: 'libs/jquery.touchwipe/jquery.touchwipe.min',
     jquery_dotdotdot: 'libs/jquery.dotdotdot/jquery.dotdotdot',
     jquery_xmpp: 'libs/jquery.xmpp/jquery.xmpp',
+    autocomplete: 'libs/jquery.backbone.widget/jquery.backbone.widgets',
     moment: 'libs/moment/moment.min',
     json2: 'libs/json/json2',
     jqueryui_datepicker_ptBR: 'libs/jquery-ui/development-bundle/ui/i18n/jquery.ui.datepicker-pt-BR',
@@ -37,6 +38,9 @@ require.config({
       },
       jquery_touchwipe: {
         deps: ['jquery']
+      },
+      autocomplete: {
+            deps: ['jquery']
       },
       jqueryui_datepicker_ptBR: {
         deps: ['jquery', 'jqueryui']

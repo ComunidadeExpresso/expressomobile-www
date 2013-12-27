@@ -23,6 +23,7 @@
         jquery_dotdotdot: 'libs/jquery.dotdotdot/jquery.dotdotdot',
         jquery_xmpp: 'libs/jquery.xmpp/jquery.xmpp',
         moment: 'libs/moment/moment.min',
+        autocomplete: 'libs/jquery.backbone.widget/jquery.backbone.widgets',
         json2: 'libs/json/json2',
         jqueryui_datepicker_ptBR: 'libs/jquery-ui/development-bundle/ui/i18n/jquery.ui.datepicker-pt-BR',
         templates: '../templates'
@@ -43,6 +44,9 @@
             deps: ['jquery']
         },
         jquery_touchwipe: {
+            deps: ['jquery']
+        },
+        autocomplete: {
             deps: ['jquery']
         },
         jqueryui_datepicker_ptBR: {

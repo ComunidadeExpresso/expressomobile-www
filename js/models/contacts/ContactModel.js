@@ -18,7 +18,7 @@ define ([
 	        contactBirthDate: "",
 	        contactNotes: "",
 	        contactHasImagePicture: 0,
-	        contactImagePicture: ""
+	        contactImagePicture: "",
 		},
 
 		initialize: function ()
@@ -28,6 +28,18 @@ define ([
 			this.updateResource = '';
 			this.createResource = '';
 			this.deleteResource = '';
+		},
+
+		getSearchString: function() {
+
+			var retVal =  this.get('contactFirstName') + " " + this.get('contactLastName')  + " &lt;" + this.getFirstEmailAddress() + "&gt;";
+			return retVal;
+		},
+
+		getEmailString: function() {
+
+			var retVal =  "\"" + this.get('contactFirstName') + " " + this.get('contactLastName') + "\""  + " <" + this.getFirstEmailAddress() + "> ,";
+			return retVal;
 		},
 
 		route: function() 

@@ -3,6 +3,7 @@ define([
   'underscore',
   'backbone',
   'shared',
+  'autocomplete',
   'views/calendar/CalendarEditEventAddParticipantsView',
   'text!templates/mail/composeMessageTemplate.html',
   'models/mail/MessagesModel',
@@ -10,8 +11,9 @@ define([
   'collections/home/ContextMenuCollection',
   'views/mail/PreviewAttachmentMessageView',
   'views/home/LoadingView',
+  'collections/contacts/ContactsListCollection',
 
-], function($, _, Backbone, Shared, CalendarEditEventAddParticipantsView ,composeMessageTemplate,MessagesModel,MessagesCollection,ContextMenuCollection,PreviewAttachmentMessageView,LoadingView){
+], function($, _, Backbone, Shared, AutoComplete, CalendarEditEventAddParticipantsView ,composeMessageTemplate,MessagesModel,MessagesCollection,ContextMenuCollection,PreviewAttachmentMessageView,LoadingView,ContactsListCollection){
 
   var ComposeMessageView = Backbone.View.extend({
 
@@ -98,10 +100,81 @@ define([
         $("#msgAttachmentsRow").removeClass("hidden");
         dropZone.addEventListener('dragover', handleDragOverDropZone, false);
         dropZone.addEventListener('drop', handleFileSelectInDropZone, false);
+        
+        this.setupAutoComplete();
 
       }
 
       this.loaded();
+    },
+
+    setupAutoComplete: function() {
+      var that = this;
+      var contactsData = new ContactsListCollection();
+        contactsData.getContacts('', '1')
+        .done(function (data) 
+        {
+
+          var ThatClass = that;
+
+            var onSelectMsgToFunction = function(model) {
+              var prefix = "msgTo";
+              $("#" + prefix + "Input").val("");
+              ThatClass.prependEmailRecipientBadgeToDiv(prefix,"#" + prefix + "Recipients",model.getEmailString(),model.get('contactFirstName') + " " + model.get('contactLastName'));
+            };
+
+            var onSelectMsgCcFunction = function(model) {
+              var prefix = "msgCc";
+              $("#" + prefix + "Input").val("");
+              ThatClass.prependEmailRecipientBadgeToDiv(prefix,"#" + prefix + "Recipients",model.getEmailString(),model.get('contactFirstName') + " " + model.get('contactLastName'));
+            };
+
+            var onSelectMsgBccFunction = function(model) {
+              var prefix = "msgBcc";
+              $("#" + prefix + "Input").val("");
+              ThatClass.prependEmailRecipientBadgeToDiv(prefix,"#" + prefix + "Recipients",model.getEmailString(),model.get('contactFirstName') + " " + model.get('contactLastName'));
+            };
+            
+            $('#msgToInput').autocomplete({
+              collection: data,
+              attr: 'contactSearchString',
+              attrID: 'contactID',
+              noCase: true,
+              width: '95%',
+              onselect: onSelectMsgToFunction,
+              ul_class: 'autocomplete shadow',
+              ul_css: {'z-index':1234},
+              max_results: 10
+            });
+
+            $('#msgCcInput').autocomplete({
+              collection: data,
+              attr: 'contactSearchString',
+              attrID: 'contactID',
+              noCase: true,
+              width: '95%',
+              onselect: onSelectMsgCcFunction,
+              ul_class: 'autocomplete shadow',
+              ul_css: {'z-index':1234},
+              max_results: 10
+            });
+
+            $('#msgBccInput').autocomplete({
+              collection: data,
+              attr: 'contactSearchString',
+              attrID: 'contactID',
+              noCase: true,
+              width: '95%',
+              onselect: onSelectMsgBccFunction,
+              ul_class: 'autocomplete shadow',
+              ul_css: {'z-index':1234},
+              max_results: 10
+            });
+        })
+        .fail(function (data) 
+        {
+          // callbackFail({ error: data.error, _: _ });
+        });
     },
 
     getContextMenuParams: function() {
@@ -651,13 +724,16 @@ define([
         nextOrder = "msgBody";
       }
 
-
-      if ( (e.which == 13 && !e.shiftKey) || (e.which == 32) || (e.which == 9) || (e.which == 188) ) {
+      if ( (e.which == 13 && !e.shiftKey) || (e.which == 32) || (e.which == 188) || (e.which == 59) ) {
         if (this.validateEmail($.trim(val))) {
           $(e.currentTarget).val("");
           this.prependEmailRecipientBadgeToDiv(prefix,"#" + prefix + "Recipients",val);
+
+          if ((e.which == 188) || (e.which == 59) || (e.which == 32)) {
+            e.preventDefault();
+          }
         } else {
-          if ( (e.which == 13 && !e.shiftKey && val == "") ) {
+          if ( (e.which == 13 && !e.shiftKey && val == "") || (e.which == 9) ) {
             $("#" + nextOrder + "Input").focus();
 
           }
@@ -687,11 +763,17 @@ define([
       
     },
 
-    prependEmailRecipientBadgeToDiv: function(prefix,divID,emailRecipient) {
+    prependEmailRecipientBadgeToDiv: function(prefix,divID,emailRecipient,emailName) {
 
       var div = $("<div />").addClass("recipient" + prefix).attr("data-mail",emailRecipient);
 
-      var span = $("<span />").addClass("badge").addClass("badge-write-message").html(emailRecipient);
+      var span = $("<span />").addClass("badge").addClass("badge-write-message");
+
+      if (emailName == undefined) {
+        span.html(emailRecipient);
+      } else {
+        span.html(emailName);
+      }
 
       var input = $("<input />").attr("type","text").addClass("hidden").addClass(prefix + "Input").attr("name", prefix+ "Input").attr("value",emailRecipient);
 
