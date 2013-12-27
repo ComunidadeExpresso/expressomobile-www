@@ -750,6 +750,18 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
   height: 40px;
 }
 
+.btn-edit-event {
+  background: url("../imgs/icon-editar-evento-30x30.png") no-repeat scroll center center;
+  background-color: #006DCC;
+  background-repeat: no-repeat;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  color: #FFFFFF;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  min-width: 40px;
+  height: 40px;
+
+}
+
 .icon-add-event {
   background: url("../imgs/icon-adicionar-evento-30x30.png") no-repeat scroll center center;
 
@@ -1299,4 +1311,8 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
   color: #0000FF;
   font-weight: bold;
 }
+
+
+
+
 
