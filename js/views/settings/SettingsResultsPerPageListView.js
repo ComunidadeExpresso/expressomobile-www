@@ -13,20 +13,31 @@ define([
     render: function(){
 
       var possibleValues = [10,20,30,50,100];
+      var that = this;
 
-      var newData = {
-        _: _ ,
-        resultsperpage : Shared.settings.resultsPerPage,
-        possibleValues : possibleValues,
-      };
+      Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
-      var compiledTemplate = _.template( settingsResultsPerPageListTemplate, newData );
-      this.$el.html( compiledTemplate ); 
+        var rpp = 30;
 
-      $(this.elementID).empty().html(this.$el);
+        if (expressoValue.settings != undefined) {
+          Shared.settings = expressoValue.settings;
+          rpp = expressoValue.settings.resultsPerPage;
+        }
 
-      this.loaded();
+        var newData = {
+          _: _ ,
+          resultsperpage : rpp,
+          possibleValues : possibleValues,
+        };
 
+        var compiledTemplate = _.template( settingsResultsPerPageListTemplate, newData );
+        that.$el.html( compiledTemplate ); 
+
+        $(that.elementID).empty().html(that.$el);
+
+        that.loaded();
+
+      });
 
     },
 

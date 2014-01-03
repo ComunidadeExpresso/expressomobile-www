@@ -12,17 +12,28 @@ define([
 
     render: function(){
 
-      var newData = {
-        _: _ ,
-        mailsignature : Shared.settings.mailSignature
-      };
+      var mailsign = '';
 
-      var compiledTemplate = _.template( settingsMailSignatureListTemplate, newData );
-      this.$el.html( compiledTemplate ); 
+      var that = this;
 
-      this.loaded();
+      Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
+        
+        mailsign = expressoValue.settings.mailSignature;
 
-      Shared.menuView.renderContextMenu('mailsignature',{});
+        Shared.settings = expressoValue.settings;
+
+        var newData = {
+          _: _ ,
+          mailsignature : mailsign
+        };
+
+        var compiledTemplate = _.template( settingsMailSignatureListTemplate, newData );
+        that.$el.html( compiledTemplate ); 
+
+        that.loaded();
+
+        Shared.menuView.renderContextMenu('mailsignature',{});
+      });
 
     },
 

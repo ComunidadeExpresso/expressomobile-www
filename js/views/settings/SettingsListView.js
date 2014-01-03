@@ -32,7 +32,7 @@ define([
       
       if (this.secondViewName != null) {
 
-        if (this.secondViewName != "SaveMailSignature") {
+        if ((this.secondViewName != "SaveMailSignature") && (this.secondViewName != "SaveChangePassword")) {
 
           $(detailElementID).html("");
 
@@ -67,6 +67,9 @@ define([
         if (this.secondViewName == "SaveMailSignature") {
            var secondView = new SettingsMailSignatureListView({ el: $(detailElementID) });
            secondView.SaveMailSignature();
+        } else if (this.secondViewName == "SaveChangePassword") {
+          var secondView = new SettingsChangePasswordListView({ el: $(detailElementID) });
+          secondView.SaveChangePassword();
         } else {
 
           setTimeout(function() {
