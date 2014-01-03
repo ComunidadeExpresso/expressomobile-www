@@ -28,6 +28,7 @@ define([
 
       'Home' : 'homeView',
       'Login' : 'loginView',
+      'Mail/CleanTrash/*PfolderID' : 'cleanTrashView',
       'Mail/AddFolder/*PfolderID' : 'newFolderView',
       'Mail/RenameFolder/*PfolderID' : 'renameFolderView',
       'Mail/DeleteFolder/*PfolderID' : 'deleteFolderView',
@@ -88,6 +89,21 @@ define([
       editFolderView.action = "addFolder";
       editFolderView.parentFolderID = PfolderID;
       editFolderView.render();
+
+      Shared.menuView.closeMenu();
+
+    });
+
+    app_router.on('route:cleanTrashView', function (PfolderID) {
+
+      if (PfolderID == undefined) {
+        PfolderID = "INBOX";
+      }
+
+      PfolderID = PfolderID.replace("#","");
+
+      var editFolderView = new EditFolderView();
+      editFolderView.cleanTrash(PfolderID);
 
       Shared.menuView.closeMenu();
 

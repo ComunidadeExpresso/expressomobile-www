@@ -89,6 +89,44 @@ define([
       this.loaded();
     },
 
+    cleanTrash: function(folderID) {
+
+      var foldersCol =  new FoldersCollection();
+
+      foldersCol.cleanTrash().done(function (result) {
+
+        var message = {
+          type: "success",
+          icon: 'icon-email',
+          title: "Lixeira foi esvaziada com sucesso!",
+          description: "",
+          elementID: "#pageMessage",
+        }
+
+        Shared.showMessage(message);
+
+        Shared.menuView.refreshFolders();
+
+        Shared.router.navigate("/Mail/Messages/1/0/" + folderID + "#",{ trigger: true });
+
+
+      }).fail(function (result) {
+
+        var message = {
+          type: "error",
+          icon: 'icon-email',
+          title: "Não foi possível esvaziar a lixeira!",
+          description: "",
+          elementID: "#pageMessage",
+        }
+
+        Shared.showMessage(message);
+
+        Shared.router.navigate("/Mail/Messages/1/0/" + folderID + "#",{ trigger: true });
+        
+      }).execute();
+    },
+
     saveFolder: function() {
       var folderAction = $("#folderAction").val();
       var folderName = $("#folderName").val();
@@ -100,8 +138,6 @@ define([
       if (folderAction == "addFolder") { 
 
         foldersCol.addFolder(folderName,parentFolderID).done(function (result) {
-
-          console.log(result);
 
           var message = {
             type: "success",

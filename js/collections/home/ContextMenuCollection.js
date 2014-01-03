@@ -31,6 +31,8 @@ define([
         var renameFolder = { route: "/Mail/RenameFolder/" + folderID + "", id: "3", iconClass : 'context-rename-folder', title: "Renomear Pasta"};
         var deleteFolder = { route: "/Mail/DeleteFolder/" + folderID + "", id: "4", iconClass : 'context-del-folder', title: "Apagar Pasta"};
 
+        var cleanTrash = { route: "/Mail/CleanTrash/" + folderID + "", id: "5", iconClass : 'context-delete-message', title: "Limpar Lixeira"};
+
         menuItems.push(newMessage);
 
         //ONLY CAN ADD SUBFOLDERS OR RENAME IF THE FOLDER TYPE IS 5 (PERSONAL FOLDER)
@@ -48,6 +50,10 @@ define([
           menuItems.push(addFolder);
         }
 
+        if (folderType == 3) {
+          menuItems.push(cleanTrash);
+        }
+
         this.createModelsFromArray(menuItems);
         return this;
       },
@@ -55,6 +61,15 @@ define([
       getMailSignatureMenu: function() {
         var menuItems = [
             { route: "/Settings/SaveMailSignature", title:"Salvar", primary: true}
+          ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
+      },
+
+      getChangePasswordMenu: function() {
+        var menuItems = [
+            { route: "/Settings/SaveChangePassword", title:"Salvar", primary: true}
           ];
 
         this.createModelsFromArray(menuItems);
@@ -91,6 +106,7 @@ define([
         var addFolder = { route: "/Mail/AddFolder/" + folderID + "", id: "5", iconClass : 'context-add-folder', title: "Adicionar Pasta"};
         var renameFolder = { route: "/Mail/RenameFolder/" + folderID + "", id: "6", iconClass : 'context-rename-folder', title: "Renomear Pasta"};
         var deleteFolder = { route: "/Mail/DeleteFolder/" + folderID + "", id: "7", iconClass : 'context-del-folder', title: "Apagar Pasta"};
+        var cleanTrash = { route: "/Mail/CleanTrash/" + folderID + "", id: "5", iconClass : 'context-delete-message', title: "Limpar Lixeira"};
 
         menuItems.push(newMessage);
 
@@ -114,6 +130,10 @@ define([
 
         if (folderType == 0) {
           menuItems.push(addFolder);
+        }
+
+        if (folderType == 3) {
+          menuItems.push(cleanTrash);
         }
         
         this.createModelsFromArray(menuItems);

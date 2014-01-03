@@ -114,6 +114,33 @@ define([
 
       },
 
+      cleanTrash: function() {
+        var that = this;
+
+        that._data = {};
+
+        var thatModel = FoldersModel;
+
+        var data = this._data;
+
+        this.api
+        .resource('/Mail/CleanTrash')
+        .params({})
+        .done(function(result){
+
+          if (that._data.done) { 
+            that._data.done(result); 
+          }
+        })
+        .fail( function (error) {
+          if (that._data.fail) { 
+            that._data.fail(error); 
+          }
+        });
+
+        return that;
+      },
+
       deleteFolder: function(PfolderID) {
         var that = this;
 
