@@ -14,10 +14,14 @@
 			<div class="icon folder-sent"></div>
 		<% } %>
 		<% if (folder.get("folderType") == 2) { %>
-			<div class="icon folder-blue"></div>
+			<div class="icon folder-spam"></div>
 		<% } %>
 		<% if (folder.get("folderType") == 3) { %>
-			<div class="icon folder-trash-full"></div>
+			<% if (folder.get("qtdMessages") == "0") { %>
+				<div class="icon folder-trash"></div>
+			<% } else { %>
+				<div class="icon folder-trash-full"></div>
+			<% } %>
 		<% } %>
 		<% if (folder.get("folderType") == 5) { %>
 			<div class="icon folder-blue"></div>
