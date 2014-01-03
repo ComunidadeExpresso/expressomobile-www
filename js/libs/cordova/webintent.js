@@ -35,6 +35,10 @@
         return cordova.exec(win, fail, "WebIntent", "saveImage", [b64String, params]);
     };
 
+    WebIntent.prototype.createAccount = function(params, win, fail) {
+        return cordova.exec(win, fail, "WebIntent", "createAccount", [params]);
+    };
+
     WebIntent.prototype.getUri = function(success, fail) {
         return cordova.exec(function(args) {
             success(args);

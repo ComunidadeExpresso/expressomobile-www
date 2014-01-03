@@ -28,7 +28,21 @@ define([
 
     selectFolderMenuItem: function(e){
       e.preventDefault();
-      console.log("selectFolderMenuItem");
+
+      $('#myFolders li').each(function() { 
+        if ($(this).hasClass('selected')) {
+          $(this).removeClass( 'selected' ); 
+        }
+      });
+
+      var parent = $(e.target).parent();
+
+      if (parent.hasClass("listFolderMenuItemLink")) {
+        parent = parent.parent();
+      }
+
+      parent.addClass("selected");
+
       Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
     },
 

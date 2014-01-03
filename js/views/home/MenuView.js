@@ -138,6 +138,14 @@ define([
         $(this).removeClass( 'selected' ); 
       });
 
+      if ((index >=1) && (index <= 6) ) {
+        $('#myFolders li').each(function() { 
+          if ($(this).hasClass('selected')) {
+            $(this).removeClass( 'selected' ); 
+          }
+        });
+      }
+
       if (index == 1) {
          $('#mainMenu li.inbox').addClass("selected"); 
       }
@@ -259,6 +267,9 @@ define([
       }
       if (menuID == 'mailsignature') {
           this.context.collection = contextMenuCollection.getMailSignatureMenu();
+      } 
+      if (menuID == 'changePassword') {
+          this.context.collection = contextMenuCollection.getChangePasswordMenu();
       } 
       if (menuID == 'calendarAddEvent') {
           this.context.collection = contextMenuCollection.getCalendarAddEventMenu(params);

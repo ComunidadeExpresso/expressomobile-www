@@ -127,6 +127,8 @@ define([
           retString = retString + this.getForwardMessageString(forwardString);
           retString = this.nl2br(retString,'<br>');
           retString = retString + "<div style='width: 100%; border-left: 2px solid #000; margin-left: 10px;'><div style='margin: 10px;'>" + msgBody + "</div></div>";
+        } else {
+          retString = this.nl2br(retString,'<br>');
         }
         
       } else {

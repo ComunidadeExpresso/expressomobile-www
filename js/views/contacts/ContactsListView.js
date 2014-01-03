@@ -116,6 +116,7 @@ define([
 			var self = this;
 
 			$('#contentTitle').text('Contatos Pessoais');
+			$('#contentTitle').addClass("icon-contacts");
 			$('.searchArea').removeClass('generalContacts');
 			$('.searchArea').addClass('personalContacts');
 			
@@ -169,6 +170,7 @@ define([
 			this.personalContact = false;
 
 			$('#contentTitle').text('Catálogo Geral');
+			$('#contentTitle').addClass("icon-contacts");
 			$('.searchArea').removeClass('personalContacts');
 			$('.searchArea').addClass('generalContacts');
 

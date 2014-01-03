@@ -1,4 +1,4 @@
-<h2 id="contentTitle" class="ellipsis50">Prefer&ecirc;ncias</h2>
+<h2 id="contentTitle" class="ellipsis50 icon-settings" style="padding-left: 50px; background-position: 10px;">Prefer&ecirc;ncias</h2>
 <div id="wrapper" class="container">
 	<div id="scroller">
 
@@ -6,8 +6,13 @@
 			<dt>Conta de e-mail</dt>
 			<dd>
 				<ul>
-					<li><% if (!_.isNull(user.contactMails[0])) { %><%=user.contactMails[0]%><% } %></li>
-					<li>
+					<li><% if (Shared.userHasModule("catalog")) { %>
+						<a href="/Contacts/General/<%=user.contactUIDNumber%>" class="settinsLink"><% if (!_.isNull(user.contactMails[0])) { %><%=user.contactMails[0]%><% } %></a>
+					<% } else { %>
+							<% if (!_.isNull(user.contactMails[0])) { %><%=user.contactMails[0]%><% } %>
+						<% } %>
+					</li>
+					<!-- <li>
 
 						<div id="automaticLogin" class="onoffswitch right" style="margin: 5px; margin-top: 10px;">
 						    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="automaticLoginSwitch" <% if (automaticLogin == true) { %>checked<% } %>>
@@ -17,7 +22,7 @@
 						    </label>
 						</div>
 						Login autom&aacute;tico 
-					</li>
+					</li> -->
 					<li><a href="/Settings/ChangePassword" class="settinsLink">Alterar senha</a></li>
 				</ul>
 			</dd>

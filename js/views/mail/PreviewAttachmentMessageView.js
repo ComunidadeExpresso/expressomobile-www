@@ -108,7 +108,7 @@ define([
 
         var imageID = "attachment_image_" + this.fileID;
 
-        var div = $("<div />").attr("style","position: relative; overflow: hidden; height: 100%;");
+        var div = $("<div />").attr("style","position: relative; overflow: hidden; height: 100%;").addClass("grow");
         var img = $("<img />").attr("style","position: relative; left: 0px;").addClass("attachmentImage");
 
         img.attr("id",imageID);

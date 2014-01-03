@@ -119,7 +119,6 @@ define([
             auth: Shared.api.auth(), 
             "profile":result.profile[0],
             username: userName, 
-            password: passwd,
             phoneGap: isPhoneGap,
             serverAPI: serverURL
           };
@@ -129,13 +128,23 @@ define([
           Shared.api.setLocalStorageValue("expresso",expressoValues);
 
           if (Shared.isAndroid()) {
-            //Shared.service.startService();
+
             Shared.service.setConfig(serverURL,Shared.api.auth());
             Shared.service.startService();
             setTimeout(function() {
               Shared.service.setConfig(serverURL,Shared.api.auth(),userName,passwd);
               Shared.service.enableTimer();
             },10000);
+
+
+            window.plugins.webintent.createAccount({accountName : userName, accountPassword: passwd, accountAuthToken: Shared.api.auth(), accountAPIURL: serverURL}, 
+             function(result) {
+
+                alert("Conta Criada");
+                
+             }, function(error) {
+                alert(error);
+             });
           }
           
 

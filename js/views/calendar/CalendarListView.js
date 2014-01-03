@@ -233,6 +233,7 @@ define([
 
 			$('#content .searchArea').remove();
 			$('#contentTitle').text('Agenda');
+			$('#contentTitle').addClass("icon-agenda");
 
 			if (this.status == 'OK')
 			{
