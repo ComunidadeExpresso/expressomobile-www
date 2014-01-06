@@ -20,6 +20,7 @@ define([
     msgID: "",
     folderID: "",
     hasPreview: false,
+    forceDownloadFile: false,
 
     render: function(){
 
@@ -44,6 +45,19 @@ define([
 
       if (this.canShowPreview()) {
         this.preview();
+      }
+
+      if (this.forceDownloadFile != false) {
+
+        var that = this;
+
+        this.getFileData(function(params,result) {
+
+          var base64 = that.base64ArrayBuffer(result);
+
+          that.forceDownloadFile(that.fileID,base64,that.fileName,"base64");
+          
+        });
       }
     
     },
@@ -82,7 +96,7 @@ define([
 
       var retVal = false;
 
-      if (this.fileData == "") {
+      if  ( ((this.previewType == 'compose') && (this.fileType == 'binary')) ||  (this.fileData == '') ) {
 
       // if (Shared.isDesktop()) {
 
@@ -292,14 +306,43 @@ define([
 
       var that = this; 
 
-      this.getFileData(function(params,result) {
+      if (this.previewType != 'compose') {
 
-        var base64 = that.base64ArrayBuffer(result);
+        this.getFileData(function(params,result) {
+          var base64 = that.base64ArrayBuffer(result);
+          that.showImage(base64);
+        });
 
-        that.showImage(base64);
+      } else {
+       // if (this.fileType == 'binary') {
 
-      });
- 
+          var reader = new FileReader();
+          reader.fileName = that.fileName;
+          reader.fileID = that.fileID;
+          reader.onerror = function(e) {
+          };
+          reader.onprogress = function(e) {
+
+          };
+          reader.onabort = function(e) {
+            
+          };
+          reader.onloadstart = function(e) {
+            
+          };
+          reader.onload = function(e) {
+
+            var buffer = e.target.result;
+
+            var base64 = that.base64ArrayBuffer(buffer);
+            that.showImage(base64);
+
+          }
+
+          reader.readAsArrayBuffer(that.fileData);
+       // }
+      }
+
     },
 
 

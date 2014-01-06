@@ -212,6 +212,7 @@ body #menu dl dd ul#myFolders li a span .badge.badge-info { float: right; }
 /** Menu de contexto **/
 body #page .topHeader #contextMenu { background-color: #333333; width: 240px; position: absolute; top: 53px; right: 0; z-index: 9999; }
 body #page .topHeader #contextMenu ul li { border-bottom: 1px solid #2C2C2C; }
+body #page .topHeader #contextMenu ul li:hover { background-color: #111111; border-bottom: 1px solid #2C2C2C; }
 body #page .topHeader #contextMenu ul li a { color: #EFEFEF; text-decoration: none; display: block; padding: 15px 10px; width: 200px; }
 
 

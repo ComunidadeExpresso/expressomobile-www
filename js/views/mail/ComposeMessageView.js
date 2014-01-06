@@ -86,9 +86,9 @@ define([
 
             var fileID = Shared.currentDraftMessage.getQtdFiles();
 
-            var attachID = that.prependAttachmentImage(fileID,f.name,f.size,'binary');
+            that.prependAttachmentImage(fileID,f.name,f.size,'binary',files[i]);
 
-            Shared.currentDraftMessage.addBinaryFile(attachID,escape(f.name),files[i]);
+            Shared.currentDraftMessage.addBinaryFile(fileID,escape(f.name),files[i]);
 
           }
 
@@ -106,6 +106,44 @@ define([
       }
 
       this.loaded();
+    },
+
+    renderAttachments: function(message) {
+
+      this.showAttachments();
+
+      Shared.currentDraftMessage.clearFiles();
+
+      if (message != undefined) {
+        
+        var attachments = message.get("msgAttachments");
+        for (var i in attachments) {
+
+          var attachment = attachments[i];
+
+          var preview = new PreviewAttachmentMessageView();
+
+          preview.fileID = attachment.attachmentID;
+          preview.fileName = attachment.attachmentName;
+          preview.fileSize = attachment.attachmentSize;
+          preview.fileEncoding = attachment.attachmentEncoding;
+          preview.fileIndex = attachment.attachmentIndex;
+          preview.msgID = message.get("msgID");
+          preview.folderID = message.get("folderID");
+          preview.fileData = '';
+
+          preview.previewType = 'compose';
+
+          var OnDownloadFile = function(fileID,fileData,fileName,fileType) {
+            Shared.currentDraftMessage.addFile(fileID,fileData,fileName,fileType);
+          }
+
+          preview.forceDownloadFile = OnDownloadFile;
+
+          preview.render();
+        }
+
+      }
     },
 
     setupAutoComplete: function() {
@@ -525,11 +563,22 @@ define([
           newMessage.set("msgBcc",[]);
           newMessage.set("msgSubject","Fwd: " + newMessage.get("msgSubject"));
 
-          Shared.currentDraftMessage = newMessage;
+          if (newMessage.get("msgHasAttachments") == "1") {
 
-          that.renderComposeMessage(newMessage,true,result.models[0].get("msgFrom").mailAddress);
+            Shared.currentDraftMessage = newMessage;
 
-          
+            that.renderComposeMessage(newMessage,true,result.models[0].get("msgFrom").mailAddress);
+
+            that.renderAttachments(Shared.currentDraftMessage);
+
+          } else {
+
+            Shared.currentDraftMessage = newMessage;
+
+            that.renderComposeMessage(newMessage,true,result.models[0].get("msgFrom").mailAddress);
+
+          }
+
         };
         var ForwardOnGetMessageFailed = function() {
           
