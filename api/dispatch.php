@@ -39,15 +39,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 		curl_setopt($curl, CURLOPT_URL, $url);
 
-
 		$newPost['id'] = $_POST['id'];
 		$newPost['params'] = $_POST['params'];
 
 		foreach ($newPost['params'] as $i => $value) {
-			$newPost['params'][$i] = htmlentities(mb_convert_encoding($_POST['params'][$i],"ISO-8859-1","UTF-8"));
-		}
+            $newPost['params'][$i] = stripslashes(html_entity_decode($_POST['params'][$i]));
+        }
 
-		$newPost['params'] = stripslashes(mb_convert_encoding(html_entity_decode(json_encode($newPost['params'])),"UTF-8","ISO-8859-1" ));
+        $newPost['params'] = json_encode($newPost['params']);
 
 		 if ($_FILES) {
 
@@ -73,3 +72,4 @@ echo ($result && !curl_errno($curl))? $result : json_encode($error);// curl_erro
 
 // Close cURL
 curl_close($curl);
+

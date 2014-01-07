@@ -5,6 +5,8 @@ define([
 ], function($, _, Backbone){
 
 
+
+
 	jQuery.ajaxTransport( 'arraybuffer', function( options, originalOptions, jqXHR ) {
         return {
             send: function( headers, completeCallback ) {
@@ -43,7 +45,7 @@ define([
                     body += "--" + boundary + "\r\n";
                     body += "Content-Disposition: form-data; name=\"params["+i+"]\"\r\n";
                     body += "Content-Type: text/plain; charset=UTF-8 \r\n\r\n";
-                    body += unescape(encodeURIComponent(options.params[i].replace(/'/g, '&#39;').replace(/\t/g,'')));
+                    body += unescape(encodeURIComponent(options.params[i].replace(/\t/g,'')));
                     body += "\r\n";
                 }
 
