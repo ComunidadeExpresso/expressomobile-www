@@ -1,2 +1,4 @@
 servers.json
 .DS_Store
+
+dist/*

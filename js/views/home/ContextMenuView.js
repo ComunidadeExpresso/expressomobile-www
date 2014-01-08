@@ -103,7 +103,6 @@ define([
       } else {
         //if (this.callBack != '') {
           var primary = this.collection.getPrimaryAction();
-          console.log(primary.get("parentCallBack"));
           this.callBack( this.parentCallBack);
         //}
       }

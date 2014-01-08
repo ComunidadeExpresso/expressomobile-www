@@ -55,6 +55,8 @@ define([
 
           var base64 = that.base64ArrayBuffer(result);
 
+          that.fileData = base64;
+
           that.forceDownloadFile(that.fileID,base64,that.fileName,"base64");
           
         });
@@ -306,7 +308,7 @@ define([
 
       var that = this; 
 
-      if (this.previewType != 'compose') {
+      if ((this.previewType != 'compose') || (this.forceDownloadFile != false))  {
 
         this.getFileData(function(params,result) {
           var base64 = that.base64ArrayBuffer(result);
@@ -340,6 +342,7 @@ define([
           }
 
           reader.readAsArrayBuffer(that.fileData);
+
        // }
       }
 

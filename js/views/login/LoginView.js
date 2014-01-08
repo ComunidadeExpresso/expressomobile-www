@@ -125,11 +125,13 @@ define([
             serverAPI: serverURL
           };
 
+          Shared.password = passwd;
+
           Shared.profile = expressoValues.profile;
 
           Shared.api.setLocalStorageValue("expresso",expressoValues);
 
-          if (Shared.isAndroid()) {
+          if ((Shared.isAndroid()) && (Shared.isPhonegap())) {
 
             Shared.service.setConfig(serverURL,Shared.api.auth());
             Shared.service.startService();
@@ -142,7 +144,6 @@ define([
             window.plugins.webintent.createAccount({accountName : userName, accountPassword: passwd, accountAuthToken: Shared.api.auth(), accountAPIURL: serverURL}, 
              function(result) {
 
-                alert("Conta Criada");
                 
              }, function(error) {
                 alert(error);

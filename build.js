@@ -7,7 +7,7 @@
             name: 'main'
         }
     ],
-    fileExclusionRegExp: /^(r|build)\.js$/,
+    fileExclusionRegExp: /^((r|build)\.js|.git|.gitignore|README.md|servers.json.config|LICENSE|index_ios.html|index_android.html|config.xml|styles.css|estilo.css|chat.css|spinner.css|dist_web.sh)$/,
     optimizeCss: 'standard',
     removeCombined: true,
     paths: {
@@ -18,6 +18,7 @@
         localstorage: 'libs/Backbone.localStorage/backbone.localstorage',
         expressoAPI: 'libs/expresso/expressoAPI',
         expressoIM: 'libs/expresso/expressoIM',
+        expressoService: 'libs/expresso/expressoService',
         jqueryui: 'libs/jquery-ui/js/jquery-ui-1.10.3.custom.min',
         jquery_touchwipe: 'libs/jquery.touchwipe/jquery.touchwipe.min',
         jquery_dotdotdot: 'libs/jquery.dotdotdot/jquery.dotdotdot',

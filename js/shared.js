@@ -292,7 +292,7 @@ define([
     var retVal = false;
     var a = Shared.profile.contactApps;
     a.push("settings"); //EVERYONE HAS ACCESS TO SETTINGS.
-    //a.push("chat"); //TODO - CHAT MODULE IS NOT COMMING FROM THE API YET.
+    a.push("chat"); //TODO - CHAT MODULE IS NOT COMMING FROM THE API YET.
     //a = ["mail","chat","settings"]; //USE THIS IF YOU WANT TO TEST SPECIFC MODULES WILL WORK INDIVIDUALY
     for (var i = 0; i < a.length; i++) {
       if (a[i] === moduleName) {

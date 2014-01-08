@@ -59,13 +59,15 @@ define([
           Shared.profile = expressoValue.profile;
 
           var userName = expressoValue.username;
-          var passwd = expressoValue.password;
+          var passwd = Shared.password;
 
           if (Shared.userHasModule("chat")) {
-            Shared.im
-            .username(userName)
-            .password(passwd)
-            .connect();
+            if (passwd != undefined) {
+              Shared.im
+              .username(userName)
+              .password(passwd)
+              .connect();
+            }
           }
 
           Shared.api.phoneGap(expressoValue.phoneGap);

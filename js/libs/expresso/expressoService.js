@@ -76,10 +76,14 @@ define([
 				"username" : username,
 				"password" : password 
 			};
-		
-			this.service.setConfiguration(	config,
+
+			if (this.service != undefined) {
+				this.service.setConfiguration(	config,
 											function(r){ that.handleSuccess(r)},
 											function(e){ that.handleError(e)});
+			}
+		
+			
 		};
 
 	}

@@ -40,11 +40,26 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		curl_setopt($curl, CURLOPT_URL, $url);
 
 		$newPost['id'] = $_POST['id'];
+
+		//MSGBODY is a specific field that needs to be converted because of the nature of its contents,
+		//the conversion makes sure that the content is in utf-8 encoding.
+		if (isset($_POST['params']['msgBody'])) {
+			$_POST['params']['msgBody'] = mb_convert_encoding($_POST['params']['msgBody'], "ISO-8859-1","UTF-8");  
+		}
+
 		$newPost['params'] = $_POST['params'];
+
 
 		foreach ($newPost['params'] as $i => $value) {
             $newPost['params'][$i] = stripslashes(html_entity_decode($_POST['params'][$i]));
+
+            if ($i == "msgBody") {
+            	$newPost['params'][$i] = mb_convert_encoding($newPost['params'][$i], "UTF-8","ISO-8859-1");
+            }
+            
         }
+
+        //print_r($newPost['params']);
 
         $newPost['params'] = json_encode($newPost['params']);
 
@@ -58,6 +73,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			}
 
 		}
+
+
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $newPost);
 
 		$result = curl_exec($curl);

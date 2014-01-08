@@ -86,7 +86,6 @@ define([
             var result = jQuery.parseJSON(tempData).result;
 
             for (var i in result.servers) {
-              console.log(result.servers[i]);
               var currentModel = new ServerModel(result.servers[i]);
               that.add(currentModel);
             }
