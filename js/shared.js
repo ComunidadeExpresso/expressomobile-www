@@ -11,7 +11,7 @@ define([
   
   var Shared = {};
 
-  Shared.appVersion = "1.0";
+  Shared.appVersion = "BETA";
   Shared.context = "/api/";
 
   Shared.settings = {};
@@ -379,19 +379,21 @@ document.addEventListener('deviceready', function () {
 
   var exitFunction = function(){
 
-    Shared.api.getLocalStorageValue("expresso",function(expressoValue) {   
+    window.location.href = "/";
+    
+    // Shared.api.getLocalStorageValue("expresso",function(expressoValue) {   
 
-      if (expressoValue != null) {
-        if (expressoValue.auth != "") { 
-          window.location.href = "/Home";
-        } else {
-          window.location.href = "/Login";
-        }
-      } else {
-        window.location.href = "/Login";
-      }
+    //   if (expressoValue != null) {
+    //     if (expressoValue.auth != "") { 
+    //       window.location.href = "/Home";
+    //     } else {
+    //       window.location.href = "/Login";
+    //     }
+    //   } else {
+    //     window.location.href = "/Login";
+    //   }
 
-    });
+    // });
 
     
   };

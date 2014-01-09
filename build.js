@@ -7,7 +7,7 @@
             name: 'main'
         }
     ],
-    fileExclusionRegExp: /^((r|build)\.js|.git|.gitignore|README.md|servers.json.config|LICENSE|index_ios.html|index_android.html|config.xml|styles.css|estilo.css|chat.css|spinner.css|dist_web.sh)$/,
+    fileExclusionRegExp: /^((r|build)\.js|.git|README.md|servers.json.config|LICENSE|index_ios.html|index_android.html|config.xml|styles.css|estilo.css|chat.css|spinner.css|dist_web.sh)$/,
     optimizeCss: 'standard',
     removeCombined: true,
     paths: {

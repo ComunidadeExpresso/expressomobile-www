@@ -105,27 +105,27 @@ body #menu dl dd ul#mainMenu li a .icon { width: 40px; height: 32px; }
   background-size: 40px 32px;
 }
 .icon-agenda { 
-   border-radius: 5px;
+
   background: url("../imgs/icon-agenda-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
 .icon-contacts { 
-   border-radius: 5px;
+
   background: url("../imgs/icon-contatos-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
 .icon-jabber { 
-   border-radius: 5px;
+
   background: url("../imgs/icon-chat-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
 .icon-settings { 
-   border-radius: 5px;
+
   background: url("../imgs/icon-preferencias-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
 .icon-logout { 
-  border-radius: 5px;
+
   background: url("../imgs/icon-sair-90x72.png") no-repeat scroll center center;
   background-size: 40px 32px;
 }
@@ -627,13 +627,13 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
   height: 37px;
   margin-bottom: 20px;
   padding: 0px 0px;
-  color: #333;
-  text-shadow: 0 1px black;
-  background: #EFEFEF;
+  color: #000000;
+  background: #FFFFFF;
   border: 0px solid #333;
   border-top-color: #333;
   text-align: center;
   border-radius: 10px;
+  font-size: 16px;
   background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.2) 20%, rgba(0, 0, 0, 0));
   background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.2) 20%, rgba(0, 0, 0, 0));
   background-image: -o-linear-gradient(top, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.2) 20%, rgba(0, 0, 0, 0));
@@ -643,10 +643,17 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
 }
 .login-input:focus {
   outline: 0;
-  color: white;
-  background-color: #32486d;
+/*  color: #FFF;
+  background-color: #F5F5F5;
   -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 4px 1px rgba(255, 255, 255, 0.6);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 4px 1px rgba(255, 255, 255, 0.6);
+*/
+  background-color: #32486d;
+    background-image: linear-gradient(to bottom, #32486d, #000);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 .lt-ie9 .login-input {
   line-height: 35px;
@@ -1409,4 +1416,15 @@ ul.autocomplete li.selected span.emailInfo {
   box-shadow: 1px 1px 2px #999;
   -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=135, Color='#999999')";
   filter: progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=135, Color='#999999');}
+
+#beta {
+  background:  url("../imgs/beta.png") no-repeat scroll 0 0 transparent; background-position: 0px 0px; 
+  margin-top: -10px;
+  margin-left: -10px;
+  position: absolute;
+  z-index: 1000;
+  width: 50px;
+  height: 50px;
+  background-size: 50px 50px;
+}
 
