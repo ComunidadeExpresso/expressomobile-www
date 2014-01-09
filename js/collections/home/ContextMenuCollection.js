@@ -67,9 +67,10 @@ define([
         return this;
       },
 
-      getChangePasswordMenu: function() {
+      getChangePasswordMenu: function(params) {
         var menuItems = [
-            { route: "/Settings/SaveChangePassword", title:"Salvar", primary: true}
+            { route: "#", id: "0", callBack : params.saveCallBack, parentCallBack: params.parentCallBack, title:"Salvar", primary: true}
+
           ];
 
         this.createModelsFromArray(menuItems);
