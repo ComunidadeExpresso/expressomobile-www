@@ -15,6 +15,8 @@ define([
 
   var LoginView = Backbone.View.extend({
 
+    errors: false,
+
     render: function(){
 
 
@@ -34,6 +36,10 @@ define([
         that.$el.html(compiledTemplate);
         that.$el.attr("style","top: -53px; position: relative;");
         $("#mainAppPageContent").empty().append(that.$el);
+
+        if (Shared.betaVersion) {
+          $("#beta").removeClass("hidden");
+        }
 
       })
       .fail(function (error) {
@@ -79,7 +85,7 @@ define([
         Shared.api.context(Shared.context).crossdomain(serverURL);
       }
 
-      var errors = false;
+      this.errors = false;
 
       if (passwd == "") {
         Shared.showMessage({
@@ -89,7 +95,7 @@ define([
             description: "",
             elementID: "#pageMessage",
           });
-        errors = true;
+        this.errors = true;
       }
 
       if (userName == "") {
@@ -100,17 +106,16 @@ define([
             description: "",
             elementID: "#pageMessage",
           });
-        errors = true;
+        this.errors = true;
       }
 
       
+      var that = this;      
 
-      if (!errors) {
+      if (!that.errors) {
 
         var loadingView = new LoadingView({ el: $("#loadingLogin") });
         loadingView.render();
-
-        var that = this; 
 
         Shared.api
         .resource('Login')
@@ -149,6 +154,7 @@ define([
                 alert(error);
              });
           }
+          
           
 
           var homeView = new HomeView();

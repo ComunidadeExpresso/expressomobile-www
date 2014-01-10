@@ -11,16 +11,20 @@ define([
   
   var Shared = {};
 
-  Shared.appVersion = "BETA";
+  Shared.betaVersion = true;
+
+  if (Shared.betaVersion) {
+    Shared.appVersion = "BETA";
+  } else {
+    Shared.appVersion = "1.0";
+  }
+
   Shared.context = "/api/";
 
   Shared.settings = {};
 
-  Shared.settings.resultsPerPage = 30;
-
+  Shared.settings.resultsPerPage = 25;
   Shared.settings.mailSignature = "Mensagem enviada pelo Expresso Mobile.";
-
-  Shared.settings.automaticLogin = true;
 
   Shared.timeoutDelay = 500;
 
@@ -142,6 +146,29 @@ define([
         Shared.detailView = view;
       }
     }
+  };
+
+  Shared.refreshSettings = function() {
+     Shared.api
+      .resource('Preferences/UserPreferences')
+      .params({"module": "mail"})
+      .done(function(result){
+
+        var rpp = 25;
+
+        rpp = result.mail.max_email_per_page;
+
+        var mailsign = result.mail.signature;
+
+        Shared.settings.resultsPerPage = rpp;
+        Shared.settings.mailSignature = mailsign;
+
+        Shared.saveSettingsToLocalStorage();
+
+
+      }).fail(function(result) {
+
+      }).execute();
   };
 
   Shared.showMessage = function( message) {

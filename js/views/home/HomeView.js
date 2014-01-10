@@ -277,6 +277,10 @@ define([
 
       $('body').height($(window).height() - top);
       $('#wrapper').css('top', top + search);
+
+      if (Shared.betaVersion) {
+        $("#beta").removeClass("hidden");
+      }
       
     }
 
