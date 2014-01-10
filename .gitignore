@@ -1,4 +1,10 @@
-servers.json
-.DS_Store
+/servers.json
+/.DS_Store
+/dist/*
 
-dist/*
+*.log
+*.orig
+
+!.empty
+!.gitignore
+
