@@ -13,6 +13,8 @@ define([
 
   Shared.betaVersion = true;
 
+  Shared.betaTesters = [];
+
   if (Shared.betaVersion) {
     Shared.appVersion = "BETA";
   } else {
@@ -46,6 +48,12 @@ define([
   Shared.gotoRoute = false;
   Shared.newMessageIntent = false;
   Shared.newMessageFiles = true;
+
+  //MAXIMUM ALLOWED UPLOAD FILES IN ATTACHMENTS
+  Shared.max_upload_file_size = 10240; //IN KBYTES
+  
+  //MAXIMUM QUANTITY OF FILES IN EVERY MESSAGE.
+  Shared.max_upload_file_qtd = 20; //
 
 
   //MENSAGE THAT IT'S BEING COMPOSED.
@@ -408,21 +416,6 @@ document.addEventListener('deviceready', function () {
 
     window.location.href = "/";
     
-    // Shared.api.getLocalStorageValue("expresso",function(expressoValue) {   
-
-    //   if (expressoValue != null) {
-    //     if (expressoValue.auth != "") { 
-    //       window.location.href = "/Home";
-    //     } else {
-    //       window.location.href = "/Login";
-    //     }
-    //   } else {
-    //     window.location.href = "/Login";
-    //   }
-
-    // });
-
-    
   };
 
     if(window.onpagehide || window.onpagehide === null){
@@ -437,7 +430,6 @@ document.addEventListener('deviceready', function () {
 
       exitFunction();
 
-      //return  "Are you sure want to LOGOUT the session ?";
     }; 
 
 

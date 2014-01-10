@@ -55,15 +55,55 @@ define([
 		  this.deleteResource = '/Mail/DelMessage';
     },
 
+    checkAttachments: function(showMessage) {
+
+      var maxSize = Shared.max_upload_file_size; 
+      var maxAttachments = Shared.max_upload_file_qtd; 
+
+      var files = this.get("files");
+      var sumSize = 0;
+
+      var retVal = true;
+
+      for (var i in files) {
+        sumSize = sumSize + files[i].fileSize;
+      }
+
+      if ((sumSize / 1024) > maxSize) {
+        var maxMsgSize = Shared.bytesToSize(maxSize * 1024,0);
+        retVal = "Sua mensagem está com mais de " + maxMsgSize + "!";
+      }
+
+      if (files.length > maxAttachments) {
+        retVal = "Sua mensagem está com mais de " + maxAttachments + " anexos!";
+      }
+
+      if ((retVal != true) && (showMessage)) {
+        if (showMessage) {
+          Shared.showMessage({
+            type: "warning",
+            icon: 'icon-email',
+            title: retVal,
+            description: "",
+            elementID: "#pageMessage",
+          });
+        }
+      }
+
+      return retVal;
+      
+    },
+
     clearFiles: function() {
       this.set("files",[]);    
     },
 
-    addFile: function(fileID,fileData,fileName,dataType) {
+    addFile: function(fileID,fileData,fileName,dataType,fileSize) {
       var files = this.get("files");
       var file = {
         "fileID" : fileID,
         "filename" : fileName,
+        "fileSize": fileSize,
         "src": fileData,
         "dataType": dataType,
       };
@@ -71,6 +111,8 @@ define([
       files.push(file);
 
       this.set("files",files);
+
+      this.checkAttachments(true);
     },
 
     removeFileByID: function(fileID) {
@@ -115,21 +157,35 @@ define([
       return "" + retVal + "";
     },
 
-    getMessageBody: function(signature,forwardString) {
+    getMessageBody: function(signature,msgType,msgOriginal) {
 
-      var msgBody = this.get("msgBody");
+      var msgBody = "";
+      if (msgOriginal != undefined) {
+        msgBody = msgOriginal.get("msgBody");
+      } else {
+        msgBody = this.get("msgBody");
+      }
       msgBody = this.nl2br(msgBody,'');
       var retString = "";
       if (signature == true) {
         retString = "\n\n" + this.getUserSignature() + "\n\n";
-        
-        if (forwardString != undefined) {
-          retString = retString + this.getForwardMessageString(forwardString);
+
+        if (msgType == 'forward') {
+
+          retString = retString + msgOriginal.getForwardMessageString(msgOriginal);
           retString = this.nl2br(retString,'<br>');
-          retString = retString + "<div style='width: 100%; border-left: 2px solid #000; margin-left: 10px;'><div style='margin: 10px;'>" + msgBody + "</div></div>";
+          retString = retString + msgBody;
+
         } else {
-          retString = this.nl2br(retString,'<br>');
+          if (msgType == 'reply') {
+            retString = retString + this.getReplyMessageString(msgOriginal);
+            retString = this.nl2br(retString,'<br>');
+            retString = retString + "<div style='width: 100%; border-left: 2px solid #000; margin-left: 5px;'><div style='margin: 5px;'>" + msgBody + "</div></div>";
+          }
         }
+        
+        retString = this.nl2br(retString,'<br>');
+        
         
       } else {
         retString = msgBody;
@@ -138,9 +194,36 @@ define([
       return retString;
     },
 
+    getReplyMessageString: function(message) {
+      var date = message.get("msgDate");
+      var retString = "Em " + date + ", " + message.getEmailStringForMessageRecipient(message.get("msgFrom"),true) + " escreveu: \n\n";
+      return retString;
+    },
+
     getForwardMessageString: function(message) {
-      var date = this.get("msgDate");
-      var retString = "Em " + date + ", &lt;" + message + "&gt; escreveu: \n\n";
+
+      var retString = "---------- Mensagem encaminhada ----------\n";
+      retString = retString + "Remetente: " + message.get("msgFrom").mailAddress + "\n";
+      retString = retString + "Data: " + message.get("msgDate") + "\n";
+      retString = retString + "Assunto: " + message.get("msgSubject") + "\n";
+      retString = retString + "Para: ";
+
+      console.log(message);
+
+      _.each(message.get("msgTo"), function(msgRecipient){
+        retString = retString + message.getEmailStringForMessageRecipient(msgRecipient,true);
+      }); 
+
+      if (message.get("msgCc").length) {
+        retString = retString + "\nCc: ";
+
+        _.each(message.get("msgCc"), function(msgRecipient){
+          retString = retString + message.getEmailStringForMessageRecipient(msgRecipient,true);
+        });
+      }
+
+      retString = retString + "\n";
+
       return retString;
     },
 
@@ -173,10 +256,15 @@ define([
       return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '');
     },
 
-    getEmailStringForMessageRecipient: function(emailRecipient) {
+    getEmailStringForMessageRecipient: function(emailRecipient,htmlEntities) {
       var resultString = '';
       if (($.trim(emailRecipient.fullName) != '') && ($.trim(emailRecipient.fullName) != 'undefined')) {
-        resultString += '"' +  $.trim(emailRecipient.fullName) + '" <' + emailRecipient.mailAddress + ">";
+        if (htmlEntities == undefined) {
+          resultString += '"' +  $.trim(emailRecipient.fullName) + '" <' + emailRecipient.mailAddress + ">";
+        } else {
+          resultString += '"' +  $.trim(emailRecipient.fullName) + '" &lt;' + emailRecipient.mailAddress + "&gt;";
+        }
+        
       } else {
         resultString += emailRecipient.mailAddress + "";
       }
@@ -233,6 +321,7 @@ define([
       var that = this;
       reader.fileName = fileName;
       reader.fileID = fileID;
+      reader.fileSize = file.size;
       reader.onerror = function(e) {
       };
       reader.onprogress = function(e) {
@@ -248,9 +337,7 @@ define([
 
         blobBinaryString = reader.result;
 
-        that.addFile(reader.fileID,blobBinaryString,escape(reader.fileName),'binary');
-                        
-        //console.log(blobBinaryString);
+        that.addFile(reader.fileID,blobBinaryString,escape(reader.fileName),'binary',reader.fileSize);
       }
 
       reader.readAsBinaryString(file);
@@ -278,7 +365,7 @@ define([
       this.api.clearFiles();
 
       for (var i in files) {
-        this.api.addFile(files[i].src,files[i].filename,files[i].dataType);
+        this.api.addFile(files[i].src,files[i].filename,files[i].dataType,files[i].size);
       }
 
       this.api

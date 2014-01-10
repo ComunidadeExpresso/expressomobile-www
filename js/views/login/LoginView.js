@@ -109,6 +109,28 @@ define([
         this.errors = true;
       }
 
+      if (Shared.betaVersion) { 
+        var found = false;
+        if (Shared.betaTesters.length > 0) {
+          for (var i in Shared.betaTesters) {
+            if (userName == Shared.betaTesters[i]) {
+              found = true;
+            }
+          }
+          if (!found) {
+             Shared.showMessage({
+                type: "error",
+                icon: 'icon-expresso',
+                title: "Este usuário não possui acesso a versão BETA!",
+                description: "",
+                elementID: "#pageMessage",
+              });
+            this.errors = true;
+          }
+        }
+
+      }
+
       
       var that = this;      
 

@@ -33,7 +33,7 @@ define([
       this.renderComposeMessage(params.model,false);
     },
 
-    renderComposeMessage: function(pMessage,signature,forwardString) {
+    renderComposeMessage: function(pMessage,signature,pMsgType,pMsgOriginal) {
       var elementID = "#contentDetail";
 
       if (Shared.isSmartPhoneResolution()) {
@@ -51,7 +51,8 @@ define([
         message: pMessage,
         isDesktop: Shared.isDesktop(),
         withSignature: withSignature,
-        msgForwardString: forwardString
+        msgType: pMsgType,
+        msgOriginal: pMsgOriginal,
       };
 
       var compiledTemplate = _.template( composeMessageTemplate, newData );
@@ -296,11 +297,43 @@ define([
 
       var Message = thisView.getNewMessageModel();
 
-      var loadingView = new LoadingView({ el: $(elementID) });
-      loadingView.render();
+      var msgTo = thisView.getMessageStringForRecipient("msgTo");
 
-      Message.send(onSendMessage,onFailSendMessage);
+      var errors = false;
 
+      if (msgTo == "") {
+        var message = {
+          type: "error",
+          icon: 'icon-email',
+          title: "Campo 'Para:' Não informado/Inválido!",
+          description: "",
+          elementID: "#pageMessage",
+        }
+        Shared.showMessage(message);
+        errors = true;
+      }
+
+      var checkAttachments = Message.checkAttachments(false);
+
+      if (checkAttachments != true) {
+        var message = {
+          type: "error",
+          icon: 'icon-email',
+          title: checkAttachments,
+          description: "",
+          elementID: "#pageMessage",
+        }
+        Shared.showMessage(message);
+        errors = true;
+      }
+
+      if (!errors) {
+        var loadingView = new LoadingView({ el: $(elementID) });
+        loadingView.render();
+
+        Message.send(onSendMessage,onFailSendMessage);
+      }
+      
     },
 
     onFailUploadPicture: function(message) {
@@ -395,7 +428,7 @@ define([
 
         Shared.currentDraftMessage = pMessage;
 
-        this.renderComposeMessage(pMessage);
+        this.renderComposeMessage(pMessage,'new');
 
       }
 
@@ -480,12 +513,14 @@ define([
 
         var ReplyOnGetMessage = function(result) {
 
-          var newMessage = result.models[0];
+          var originalMessage = result.models[0];
 
-          var from = newMessage.get("msgFrom");
-          var msgTo = newMessage.get("msgTo");
-          var msgCc = newMessage.get("msgCC");
-          var msgBcc = newMessage.get("msgBcc");
+          var newMessage = new MessagesModel();
+
+          var from = originalMessage.get("msgFrom");
+          var msgTo = originalMessage.get("msgTo");
+          var msgCc = originalMessage.get("msgCC");
+          var msgBcc = originalMessage.get("msgBcc");
 
           newMessage.set("msgTo",[]);
           newMessage.set("msgCc",[]);
@@ -501,11 +536,11 @@ define([
             newMessage.addRecipient("msgCc",msgCc[i].mailAddress,msgCc[i].fullName);
           }
           
-          newMessage.set("msgSubject","Re: " + newMessage.get("msgSubject"));
+          newMessage.set("msgSubject","Re: " + originalMessage.get("msgSubject"));
 
           Shared.currentDraftMessage = newMessage;
 
-          that.renderComposeMessage(newMessage,true,result.models[0].get("msgFrom").mailAddress);
+          that.renderComposeMessage(newMessage,true,'reply',originalMessage);
 
         };
         var ReplyOnGetMessageFailed = function() {
@@ -525,17 +560,19 @@ define([
 
         var ReplyOnGetMessage = function(result) {
 
-          var newMessage = result.models[0];
+          var originalMessage = result.models[0];
 
-          var from = newMessage.get("msgFrom");
+          var newMessage = new MessagesModel();
+
+          var from = originalMessage.get("msgFrom");
 
           newMessage.set("msgTo",[]);
           newMessage.addRecipient("msgTo",from.mailAddress, from.fullName);
-          newMessage.set("msgSubject","Re: " + newMessage.get("msgSubject"));
+          newMessage.set("msgSubject","Re: " + originalMessage.get("msgSubject"));
 
           Shared.currentDraftMessage = newMessage;
 
-          that.renderComposeMessage(newMessage,true,result.models[0].get("msgFrom").mailAddress);
+          that.renderComposeMessage(newMessage,true,'reply',originalMessage);
 
           
         };
@@ -556,28 +593,32 @@ define([
         
         var ForwardOnGetMessage = function(result) {
 
-          var newMessage = result.models[0];
+          var originalMessage = result.models[0];
+
+          var newMessage = new MessagesModel();
+
+          newMessage.set("msgID",originalMessage.get("msgID"));
+          newMessage.set("folderID",originalMessage.get("folderID"));
 
           newMessage.set("msgTo",[]);
           newMessage.set("msgCc",[]);
           newMessage.set("msgBcc",[]);
-          newMessage.set("msgSubject","Fwd: " + newMessage.get("msgSubject"));
+          newMessage.set("msgSubject","Fw: " + originalMessage.get("msgSubject"));
 
-          if (newMessage.get("msgHasAttachments") == "1") {
+          Shared.currentDraftMessage = newMessage;
 
-            Shared.currentDraftMessage = newMessage;
-
-            that.renderComposeMessage(newMessage,true,result.models[0].get("msgFrom").mailAddress);
-
-            that.renderAttachments(Shared.currentDraftMessage);
-
-          } else {
-
-            Shared.currentDraftMessage = newMessage;
-
-            that.renderComposeMessage(newMessage,true,result.models[0].get("msgFrom").mailAddress);
-
+          if (originalMessage.get("msgHasAttachments") == "1") {
+            newMessage.set("msgHasAttachments","1");
+            newMessage.set("msgAttachments",originalMessage.get("msgAttachments"));
+            newMessage.set("files",originalMessage.get("files"));
           }
+
+          that.renderComposeMessage(newMessage,true,'forward',originalMessage);
+
+          if (originalMessage.get("msgHasAttachments") == "1") {
+            that.renderAttachments(Shared.currentDraftMessage);
+          }
+
 
         };
         var ForwardOnGetMessageFailed = function() {

@@ -52,6 +52,8 @@ define([
 
       var that = this;
 
+      Shared.refreshSettings();
+
       Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
         if (expressoValue != null) {
@@ -124,8 +126,6 @@ define([
           }
 
         } else {
-
-          console.log("gotoRoute: " + Shared.gotoRoute);
 
           Shared.router.navigate(Shared.gotoRoute,{ trigger: true });
 
