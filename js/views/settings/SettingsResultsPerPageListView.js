@@ -12,17 +12,17 @@ define([
 
     render: function(){
 
-      var possibleValues = [10,20,30,50,100];
+      var possibleValues = [25,50,75,100];
       var that = this;
 
-      Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
+       Shared.api
+      .resource('Preferences/UserPreferences')
+      .params({"module": "mail","preference":"max_email_per_page"})
+      .done(function(result){
 
-        var rpp = 30;
+        var rpp = 25;
 
-        if (expressoValue.settings != undefined) {
-          Shared.settings = expressoValue.settings;
-          rpp = expressoValue.settings.resultsPerPage;
-        }
+        rpp = result.mail.max_email_per_page;
 
         var newData = {
           _: _ ,
@@ -37,7 +37,10 @@ define([
 
         that.loaded();
 
-      });
+      }).fail(function(result) {
+
+      }).execute();
+
 
     },
 
@@ -69,17 +72,30 @@ define([
 
       Shared.saveSettingsToLocalStorage();
 
-      Shared.showMessage({
-        type: "success",
-        icon: 'icon-settings',
-        title: "Sua preferência foi salva com sucesso!",
-        description: "",
-        elementID: "#pageMessage",
-      });
+      Shared.api
+      .resource('Preferences/ChangeUserPreferences')
+      .params({"module": "mail","preference":"max_email_per_page","value":valueSelected})
+      .done(function(result){
 
-      if (Shared.isSmartPhoneResolution()) {
-        Shared.router.navigate("/Settings",{trigger: true});
-      }
+        Shared.showMessage({
+          type: "success",
+          icon: 'icon-settings',
+          title: "Sua preferência foi salva com sucesso!",
+          description: "",
+          elementID: "#pageMessage",
+        });
+
+        if (Shared.isSmartPhoneResolution()) {
+          Shared.router.navigate("/Settings",{trigger: true});
+        }
+
+      }).fail(function(result) {
+
+      }).execute();
+
+
+
+      
 
     },
 

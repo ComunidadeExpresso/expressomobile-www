@@ -269,7 +269,7 @@ define([
           this.context.collection = contextMenuCollection.getMailSignatureMenu();
       } 
       if (menuID == 'changePassword') {
-          this.context.collection = contextMenuCollection.getChangePasswordMenu();
+          this.context.collection = contextMenuCollection.getChangePasswordMenu(params);
       } 
       if (menuID == 'calendarAddEvent') {
           this.context.collection = contextMenuCollection.getCalendarAddEventMenu(params);

@@ -16,11 +16,12 @@ define([
 
       var that = this;
 
-      Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
-        
-        mailsign = expressoValue.settings.mailSignature;
+      Shared.api
+      .resource('Preferences/UserPreferences')
+      .params({"module": "mail","preference":"signature"})
+      .done(function(result){
 
-        Shared.settings = expressoValue.settings;
+        mailsign = result.mail.signature;
 
         var newData = {
           _: _ ,
@@ -33,7 +34,11 @@ define([
         that.loaded();
 
         Shared.menuView.renderContextMenu('mailsignature',{});
-      });
+
+      }).fail(function(result) {
+
+      }).execute();
+
 
     },
 
@@ -41,19 +46,30 @@ define([
 
       var value = $("#assinaturaEmail").val();
 
-      Shared.settings.mailSignature = value;
+      Shared.api
+      .resource('Preferences/ChangeUserPreferences')
+      .params({"module": "mail","preference":"signature","value":value})
+      .done(function(result){
 
-      Shared.saveSettingsToLocalStorage();
+        Shared.settings.mailSignature = value;
 
-      Shared.showMessage({
-        type: "success",
-        icon: 'icon-settings',
-        title: "Sua preferência foi salva com sucesso!",
-        description: "",
-        elementID: "#pageMessage",
-      });
+        Shared.saveSettingsToLocalStorage();
 
-      Shared.router.navigate("/Settings",{trigger: true});
+        Shared.showMessage({
+          type: "success",
+          icon: 'icon-settings',
+          title: "Sua preferência foi salva com sucesso!",
+          description: "",
+          elementID: "#pageMessage",
+        });
+
+        Shared.router.navigate("/Settings",{trigger: true});
+
+      }).fail(function(result) {
+
+      }).execute();
+
+      
 
     },
 
