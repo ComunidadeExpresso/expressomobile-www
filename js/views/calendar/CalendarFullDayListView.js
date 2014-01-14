@@ -179,7 +179,6 @@ define([
 				})
 				.fail(function (data) 
 				{	
-					console.log(data);
 
 					if (callbackFail)
 						callbackFail({ error: data.error, _: _ });

@@ -41,7 +41,6 @@ define([
       };
 
       var onPresenceFunction = function (message) { 
-        console.log("onPresenceFunction");
         that.renderContactList();
       };
 

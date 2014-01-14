@@ -43,7 +43,6 @@ define([
 
       })
       .fail(function (error) {
-        console.log("ERRO");
         Shared.handleErrors(error);
       })
       .getServers();

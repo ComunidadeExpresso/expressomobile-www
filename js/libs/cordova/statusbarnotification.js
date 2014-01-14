@@ -116,10 +116,8 @@ if (typeof window.Notification == 'undefined') {
 
     // Not part of the W3C API. Used by the native side to call onclick handlers.
     window.Notification.callOnclickByTag = function(tag) {
-        console.log('callOnclickByTag');
         var notification = window.Notification.active[tag];
         if (notification && notification.onclick && typeof notification.onclick == 'function') {
-            console.log('inside if');
             notification.onclick();
         }
     };

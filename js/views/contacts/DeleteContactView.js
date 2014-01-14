@@ -47,8 +47,6 @@ define([
 
 			var doneDelete = function (data)
 			{
-				console.log(data);
-
 
 				if (data.contact != undefined && Boolean(data.contact.status) == true)
 				{

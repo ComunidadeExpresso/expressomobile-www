@@ -242,9 +242,7 @@ define([
 			var querySuccess = function(tx, results) {
 				if (results) {
 					var len = results.rows.length;
-				    //console.log("EXPRESSO table: " + len + " rows found.");
 				    for (var i=0; i<len; i++){
-				    	//console.log("Row = " + i + " ID = " + results.rows.item(i).id + " Data =  " + results.rows.item(i).data);
 				    	that._tempResult = results.rows.item(i).data;
 				    	if (that._tempCallback != undefined) {
 				    		that._tempCallback(JSON.parse(that._tempResult));
@@ -405,8 +403,6 @@ define([
 				if (this.dataType() == 'arraybuffer') {
 					conf.dataType = this.dataType();
 					conf.loadArrayBuffer = function(arrayBuffer) {
-						// var blob = new Blob([arrayBuffer]);
-						// console.log(blob.size);
 						if (_data[this.id].done) _data[this.id].done(arrayBuffer,_data[this.id].send);
 					};
 				} else if (this.dataType() == 'fileupload') {

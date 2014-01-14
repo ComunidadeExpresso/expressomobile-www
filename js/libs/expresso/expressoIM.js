@@ -224,8 +224,6 @@ define([
 
 		this.setContactStatus = function(Pid,status) {
 
-			console.log("setContactStatus");
-			console.log(Pid);
 			_online_contacts = this.removeFromArray(_online_contacts,Pid);
 
 			_offline_contacts = this.removeFromArray(_offline_contacts,Pid);
@@ -233,19 +231,13 @@ define([
 			_away_contacts = this.removeFromArray(_away_contacts,Pid);
 
 			if (status == "online") {
-				console.log("Status: online");
 				_online_contacts = this.pushIfNotExist(_online_contacts,Pid);
-				//console.log(_online_contacts);
 			}
 			if (status == "offline") {
 				_offline_contacts = this.pushIfNotExist(_offline_contacts,Pid);
-				console.log("Status: offline");
-				//console.log(_offline_contacts);
 			}
 			if (status == "away") {
 				_away_contacts = this.pushIfNotExist(_away_contacts,Pid);
-				console.log("Status: offline");
-				//console.log(_away_contacts);
 			}
 		};
 
@@ -296,7 +288,7 @@ define([
 		};
 
 		this.updateQtdUnreadMessagesToContact = function(Pid) {
-			console.log("updateQtdUnreadMessagesToContact");
+
 			var qtd = 0;
 			if (_messages[Pid] != null) {
 				for (var i in _messages[Pid]) {
@@ -330,7 +322,6 @@ define([
 
 			if ($.trim(message) != "") {
 
-				console.log(msgTo);
 
 				$.xmpp.sendMessage({body: message, to:msgTo, resource:"Chat", otherAttr:"value"},"<error>An error has ocurred</error>");
 
@@ -386,7 +377,6 @@ define([
 					},
 					onPresence: function(presence){
 						console.log("onPresence");
-						console.log(presence);
 
 						presence.from = presence.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
 						var md5_contact = MD5.hexdigest(presence.from);
@@ -423,7 +413,6 @@ define([
 	   				onRoster: function(roster)
 	   				{  			
 	   					console.log("onRoster");
-	   					console.log(roster);
 
 	   					var _rosterJid = roster.jid;
 						_rosterJid = _rosterJid.match(/^[\w\W][^\/]+[^\/]/g)[0]; 

@@ -28,8 +28,6 @@ define([
     SendSupportFeedback: function()
     {
 
-      console.log("SendSupportFeedback");
-
       var sugestao = $("#sugestao").val();
 
       if (sugestao == "") { 

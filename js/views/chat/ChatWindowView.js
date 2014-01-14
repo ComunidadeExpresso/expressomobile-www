@@ -79,8 +79,6 @@ define([
 
     sendMessage: function (e) {
       if(e.which == 13 && !e.shiftKey){
-        console.log("sendMessage");
-        console.log(this.currentContact.jid);
         Shared.im.sendMessage(this.currentContact.jid,$('#msgToSend').val());
         $('#msgToSend').val("");
         $('#msgToSend').blur();
@@ -102,8 +100,6 @@ define([
         _: _,
         $ : $
       };
-
-      console.log(data);
 
       var compiledMessagesTemplate = _.template( chatWindowMessagesTemplate, data );
       $("#scrollerDetail").html( compiledMessagesTemplate );

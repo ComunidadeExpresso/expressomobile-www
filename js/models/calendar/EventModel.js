@@ -132,8 +132,6 @@ define ([
 				})
 				.fail (function (error) 
 				{
-					console.log('getEventOwner');
-					console.log(error);
 
 					if (that.fail)
 		        		that.fail(error);

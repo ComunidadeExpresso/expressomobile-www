@@ -72,7 +72,6 @@ define([
 
         /*
         if (doneCallBack) {
-          console.log('doneCallback');
           doneCallback();
         } 
         */

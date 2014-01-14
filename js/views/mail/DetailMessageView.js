@@ -91,8 +91,6 @@ define([
         var attachments = message.get("msgAttachments");
         for (var i in attachments) {
 
-          //console.log(attachments[i]);
-
           var attachment = attachments[i];
 
           var preview = new PreviewAttachmentMessageView();
