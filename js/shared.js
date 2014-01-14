@@ -51,7 +51,7 @@ define([
 
   //MAXIMUM ALLOWED UPLOAD FILES IN ATTACHMENTS
   Shared.max_upload_file_size = 10240; //IN KBYTES
-  
+
   //MAXIMUM QUANTITY OF FILES IN EVERY MESSAGE.
   Shared.max_upload_file_qtd = 20; //
 
@@ -62,7 +62,7 @@ define([
   Shared.im_url = "http://im.pr.gov.br:5280/http-bind";
   Shared.im_domain = "im.pr.gov.br";
 
-  Shared.im.resource("NEW_RESOURCE").url(Shared.im_url).domain(Shared.im_domain);
+  Shared.im.resource("EXPRESSO_MOBILE").url(Shared.im_url).domain(Shared.im_domain);
 
   //CHECKS IF THE DEVICE IS AN SMARTPHONE OR AN TABLET RESOLUTION
   Shared.isTabletResolution = function() {
@@ -239,9 +239,6 @@ define([
 
   Shared.handleErrors = function(error,preferences) {
 
-    console.log("handleErrors");
-    console.log(error);
-
     if (error.code == 100) {
       if (preferences != undefined) {
 
@@ -327,8 +324,8 @@ define([
     var retVal = false;
     var a = Shared.profile.contactApps;
     a.push("settings"); //EVERYONE HAS ACCESS TO SETTINGS.
-    a.push("chat"); //TODO - CHAT MODULE IS NOT COMMING FROM THE API YET.
-    //a = ["mail","chat","settings"]; //USE THIS IF YOU WANT TO TEST SPECIFC MODULES WILL WORK INDIVIDUALY
+    //a.push("chat"); //TODO - CHAT MODULE IS NOT COMMING FROM THE API YET.
+    //a = ["settings"]; //USE THIS IF YOU WANT TO TEST SPECIFC MODULES WILL WORK INDIVIDUALY
     for (var i = 0; i < a.length; i++) {
       if (a[i] === moduleName) {
         retVal = true;

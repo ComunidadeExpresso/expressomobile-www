@@ -7,7 +7,9 @@
 		          Para:
 		        </td>
 		        <td class="descriptionCompose detailCol">
-		        	<div id="addMsgToField" class='icon-add'></div>
+		        	<% if (Shared.userHasModule("catalog")) { %>
+		        		<div id="addMsgToField" class='icon-add'></div>
+		        	<% } %>
 		        	<div id="msgToRecipients">
 						<% if (message.get("msgTo")) {  %>
 		                  	<% _.each(message.get("msgTo"), function(msgRecipient){ %>
@@ -33,7 +35,9 @@
 		          Cc:
 		        </td>
 		        <td class="descriptionCompose detailCol">
-		        	<div id="addMsgCcField" class='icon-add'></div>
+		        	<% if (Shared.userHasModule("catalog")) { %>
+		        		<div id="addMsgCcField" class='icon-add'></div>
+		        	<% } %>
 		        	<div id="msgCcRecipients">
 						<% if (message.get("msgCc")) {  %>
 		                  	<% _.each(message.get("msgCc"), function(msgRecipient){ %>
@@ -60,7 +64,9 @@
 		          Bcc:
 		        </td>
 		        <td class="descriptionCompose detailCol">
-		        	<div id="addMsgBccField" class='icon-add'></div>
+		        	<% if (Shared.userHasModule("catalog")) { %>
+		        		<div id="addMsgBccField" class='icon-add'></div>
+		        	<% } %>
 		        	<div id="msgBccRecipients">
 						<% if (message.get("msgBcc")) {  %>
 		                  	<% _.each(message.get("msgBcc"), function(msgRecipient){ %>

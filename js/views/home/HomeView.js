@@ -107,11 +107,14 @@ define([
               } else {
                 if (Shared.userHasModule("catalog")) {
                   that.menuView.selectMenu(3);
-                  Shared.router.navigate("/Catalog",{ trigger: true });
+                  Shared.router.navigate("/Contacts/Personal",{ trigger: true });
                 } else {
                   if (Shared.userHasModule("chat")) {
                     that.menuView.selectMenu(4);
                     Shared.router.navigate("/Chat",{ trigger: true });
+                  } else {
+                    that.menuView.selectMenu(5);
+                    Shared.router.navigate("/Settings",{ trigger: true });
                   }
                 }
               } 
@@ -201,7 +204,6 @@ define([
 
     selectFolderItem: function(e){
       e.preventDefault();
-      console.log("selectFolderItem");
       Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
     },
 

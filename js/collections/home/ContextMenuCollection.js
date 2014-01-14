@@ -216,16 +216,32 @@ define([
       },
 
       getDetailsContactMenu: function(email, contactID, contactType) {
-        var menuItems = [
-            { route: "/Mail/Message/New/" + email, id: '0', title:"Nova Mensagem", iconClass : 'btn-compose', primary: true},
-            { route: "/Contacts/Personal", iconClass: 'context-catalogo-pessoal', id: '1', title:"Contatos Pessoais"},
-            { route: "/Contacts/General", iconClass: 'context-catalogo-geral', id: '2', title: "Catálogo Geral"}
-          ];
 
-        if (contactType == 'General')
-          menuItems.push({ route: "/Contacts/Add/" + contactID, id: "3", title:"Adicionar nos contatos pessoais", iconClass : 'icon-add-contact-personal' });
-        else
-          menuItems.push({ route: "/Contacts/Delete/" + contactID, id: "3", title:"Remover dos contatos pessoais", iconClass: 'icon-delete-contact-personal' });
+        var newMail = { route: "/Mail/Message/New/" + email, id: '0', title:"Nova Mensagem", iconClass : 'btn-compose', primary: true};
+        var personalContacts = { route: "/Contacts/Personal", iconClass: 'context-catalogo-pessoal', id: '1', title:"Contatos Pessoais"};
+        var generalContacts = { route: "/Contacts/General", iconClass: 'context-catalogo-geral', id: '2', title: "Catálogo Geral"};
+        var addContactToPersonal = { route: "/Contacts/Add/" + contactID, id: "3", title:"Adicionar nos contatos pessoais", iconClass : 'icon-add-contact-personal' };
+        var deletePersonalContact = { route: "/Contacts/Delete/" + contactID, id: "3", title:"Remover dos contatos pessoais", iconClass: 'icon-delete-contact-personal' };
+
+        var menuItems = [ ];
+
+        if (Shared.userHasModule("mail")) {
+          menuItems.push(newMail);
+        } else {
+          addContactToPersonal.primary = true;
+          addContactToPersonal.iconClass = 'btn-add-contact-personal';
+          deletePersonalContact.primary = true;
+          deletePersonalContact.iconClass = 'btn-delete-contact-personal';
+        }
+
+        if (contactType == 'General') {
+          menuItems.push(personalContacts);
+
+          menuItems.push(addContactToPersonal);
+        } else {
+          menuItems.push(generalContacts);
+          menuItems.push(deletePersonalContact);
+        }  
 
         this.createModelsFromArray(menuItems);
         return this;

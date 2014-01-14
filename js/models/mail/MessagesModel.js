@@ -165,9 +165,11 @@ define([
       } else {
         msgBody = this.get("msgBody");
       }
-      msgBody = this.nl2br(msgBody,'');
+      
       var retString = "";
+      
       if (signature == true) {
+
         retString = "\n\n" + this.getUserSignature() + "\n\n";
 
         if (msgType == 'forward') {
@@ -184,10 +186,12 @@ define([
           }
         }
         
-        retString = this.nl2br(retString,'<br>');
-        
         
       } else {
+
+        if (this.get("msgType") == "text") {
+          msgBody = this.nl2br(msgBody,'<br>');
+        }
         retString = msgBody;
       }
 
@@ -208,17 +212,15 @@ define([
       retString = retString + "Assunto: " + message.get("msgSubject") + "\n";
       retString = retString + "Para: ";
 
-      console.log(message);
-
       _.each(message.get("msgTo"), function(msgRecipient){
-        retString = retString + message.getEmailStringForMessageRecipient(msgRecipient,true);
+        retString = retString + message.getEmailStringForMessageRecipient(msgRecipient,true) + ", ";
       }); 
 
       if (message.get("msgCc").length) {
         retString = retString + "\nCc: ";
 
         _.each(message.get("msgCc"), function(msgRecipient){
-          retString = retString + message.getEmailStringForMessageRecipient(msgRecipient,true);
+          retString = retString + message.getEmailStringForMessageRecipient(msgRecipient,true) + ", ";
         });
       }
 
@@ -377,6 +379,10 @@ define([
         callbackFail(error);
       })
       .execute();
+    },
+
+    getMessageSize: function() {
+      return Shared.bytesToSize(this.get("msgSize"),0);
     },
 
     delete: function(callbackSuccess,callbackFail) {
