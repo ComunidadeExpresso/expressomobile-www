@@ -389,7 +389,7 @@ define([
 
 					};
 				} else {
-					conf.timeout = 10000;
+					conf.timeout = 30000;
 				}
 
 			} else {
@@ -413,7 +413,7 @@ define([
 						if (_data[this.id].done) _data[this.id].done(arrayBuffer,_data[this.id].send);
 					};
 				} else {
-					conf.timeout = 10000;
+					conf.timeout = 30000;
 				}
 				
 			}
