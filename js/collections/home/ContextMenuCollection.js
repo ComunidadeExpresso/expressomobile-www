@@ -239,8 +239,10 @@ define([
 
           menuItems.push(addContactToPersonal);
         } else {
-          menuItems.push(generalContacts);
-          menuItems.push(deletePersonalContact);
+          if (Shared.apiVersion != '1.0') {
+            menuItems.push(generalContacts);
+            menuItems.push(deletePersonalContact);
+          }
         }  
 
         this.createModelsFromArray(menuItems);

@@ -169,7 +169,9 @@ define([
                     
                     if ((that.msgID == "") || (that.msgID == "0"))  {
                       if (data.length) {
-                        that.msgID = data.models[0].get("msgID"); 
+                        if (Shared.isTabletResolution()) {
+                          that.msgID = data.models[0].get("msgID"); 
+                        }
                       }
                     }
                     messagesListItemsView.msgIDSelected = that.msgID;

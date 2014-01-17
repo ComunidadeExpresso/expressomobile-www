@@ -21,6 +21,9 @@ define([
     Shared.appVersion = "1.0";
   }
 
+  Shared.apiVersion = '';
+  Shared.expressoVersion = '';
+
   Shared.context = "/api/";
 
   Shared.settings = {};
@@ -33,6 +36,8 @@ define([
   Shared.scrollDetail = null;
   Shared.scroll = null;
   Shared.scrollMenu = null;
+
+  Shared.lastCheckDate = null;
 
   Shared.forceSmartPhoneResolution = false;
   
@@ -59,10 +64,7 @@ define([
   //MENSAGE THAT IT'S BEING COMPOSED.
   Shared.currentDraftMessage = '';
 
-  Shared.im_url = "http://im.pr.gov.br:5280/http-bind";
-  Shared.im_domain = "im.pr.gov.br";
 
-  Shared.im.resource("EXPRESSO_MOBILE").url(Shared.im_url).domain(Shared.im_domain);
 
   //CHECKS IF THE DEVICE IS AN SMARTPHONE OR AN TABLET RESOLUTION
   Shared.isTabletResolution = function() {
@@ -157,26 +159,41 @@ define([
   };
 
   Shared.refreshSettings = function() {
-     Shared.api
-      .resource('Preferences/UserPreferences')
-      .params({"module": "mail"})
-      .done(function(result){
 
-        var rpp = 25;
+    Shared.api.resource('ExpressoVersion').params({}).done(function(result){
 
-        rpp = result.mail.max_email_per_page;
+      Shared.apiVersion = result.apiVersion;
+      Shared.expressoVersion = result.expressoVersion;
 
-        var mailsign = result.mail.signature;
+      if (Shared.apiVersion != "1.0") {
+        Shared.api
+        .resource('Preferences/UserPreferences')
+        .params({"module": "mail"})
+        .done(function(result){
 
-        Shared.settings.resultsPerPage = rpp;
-        Shared.settings.mailSignature = mailsign;
+          var rpp = 25;
+          var mailsign = "Mensagem enviada pelo Expresso Mobile.";
 
-        Shared.saveSettingsToLocalStorage();
+          if (result.mail != undefined) {
+            rpp = result.mail.max_email_per_page;
+            mailsign = result.mail.signature;
+          }
+
+          Shared.settings.resultsPerPage = rpp;
+          Shared.settings.mailSignature = mailsign;
+
+          Shared.saveSettingsToLocalStorage();
 
 
-      }).fail(function(result) {
+        }).fail(function(result) {
 
-      }).execute();
+        }).execute();
+      }
+
+    }).fail(function(result) {
+
+    }).execute();
+
   };
 
   Shared.showMessage = function( message) {
@@ -289,11 +306,83 @@ define([
     }
   };
 
+  Shared.scheduleCheckForNewMessages = function() {
+    Shared.checkForNewMessages();
+    setInterval(Shared.checkForNewMessages, 70000);
+  };
+
+  Shared.checkForNewMessages = function() {
+    if (Shared.userHasModule("mail")) {
+
+      Shared.api.resource('/Mail/Messages').params({folderID: "INBOX", search: ""}).done(function(result){
+
+        var qtdUnreadMessages = 0;
+        var lastMessage = '';
+
+        var unreadMessages = [];
+
+        _.each(result.messages, function(message){ 
+
+          var date = moment(message.msgDate + ":59", "DD/MM/YYYY HH:mm:ss").unix();
+
+          if (Shared.lastCheckDate != null) {
+
+            if (date > (Shared.lastCheckDate / 1000)) {
+
+              qtdUnreadMessages = qtdUnreadMessages + 1;
+              lastMessage = message;
+
+              unreadMessages.push(message);
+            }
+
+          }
+
+        });
+
+        if (qtdUnreadMessages > 0) {
+
+          if (qtdUnreadMessages == 1) {
+
+            Shared.showMessage({
+              type: "chat-message",
+              icon: 'icon-expresso',
+              title: lastMessage.msgSubject,
+              description: lastMessage.msgFrom.mailAddress,
+              route: "/Mail/Messages/1/" +  lastMessage.msgID + "/INBOX",
+              timeout: 5000,
+              elementID: "#pageMessage",
+            });
+
+          } else {
+            Shared.showMessage({
+              type: "chat-message",
+              icon: 'icon-expresso',
+              title: "Você tem " + qtdUnreadMessages + " novas mensagens.",
+              description: "",
+              route: "/Mail/Messages/1/0/INBOX",
+              timeout: 5000,
+              elementID: "#pageMessage",
+            });
+          }
+
+          Shared.menuView.setMailBadge(qtdUnreadMessages);
+          
+        }
+
+        Shared.lastCheckDate = Date.now();
+
+      }).fail(function(result) {
+
+      }).execute();
+    }
+  };
+
   Shared.setDefaultIMListeners = function() {
 
     Shared.im.clearListeners();
 
     var onMessageFunction = function (message) { 
+
       Shared.menuView.setChatBadge(Shared.im.qtdUnreadMessages());
 
       var message = {
@@ -322,16 +411,29 @@ define([
 
   Shared.userHasModule = function(moduleName) {
     var retVal = false;
+    var module = moduleName;
     var a = Shared.profile.contactApps;
     a.push("settings"); //EVERYONE HAS ACCESS TO SETTINGS.
-    //a.push("chat"); //TODO - CHAT MODULE IS NOT COMMING FROM THE API YET.
+
+    //CHECK IF THE CHAT SERVICE IS AVAILABLE AND ADD CHAT AS A MODULE.
+    if (Shared.profile.contactServices != undefined) {
+      if (Shared.profile.contactServices.chat != undefined) {
+        a.push("chat");
+      }
+    }
     //a = ["settings"]; //USE THIS IF YOU WANT TO TEST SPECIFC MODULES WILL WORK INDIVIDUALY
     for (var i = 0; i < a.length; i++) {
       if (a[i] === moduleName) {
         retVal = true;
       }
     }
+    if (Shared.apiVersion == "1.0") {
+      if ((module == 'calendar') || (module == 'chat')) {
+        retVal = false;
+      }
+    }
     return retVal;
+    
   };
 
   Shared.userHasAuth = function() {

@@ -2,7 +2,7 @@
   <div class="product-logo-menu"></div>
 
   <div id="personalInfo">
-    <div id="userPicture" class="userPicture"></div>
+    <div id="userPicture" class="userPicture shadow"></div>
     <div class="personalData">
       <span id="userName" class="name"><% if (!_.isNull(user.contactFullName)) { %><%=user.contactFullName%><% } %></span>
       <% if (Shared.userHasModule("mail")) { %>
@@ -27,7 +27,7 @@
         <% _.each(menuItems, function(menuItem){ %>
           <li class="<%=menuItem.get("menuClass")%>">
             <a href="<%=menuItem.get("menuRoute")%>" class="menuLink">
-              <span><% if (menuItem.get("menuHasBadge")) { %><div id="badge_chat" class="badge badge-chat hidden"></div><% } %><%=menuItem.get("menuTitle")%></span>
+              <span><% if (menuItem.get("menuHasBadge")) { %><div id="badge_<%=menuItem.get("menuClass")%>" class="badge badge-chat hidden"></div><% } %><%=menuItem.get("menuTitle")%></span>
               <div class="icon <%=menuItem.get("menuIconClass")%>"></div>
             </a>
           </li>

@@ -3,9 +3,11 @@
 	<div id="scroller">
 
 		<dl id="settingsList">
+			<% if (Shared.apiVersion != "1.0") { %>
 			<dt>Conta de e-mail</dt>
 			<dd>
 				<ul>
+
 					<li><% if (Shared.userHasModule("catalog")) { %>
 						<a href="/Contacts/General/<%=user.contactUIDNumber%>" class="settinsLink"><% if (!_.isNull(user.contactMails[0])) { %><%=user.contactMails[0]%><% } %></a>
 					<% } else { %>
@@ -23,17 +25,20 @@
 						</div>
 						Login autom&aacute;tico 
 					</li> -->
+					
 					<li><a href="/Settings/ChangePassword" class="settinsLink">Alterar senha</a></li>
+					
 				</ul>
 			</dd>
-			<% if (Shared.userHasModule("mail")) { %>
-			<dt>Configura&ccedil;&otilde;es do Email</dt>
-			<dd>
-				<ul>
-					<li><a href="/Settings/ResultsPerPage" class="settinsLink">Resultados por p&aacute;gina</a></li>
-					<li><a href="/Settings/MailSignature" class="settinsLink">Assinatura de e-mail</a></li>
-				</ul>
-			</dd>
+				<% if (Shared.userHasModule("mail")) { %>
+				<dt>Configura&ccedil;&otilde;es do Email</dt>
+				<dd>
+					<ul>
+						<li><a href="/Settings/ResultsPerPage" class="settinsLink">Resultados por p&aacute;gina</a></li>
+						<li><a href="/Settings/MailSignature" class="settinsLink">Assinatura de e-mail</a></li>
+					</ul>
+				</dd>
+				<% } %>
 			<% } %>
 			<dt>Expresso</dt>
 			<dd>

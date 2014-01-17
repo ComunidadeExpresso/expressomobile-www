@@ -26,6 +26,7 @@ define([
       var that = this;
       var onMessageFunction = function (message) { 
         that.renderMessages();
+        Shared.menuView.setChatBadge(Shared.im.qtdUnreadMessages());
       };
 
       var onComposingFunction = function (message) { 
@@ -46,6 +47,8 @@ define([
 
       Shared.im.addOnMessageListener(onMessageFunction);
       Shared.im.addOnComposingListener(onComposingFunction);
+
+      Shared.menuView.setChatBadge(Shared.im.qtdUnreadMessages());
 
       var data = {
         chatID: this.chatID,

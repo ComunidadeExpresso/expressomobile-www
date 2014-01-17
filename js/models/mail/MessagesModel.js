@@ -170,7 +170,7 @@ define([
       
       if (signature == true) {
 
-        retString = "\n\n" + this.getUserSignature() + "\n\n";
+        retString = "<br><br>" + this.getUserSignature() + "<br><br>";
 
         if (msgType == 'forward') {
 
@@ -188,10 +188,7 @@ define([
         
         
       } else {
-
-        if (this.get("msgType") == "text") {
-          msgBody = this.nl2br(msgBody,'<br>');
-        }
+        
         retString = msgBody;
       }
 
@@ -230,6 +227,9 @@ define([
     },
 
     getUserSignature: function() {
+      if (Shared.settings.mailSignature == undefined) {
+        Shared.settings.mailSignature = "Mensagem enviada pelo Expresso Mobile.";
+      }
       return Shared.settings.mailSignature;
     },
 

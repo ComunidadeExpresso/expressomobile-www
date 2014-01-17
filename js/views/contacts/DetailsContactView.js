@@ -51,19 +51,24 @@ define([
 
 			var done = function (data)
 			{
-				contentTitle.text(_.first(data.contacts).get('contactFullName'));
+				var firstContact = _.first(data.contacts);
+				if (firstContact != undefined) {
+					contentTitle.text(firstContact.get('contactFullName'));
+				
+					var contact = {contact: _.first(data.contacts), _: _};
+					var contactID = self.secondViewName == 'Personal' ? _.first(data.contacts).get('contactID') : _.first(data.contacts).get('contactUIDNumber');
 
-				var contact = {contact: _.first(data.contacts), _: _};
-				var contactID = self.secondViewName == 'Personal' ? _.first(data.contacts).get('contactID') : _.first(data.contacts).get('contactUIDNumber');
+					container.empty().append(_.template(DetailsContactTemplate, contact));
+					self.loaded((_.first(data.contacts).get('contactMails'))[0], contactID);
 
-				container.empty().append(_.template(DetailsContactTemplate, contact));
-				self.loaded((_.first(data.contacts).get('contactMails'))[0], contactID);
+					var pictureImageContactView = new PictureImageContactView({el: $('.details_picture_image')});
+						pictureImageContactView.render(data);
 
-				var pictureImageContactView = new PictureImageContactView({el: $('.details_picture_image')});
-					pictureImageContactView.render(data);
+					$('.details_picture_image').css('margin', '0 10px');
+					$('.details_picture_image img').css('width', '80px').css('height', '106px');
+					$('.details_picture_image img').css('margin-top', '10px').css('background-size', '110px 130px');
 
-				$('.details_picture_image').css('margin', '0 10px');
-				$('.details_picture_image img').css('width', '80px').css('height', '106px');
+				}
 
 				if (self.status == 'OK')
 				{

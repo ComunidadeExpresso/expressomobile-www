@@ -8,7 +8,9 @@
 		        </td>
 		        <td class="descriptionCompose detailCol">
 		        	<% if (Shared.userHasModule("catalog")) { %>
+		        		<% if (Shared.apiVersion != "1.0") { %>
 		        		<div id="addMsgToField" class='icon-add'></div>
+		        		<% } %>
 		        	<% } %>
 		        	<div id="msgToRecipients">
 						<% if (message.get("msgTo")) {  %>
@@ -36,7 +38,9 @@
 		        </td>
 		        <td class="descriptionCompose detailCol">
 		        	<% if (Shared.userHasModule("catalog")) { %>
-		        		<div id="addMsgCcField" class='icon-add'></div>
+		        		<% if (Shared.apiVersion != "1.0") { %>
+		        			<div id="addMsgCcField" class='icon-add'></div>
+		        		<% } %>
 		        	<% } %>
 		        	<div id="msgCcRecipients">
 						<% if (message.get("msgCc")) {  %>
@@ -65,7 +69,9 @@
 		        </td>
 		        <td class="descriptionCompose detailCol">
 		        	<% if (Shared.userHasModule("catalog")) { %>
-		        		<div id="addMsgBccField" class='icon-add'></div>
+		        		<% if (Shared.apiVersion != "1.0") { %>
+		        			<div id="addMsgBccField" class='icon-add'></div>
+		        		<% } %>
 		        	<% } %>
 		        	<div id="msgBccRecipients">
 						<% if (message.get("msgBcc")) {  %>

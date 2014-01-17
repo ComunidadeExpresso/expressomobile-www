@@ -237,6 +237,17 @@ define([
       }
     },
 
+    setMailBadge: function(value) 
+    {
+      if (value > 0) {
+        $("#badge_inbox").removeClass("hidden");
+        $("#badge_inbox").html(value);
+      } else {
+        $("#badge_inbox").addClass("hidden");
+        $("#badge_inbox").html(value);
+      }
+    },
+
     renderContextMenu: function(menuID,params) {
 
       this.context = new ContextMenuView();

@@ -20,7 +20,8 @@ define([
         var menuItem = {menuTitle: "Caixa de Entrada",
                         menuRoute: "/Mail/Messages/1/0/INBOX#",
                         menuClass: "inbox",
-                        menuIconClass: "icon-email"};
+                        menuIconClass: "icon-email",
+                        menuHasBadge: true};
         var model = new MenuItemModel(menuItem);
         return model;
     },

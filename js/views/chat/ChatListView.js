@@ -38,6 +38,8 @@ define([
           that.setChatBadge(that.secondViewName,0);
           Shared.im.setAsSeenAllMessagesFromContact(that.secondViewName);
         }
+        
+        Shared.menuView.setChatBadge(Shared.im.qtdUnreadMessages());
       };
 
       var onPresenceFunction = function (message) { 
@@ -103,6 +105,8 @@ define([
           that.loaded();
 
           Shared.setCurrentView(1,that);
+
+          Shared.menuView.setChatBadge(Shared.im.qtdUnreadMessages());
 
         },Shared.timeoutDelay);
     },
