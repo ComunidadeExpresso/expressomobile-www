@@ -16,14 +16,28 @@ body #page .topHeader { position: absolute; height: 53px; width: 100%; top: -53p
 body #page .smartphone { position: absolute; height: 53px; width: 100%; top: -53px; background: url("../imgs/icon-logo-top.png") no-repeat scroll center center #F1F1F1; border-bottom: 1px solid #E5E5E5; }
 body #page .topHeader .topButtons li { float: left; }
 body #page .topHeader .topButtons li a { height: 53px; width: 53px; display: block; color: transparent; text-shadow: none; font: 0px/0 a; }
-	.topButtons .menu { background: url("../imgs/menu.png") no-repeat scroll 0 0 transparent; }
-  .topButtons .menu:hover { background: url("../imgs/menu.png") no-repeat scroll 0 0 transparent; background-position: -50px 0px; }
+	.topButtons .menu { background: url("../imgs/menu.png") no-repeat scroll 0 0 transparent; z-index: 9999; }
+  .topButtons .menu:hover { background: url("../imgs/menu.png") no-repeat scroll 0 0 transparent; background-position: -50px 0px; z-index: 9999;  }
 	.topButtons .voltar { background: url("../imgs/menu.png") no-repeat scroll 0 0 transparent; }
-	.topButtons .contextMenu { background: url("../imgs/context_menu.png") no-repeat scroll 0 0 transparent; }
+	.topButtons .contextMenu { background: url("../imgs/context_menu.png") no-repeat scroll 0 0 transparent; z-index: 2000; }
   .topButtons .contextMenu:hover { background: url("../imgs/context_menu.png") no-repeat scroll 0 0 transparent; background-position: -56px 0px;  }
 
+#pageSwipe { position: absolute; width: 100%; height: 50px; margin-top: 0px; z-index: 100; }
+
 body #page .main { position: absolute; width: 100%; height: 100%; bottom: 0; }
-body #page .main h2 { border-bottom: 2px solid #437DD6; font-size: 20px; height: 50px; line-height: 50px; padding: 0 0 0 10px; color: #333333; } 
+body #page .main h2 { 
+  border-bottom: 2px solid #437DD6; 
+  font-size: 20px; 
+  height: 50px; 
+  line-height: 50px; 
+  padding: 0 0 0 10px; 
+  color: #333333; 
+  -moz-box-shadow: 1px 1px 2px #999;
+  -webkit-box-shadow: 1px 1px 2px #999;
+  box-shadow: 1px 1px 2px #999;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=135, Color='#999999')";
+  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=135, Color='#999999');
+} 
 
 body #page .main #content { width: 40%; height: 100%; position: relative; border-right: 1px solid #E5E5E5; z-index: 10; }
 /*body #page .main #content.full { width: 100% }*/
@@ -65,7 +79,7 @@ body #page .searchArea input:focus { border: 1px solid #0088CC; }
 body #menu { width: 50%; height: 100%; position: absolute; margin-top: -53px; display: none; background-color: #F1F1F1; }
 body #menu.expanded { display: block; }
 body #menu #personalInfo { height: 61px; padding: 10px 10px; background: url("../imgs/bg.png"); }
-.userPicture { float: left; width: 46px; height: 61px; border-radius: 6px 6px 6px 6px; background: url('../imgs/contactPhotoFrameNone.png') center center no-repeat; }
+.userPicture { float: left; width: 46px; height: 61px; border: 1px solid #3A87AD; border-radius: 6px 6px 6px 6px; background: url('../imgs/contactPhotoFrameNone.png') center center no-repeat; }
 body #menu #personalInfo .personalData { margin: 0 0 0 56px; height: 61px; color: #FFF; }
 body #menu #personalInfo .personalData span { display: block; }
 body #menu #personalInfo .personalData span.name { font-size: 15px; }
@@ -214,7 +228,7 @@ body #menu dl dd ul#myFolders li a span .badge.badge-info { float: right; }
 
 
 /** Menu de contexto **/
-body #page .topHeader #contextMenu { background-color: #333333; width: 240px; position: absolute; top: 53px; right: 0; z-index: 9999; box-shadow: 10px 10px 5px #888; }
+body #page .topHeader #contextMenu { background-color: #333333; width: 240px; position: absolute; top: 53px; right: 0; z-index: 9999;  }
 body #page .topHeader #contextMenu ul li { border-bottom: 1px solid #2C2C2C; }
 body #page .topHeader #contextMenu ul li:hover { background-color: #111111; border-bottom: 1px solid #2C2C2C; }
 body #page .topHeader #contextMenu ul li a { color: #EFEFEF; text-decoration: none; display: block; padding: 15px 10px; width: 200px; }
@@ -721,6 +735,7 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
     text-align: center;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
     vertical-align: middle;
+    z-index: 2000;
 }
 
 .btn-primary {
@@ -730,6 +745,7 @@ body #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-datepic
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     color: #FFFFFF;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+
 }
 
 .btn-context {
@@ -1183,6 +1199,11 @@ body #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3
 .chat-message {
      background-color: #4ea5cd;
      border-color: #3b8eb5;
+     text-decoration: none;
+}
+
+.chat-message a {
+     text-decoration: none;
 }
 
 .error{
@@ -1424,6 +1445,8 @@ ul.autocomplete li {
   cursor:pointer;
   margin:0;
   padding:10px;
+  height: 30px !important;
+  color:#000000 !important;
 }
 
 ul.autocomplete li span.emailInfo {
@@ -1438,12 +1461,17 @@ ul.autocomplete li.selected {
   background-color:#3A87AD; color: #FFF; font-weight: bold; 
 }
 
+ul.autocomplete li.selected:hover {
+  background-color:#3A87AD; color: #FFF !important; font-weight: bold; 
+}
+
 ul.autocomplete li.selected span.emailInfo {
   cursor:pointer;
   margin:0;
   padding:10px;
   font-size: 12px;
   float: right;
+  color:#FFF !important;
 }
 
 .shadow {
