@@ -312,9 +312,13 @@ define([
 		};
 
 		this.qtdUnreadMessages = function(value) {
-			if(value == undefined) return _qtdUnreadMessages;
-			_qtdUnreadMessages = value;
-			return this;
+			var qtdUnread = 0;
+			for (var x=0; x < _contacts.length; x++) {
+				qtdUnread = qtdUnread + _contacts[x].qtdUnread;
+			}
+			this._qtdUnreadMessages = qtdUnread;
+
+			return qtdUnread;
 		};
 
 
@@ -347,26 +351,30 @@ define([
 				connection_options = {
 					"resource":_resource, "username":_username, "password":_password, "url":_url, "domain" : _domain,				
 					onDisconnect:function(){
-						console.log("onDisconnect");
+						//console.log"onDisconnect");
 					},
 					onConnect: function(eas){
-						console.log("onConnect");
+						//console.log("onConnect");
 						$.xmpp.getRoster();
 						$.xmpp.setPresence(null);
 					},
 					onIq: function(iq){
-						console.log("onIq");
+						//console.log"onIq");
 					},
 					onMessage: function(message){
-						console.log("onMessage");
+						//console.log"onMessage");
 
 						message.from = message.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
 						var jid = message.from.split("/");
 						var id = MD5.hexdigest(message.from);
 
+						//console.logid);
+
 						var new_message = that.addMessage(id,jid[0],message.body,new Date());
 
-						that.qtdUnreadMessages( that.qtdUnreadMessages() + 1 );
+						//that.qtdUnreadMessages( that.qtdUnreadMessages() + 1 );
+
+						
 
 						that.updateQtdUnreadMessagesToContact(id);
 
@@ -376,7 +384,7 @@ define([
 
 					},
 					onPresence: function(presence){
-						console.log("onPresence");
+						//console.log"onPresence");
 
 						presence.from = presence.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
 						var md5_contact = MD5.hexdigest(presence.from);
@@ -395,13 +403,13 @@ define([
 
 					},
 					onError: function(error){
-						console.log("onError");
+						//console.log"onError");
 
 						that.executeListenersFromArray(_onErrorDelegate,error);
 					},
 	   				onComposing: function(message)
 	   				{
-	   					console.log("onComposing");
+	   					//console.log"onComposing");
 
 	   					message.from = message.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
 						var jid = message.from.split("/");
@@ -412,7 +420,7 @@ define([
 	   				},
 	   				onRoster: function(roster)
 	   				{  			
-	   					console.log("onRoster");
+	   					//console.log"onRoster");
 
 	   					var _rosterJid = roster.jid;
 						_rosterJid = _rosterJid.match(/^[\w\W][^\/]+[^\/]/g)[0]; 
