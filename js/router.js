@@ -6,6 +6,7 @@ define([
   'shared',
   'views/login/LoginView',
   'views/home/HomeView',
+  'views/home/OfflineView',
   'views/mail/DetailMessageView',
   'views/mail/ComposeMessageView',
   'views/mail/EditFolderView',
@@ -20,7 +21,7 @@ define([
   'views/calendar/CalendarDeleteEventView',
   'views/calendar/CalendarFullDayListView',
   'views/chat/ChatListView',
-], function($, _, Backbone, Shared, LoginView, HomeView, DetailMessageView, ComposeMessageView, EditFolderView, SettingsListView,ContactsListView,DetailsContactView, AddContactView, DeleteContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarDeleteEventView, CalendarFullDayListView, ChatListView) {
+], function($, _, Backbone, Shared, LoginView, HomeView, OfflineView, DetailMessageView, ComposeMessageView, EditFolderView, SettingsListView,ContactsListView,DetailsContactView, AddContactView, DeleteContactView,CalendarListView,CalendarDetailsView, CalendarEditEventView, CalendarDeleteEventView, CalendarFullDayListView, ChatListView) {
   
   var AppRouter = Backbone.Router.extend({
 
@@ -28,6 +29,7 @@ define([
 
       'Home' : 'homeView',
       'Login' : 'loginView',
+      'Offline' : 'offlineView',
       'Mail/CleanTrash/*PfolderID' : 'cleanTrashView',
       'Mail/AddFolder/*PfolderID' : 'newFolderView',
       'Mail/RenameFolder/*PfolderID' : 'renameFolderView',
@@ -145,6 +147,13 @@ define([
 
     });
 
+    app_router.on('route:offlineView', function (actions) {
+
+       var offlineView = new OfflineView();
+       offlineView.render();
+
+    });
+
     app_router.on('route:logoutView', function (actions) {
 
       var loginView = new LoginView();
@@ -154,26 +163,32 @@ define([
 
     app_router.on('route:defaultAction', function (actions) {
 
-      Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
+      if (Shared.versionIsActive) {
 
-        if (expressoValue != null) {
+        Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
-          var authValue = expressoValue.auth;
+          if (expressoValue != null) {
 
-          if (authValue != null) {
-            Shared.api.auth(authValue);
+            var authValue = expressoValue.auth;
+
+            if (authValue != null) {
+              Shared.api.auth(authValue);
+            }
+
+            Shared.profile = expressoValue.profile;
+
           }
 
-          Shared.profile = expressoValue.profile;
+        });
 
+        if ((Shared.api.auth()) || (Shared.gotoRoute != false)) {
+          app_router.navigate("Home",{ trigger: true });
+        } else {
+          app_router.navigate("Login",{ trigger: true });
         }
 
-      });
-
-      if ((Shared.api.auth()) || (Shared.gotoRoute != false)) {
-        app_router.navigate("Home",{ trigger: true });
       } else {
-        app_router.navigate("Login",{ trigger: true });
+        app_router.navigate("Offline",{ trigger: true });
       }
 
     });
@@ -194,18 +209,6 @@ define([
 
       Shared.deviceType(Shared.isSmartPhoneResolution());
 
-/*
-      var detailMessageView = new DetailMessageView();
-      detailMessageView.folderID = folderID;
-      detailMessageView.msgID = msgID;
-
-      detailMessageView.render();
-
-      Shared.menuView.closeMenu();
-
-      Shared.deviceType(Shared.isSmartPhoneResolution()); 
-*/
-  
     });
 
     app_router.on('route:composeMessageView', function (secondViewName,msgID,folderID) {
@@ -367,10 +370,6 @@ define([
     app_router.on('route:calendarAddEventView', function (year, month, day) {
 
       var calendarAddEventView = new CalendarEditEventView({year: year, month: month, day: day});
-          // calendarAddEventView.year = year;
-          // calendarAddEventView.month = month;
-          // calendarAddEventView.day = day;
-          // calendarAddEventView.listParticipants = [];
           calendarAddEventView.render();
 
       Shared.menuView.selectMenu(2);

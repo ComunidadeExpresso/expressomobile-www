@@ -11,9 +11,12 @@ define([
   
   var Shared = {};
 
+  //USE THIS IF YOU WANT TO SET THIS VERSION AS BETA FOR YOUR USERS.
   Shared.betaVersion = true;
-
   Shared.betaTesters = [];
+
+  //USE THIS IF YOU WANT TO TEMPORARIALY DISPLAY AN OUT OF SERVICE PAGE.
+  Shared.versionIsActive = false;
 
   if (Shared.betaVersion) {
     Shared.appVersion = "BETA";
@@ -525,6 +528,8 @@ document.addEventListener('deviceready', function () {
     } else {
        window.addEventListener('unload', exitFunction, false);
     }
+
+
 
     window.onunload=exitFunction;
 

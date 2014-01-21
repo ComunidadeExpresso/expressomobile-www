@@ -113,7 +113,7 @@ define([
 		};
 
 		this.defaultErrorCallback = function(response) {
-			if(response && response.error && response.error.message) alert(response.error.message);
+			//if(response && response.error && response.error.message) alert(response.error.message);
 		};
 
 		this.crossdomain = function(value) {
@@ -214,10 +214,10 @@ define([
 		this.setCookie = function(c_name,value,exdays)
 		{
 			window.localStorage.setItem(c_name, value);
-			var exdate=new Date();
-			exdate.setDate(exdate.getDate() + exdays);
-			var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-			document.cookie=c_name + "=" + c_value;
+			//var exdate=new Date();
+			//exdate.setDate(exdate.getDate() + exdays);
+			//var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+			//document.cookie=c_name + "=" + c_value;
 		}
 
 		this.read_cookie =  function(key)
@@ -353,7 +353,7 @@ define([
 
 			var conf = {};
 
-			conf.headers = {'Cookie' : '' },
+			conf.headers = {},
 			conf.xhrFields = { withCredentials: false };
 
 			if (_phoneGap) {
