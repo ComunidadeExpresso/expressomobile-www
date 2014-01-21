@@ -4,7 +4,14 @@
 		<div id="emailSignature">
 			<ol>
 				<li>
+					<input type="hidden" id="typeSignature" name="typeSignature" value="<%=typeSignature%>">
+					<% if (typeSignature == 'html') { %>
+					<div id="assinaturaEmailHTML"  class="messageBodyInput" style="width: 100%; min-height: 400px;" contenteditable="true">
+						<%=mailsignature%>
+					</div>
+					<% } else { %>
 					<textarea name="assinaturaEmail" id="assinaturaEmail" placeholder="Mensagem enviada pelo Expresso Mobile."><%=mailsignature%></textarea>
+					<% } %>
 				</li>
 			</ol>
 		</div>

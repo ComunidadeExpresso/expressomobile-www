@@ -173,14 +173,17 @@ define([
 
           var rpp = 25;
           var mailsign = "Mensagem enviada pelo Expresso Mobile.";
+          var typeSignature = "html";
 
           if (result.mail != undefined) {
             rpp = result.mail.max_email_per_page;
             mailsign = result.mail.signature;
+            typeSignature = result.mail.type_signature;
           }
 
           Shared.settings.resultsPerPage = rpp;
           Shared.settings.mailSignature = mailsign;
+          Shared.settings.typeSignature = typeSignature;
 
           Shared.saveSettingsToLocalStorage();
 

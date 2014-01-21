@@ -230,7 +230,12 @@ define([
       if (Shared.settings.mailSignature == undefined) {
         Shared.settings.mailSignature = "Mensagem enviada pelo Expresso Mobile.";
       }
-      return Shared.settings.mailSignature;
+      if (Shared.settings.typeSignature != "html") {
+        return this.nl2br(Shared.settings.mailSignature,'<br>');
+      } else {
+        return Shared.settings.mailSignature;
+      }
+      
     },
 
     nl2br: function(str, breakTag) {

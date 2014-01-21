@@ -13,19 +13,24 @@ define([
     render: function(){
 
       var mailsign = '';
+      var type_signature = '';
 
       var that = this;
 
       Shared.api
       .resource('Preferences/UserPreferences')
-      .params({"module": "mail","preference":"signature"})
+      .params({"module": "mail"})
       .done(function(result){
 
         mailsign = result.mail.signature;
+        type_signature = result.mail.type_signature;
+
+        console.log(result);
 
         var newData = {
           _: _ ,
-          mailsignature : mailsign
+          mailsignature : mailsign,
+          typeSignature: type_signature
         };
 
         var compiledTemplate = _.template( settingsMailSignatureListTemplate, newData );
@@ -44,7 +49,13 @@ define([
 
     SaveMailSignature: function() {
 
-      var value = $("#assinaturaEmail").val();
+      var value = '';
+
+      if ($("#typeSignature").val() == "html") {
+        value = $("#assinaturaEmailHTML").html();
+      } else {
+        value = $("#assinaturaEmail").val();
+      }
 
       Shared.api
       .resource('Preferences/ChangeUserPreferences')
@@ -52,6 +63,7 @@ define([
       .done(function(result){
 
         Shared.settings.mailSignature = value;
+        Shared.settings.typeSignature = $("#typeSignature").val();
 
         Shared.saveSettingsToLocalStorage();
 
