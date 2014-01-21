@@ -211,19 +211,46 @@ define([
 
     downloadBrowser: function(params,result) {
 
+      window.URL = window.URL || window.webkitURL;
+
       var base64 = this.base64ArrayBuffer(result);
       this.showImage(base64);
-      
+
+      var fileExtension = params.attachmentName.toLowerCase().substr(params.attachmentName.length - 3,3);
+
+      var fileType = "application/*";
+
+      switch(fileExtension)
+      {
+      case "png":
+        fileType = "image/png";
+        break;
+      case "jpg":
+        fileType = "image/jpeg";
+        break;
+      case "jpge":
+        fileType = "image/jpge";
+        break;
+      case "pdf":
+        fileType = "application/pdf";
+        break;
+      }
+
+      console.log(fileType);
+
+      var blob = new Blob([result], {type: fileType});
+
+      var link = document.createElement('a');
       var name = params.attachmentName;
-      var url = URL.createObjectURL(new Blob([result]));
-      var link = document.createElement("a");
-      link.setAttribute("href",url);
+      link.href = window.URL.createObjectURL(blob);
       link.setAttribute("download",name);
+      //link.setAttribute("target","_blank");
       $('body').append(link);
       var event = document.createEvent('MouseEvents');
       event.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
       link.dispatchEvent(event);
       $(link).trigger('click');
+
 
     },
 
