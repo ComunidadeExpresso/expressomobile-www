@@ -2,6 +2,7 @@
     appDir: './',
     baseUrl: './js',
     dir: './dist',
+    urlArgs: "bust=" + (new Date()).getTime(),
     modules: [
         {
             name: 'main'

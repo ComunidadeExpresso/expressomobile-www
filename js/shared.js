@@ -16,7 +16,7 @@ define([
   Shared.betaTesters = [];
 
   //USE THIS IF YOU WANT TO TEMPORARIALY DISPLAY AN OUT OF SERVICE PAGE.
-  Shared.versionIsActive = false;
+  Shared.versionIsActive = true;
 
   if (Shared.betaVersion) {
     Shared.appVersion = "BETA";
