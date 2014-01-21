@@ -43,7 +43,32 @@ define([
       };
 
       var onPresenceFunction = function (message) { 
-        that.renderContactList();
+
+        var element = $("#" + message.id);
+        
+        element.animate({
+          opacity: 0.25,
+          height: "toggle"
+        }, 1000, function() {
+
+          element.remove();
+
+          $("#list_" + message.status).append(element);
+          
+          var elementStatus = $("#" + message.id + "_status");
+          elementStatus.removeClass();
+          elementStatus.addClass("chat-" + message.status);
+
+          element.animate({
+          opacity: 1,
+          height: "toggle"
+          }, 1000, function() {
+
+          });
+        
+        });
+        
+
       };
 
       Shared.im.addOnMessageListener(onMessageFunction);

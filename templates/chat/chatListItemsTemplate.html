@@ -6,12 +6,12 @@
       <% if (i == 'away') { %>Ausente<% } %>
       <% if (i == 'offline') { %>Offline<% } %>
     </dt>
-    <ul>
+    <ul id="list_<%=i%>">
       <% _.each(contacts[i], function(contact){ %>
         <% if (contact.id != null) { %>
         <li id="<%=contact.id%>"> 
           <a href="/Chat/<%=contact.id%>" class="listItemLink">
-            <div class="chat-<%=i%>"></div>
+            <div id="<%=contact.id%>_status" class="chat-<%=i%>"></div>
             <div id="<%=contact.id%>_badge" style="" class="badge badge-chat-list <% if (contact.qtdUnread == 0) { %>hidden<% } %>"><%= contact.qtdUnread %></div>
             <% if (contact.name != null) { %>
             <h3 class="ellipsis20"><%= contact.name %></h3>

@@ -367,20 +367,11 @@ define([
 						message.from = message.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
 						var jid = message.from.split("/");
 						var id = MD5.hexdigest(message.from);
-
-						//console.logid);
-
 						var new_message = that.addMessage(id,jid[0],message.body,new Date());
-
-						//that.qtdUnreadMessages( that.qtdUnreadMessages() + 1 );
-
-						
 
 						that.updateQtdUnreadMessagesToContact(id);
 
 						that.executeListenersFromArray(_onMessageDelegate,new_message);
-
-						//that.onMessage(new_message);
 
 					},
 					onPresence: function(presence){
