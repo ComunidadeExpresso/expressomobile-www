@@ -1,0 +1,10 @@
+/servers.json
+/.DS_Store
+/dist/*
+
+*.log
+*.orig
+
+!.empty
+!.gitignore
+
