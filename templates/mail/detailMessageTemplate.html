@@ -110,6 +110,14 @@
           <%=message.get("msgDate")%>&nbsp;(<%=message.getTimeAgo()%>)
         </td>
       </tr> 
+      <tr class="detailRow">
+        <td class="item detailCol">
+          Assunto:
+        </td>
+        <td class="description detailCol" colspan="2">
+          <%= message.get("msgSubject") %>
+        </td>
+      </tr>
       <% if (message.get("msgAttachments")) {  %>
       <tr class="detailRow">
         <td class="item detailCol">

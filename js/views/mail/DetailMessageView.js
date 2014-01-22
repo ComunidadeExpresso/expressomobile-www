@@ -123,11 +123,13 @@ define([
     showMoreMsgTo: function(e) { 
       $(".detailMsgTo").removeClass("hidden");
       $(".showMoreMsgTo").addClass("hidden");
+      this.loaded();
     },
 
     showMoreMsgCc: function(e) { 
       $(".detailMsgCc").removeClass("hidden");
       $(".showMoreMsgCc").addClass("hidden");
+      this.loaded();
     },
 
     openAttachment: function(e) {

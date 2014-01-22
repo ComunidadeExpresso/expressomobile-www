@@ -190,7 +190,7 @@ define([
       var winWidth = $(window).width();
       var menuButtonWidth = $('.top .menu').width();
       var propWidth = Math.ceil(winWidth * 30 / 100);
-      var width =  300;
+      var width =  280;
 
       if ((winWidth - menuButtonWidth) < width)
         width = winWidth - menuButtonWidth;

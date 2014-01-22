@@ -4,9 +4,9 @@
   <div id="personalInfo">
     <div id="userPicture" class="userPicture shadow"></div>
     <div class="personalData">
-      <span id="userName" class="name"><% if (!_.isNull(user.contactFullName)) { %><%=user.contactFullName%><% } %></span>
+      <span id="userName" class="name ellipsis14" style="margin-bottom: 8px;"><% if (!_.isNull(user.contactFullName)) { %><%=user.contactFullName%><% } %></span>
       <% if (Shared.userHasModule("mail")) { %>
-      <span id="userEmail" class="email"><% if (!_.isNull(user.contactMails[0])) { %><%=user.contactMails[0]%><% } %></span>
+      <span id="userEmail" class="email ellipsis14" style="margin-bottom: 8px;"><% if (!_.isNull(user.contactMails[0])) { %><%=user.contactMails[0]%><% } %></span>
       <div id="quota">
         
         <div class="bar"> 

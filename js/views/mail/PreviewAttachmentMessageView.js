@@ -134,6 +134,8 @@ define([
 
         $("#attach_" + this.fileID).append(div);
 
+        $("#attach_" + this.fileID).removeClass("attachment-arquivo-background");
+
         var width = $("#" + imageID).width();
 
         var margin = 0;

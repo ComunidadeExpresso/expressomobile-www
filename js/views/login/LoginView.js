@@ -74,7 +74,9 @@ define([
 
       var serverURL = $("#serverURL").val();
 
-      serverURL = serverURL.replace("https://","http://");
+      if ((Shared.isAndroid()) && (Shared.isPhonegap())) {
+        serverURL = serverURL.replace("https://","http://");
+      }
 
       var isPhoneGap = Shared.api.phoneGap();
 
