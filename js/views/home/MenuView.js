@@ -200,6 +200,11 @@ define([
       $('#menu').addClass('expanded').css('width', width);
       $('#page').css('margin-left', width);
 
+      if (Shared.isTabletResolution()) {
+        $('#page').css('width', '70%');
+        Shared.refreshDotDotDot();
+      }
+
       if (Shared.scrollMenu == null) {
         this.loaded();
       }

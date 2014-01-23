@@ -69,6 +69,10 @@ define([
           if (that._data.done) { 
             that._data.done(that); 
           }
+
+          if (PfolderID == "INBOX") {
+            Shared.lastCheckDate = Date.now();
+          }
         })
         .fail( function (error) {
           if (that._data.fail) { 

@@ -42,7 +42,7 @@
               <% } %>
                 <% var qtdMsgTo = 1; %>
                 <% _.each(message.get("msgTo"), function(msgRecipient){ %>
-                    <span class="detailMsgTo badge badge-write-message <% if (qtdMsgTo >= 4) { %>hidden<% } %>">
+                    <span class="detailMsgTo badge badge-write-message <% if (qtdMsgTo >= 4) { %>hidden<% } %>" data-mail="<%=msgRecipient.mailAddress%>">
                       
                     <% if ($.trim(msgRecipient.fullName) != '') { %> 
                       <%=$.trim(msgRecipient.fullName)%>

@@ -149,10 +149,15 @@ define([
 
         var takePicture = {route: "#", id:"3", callBack : params.takePictureCallBack, parentCallBack: params.parentCallBack , title: "Tirar Foto", iconClass: 'icon-take-picture', primary: false};
         var selectPicture = {route: "#", id:"4", callBack : params.selectPictureCallBack, parentCallBack: params.parentCallBack , title: "Escolher Foto", iconClass: 'icon-select-picture', primary: false};
+        var addAttachment = {route: "#", id:"5", callBack : params.selectAttachmentFileCallBack, parentCallBack: params.parentCallBack , title: "Adicionar Anexo", iconClass: 'icon-select-picture', primary: false};
 
         if (Shared.isPhonegap()) {
           menuItems.push(takePicture);
           menuItems.push(selectPicture);
+        } else {
+          //if (!Shared.isDesktop()) {
+            menuItems.push(addAttachment);
+          //}
         }
 
         this.createModelsFromArray(menuItems);
@@ -167,10 +172,13 @@ define([
 
         var takePicture = {route: "#", id:"3", callBack : params.takePictureCallBack, parentCallBack: params.parentCallBack , title: "Tirar Foto", iconClass: 'icon-take-picture', primary: false};
         var selectPicture = {route: "#", id:"4", callBack : params.selectPictureCallBack, parentCallBack: params.parentCallBack , title: "Escolher Foto", iconClass: 'icon-select-picture', primary: false};
+        var addAttachment = {route: "#", id:"5", callBack : params.selectAttachmentFileCallBack, parentCallBack: params.parentCallBack , title: "Adicionar Anexo", iconClass: 'icon-select-picture', primary: false};
 
         if (Shared.api.phoneGap()) {
           menuItems.push(takePicture);
           menuItems.push(selectPicture);
+        } else {
+          menuItems.push(addAttachment);
         }
 
         this.createModelsFromArray(menuItems);

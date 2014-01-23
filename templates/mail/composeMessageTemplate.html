@@ -110,16 +110,19 @@
 		        <td class="descriptionCompose detailCol">
 		        	
 		        	<div id="msgAttachmentsRecipients">
-		        		
+		        		<input type="file" id="attachment_input" name="attachment_input_temp" class="hidden">
 		        		<% if (isDesktop) { %>
 		        		<div class="clear"></div>
+		        		<div id="add_attachment" class="icon-add-attachment"></div>
 						<div id="drop_zone_text">
 							Arraste e solte os arquivos aqui...
 						</div>
 						<% } %>
+						
 	            	</div>
 		        </td>
 	    	</tr>
+
 	    	
 	    	<tr id="msgBodyRow detailRow">
 	    		<td class="itemBody detailCol" colspan="2">

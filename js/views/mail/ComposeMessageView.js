@@ -228,6 +228,7 @@ define([
       params.addCcBccCallBack = this.addCcBcc;
       params.removeCcBccCallBack = this.removeCcBcc;
       params.takePictureCallBack = this.takePicture;
+      params.selectAttachmentFileCallBack = this.selectAttachmentFile;
       params.selectPictureCallBack = this.selectPicture;
       params.parentCallBack = this;
       return params;
@@ -391,11 +392,12 @@ define([
 
       if ((Shared.isPhonegap()) && (navigator.camera != undefined)) {
 
-          Shared.currentView = thisView;
+        Shared.currentView = thisView;
 
-          navigator.camera.getPicture(thisView.uploadPicture, thisView.onFailUploadPicture, { quality: 60, 
-            destinationType: Camera.DestinationType.DATA_URL }); 
-        } else {
+        navigator.camera.getPicture(thisView.uploadPicture, thisView.onFailUploadPicture, { quality: 60, 
+          destinationType: Camera.DestinationType.DATA_URL }); 
+      } else {
+
           Shared.showMessage({
             type: "error",
             icon: 'icon-email',
@@ -403,11 +405,44 @@ define([
             description: "",
             elementID: "#pageMessage",
           });
-        }
+
+      }
 
     },
 
-    
+    selectAttachmentFile: function(thisView) {
+
+      Shared.currentView = thisView;
+
+      $("#attachment_input").click(); 
+
+      thisView.renderContextMenu();
+
+    },
+
+    addAttachmentFile: function(evt) {
+
+      evt.stopPropagation();
+      evt.preventDefault();
+
+      $("#msgAttachmentsRow").removeClass("hidden");
+
+      var that = this;
+      var files = evt.target.files; 
+
+      for (var i = 0, f; f = files[i]; i++) {
+
+        var fileID = Shared.currentDraftMessage.getQtdFiles();
+
+        that.prependAttachmentImage(fileID,f.name,f.size,'binary',files[i]);
+
+        Shared.currentDraftMessage.addBinaryFile(fileID,escape(f.name),files[i]);
+      }
+
+      var control = $("#attachment_input");
+      control.replaceWith( control = control.clone( true ) );
+
+    },
 
     render: function(){
 
@@ -528,13 +563,15 @@ define([
           var msgCc = originalMessage.get("msgCC");
           var msgBcc = originalMessage.get("msgBcc");
 
+          var myEmail = Shared.profile.contactMails[0];
+
           newMessage.set("msgTo",[]);
           newMessage.set("msgCc",[]);
           newMessage.set("msgBcc",[]);
 
           newMessage.addRecipient("msgTo",from.mailAddress, from.fullName);
           for (var i in msgTo) {
-            if (msgTo[i].mailAddress != from.mailAddress) {
+            if ((msgTo[i].mailAddress != from.mailAddress) && (msgTo[i].mailAddress != myEmail)) {
               newMessage.addRecipient("msgCc",msgTo[i].mailAddress,msgTo[i].fullName);
             }
           }
@@ -673,6 +710,8 @@ define([
       "touch .recipientmsgTo" : "removeRecipientMsgTo",
       "touch .recipientmsgCc" : "removeRecipientMsgCc",
       "touch .recipientmsgBcc" : "removeRecipientMsgBcc",
+      "change #attachment_input" : "addAttachmentFile",
+      "click #add_attachment" : "selectAttachmentFile",
     },
 
     removeRecipientMsgTo: function(e) {
