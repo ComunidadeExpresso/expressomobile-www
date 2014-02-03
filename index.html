@@ -45,11 +45,21 @@
     if ((/iphone|ipad/gi).test(navigator.appVersion)) {
       document.write('<link rel="stylesheet" href="./css/ios_7.css">');
     }
+
+    setTimeout(function() {
+      var navTest = document.getElementById("navigatorTest"); 
+      if (navTest != undefined) {
+
+        document.getElementById("mainAppPageContent").innerHTML = '<div class="login-center" style="width: 245px; margin-top: 0px;"><div class="product-logo"></div><br><br><br><span style="color: #000; font-size: 14px;">Não foi possível carregar o Expresso Mobile para este navegador, por favor instale um navegador compatível para acessar esta versão.<br><br>O Expresso Mobile é compatível com as ultimas versões dos navegadores: Chrome, Firefox e Safari.<br><br></span></div>';
+
+      }
+    },30000);
   </script>
 
 	<script data-main="js/main" src="./js/libs/require/require.js"></script>
 </head>
 <body id="mainAppPageContent" >
+  <div id="navigatorTest"></div>
   <div class="spinner"></div>
 </body>
 </html>

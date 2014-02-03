@@ -9,10 +9,9 @@ define([
   var initialize = function(){
 
 
+    Shared.router = new AppRouter();
 
-    var newRouterInstance = AppRouter.initialize();
-
-    Shared.router = newRouterInstance;
+    Shared.router.setupRouter();
 
     Shared.router.start();
 

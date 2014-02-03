@@ -25,8 +25,6 @@ define([
         mailsign = result.mail.signature;
         type_signature = result.mail.type_signature;
 
-        console.log(result);
-
         var newData = {
           _: _ ,
           mailsignature : mailsign,

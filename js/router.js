@@ -65,362 +65,359 @@ define([
     },
     start: function() {
       Backbone.history.start({pushState: true});
-    }
-    
-  });
+    },
 
-  var initialize = function(){
+    setupRouter: function() {
+      var app_router = this;
 
-    var app_router = new AppRouter;
+        app_router.on('route:homeView', function (actions) {
+         
+            var homeView = new HomeView();
+            homeView.render();
+        });
 
-    app_router.on('route:homeView', function (actions) {
-     
-        var homeView = new HomeView();
-        homeView.render();
-    });
+        app_router.on('route:newFolderView', function (PfolderID) {
 
-    app_router.on('route:newFolderView', function (PfolderID) {
+          if (PfolderID == undefined) {
+            PfolderID = "INBOX";
+          }
 
-      if (PfolderID == undefined) {
-        PfolderID = "INBOX";
-      }
+          PfolderID = PfolderID.replace("#","");
 
-      PfolderID = PfolderID.replace("#","");
+          var editFolderView = new EditFolderView();
+          editFolderView.action = "addFolder";
+          editFolderView.parentFolderID = PfolderID;
+          editFolderView.render();
 
-      var editFolderView = new EditFolderView();
-      editFolderView.action = "addFolder";
-      editFolderView.parentFolderID = PfolderID;
-      editFolderView.render();
+          Shared.menuView.closeMenu();
 
-      Shared.menuView.closeMenu();
+        });
 
-    });
+        app_router.on('route:cleanTrashView', function (PfolderID) {
 
-    app_router.on('route:cleanTrashView', function (PfolderID) {
+          if (PfolderID == undefined) {
+            PfolderID = "INBOX";
+          }
 
-      if (PfolderID == undefined) {
-        PfolderID = "INBOX";
-      }
+          PfolderID = PfolderID.replace("#","");
 
-      PfolderID = PfolderID.replace("#","");
+          var editFolderView = new EditFolderView();
+          editFolderView.cleanTrash(PfolderID);
 
-      var editFolderView = new EditFolderView();
-      editFolderView.cleanTrash(PfolderID);
+          Shared.menuView.closeMenu();
 
-      Shared.menuView.closeMenu();
+        });
 
-    });
+        app_router.on('route:renameFolderView', function (PfolderID) {
 
-    app_router.on('route:renameFolderView', function (PfolderID) {
+          if (PfolderID == undefined) {
+            PfolderID = "INBOX";
+          }
 
-      if (PfolderID == undefined) {
-        PfolderID = "INBOX";
-      }
+          PfolderID = PfolderID.replace("#","");
 
-      PfolderID = PfolderID.replace("#","");
+          var editFolderView = new EditFolderView();
+          editFolderView.action = "renameFolder";
+          editFolderView.folderID = PfolderID;
+          editFolderView.render();
 
-      var editFolderView = new EditFolderView();
-      editFolderView.action = "renameFolder";
-      editFolderView.folderID = PfolderID;
-      editFolderView.render();
+          Shared.menuView.closeMenu();
 
-      Shared.menuView.closeMenu();
+        });
 
-    });
+        app_router.on('route:deleteFolderView', function (PfolderID) {
 
-    app_router.on('route:deleteFolderView', function (PfolderID) {
+          PfolderID = PfolderID.replace("#","");
 
-      PfolderID = PfolderID.replace("#","");
+          var editFolderView = new EditFolderView();
+          editFolderView.deleteFolder(PfolderID);
 
-      var editFolderView = new EditFolderView();
-      editFolderView.deleteFolder(PfolderID);
+          Shared.menuView.closeMenu();
 
-      Shared.menuView.closeMenu();
-
-    });
+        });
 
 
-    app_router.on('route:loginView', function (actions) {
+        app_router.on('route:loginView', function (actions) {
 
-       var loginView = new LoginView();
-       loginView.render();
+           var loginView = new LoginView();
+           loginView.render();
 
-    });
+        });
 
-    app_router.on('route:offlineView', function (actions) {
+        app_router.on('route:offlineView', function (actions) {
 
-       var offlineView = new OfflineView();
-       offlineView.render();
+           var offlineView = new OfflineView();
+           offlineView.render();
 
-    });
+        });
 
-    app_router.on('route:logoutView', function (actions) {
+        app_router.on('route:logoutView', function (actions) {
 
-      var loginView = new LoginView();
-      loginView.logoutUser();
-  
-    });
+          var loginView = new LoginView();
+          loginView.logoutUser();
+      
+        });
 
-    app_router.on('route:defaultAction', function (actions) {
+        app_router.on('route:defaultAction', function (actions) {
 
-      if (Shared.versionIsActive) {
+          if (Shared.versionIsActive) {
 
-        Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
+            Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
-          if (expressoValue != null) {
+              if (expressoValue != null) {
 
-            var authValue = expressoValue.auth;
+                var authValue = expressoValue.auth;
 
-            if (authValue != null) {
-              Shared.api.auth(authValue);
+                if (authValue != null) {
+                  Shared.api.auth(authValue);
+                }
+
+                Shared.profile = expressoValue.profile;
+
+              }
+
+            });
+
+            if ((Shared.api.auth()) || (Shared.gotoRoute != false)) {
+              app_router.navigate("Home",{ trigger: true });
+            } else {
+              app_router.navigate("Login",{ trigger: true });
             }
 
-            Shared.profile = expressoValue.profile;
-
+          } else {
+            app_router.navigate("Offline",{ trigger: true });
           }
 
         });
 
-        if ((Shared.api.auth()) || (Shared.gotoRoute != false)) {
-          app_router.navigate("Home",{ trigger: true });
-        } else {
-          app_router.navigate("Login",{ trigger: true });
-        }
+        app_router.on('route:detailMessageView', function (PforceReload,PmsgID,PfolderID) {
 
-      } else {
-        app_router.navigate("Offline",{ trigger: true });
-      }
+          PfolderID = PfolderID.replace("#","");
 
-    });
+          var homeView = new HomeView({folderID: PfolderID});
+          Shared.menuView.closeMenu();
+          homeView.loadMessagesInFolder(PfolderID,'',PmsgID,PforceReload);
 
-    app_router.on('route:detailMessageView', function (PforceReload,PmsgID,PfolderID) {
+          if (PfolderID == 'INBOX') {
+            Shared.menuView.selectMenu(1);
+          } else {
+            Shared.menuView.selectMenu(0);
+          }
 
-      PfolderID = PfolderID.replace("#","");
+          Shared.deviceType(Shared.isSmartPhoneResolution());
 
-      var homeView = new HomeView({folderID: PfolderID});
-      Shared.menuView.closeMenu();
-      homeView.loadMessagesInFolder(PfolderID,'',PmsgID,PforceReload);
+        });
 
-      if (PfolderID == 'INBOX') {
-        Shared.menuView.selectMenu(1);
-      } else {
-        Shared.menuView.selectMenu(0);
-      }
+        app_router.on('route:composeMessageView', function (secondViewName,msgID,folderID) {
 
-      Shared.deviceType(Shared.isSmartPhoneResolution());
+          var composeMessageView = new ComposeMessageView();
+          composeMessageView.secondViewName = secondViewName;
+          composeMessageView.msgID = msgID;
+          composeMessageView.folderID = folderID;
+          composeMessageView.render();
+          Shared.menuView.closeMenu();
 
-    });
-
-    app_router.on('route:composeMessageView', function (secondViewName,msgID,folderID) {
-
-      var composeMessageView = new ComposeMessageView();
-      composeMessageView.secondViewName = secondViewName;
-      composeMessageView.msgID = msgID;
-      composeMessageView.folderID = folderID;
-      composeMessageView.render();
-      Shared.menuView.closeMenu();
-
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-  
-    });
-
-    app_router.on('route:composeMessageTo', function (secondViewName, emailTo) {
-
-      var composeMessageView = new ComposeMessageView();
-      composeMessageView.secondViewName = secondViewName;
-      composeMessageView.emailTo = emailTo;
-      composeMessageView.render();
-      Shared.menuView.closeMenu();
-
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-  
-    });
-
-    app_router.on('route:settingsListView', function (secondViewName) {
-
-      var settingsListView = new SettingsListView();
-      settingsListView.secondViewName = secondViewName;
-      settingsListView.render();
-
-      Shared.menuView.selectMenu(5);
-
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-  
-    });
-
-    app_router.on('route:contactsListView', function (secondViewName) {
-
-      contactsListView = new ContactsListView();
-      contactsListView.secondViewName = secondViewName;
-      contactsListView.render();
-
-      Shared.menuView.selectMenu(3);
-
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-  
-    });
-
-    app_router.on('route:deleteContactsListView', function (secondViewName) {
-
-      contactsListView = new ContactsListView();
-      contactsListView.secondViewName = secondViewName;
-      contactsListView.status = 'OK';
-      contactsListView.render();
-
-      Shared.menuView.selectMenu(3);
-
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-  
-    });
-
-    app_router.on('route:detailsContactView', function (secondViewName, contactID, status) {
-
-      detailsContactView = new DetailsContactView();
-      detailsContactView.secondViewName = secondViewName;
-      detailsContactView.contactID = contactID;
-      detailsContactView.status = status;
-      detailsContactView.render();
-
-      Shared.menuView.selectMenu(3);
-
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-  
-    });
-
-    app_router.on('route:addContactView', function (contactID, email) {
-
-      addContactView = new AddContactView();
-      addContactView.contactID = contactID;
-      addContactView.email = email;
-      addContactView.render();
-
-      Shared.menuView.selectMenu(3);
-
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-    });
-
-    app_router.on('route:deleteContactView', function (contactID) {
-
-      deleteContactView = new DeleteContactView();
-      deleteContactView.contactID = contactID;
-      deleteContactView.render();
-
-      Shared.menuView.selectMenu(3);
-
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-    });
-
-    app_router.on('route:calendarListView', function (year, month, day, status) {
-
-      var calendarListView = new CalendarListView();
-      calendarListView.year = year;
-      calendarListView.month = month;
-      calendarListView.day = day;
-      calendarListView.fullDay = false;
-      calendarListView.status = status;
-      calendarListView.render();
-
-      Shared.menuView.selectMenu(2);
-
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-  
-    });
-
-    app_router.on('route:calendarFullDayView', function (year, month, day) {
-
-      var calendarFullDayListView = new CalendarFullDayListView();
-      calendarFullDayListView.year = year;
-      calendarFullDayListView.month = month;
-      calendarFullDayListView.day = day;
-      calendarFullDayListView.fullDay = true;
+          Shared.deviceType(Shared.isSmartPhoneResolution());
       
-      calendarFullDayListView.render();
+        });
 
-      Shared.menuView.selectMenu(2);
+        app_router.on('route:composeMessageTo', function (secondViewName, emailTo) {
 
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-  
-    });
+          var composeMessageView = new ComposeMessageView();
+          composeMessageView.secondViewName = secondViewName;
+          composeMessageView.emailTo = emailTo;
+          composeMessageView.render();
+          Shared.menuView.closeMenu();
 
-    app_router.on('route:calendarDetailsView', function (eventID, status) {
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+      
+        });
 
-      var calendarDetailsView = new CalendarDetailsView();
-      calendarDetailsView.eventID = eventID;
-      calendarDetailsView.status = status;
-      calendarDetailsView.render();
+        app_router.on('route:settingsListView', function (secondViewName) {
 
-      Shared.menuView.selectMenu(2);
+          var settingsListView = new SettingsListView();
+          settingsListView.secondViewName = secondViewName;
+          settingsListView.render();
 
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-  
-    });
+          Shared.menuView.selectMenu(5);
 
-    app_router.on('route:calendarEditEventView', function (eventID) {
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+      
+        });
 
-      var calendarEditEventView = new CalendarEditEventView();
-      calendarEditEventView.eventID = eventID;
-      calendarEditEventView.render();
+        app_router.on('route:contactsListView', function (secondViewName) {
 
-      Shared.menuView.selectMenu(2);
+          contactsListView = new ContactsListView();
+          contactsListView.secondViewName = secondViewName;
+          contactsListView.render();
 
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-  
-    });
+          Shared.menuView.selectMenu(3);
 
-    app_router.on('route:calendarAddEventView', function (year, month, day) {
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+      
+        });
 
-      var calendarAddEventView = new CalendarEditEventView({year: year, month: month, day: day});
-          calendarAddEventView.render();
+        app_router.on('route:deleteContactsListView', function (secondViewName) {
 
-      Shared.menuView.selectMenu(2);
+          contactsListView = new ContactsListView();
+          contactsListView.secondViewName = secondViewName;
+          contactsListView.status = 'OK';
+          contactsListView.render();
 
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-  
-    });
+          Shared.menuView.selectMenu(3);
 
-    app_router.on('route:calendarDeleteEventView', function (eventID, year, month, day) {
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+      
+        });
 
-      var calendarDeleteEventView = new CalendarDeleteEventView();
-      calendarDeleteEventView.eventID = eventID;
-      calendarDeleteEventView.year = year;
-      calendarDeleteEventView.month = month;
-      calendarDeleteEventView.day = day;
-      calendarDeleteEventView.render();
+        app_router.on('route:detailsContactView', function (secondViewName, contactID, status) {
 
-      Shared.menuView.selectMenu(2);
+          detailsContactView = new DetailsContactView();
+          detailsContactView.secondViewName = secondViewName;
+          detailsContactView.contactID = contactID;
+          detailsContactView.status = status;
+          detailsContactView.render();
 
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-    });
+          Shared.menuView.selectMenu(3);
 
-    app_router.on('route:chatListView', function (secondViewName) {
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+      
+        });
 
-      var chatListView = new ChatListView();
-      chatListView.secondViewName = secondViewName;
-      chatListView.render();
+        app_router.on('route:addContactView', function (contactID, email) {
 
-      Shared.menuView.selectMenu(4);
-      Shared.deviceType(Shared.isSmartPhoneResolution());
-  
-    });
+          addContactView = new AddContactView();
+          addContactView.contactID = contactID;
+          addContactView.email = email;
+          addContactView.render();
 
-    app_router.on('route:contextMenuView', function () {
+          Shared.menuView.selectMenu(3);
 
-      Shared.menuView.context.toggleMenu();
-  
-    });
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+        });
+
+        app_router.on('route:deleteContactView', function (contactID) {
+
+          deleteContactView = new DeleteContactView();
+          deleteContactView.contactID = contactID;
+          deleteContactView.render();
+
+          Shared.menuView.selectMenu(3);
+
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+        });
+
+        app_router.on('route:calendarListView', function (year, month, day, status) {
+
+          var calendarListView = new CalendarListView();
+          calendarListView.year = year;
+          calendarListView.month = month;
+          calendarListView.day = day;
+          calendarListView.fullDay = false;
+          calendarListView.status = status;
+          calendarListView.render();
+
+          Shared.menuView.selectMenu(2);
+
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+      
+        });
+
+        app_router.on('route:calendarFullDayView', function (year, month, day) {
+
+          var calendarFullDayListView = new CalendarFullDayListView();
+          calendarFullDayListView.year = year;
+          calendarFullDayListView.month = month;
+          calendarFullDayListView.day = day;
+          calendarFullDayListView.fullDay = true;
+          
+          calendarFullDayListView.render();
+
+          Shared.menuView.selectMenu(2);
+
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+      
+        });
+
+        app_router.on('route:calendarDetailsView', function (eventID, status) {
+
+          var calendarDetailsView = new CalendarDetailsView();
+          calendarDetailsView.eventID = eventID;
+          calendarDetailsView.status = status;
+          calendarDetailsView.render();
+
+          Shared.menuView.selectMenu(2);
+
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+      
+        });
+
+        app_router.on('route:calendarEditEventView', function (eventID) {
+
+          var calendarEditEventView = new CalendarEditEventView();
+          calendarEditEventView.eventID = eventID;
+          calendarEditEventView.render();
+
+          Shared.menuView.selectMenu(2);
+
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+      
+        });
+
+        app_router.on('route:calendarAddEventView', function (year, month, day) {
+
+          var calendarAddEventView = new CalendarEditEventView({year: year, month: month, day: day});
+              calendarAddEventView.render();
+
+          Shared.menuView.selectMenu(2);
+
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+      
+        });
+
+        app_router.on('route:calendarDeleteEventView', function (eventID, year, month, day) {
+
+          var calendarDeleteEventView = new CalendarDeleteEventView();
+          calendarDeleteEventView.eventID = eventID;
+          calendarDeleteEventView.year = year;
+          calendarDeleteEventView.month = month;
+          calendarDeleteEventView.day = day;
+          calendarDeleteEventView.render();
+
+          Shared.menuView.selectMenu(2);
+
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+        });
+
+        app_router.on('route:chatListView', function (secondViewName) {
+
+          var chatListView = new ChatListView();
+          chatListView.secondViewName = secondViewName;
+          chatListView.render();
+
+          Shared.menuView.selectMenu(4);
+          Shared.deviceType(Shared.isSmartPhoneResolution());
+      
+        });
+
+        app_router.on('route:contextMenuView', function () {
+
+          Shared.menuView.context.toggleMenu();
+      
+        });
 
 
-/* 
-    $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
-      options.url = "http://localhost:8888/expresso-www/" + options.url;
-    });
-*/
+    /* 
+        $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+          options.url = "http://localhost:8888/expresso-www/" + options.url;
+        });
+    */
 
-    return app_router;
+      return app_router;
 
-  };
-
-  AppRouter.initialize = initialize;
+    }
+    
+  });
 
   return AppRouter;
 
