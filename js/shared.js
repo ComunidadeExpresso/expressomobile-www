@@ -1,19 +1,48 @@
 // Filename: shared.js
 define([
-  'jquery',
   'underscore',
+  'jquery',
   'backbone',
   'expressoAPI',
   'expressoIM',
   'views/home/UserMessageView',
   'expressoService',
-], function($, _, Backbone,expressoAPI,expressoIM,UserMessageView,expressoService) {
+], function(_, $, Backbone,expressoAPI,expressoIM,UserMessageView,expressoService) {
   
   var Shared = {};
 
   //USE THIS IF YOU WANT TO SET THIS VERSION AS BETA FOR YOUR USERS.
   Shared.betaVersion = true;
-  Shared.betaTesters = [];
+  Shared.betaTesters = ["born",
+                        "cmarin",
+                        "sergior",
+                        "ioquir",
+                        "alexandrecorreia",
+                        "fpcorrea",
+                        "asaikawa",
+                        "rogeriosw",
+                        "rodsouza",
+                        "pereira.jair",
+                        "bherides",
+                        "rafaelgobara",
+                        "alexandrerw",
+                        "galiano",
+                        "joseroza",
+                        "alanzari",
+                        "dalmirmachado",
+                        "dittrich",
+                        "viani",
+                        "bonato",
+                        "dscalet",
+                        "projetomobile",
+                        "teste.ios",
+                        "iwersen",
+                        "carlosr",
+                        "jussaracarniere",
+                        "asmaniotto",
+                        "robson",
+                        "alexandrepereira",
+                        "gilsonsantos"];
 
   //USE THIS IF YOU WANT TO TEMPORARIALY DISPLAY AN OUT OF SERVICE PAGE.
   Shared.versionIsActive = true;
