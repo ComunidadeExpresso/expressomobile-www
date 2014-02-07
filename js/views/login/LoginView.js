@@ -11,7 +11,8 @@ define([
   'expressoIM',
   'collections/home/ExpressoCollection',
   'collections/home/ServersCollection',
-], function($, _, Backbone, Shared, MessagesModel, MessagesCollection, loginTemplate,LoadingView,HomeView,expressoIM,ExpressoCollection,ServersCollection){
+  'views/settings/SettingsFaqListView',
+], function($, _, Backbone, Shared, MessagesModel, MessagesCollection, loginTemplate,LoadingView,HomeView,expressoIM,ExpressoCollection,ServersCollection,SettingsFaqListView){
 
   var LoginView = Backbone.View.extend({
 
@@ -52,6 +53,12 @@ define([
       'click #btn-login' : 'loginUser',
       "keydown #username" : "keydownUserName",
       "keydown #password" : "keydownPassword",
+      "click #helpLink" : "showHelp",
+    },
+
+    showHelp: function(e) {
+      var secondView = new SettingsFaqListView({ el: $("body") });
+      secondView.render();
     },
 
     keydownUserName: function(e) {

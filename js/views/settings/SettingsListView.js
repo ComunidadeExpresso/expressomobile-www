@@ -10,8 +10,9 @@ define([
   'views/settings/SettingsMailSignatureListView',
   'views/settings/SettingsResultsPerPageListView',
   'views/settings/SettingsSupportListView',
+  'views/settings/SettingsFaqListView',
   'views/home/LoadingView',
-], function($, _, Backbone, Shared, settingsListTemplate,SettingsAboutListView,SettingsChangePasswordListView,SettingsCreditsListView,SettingsMailSignatureListView,SettingsResultsPerPageListView,SettingsSupportListView,LoadingView){
+], function($, _, Backbone, Shared, settingsListTemplate,SettingsAboutListView,SettingsChangePasswordListView,SettingsCreditsListView,SettingsMailSignatureListView,SettingsResultsPerPageListView,SettingsSupportListView,SettingsFaqListView,LoadingView){
 
   var SettingsListView = Backbone.View.extend({
 
@@ -49,6 +50,9 @@ define([
         // }
         if (this.secondViewName == "About") {
            var secondView = new SettingsAboutListView({ el: $(detailElementID) });
+        }
+        if (this.secondViewName == "FAQ") {
+           var secondView = new SettingsFaqListView({ el: $(detailElementID) });
         }
         if (this.secondViewName == "Credits") {
            var secondView = new SettingsCreditsListView({ el: $(detailElementID) });
