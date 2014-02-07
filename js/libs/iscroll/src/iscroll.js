@@ -430,6 +430,8 @@ iScroll.prototype = {
 
 		if (that.options.onScrollStart) that.options.onScrollStart.call(that, e);
 
+		that.refresh();
+
 		that._bind(MOVE_EV, window);
 		that._bind(END_EV, window);
 		that._bind(CANCEL_EV, window);
@@ -1041,6 +1043,8 @@ iScroll.prototype = {
 		time = time === undefined ? 400 : time;
 
 		if (that.options.onScrollStart) that.options.onScrollStart.call(that);
+
+		that.refresh();
 
 		if (that.options.snap) {
 			pageX = pageX == 'next' ? that.currPageX+1 : pageX == 'prev' ? that.currPageX-1 : pageX;

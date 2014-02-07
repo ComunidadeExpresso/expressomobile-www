@@ -17,6 +17,8 @@ define([
     search: '',
     page: 1,
 
+    scrollRefresh: false,
+
     scrollDetail: '',
 
     render: function(){
@@ -117,7 +119,8 @@ define([
       'click .attachmentLink': 'openAttachment',
       'click .showMoreMsgTo' : 'showMoreMsgTo',
       'click .showMoreMsgCc' : 'showMoreMsgCc',
-      
+      'click #scrollerDetail' : 'refreshScroll',
+      'touch #scrollerDetail' : 'refreshScroll',
     },
 
     showMoreMsgTo: function(e) { 
@@ -137,6 +140,11 @@ define([
       Shared.router.navigate(e.currentTarget.getAttribute("href"),{trigger: true});
     },
 
+    refreshScroll: function(e) {
+      if (Shared.scrollDetail != null) {
+        Shared.scrollDetail.refresh();
+      }
+    },
 
     loaded: function () {
 
