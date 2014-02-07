@@ -182,7 +182,7 @@ define([
           if (msgType == 'reply') {
             retString = retString + this.getReplyMessageString(msgOriginal);
             retString = this.nl2br(retString,'<br>');
-            retString = retString + "<div style='width: 100%; border-left: 2px solid #000; margin-left: 5px;'><div style='margin: 5px;'>" + msgBody + "</div></div>";
+            retString = retString + '<blockquote style="margin: 0pt 0pt 0pt 0.8ex; padding-left: 1ex; border-left-color: rgb(204, 204, 204); border-left-width: 1px; border-left-style: solid;">' + msgBody + '</blockquote>';
           }
         }
         
