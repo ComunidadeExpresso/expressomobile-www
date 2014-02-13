@@ -42,6 +42,75 @@ define([
           $("#beta").removeClass("hidden");
         }
 
+        if ((Shared.isAndroid()) && (Shared.isPhonegap())) {
+
+          if (Shared.forceLogout == false) {
+
+            if (window.plugins.webintent != null) {
+
+              window.plugins.webintent.getAccounts("", function (accounts) {
+
+                Shared.automaticLoginAccounts = accounts;
+
+                var JsonAccounts = JSON.parse(accounts);
+
+                  if (JsonAccounts.accounts.length > 0) {
+
+                    if (JsonAccounts.accounts.length == 1) {
+
+                      that.automaticLogin(JsonAccounts.accounts[0]);
+
+                    } else {
+
+                      var s = $("<select id=\"switch_accounts\" />");
+
+                      $("<option />", {value: "", text: "Escolha uma Conta"}).appendTo(s);
+
+                      for (var i=0;i<JsonAccounts.accounts.length;i++) {
+                        if (JsonAccounts.accounts[i] != undefined) {
+                          $("<option />", {value: JsonAccounts.accounts[i].accountAPIURL + "|" + JsonAccounts.accounts[i].accountName + "|" + JsonAccounts.accounts[i].accountPassword, text: JsonAccounts.accounts[i].accountName}).appendTo(s);
+                        }
+                      }
+                      //s.css("display","none");
+                      s.appendTo("body");
+                      s.click();
+
+ 
+
+                      $("#switch_accounts").change(function(evt) {
+                        //alert($("#switch_accounts").val());
+                        var value = $("#switch_accounts").val();
+
+                        if (value != "") {
+
+                          var act = value.split("|");
+
+                          var Account = { 
+                            accountAPIURL: act[0],
+                            accountName : act[1],
+                            accountPassword: act[2],
+                          };
+
+                          that.automaticLogin(Account);
+
+                        }
+
+                      });
+
+                      $("#switch_accounts").trigger('click');
+
+                     }
+
+                  } 
+
+              }, function() {
+                
+              });
+            }
+
+          }
+        }
+
       })
       .fail(function (error) {
         Shared.handleErrors(error);
@@ -50,7 +119,7 @@ define([
 
     },
     events: {
-      'click #btn-login' : 'loginUser',
+      'click #btn-login' : 'login',
       "keydown #username" : "keydownUserName",
       "keydown #password" : "keydownPassword",
       "click #helpLink" : "showHelp",
@@ -69,17 +138,28 @@ define([
 
     keydownPassword: function(e) {
       if ( (e.which == 13 && !e.shiftKey) ) {
-        this.loginUser();
+        this.login();
       }
     },
 
 
-    loginUser: function(ev) {
+    automaticLogin: function(Account) {
 
+      this.loginUser(Account.accountName,Account.accountPassword,Account.accountAPIURL);
+    },
+
+    login: function(ev) {
       var userName = $("#username").val();
       var passwd = $("#password").val();
 
       var serverURL = $("#serverURL").val();
+
+      this.loginUser(userName,passwd,serverURL);
+
+    },
+
+
+    loginUser: function(userName,passwd,serverURL) {
 
       if ((Shared.isAndroid()) && (Shared.isPhonegap())) {
         serverURL = serverURL.replace("https://","http://");
@@ -241,44 +321,44 @@ define([
       var loadingView = new LoadingView({ el: $("#mainAppPageContent") });
       loadingView.render();
 
+      Shared.forceLogout = true;
+
       Shared.api
       .resource('Logout')
       .done(function(result){
 
-        Shared.scrollMenu = null;
-
-        Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
-
-          var isPhoneGap = Shared.api.phoneGap();
-
-          expressoValue.auth = "";
-          expressoValue.profile = "";
-          expressoValue.username = "";
-          expressoValue.password = "";
-          expressoValue.phoneGap = isPhoneGap;
-          expressoValue.serverAPI = "";
-
-          if (Shared.isAndroid()) {
-            Shared.service.disableTimer();
-            Shared.service.stopService();
-          }
-
-          Shared.api.setLocalStorageValue("expresso",expressoValue);
-
-          Shared.router.navigate('Login',true);
-
-
-        });
-
-        return false;
       })
       .fail(function(error){
 
         Shared.handleErrors(error);
         
-        return false;
       })
       .execute();
+
+      Shared.scrollMenu = null;
+
+      Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
+
+        var isPhoneGap = Shared.api.phoneGap();
+
+        expressoValue.auth = "";
+        expressoValue.profile = "";
+        expressoValue.username = "";
+        expressoValue.password = "";
+        expressoValue.phoneGap = isPhoneGap;
+        expressoValue.serverAPI = "";
+
+        if (Shared.isAndroid()) {
+          Shared.service.disableTimer();
+          Shared.service.stopService();
+        }
+
+        Shared.api.setLocalStorageValue("expresso",expressoValue);
+
+      });
+
+      Shared.router.navigate('Login',true);
+
     }
 
   });

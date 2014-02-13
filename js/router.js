@@ -29,6 +29,7 @@ define([
 
       'Home' : 'homeView',
       'Login' : 'loginView',
+      'AutomaticLogin': 'automaticLoginView',
       'Offline' : 'offlineView',
       'Mail/CleanTrash/*PfolderID' : 'cleanTrashView',
       'Mail/AddFolder/*PfolderID' : 'newFolderView',
@@ -141,6 +142,13 @@ define([
 
            var loginView = new LoginView();
            loginView.render();
+
+        });
+
+        app_router.on('route:automaticLoginView', function (actions) {
+
+           var loginView = new LoginView();
+           loginView.automaticLogin();
 
         });
 

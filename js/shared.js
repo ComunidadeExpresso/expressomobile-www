@@ -72,6 +72,8 @@ define([
   Shared.lastCheckDate = null;
 
   Shared.forceSmartPhoneResolution = false;
+
+  Shared.forceLogout = false;
   
 
   Shared.im = expressoIM;
@@ -95,6 +97,8 @@ define([
 
   //MENSAGE THAT IT'S BEING COMPOSED.
   Shared.currentDraftMessage = '';
+
+  Shared.automaticLoginAccounts = false;
 
 
 
@@ -523,8 +527,6 @@ document.addEventListener('deviceready', function () {
           alert(url);
           Shared.newMessageFiles = eval(url);
 
-          
-
         }, function() {
 
         });
@@ -557,8 +559,6 @@ document.addEventListener('deviceready', function () {
     } else {
        window.addEventListener('unload', exitFunction, false);
     }
-
-
 
     window.onunload=exitFunction;
 
