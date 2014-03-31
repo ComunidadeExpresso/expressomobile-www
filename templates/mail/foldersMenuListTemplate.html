@@ -1,5 +1,5 @@
 <% _.each(folders, function(folder){ %>
-	<% if (folder.get("folderParentID") == "") { %>
+	<% if ((folder.get("folderParentID") == "") || (folder.get("folderParentID") == "user")) { %>
 	<li>
 		<a href="<%=folder.route()%>" name="<%=folder.route()%>" data-toggle="collapse" data-target="#menu" class="listFolderMenuItemLink">
 			<span><%=folder.get("folderName")%><% if (folder.get("folderHasChildren") == 1) { %><strong class="badge badge-subfolders"> > </strong><% } %><% if (folder.get("qtdUnreadMessages") != 0) { %><strong class="badge badge-info"><%=folder.get("qtdUnreadMessages")%></strong><% } %>
