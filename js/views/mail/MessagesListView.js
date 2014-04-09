@@ -42,7 +42,13 @@ define([
         if (!colection.length) {
 
           if (Shared.isTabletResolution()) {
-            Shared.router.navigate("/Mail/Messages/0/0/" + that.folderID + "#", {trigger: true});
+            if (Shared.newMessageIntent) {
+              Shared.newMessageIntent = false;
+              Shared.router.navigate("/Mail/Message/New", {trigger: true});
+            } else {
+              Shared.router.navigate("/Mail/Messages/0/0/" + that.folderID + "#", {trigger: true});
+            }
+            
           }
 
         }
@@ -58,22 +64,33 @@ define([
 
       var doneFunction = function() { 
 
+        if (Shared.newMessageIntent == false) {
+          Shared.menuView.renderContextMenu('messageList',{folderID: that.folderID, folderName: that.currentFolder.folderName, folderType: that.currentFolder.get("folderType"), qtdMessages: 0});
+        }
+
         if ( ((Shared.isTabletResolution()) && (that.forceReload == "1")) || ( (!Shared.isTabletResolution()) && (Shared.gotoRoute != false)) ) {
 
-          if (that.msgID != undefined) {
+          if (Shared.newMessageIntent == true) {
+            Shared.newMessageIntent = false;
+            Shared.router.navigate("/Mail/Message/New", {trigger: true});
+          } else {
 
-            var detailMessageView = new DetailMessageView();
-            detailMessageView.folderID = that.folderID;
-            detailMessageView.msgID = that.msgID;
+            if (that.msgID != undefined) {
 
-            detailMessageView.render();
+              var detailMessageView = new DetailMessageView();
+              detailMessageView.folderID = that.folderID;
+              detailMessageView.msgID = that.msgID;
+
+              detailMessageView.render();
+
+              Shared.menuView.renderContextMenu('messageList',{folderID: that.folderID, folderName: that.currentFolder.folderName, folderType: that.currentFolder.get("folderType"), qtdMessages: 0});
+            }
+
           }
 
         }
 
         Shared.setDefaultIMListeners();
-
-        Shared.menuView.renderContextMenu('messageList',{folderID: that.folderID, folderName: that.currentFolder.folderName, folderType: that.currentFolder.get("folderType"), qtdMessages: 0});
 
         that.loaded(); 
       };

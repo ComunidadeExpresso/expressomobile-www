@@ -23,7 +23,7 @@ define([
 		this.enableTimer = function() {
 			var that = this;
 			// VERIFY NEW MESSAGES EVERY 5 MINUTES - 300000
-			this.service.enableTimer(	60000, 
+			this.service.enableTimer(	300000, 
 										function(r){ that.handleSuccess(r)},
 										function(e){ that.handleError(e)});
 		};

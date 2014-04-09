@@ -12,7 +12,7 @@ define([
   var Shared = {};
 
   //USE THIS IF YOU WANT TO SET THIS VERSION AS BETA FOR YOUR USERS.
-  Shared.betaVersion = true;
+  Shared.betaVersion = false;
   Shared.betaTesters = ["born",
                         "cmarin",
                         "sergior",
@@ -75,7 +75,6 @@ define([
 
   Shared.forceLogout = false;
   
-
   Shared.im = expressoIM;
   Shared.api = expressoAPI;
   Shared.service = expressoService;
@@ -86,7 +85,7 @@ define([
   //USED WHEN THE ANDROID SEND FILES AND OPENS A NEW COMPOSE MESSAGE.
   Shared.gotoRoute = false;
   Shared.newMessageIntent = false;
-  Shared.newMessageFiles = true;
+  Shared.newMessageFiles = false;
 
   //MAXIMUM ALLOWED UPLOAD FILES IN ATTACHMENTS
   Shared.max_upload_file_size = 10240; //IN KBYTES
@@ -98,8 +97,8 @@ define([
   //MENSAGE THAT IT'S BEING COMPOSED.
   Shared.currentDraftMessage = '';
 
-  Shared.automaticLoginAccounts = false;
-
+  Shared.automaticLoginAccounts = { accounts: [] };
+  Shared.forceAutomaticLoginInAccountName = false;
 
 
   //CHECKS IF THE DEVICE IS AN SMARTPHONE OR AN TABLET RESOLUTION
@@ -284,6 +283,10 @@ define([
   Shared.saveSettingsToLocalStorage = function() {
 
     Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
+
+      if (expressoValue == undefined) {
+        var expressoValue = {};
+      }
 
       expressoValue.settings = Shared.settings;
 
@@ -514,6 +517,8 @@ document.addEventListener('deviceready', function () {
   Shared.api.phoneGap(true);
   Shared.api.android(Shared.isAndroid());
 
+
+
   if (Shared.isAndroid()) {
 
       Shared.service.service = cordova.require('cordova/plugin/ExpressoService');
@@ -521,24 +526,49 @@ document.addEventListener('deviceready', function () {
       Shared.api.createPhoneGapDatabase();
 
       if (window.plugins.webintent != undefined) {
-        window.plugins.webintent.getExtra("android.intent.extra.STREAM", function (url) {
+        window.plugins.webintent.getExtra("android.intent.extra.STREAM", function (files) {
+
+          var arquivos = [];
+
+          if (files.indexOf("[") != -1) {
+            files = files.replace("[","").replace("]","");
+            arquivos = files.split(",");
+          } else {
+            arquivos.push(files);
+          }
+
+          for (var i=0; i<arquivos.length; i++) {
+             arquivos[i] = decodeURI(arquivos[i].replace("file://","").trim());
+          }
 
           Shared.newMessageIntent = true;
-          alert(url);
-          Shared.newMessageFiles = eval(url);
+          Shared.newMessageFiles = arquivos;
 
         }, function() {
 
         });
 
-        window.plugins.webintent.getExtra("android.intent.action.VIEW", function (url) {
 
-          alert("view");
-          alert(url);
+        window.plugins.webintent.hasExtra("ROUTE", function (hasExtra) {
+
+          window.plugins.webintent.getExtra("ROUTE", function (url) {
+
+            if (Shared.isTabletResolution()) {
+              url = url.replace("{:TABLET}","1");
+            } else {
+              url = url.replace("{:TABLET}","0");
+            }
+
+            Shared.gotoRoute = url;
+
+          }, function() {
+
+          });
 
         }, function() {
 
         });
+
 
       } else {
         //SEM WEBINTENT.
@@ -569,9 +599,7 @@ document.addEventListener('deviceready', function () {
     }; 
 
 
-
   //Shared.router is created in App.js
-
   return Shared;
 
 });

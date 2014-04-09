@@ -21,7 +21,7 @@ define([
 
     render: function(){
 
-      if (!this.collection) {
+      if (this.collection == null) {
         this.collection = new ContextMenuCollection();
       }
 

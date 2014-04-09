@@ -15,7 +15,6 @@ define([
 ], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, MessagesCollection, ServersCollection, MessagesListView, DetailMessageView, MenuView, homeTemplate){
 
   var HomeView = Backbone.View.extend({
-    el: $("#mainAppPageContent"),
 
     folderID: 'INBOX',
     msgID: '0',
@@ -36,8 +35,6 @@ define([
       //SALVA A VIEW DO MENU NO SHARED
       Shared.menuView = mView;
 
-      // 
-
     },
 
     remove: function() {
@@ -47,12 +44,13 @@ define([
     },
 
     render: function(){
-      
+
       this.$el.html(homeTemplate);
+      this.$el.css("width","100%");
+      this.$el.css("height","100%");
+      $("#mainAppPageContent").empty().append(this.$el);
 
       var that = this;
-
-
 
       Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
@@ -113,14 +111,20 @@ define([
 
           
            if (Shared.gotoRoute == false) {
-            if (!Shared.newMessageIntent) {
-
 
               if (Shared.userHasModule("mail")) {
-                that.menuView.selectMenu(1);
-                that.loadMessagesInFolder(that.folderID,that.search,'','1');
-                that.loaded();
 
+                if ((Shared.isSmartPhoneResolution()) && (Shared.newMessageIntent == true)) {
+         
+                  Shared.newMessageIntent = false;
+                  Shared.router.navigate("/Mail/Message/New", {trigger: true});
+
+                } else {
+                  that.menuView.selectMenu(1);
+                  that.loadMessagesInFolder(that.folderID,that.search,'','1');
+                  that.loaded();
+                }
+ 
               } else {
 
                 if (Shared.userHasModule("calendar")) {
@@ -142,19 +146,8 @@ define([
                 } 
               }
 
-            } else {
-
-              that.loaded();
-              
-              Shared.newMessageIntent = false;
-              Shared.router.navigate("/Mail/Message/New",{ trigger: true });
-            }
 
           } else {
-
-            Shared.router.navigate(Shared.gotoRoute,{ trigger: true });
-
-            Shared.gotoRoute = false;
 
             that.loaded();
           }
@@ -316,7 +309,6 @@ define([
     {
       
       if (Shared.gotoRoute != false) {
-        
         Shared.router.navigate(Shared.gotoRoute,{ trigger: true });
         Shared.gotoRoute = false;
       }

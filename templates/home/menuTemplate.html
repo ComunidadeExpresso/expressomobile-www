@@ -21,6 +21,25 @@
 
   <dl>
 
+    <% if (Shared.automaticLoginAccounts.accounts.length >= 2) { %>
+
+    <dt>Alterar Conta</dt>
+    <dd>
+      <ul id="mainMenu">
+      <% _.each(Shared.automaticLoginAccounts.accounts, function(account){ %>
+      <% if (Shared.forceAutomaticLoginInAccountName != account.accountName) { %>
+        <li class="account">
+          <a class="menuLink" href="/Switch/<%=account.accountName%>">
+            <span><%=account.accountName%></span>
+            <div class="userPicture icon"></div>
+          </a>
+        </li>
+      <% } %>
+      <% }); %>
+      </ul>
+    </dd>
+    <% } %>
+
     <dt>Menu</dt>
     <dd>
       <ul id="mainMenu">

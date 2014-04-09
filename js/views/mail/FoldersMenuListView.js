@@ -15,9 +15,6 @@ define([
 
     render: function(){
       
-      var loadingView = new LoadingView({ el: $("#myFolders") });
-      loadingView.render();
-
       this.getFolders(this.folderID,this.search);
  
     },

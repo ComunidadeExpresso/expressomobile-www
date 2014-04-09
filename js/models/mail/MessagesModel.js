@@ -102,7 +102,7 @@ define([
       var files = this.get("files");
       var file = {
         "fileID" : fileID,
-        "filename" : fileName,
+        "filename" : decodeURI(fileName),
         "fileSize": fileSize,
         "src": fileData,
         "dataType": dataType,
@@ -323,7 +323,7 @@ define([
       return files.length;
     },
 
-    addBinaryFile: function(fileID,fileName,file) {
+    addBinaryFile: function(fileID,fileName,file,callbackSuccess) {
       var reader = new FileReader();
       var that = this;
       reader.fileName = fileName;
@@ -345,11 +345,63 @@ define([
         blobBinaryString = reader.result;
 
         that.addFile(reader.fileID,blobBinaryString,escape(reader.fileName),'binary',reader.fileSize);
+
+        if (callbackSuccess != undefined) {
+          callbackSuccess(that);
+        }
+
       }
 
       reader.readAsBinaryString(file);
     },
-    
+
+    addNewMessageFiles: function(callbackSuccess) {
+
+      var that = this;
+
+      var qtdFiles = 1;
+
+      var failLoad = function(evt) {
+
+        alert("Não foi possível anexar um arquivo!\n");
+        callbackSuccess(that);
+      };
+
+      var gotFile = function(file){
+
+        var callback = function(message) {
+          callbackSuccess(message);
+        };
+
+        qtdFiles = qtdFiles + 1;
+
+        that.addBinaryFile(qtdFiles,file.name,file,callback);
+
+      };
+
+      var gotFileEntry = function(fileEntry) {
+        fileEntry.file(gotFile, failLoad);
+      };
+
+      var gotFS = function(fileSystem) {
+        
+        var files = Shared.newMessageFiles;
+
+        for (var i = 0, f; f = files[i]; i++) {
+          var fileName = files[i];
+          fileSystem.root.getFile(fileName, null, gotFileEntry, failLoad);
+        }
+
+      };
+
+      if (Shared.newMessageFiles != false) {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, failLoad);
+      } else {
+        callbackSuccess(that);
+      }
+    },
+
+
     send: function(callbackSuccess,callbackFail) {
 
       var that = this;

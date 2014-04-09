@@ -59,15 +59,10 @@ define([
       var compiledTemplate = _.template( composeMessageTemplate, newData );
 
       this.$el.html(compiledTemplate);
-
       $(elementID).empty().append(this.$el);
 
-      this.renderContextMenu();
-
-
       if (Shared.isDesktop()) {
-
-        //ENABLE ATTACHMENTS AND DROP ZONE.
+        //ENABLE ATTACHMENTS, DROP ZONE AND AUTO-COMPLETE.
 
         var that = this;
 
@@ -106,6 +101,8 @@ define([
         this.setupAutoComplete();
 
       }
+
+      this.renderContextMenu();
 
       this.loaded();
     },
@@ -237,6 +234,7 @@ define([
     renderContextMenu: function() {
       
       var params = this.getContextMenuParams();
+
       if ($("#msgCcRow").hasClass("hidden")) {
         Shared.menuView.renderContextMenu('newMessage',params);
       } else {
@@ -279,7 +277,6 @@ define([
 
         }
       
-        
         Shared.showMessage(message);
 
         Shared.router.navigate("/Mail/Messages/1/0/INBOX",{ trigger: true });
@@ -467,9 +464,31 @@ define([
         if ($.trim(this.emailTo) != '')
           pMessage.addRecipient("msgTo", this.emailTo, '');
 
-        Shared.currentDraftMessage = pMessage;
+        var that = this;
 
-        this.renderComposeMessage(pMessage,'new');
+        that.renderComposeMessage(pMessage,true,'new');
+
+        $("#msgAttachmentsRow").removeClass("hidden");
+
+        var callbackDone = function(currentMessage) {
+
+          Shared.currentDraftMessage = currentMessage;
+
+          var files = Shared.currentDraftMessage.get("files");
+
+          if (!Shared.isDesktop()) {
+            $("#msgAttachmentsRecipients").empty();
+          }
+
+          for (var i = 0, f; f = files[i]; i++) {
+
+            that.prependAttachmentImage(f.fileID,f.filename,f.fileSize,f.dataType,f.src);
+
+          }
+
+        };
+
+        pMessage.addNewMessageFiles(callbackDone);
 
       }
 
@@ -1043,9 +1062,14 @@ define([
       var msgBodyInput = $("#msgBodyInput").width();
       var contentDetailWidth = $("#contentDetail").width();
 
-      if ((msgBodyInput + 13) >= contentDetailWidth) {
-        $("#scrollerDetail").width(msgBodyInput + 13);
+      if (Shared.isTabletResolution()) {
+        if ((msgBodyInput + 13) >= contentDetailWidth) {
+          $("#scrollerDetail").width(msgBodyInput + 13);
+        }
+      } else {
+        $("#scrollerDetail").width("100%");
       }
+      
 
       Shared.scrollDetail = new iScroll('wrapperDetail',{vScroll:true, hScroll:true, hScrollBar: true, vScrollBar: true, zoom: true });
 

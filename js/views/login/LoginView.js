@@ -46,70 +46,41 @@ define([
 
           if (Shared.forceLogout == false) {
 
-            if (window.plugins.webintent != null) {
+              if (window.plugins.webintent != null) {
 
-              window.plugins.webintent.getAccounts("", function (accounts) {
+                window.plugins.webintent.getAccounts("", function (accounts) {
 
-                Shared.automaticLoginAccounts = accounts;
+                  Shared.automaticLoginAccounts = JSON.parse(accounts);
 
-                var JsonAccounts = JSON.parse(accounts);
+                  var JsonAccounts = Shared.automaticLoginAccounts;
 
-                  if (JsonAccounts.accounts.length > 0) {
+                  if (Shared.automaticLoginAccounts.accounts.length >= 1) {
 
-                    if (JsonAccounts.accounts.length == 1) {
-
-                      that.automaticLogin(JsonAccounts.accounts[0]);
-
-                    } else {
-
-                      var s = $("<select id=\"switch_accounts\" />");
-
-                      $("<option />", {value: "", text: "Escolha uma Conta"}).appendTo(s);
+                      if ((Shared.forceAutomaticLoginInAccountName == false) || (Shared.automaticLoginAccounts.accounts.length == 1)) {
+                        Shared.forceAutomaticLoginInAccountName = JsonAccounts.accounts[0].accountName;
+                      }
 
                       for (var i=0;i<JsonAccounts.accounts.length;i++) {
                         if (JsonAccounts.accounts[i] != undefined) {
-                          $("<option />", {value: JsonAccounts.accounts[i].accountAPIURL + "|" + JsonAccounts.accounts[i].accountName + "|" + JsonAccounts.accounts[i].accountPassword, text: JsonAccounts.accounts[i].accountName}).appendTo(s);
+                          if (Shared.forceAutomaticLoginInAccountName == JsonAccounts.accounts[i].accountName) {
+                            that.automaticLogin(JsonAccounts.accounts[i]);
+                          }
+                        
                         }
-                      }
-                      //s.css("display","none");
-                      s.appendTo("body");
-                      s.click();
+                      }      
+                    
+                  }
 
- 
-
-                      $("#switch_accounts").change(function(evt) {
-                        //alert($("#switch_accounts").val());
-                        var value = $("#switch_accounts").val();
-
-                        if (value != "") {
-
-                          var act = value.split("|");
-
-                          var Account = { 
-                            accountAPIURL: act[0],
-                            accountName : act[1],
-                            accountPassword: act[2],
-                          };
-
-                          that.automaticLogin(Account);
-
-                        }
-
-                      });
-
-                      $("#switch_accounts").trigger('click');
-
-                     }
-
-                  } 
-
-              }, function() {
+                }, function() {
                 
-              });
-            }
+                });
+
+              }
 
           }
         }
+
+        
 
       })
       .fail(function (error) {
@@ -118,6 +89,7 @@ define([
       .getServers();
 
     },
+
     events: {
       'click #btn-login' : 'login',
       "keydown #username" : "keydownUserName",
@@ -160,10 +132,6 @@ define([
 
 
     loginUser: function(userName,passwd,serverURL) {
-
-      if ((Shared.isAndroid()) && (Shared.isPhonegap())) {
-        serverURL = serverURL.replace("https://","http://");
-      }
 
       var isPhoneGap = Shared.api.phoneGap();
 
@@ -248,7 +216,7 @@ define([
 
           if ((Shared.isAndroid()) && (Shared.isPhonegap())) {
 
-            Shared.service.setConfig(serverURL,Shared.api.auth());
+            Shared.service.setConfig(serverURL,Shared.api.auth(),userName,passwd);
             Shared.service.startService();
             setTimeout(function() {
               Shared.service.setConfig(serverURL,Shared.api.auth(),userName,passwd);
@@ -316,12 +284,18 @@ define([
       return false;
     },
 
-    logoutUser: function () {
+    logoutUser: function (forceLogout) {
+
+      $("#mainAppPageContent").empty();
 
       var loadingView = new LoadingView({ el: $("#mainAppPageContent") });
       loadingView.render();
 
-      Shared.forceLogout = true;
+      if (forceLogout == undefined) {
+        forceLogout = true;
+      }
+
+      Shared.forceLogout = forceLogout;
 
       Shared.api
       .resource('Logout')

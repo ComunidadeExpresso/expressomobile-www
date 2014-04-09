@@ -31,6 +31,7 @@ define([
       'Login' : 'loginView',
       'AutomaticLogin': 'automaticLoginView',
       'Offline' : 'offlineView',
+      'Switch/*accountName' : 'switchAccount',
       'Mail/CleanTrash/*PfolderID' : 'cleanTrashView',
       'Mail/AddFolder/*PfolderID' : 'newFolderView',
       'Mail/RenameFolder/*PfolderID' : 'renameFolderView',
@@ -75,6 +76,15 @@ define([
          
             var homeView = new HomeView();
             homeView.render();
+        });
+
+        app_router.on('route:switchAccount', function (PaccountName) {
+
+          Shared.forceAutomaticLoginInAccountName = PaccountName;
+
+          var loginView = new LoginView();
+          loginView.logoutUser(false);
+
         });
 
         app_router.on('route:newFolderView', function (PfolderID) {
@@ -186,7 +196,7 @@ define([
 
             });
 
-            if ((Shared.api.auth()) || (Shared.gotoRoute != false)) {
+            if ((Shared.api.auth())) {
               app_router.navigate("Home",{ trigger: true });
             } else {
               app_router.navigate("Login",{ trigger: true });

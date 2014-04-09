@@ -13,7 +13,9 @@ define([
     render: function(){
 
       if (Shared.menuView) {
-        Shared.menuView.renderContextMenu(0,[]); 
+        //if (Shared.newMessageIntent != true) {
+          Shared.menuView.renderContextMenu(0,[]); 
+        //}
       }
 
       var newData = {
