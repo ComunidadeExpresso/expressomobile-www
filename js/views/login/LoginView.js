@@ -133,6 +133,8 @@ define([
 
     loginUser: function(userName,passwd,serverURL) {
 
+      
+
       var isPhoneGap = Shared.api.phoneGap();
 
       if (isPhoneGap) {
@@ -227,14 +229,11 @@ define([
             window.plugins.webintent.createAccount({accountName : userName, accountPassword: passwd, accountAuthToken: Shared.api.auth(), accountAPIURL: serverURL}, 
              function(result) {
 
-                
              }, function(error) {
                 alert(error);
              });
           }
           
-          
-
           var homeView = new HomeView();
           homeView.profile = result.profile[0];
           homeView.render();
@@ -248,8 +247,6 @@ define([
             elementID: "#pageMessage",
           });
 
-          //Shared.router.navigate('Home',{trigger: true});
-                  
           return false;
         })
         .fail(function(result){
@@ -265,13 +262,22 @@ define([
               elementID: "#pageMessage",
             });
 
-            setTimeout(function() {
-
-              Shared.router.navigate('',{trigger: true});
-
-            },2000);
-
+          } else {
+            Shared.showMessage({
+              type: "error",
+              icon: 'icon-expresso',
+              title: "Não foi possível efetuar o Login!",
+              description: "",
+              timeout: 0,
+              elementID: "#pageMessage",
+            });
           }
+
+          setTimeout(function() {
+
+            Shared.router.navigate('',{trigger: true});
+
+          },2000);
 
           return false;
         })

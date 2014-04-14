@@ -1050,21 +1050,21 @@ body div #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-dat
   padding-left: 5px;
   padding-right: 5px;
   margin-right: 5px;
-  font-size: 16px;
-  line-height: 30px;
-  color: #EFEFEF; 
-  border: 1px solid #CCCCCC; 
-  background-color: #3a87ad; 
+  font-size: 12px;
+  line-height: 20px;
+  color: #000; 
+  border: 1px solid #3a87ad; 
+  background-color: #EFEFEF; 
   border-radius: 5px 5px 5px 5px; 
 }
 
 
 /** Mensagens - Detalhes da Mensagem **/
 body div #page .main table#messageDetails { width: 100%; font-size: 16px; border-spacing: 0; margin-top: 1px; }
-body div #page .main table#messageDetails tr.detailRow { height: 60px; }
-body div #page .main table#messageDetails tr td.detailCol { border-bottom: 1px solid #CCCCCC; border-top: 1px #FFF solid; min-height: 60px; }
+body div #page .main table#messageDetails tr.detailRow { height: 40px; }
+body div #page .main table#messageDetails tr td.detailCol { border-bottom: 1px solid #CCCCCC; border-top: 1px #FFF solid; min-height: 30px; font-size: 14px; }
 body div #page .main table#messageDetails tr td.item { border-left: 8px solid #3A87AD; color: #3A87AD; width: 50px; font-weight: bold; text-align: left; padding-left: 5px; }
-body div #page .main table#messageDetails tr td.description { padding: 12px; color: #777777; font-size: 14px;}
+body div #page .main table#messageDetails tr td.description { padding: 0px; padding-left: 10px; color: #777777; font-size: 14px;}
 body div #page .main table#messageDetails tr td.descriptionCompose { padding: 0px; color: #777777; font-size: 14px;}
 body div #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3A87AD; padding-left: 5px; }
 
@@ -1132,10 +1132,10 @@ body div #page .main table#messageDetails tr td.itemBody { border-left: 8px soli
   margin-bottom: 15px;
   text-align: left;
 }
-/*
-.attachmentImage {
 
-}*/
+.attachmentImage {
+  height: 100px;
+}
 
 .drop_zone {
   margin: 10px;
@@ -1415,11 +1415,9 @@ body div #page .main table#messageDetails tr td.itemBody { border-left: 8px soli
 }
  
 .attachment-arquivo-background:hover {
-  -webkit-transform: rotate(-10deg);
-     -moz-transform: rotate(-10deg);
-       -o-transform: rotate(-10deg);
-      -ms-transform: rotate(-10deg);
-          transform: rotate(-10deg);
+  -ms-transform: scale(1.1); /* IE 9 */
+  -webkit-transform: scale(1.1); /* Chrome, Safari, Opera */
+  transform: scale(1.1);
 }
 
  

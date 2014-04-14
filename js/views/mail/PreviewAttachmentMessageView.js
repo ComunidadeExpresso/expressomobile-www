@@ -100,7 +100,6 @@ define([
 
       if  ( ((this.previewType == 'compose') && (this.fileType == 'binary')) ||  (this.fileData == '') ) {
 
-      // if (Shared.isDesktop()) {
 
         switch(fileExtension)
           {
@@ -111,9 +110,9 @@ define([
             retVal = true;
             break;
           }
-      // }
 
-      }
+      } 
+
 
       return retVal;
     },
@@ -125,7 +124,7 @@ define([
         var imageID = "attachment_image_" + this.fileID;
 
         var div = $("<div />").attr("style","position: relative; overflow: hidden; height: 100%;").addClass("grow");
-        var img = $("<img />").attr("style","position: relative; left: 0px;").addClass("attachmentImage");
+        var img = $("<img />").attr("style","position: relative; left: 0px; height: 150px;").addClass("attachmentImage");
 
         img.attr("id",imageID);
 
@@ -136,12 +135,12 @@ define([
 
         $("#attach_" + this.fileID).removeClass("attachment-arquivo-background");
 
+
         var width = $("#" + imageID).width();
 
         var margin = 0;
 
-        //alert(width);
-
+        
         if (width < 160) {
           margin = (160 - width) / 2;
         } else if (width > 160) {
@@ -238,8 +237,6 @@ define([
         break;
       }
 
-      console.log(fileType);
-
       var blob = new Blob([result], {type: fileType});
 
       var link = document.createElement('a');
@@ -271,6 +268,9 @@ define([
 
           switch(fileExtension)
           {
+          case "jpg":
+            fileType = "image/*";
+            break;
           case "png":
             fileType = "image/*";
             break;
@@ -292,6 +292,16 @@ define([
           alert(error);
        });
     
+    },
+
+    downloadPhonegapIOS: function(params,result) {
+
+      var fileName = params.attachmentName; 
+      var base64 = this.base64ArrayBuffer(result);
+      this.showImage(base64);
+
+      ExternalFileUtil.openWith( fileName, "" , base64 , function(message) { }, function(message) { alert(message); } );
+
     },
 
     getFileData: function(callBack) {
@@ -323,10 +333,14 @@ define([
 
       this.getFileData(function(params,result) {
 
-        if (Shared.isPhonegap()) {
+        if ((Shared.isPhonegap()) && (Shared.isAndroid())) {
           that.downloadPhonegap(params,result);
         } else {
-          that.downloadBrowser(params,result);
+          if ((Shared.isPhonegap()) && (Shared.isIDevice())) {
+            that.downloadPhonegapIOS(params,result);
+          } else {
+            that.downloadBrowser(params,result);
+          }
         }
 
       });
@@ -337,6 +351,7 @@ define([
 
       var that = this; 
 
+
       if ((this.previewType != 'compose') || (this.forceDownloadFile != false))  {
 
         this.getFileData(function(params,result) {
@@ -345,7 +360,6 @@ define([
         });
 
       } else {
-       // if (this.fileType == 'binary') {
 
           var reader = new FileReader();
           reader.fileName = that.fileName;
@@ -372,7 +386,6 @@ define([
 
           reader.readAsArrayBuffer(that.fileData);
 
-       // }
       }
 
     },
