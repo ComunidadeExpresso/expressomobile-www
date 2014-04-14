@@ -13,36 +13,7 @@ define([
 
   //USE THIS IF YOU WANT TO SET THIS VERSION AS BETA FOR YOUR USERS.
   Shared.betaVersion = false;
-  Shared.betaTesters = ["born",
-                        "cmarin",
-                        "sergior",
-                        "ioquir",
-                        "alexandrecorreia",
-                        "fpcorrea",
-                        "asaikawa",
-                        "rogeriosw",
-                        "rodsouza",
-                        "pereira.jair",
-                        "bherides",
-                        "rafaelgobara",
-                        "alexandrerw",
-                        "galiano",
-                        "joseroza",
-                        "alanzari",
-                        "dalmirmachado",
-                        "dittrich",
-                        "viani",
-                        "bonato",
-                        "dscalet",
-                        "projetomobile",
-                        "teste.ios",
-                        "iwersen",
-                        "carlosr",
-                        "jussaracarniere",
-                        "asmaniotto",
-                        "robson",
-                        "alexandrepereira",
-                        "gilsonsantos"];
+  Shared.betaTesters = [];
 
   //USE THIS IF YOU WANT TO TEMPORARIALY DISPLAY AN OUT OF SERVICE PAGE.
   Shared.versionIsActive = true;
@@ -516,7 +487,6 @@ document.addEventListener('deviceready', function () {
 
   Shared.api.phoneGap(true);
   Shared.api.android(Shared.isAndroid());
-
 
 
   if (Shared.isAndroid()) {
