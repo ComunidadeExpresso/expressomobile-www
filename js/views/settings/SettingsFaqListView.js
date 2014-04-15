@@ -8,19 +8,23 @@ define([
 
   var SettingsFaqListView = Backbone.View.extend({
 
-    el: $("#content"),
+    elementID: "#content",
 
     render: function(){
 
       var that = this;
 
       var newData = {
-          _: _ 
+          _: _ ,
+          elementID: this.elementID
       };
 
       var compiledTemplate = _.template( settingsFaqListTemplate, newData );
 
-      that.$el.html( compiledTemplate ); 
+      this.$el.html(compiledTemplate);
+      this.$el.css("width","100%");
+      this.$el.css("height","100%");
+      $(this.elementID).empty().append(this.$el);
 
       that.loaded();
 
@@ -30,7 +34,19 @@ define([
     {
       Shared.scrollDetail = new iScroll('wrapperDetail');
 
-    }
+    },
+
+    events: {
+      'click #btn-back' : 'backButton',
+    },
+
+    backButton: function(e) {
+      if (e != undefined) {
+        e.preventDefault();
+      }
+      Shared.router.navigate("/",{ trigger: true });
+    },
+
   });
 
   return SettingsFaqListView;

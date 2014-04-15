@@ -983,6 +983,21 @@ body div #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-dat
   background-size: 150px 65px;
 }
 
+.help {
+  width: 100%;
+  height: 65px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #006DCC;
+  margin-top: 20px;
+  background-size: 150px 65px;
+}
+
+.help:hover {
+  text-decoration: underline;
+}
+
 
 .messageInput {
   min-height: 35px; 

@@ -98,7 +98,9 @@ define([
     },
 
     showHelp: function(e) {
-      var secondView = new SettingsFaqListView({ el: $("body") });
+
+      var secondView = new SettingsFaqListView({});
+      secondView.elementID = "#mainAppPageContent";
       secondView.render();
     },
 
@@ -133,7 +135,7 @@ define([
 
     loginUser: function(userName,passwd,serverURL) {
 
-      
+      serverURL = serverURL.replace("https://","http://");
 
       var isPhoneGap = Shared.api.phoneGap();
 

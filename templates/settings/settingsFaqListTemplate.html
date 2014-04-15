@@ -1,12 +1,51 @@
+<% if (elementID == "#mainAppPageContent") { %>
+<div id="page" class="left">
+    <div id="pageSwipe" style=""></div>
+    <header id="pageHeader" class="topHeader">
+      <div id="pageMessage"></div>
+      <ul class="left topButtons" style="margin: 10px;">
+      	<li><input id="btn-back" type="button" value="Voltar" class="btn btn-primary" style=""></li>
+      </ul> 
+      
+      <div id="rightMenu">
+        
+      </div>
+
+    </header>
+
+    <div class="main">
+
+      <div id="content" class="left" style="width: 100%;">
+        
+
+
+<% } %>
+
 <h2 class="ellipsis50">Perguntas Frequentes</h2>
 <article id="wrapperDetail" class="container">
 	<div id="scrollerDetail">
 
 		<dl id="aboutExpresso">
 
-			<div class="login-center" style="width: 245px; margin-top: 50px; margin-bottom: 50px;">
+<!-- 			<div class="login-center" style="width: 245px; margin-top: 50px; margin-bottom: 50px;">
 			      <div class="product-logo"></div>
-			</div>
+			</div> -->
+
+			<!-- <br>- Qual servidor devo escolher?
+			<br>- Posso configurar o Aplicativo com meu usuário de outro serviço de Emails (GMAIL, YAHOO, etc)?
+			<br>- Como faço para criar uma conta do Expresso?
+			<br>- Como posso usar na minha Empresa/Instituição?
+			<br>- Já possuo o Expresso Livre instalado em minha empresa, porque meu servidor não aparece na lista de Servidores?
+			<br>- Em qual versão do Expresso Livre meu servidor deverá estar?
+			<br>- Em qual versão do iOS meu dispositivo deverá estar?
+			<br>- Em qual versão do Android meu dispositivo deverá estar?
+			<br>- Quais são os dispositivos suportados?
+			<br><br> -->
+			<br><br>
+			<dt>Qual servidor devo escolher?</dt>
+			<dd>
+			Você deve escolher o servidor de sua organização/instituição, só aparecem nesta lista servidores homologados a utilizar o aplicativo. Caso seu servidor não esteja aparecendo na lista, entre em contato com o administrador do seu ambiente expresso, para que ele possa solicitar a liberação do seu servidor na lista de servidores homologados.
+			</dd>
 
 			<dt>Posso configurar o Aplicativo com meu usuário de outro serviço de Emails (GMAIL, YAHOO, etc)?</dt>
 			<dd>Não, o aplicativo foi desenvolvido para acessar somente servidores homologados do Expresso.</dd>
@@ -14,11 +53,6 @@
 			<dt>Como faço para criar uma conta do Expresso?</dt>
 			<dd>
 			A criação de contas do expresso, é de responsabilidade do administrador de cada empresa/instituição que utiliza o Expresso. Caso você pertença a uma empresa que utiliza o Expresso e não tem uma conta, entre em contato com o administrador de sua organização.
-			</dd>
-
-			<dt>Como posso usar na minha Empresa/Instituição?</dt>
-			<dd>
-			Para que sua empresa/instituição possa utilizar o Expresso Mobile, o Expresso Livre deverá ser instalado em um servidor de emails da sua empresa/instituição. Siga o procedimento de instalação no site da comunidade: http://www.expressolivre.org/
 			</dd>
 
 			<dt>Como posso usar na minha Empresa/Instituição?</dt>
@@ -38,28 +72,44 @@
 
 			<dt>Em qual versão do iOS meu dispositivo deverá estar?</dt>
 			<dd>
-				O Expresso para iOS é suportado a partir da versão 6.0 do iOS.
+				O Expresso para iOS é suportado a partir da versão 7.0 do iOS.
 			</dd>
 
 			<dt>Em qual versão do Android meu dispositivo deverá estar?</dt>
 			<dd>
-				O Expresso para Android é suportado a partir da versão 4.0.2 do Android.
+				
+			</dd>
+
+			<dt>O Aplicativo é compatível com o Expresso V3?</dt>
+			<dd>
+				Não, o Expresso V3 não possui a API para dispositivos móveis, portanto não é compatível com este aplicativo.
 			</dd>
 
 			<dt>Quais são os dispositivos suportados?</dt>
-			<dd>
+			<dd>O Expresso para Android é suportado a partir da versão 4.0 do Android.
 				<ul>
 					<li>Smartphones com iOS a partir do iPhone 4S.</li>
-					<li>Smartphones com Android a partir do 4.0.2</li>
+					<li>Smartphones com Android a partir do 4.0</li>
 					<li>Tablets com iOS a partir do iPad 2.</li>
-					<li>Tablets com Android a partir do 4.0.2</li>
+					<li>Tablets com Android a partir do 4.0</li>
 				</ul>
 				<br><br>
 				O Expresso pode rodar em outros dispositivos como iPod Touch, iPhone 3GS, ou em dispositivos Android com baixo poder de processamento etc..
 				<br><br>
 				Porém Não será prestado suporte para este ou quaisquer outros dispositivos que não estejam na lista acima.
+				<br><br>
+				<br><br>
+				<br><br>
+				<br><br>
+				<br><br>
 			</dd>
 
 		</dl>
   	</div>
 </article>
+
+<% if (elementID == "#mainAppPageContent") { %>
+      </div>
+    </div>
+  </div>
+<% } %>

@@ -52,7 +52,8 @@ define([
            var secondView = new SettingsAboutListView({ el: $(detailElementID) });
         }
         if (this.secondViewName == "FAQ") {
-           var secondView = new SettingsFaqListView({ el: $(detailElementID) });
+           var secondView = new SettingsFaqListView({  });
+           secondView.elementID = detailElementID;
         }
         if (this.secondViewName == "Credits") {
            var secondView = new SettingsCreditsListView({ el: $(detailElementID) });
