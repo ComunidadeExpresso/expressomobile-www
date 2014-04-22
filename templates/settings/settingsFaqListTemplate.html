@@ -44,30 +44,25 @@
 			<br><br>
 			<dt>Qual servidor devo escolher?</dt>
 			<dd>
-			Você deve escolher o servidor de sua organização/instituição, só aparecem nesta lista servidores homologados a utilizar o aplicativo. Caso seu servidor não esteja aparecendo na lista, entre em contato com o administrador do seu ambiente expresso, para que ele possa solicitar a liberação do seu servidor na lista de servidores homologados.
+			Você deve escolher o servidor de sua organização/instituição. Somente aparecem nesta lista servidores homologados a utilizar o aplicativo. Caso seu servidor não esteja sendo exibido na lista, entre em contato com o administrador do seu ambiente expresso, para que ele possa solicitar a liberação do seu servidor na lista de servidores homologados.
 			</dd>
 
-			<dt>Posso configurar o Aplicativo com meu usuário de outro serviço de Emails (GMAIL, YAHOO, etc)?</dt>
+			<dt>Posso configurar o aplicativo com meu usuário de outro serviço de Emails (GMAIL, YAHOO, etc)?</dt>
 			<dd>Não, o aplicativo foi desenvolvido para acessar somente servidores homologados do Expresso.</dd>
 
 			<dt>Como faço para criar uma conta do Expresso?</dt>
 			<dd>
-			A criação de contas do expresso, é de responsabilidade do administrador de cada empresa/instituição que utiliza o Expresso. Caso você pertença a uma empresa que utiliza o Expresso e não tem uma conta, entre em contato com o administrador de sua organização.
+			A criação de contas do expresso é responsabilidade do administrador de cada empresa/instituição que utiliza o Expresso. Caso você pertença a uma empresa que utiliza o Expresso e não tem uma conta, entre em contato com o administrador de sua organização.
 			</dd>
 
 			<dt>Como posso usar na minha Empresa/Instituição?</dt>
 			<dd>
-			Para que sua empresa/instituição possa utilizar o Expresso Mobile, o Expresso Livre deverá ser instalado em um servidor de emails da sua empresa/instituição. Siga o procedimento de instalação no site da comunidade: http://www.expressolivre.org/
+			Para que sua empresa/instituição possa utilizar o Expresso Mobile, o Expresso Livre deverá ser instalado em um servidor de emails da sua empresa/instituição. Siga o procedimento de instalação no site da comunidade: http://www.expressolivre.org/
 			</dd>
 
-			<dt>Já possuo o Expresso Livre instalado em minha empresa, porque meu servidor não aparece na lista de Servidores?</dt>
+			<dt>Já possuo o Expresso Livre instalado em minha empresa. Porque meu servidor não aparece na lista de Servidores?</dt>
 			<dd>
-			Para que você possa usar este aplicativo em sua empresa/instituição, Foi desenvolvido um módulo para o Expresso Livre que deverá estar instalado na sua instalação do expresso, ele precisa estar rodando a versão 2.5 ou superior e ser homologada/autorizada pelos administradores da comunidade expresso, somente então seu servidor será cadastrado para aparecer na lista de servidores. Caso você já possua este módulo instalado em seu ambiente clique aqui e entre em contato solicitando a liberação do seu servidor.
-			</dd>
-
-			<dt>Em qual versão do Expresso Livre meu servidor deverá estar?</dt>
-			<dd>
-				O Módulo responsável pela comunicação com o aplicativo mobile está disponível para a versão 2.5 do Expresso, portanto seu servidor deverá estar rodando esta versão ou superior.
+			Para que você possa usar este aplicativo em sua empresa/instituição, Foi desenvolvido um módulo para o Expresso Livre que deverá ser adicionado à sua instalação do Expresso. Esse módulo deve ser homologado/autorizado pelos administradores da comunidade Expresso. Somente após essa autorização seu servidor será cadastrado para aparecer na lista de servidores. Caso você já possua este módulo instalado em seu ambiente clique aqui e entre em contato solicitando a liberação do seu servidor.
 			</dd>
 
 			<dt>Em qual versão do iOS meu dispositivo deverá estar?</dt>
@@ -77,7 +72,7 @@
 
 			<dt>Em qual versão do Android meu dispositivo deverá estar?</dt>
 			<dd>
-				
+				O Expresso para Android é homologado para a versão 4.0 ou superior do Android.
 			</dd>
 
 			<dt>O Aplicativo é compatível com o Expresso V3?</dt>
@@ -85,18 +80,21 @@
 				Não, o Expresso V3 não possui a API para dispositivos móveis, portanto não é compatível com este aplicativo.
 			</dd>
 
+			<% if (Shared.isIDevice()) { %>
+			<dt>Porque não recebo notificações de novos emails? (NOTIFICAÇÕES POR PUSH)</dt>
+			<dd>
+				As notificações de email ocorrem por um processo chamado de "Notificações por Push", e devido a algumas restrições da Apple o Expresso ainda não possui notificações por Push.<br>Obs: Nós entendemos que esta é uma funcionalidade essencial, e assim que estas restrições não existirem mais implementaremos essa funcionalidade.
+			</dd>
+			<% } %>
+
 			<dt>Quais são os dispositivos suportados?</dt>
-			<dd>O Expresso para Android é suportado a partir da versão 4.0 do Android.
+			<dd>
 				<ul>
 					<li>Smartphones com iOS a partir do iPhone 4S.</li>
 					<li>Smartphones com Android a partir do 4.0</li>
 					<li>Tablets com iOS a partir do iPad 2.</li>
 					<li>Tablets com Android a partir do 4.0</li>
 				</ul>
-				<br><br>
-				O Expresso pode rodar em outros dispositivos como iPod Touch, iPhone 3GS, ou em dispositivos Android com baixo poder de processamento etc..
-				<br><br>
-				Porém Não será prestado suporte para este ou quaisquer outros dispositivos que não estejam na lista acima.
 				<br><br>
 				<br><br>
 				<br><br>

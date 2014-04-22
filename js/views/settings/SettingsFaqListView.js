@@ -16,7 +16,8 @@ define([
 
       var newData = {
           _: _ ,
-          elementID: this.elementID
+          elementID: this.elementID,
+          Shared: Shared
       };
 
       var compiledTemplate = _.template( settingsFaqListTemplate, newData );
