@@ -3,7 +3,7 @@ body { background-color: #F1F1F1; margin-top: 20px; }
 body #menu { margin-top: -75px; }
 
 .product-logo-menu {
-	margin-top: 20px;
+	margin-top: 0px;
 }
 
 body #page .topHeader { position: absolute; height: 53px; width: 100%; top: -53px; background: url("../imgs/icon.png") no-repeat scroll center center #F1F1F1; border-bottom: 1px solid #E5E5E5; box-shadow: 0 0px 0px #FFF; }

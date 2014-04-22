@@ -135,8 +135,6 @@ define([
 
     loginUser: function(userName,passwd,serverURL) {
 
-      serverURL = serverURL.replace("https://","http://");
-
       var isPhoneGap = Shared.api.phoneGap();
 
       if (isPhoneGap) {

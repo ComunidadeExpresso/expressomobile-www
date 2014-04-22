@@ -29,6 +29,8 @@ define([
 
   Shared.context = "/api/";
 
+  Shared.ComunityServerURL = "http://api.expressolivre.org/";
+
   Shared.settings = {};
 
   Shared.settings.resultsPerPage = 25;
@@ -62,7 +64,7 @@ define([
   Shared.max_upload_file_size = 10240; //IN KBYTES
 
   //MAXIMUM QUANTITY OF FILES IN EVERY MESSAGE.
-  Shared.max_upload_file_qtd = 20; //
+  Shared.max_upload_file_qtd = 20; 
 
 
   //MENSAGE THAT IT'S BEING COMPOSED.
@@ -70,6 +72,8 @@ define([
 
   Shared.automaticLoginAccounts = { accounts: [] };
   Shared.forceAutomaticLoginInAccountName = false;
+
+  Shared.disabledModules = ["chat"];
 
 
   //CHECKS IF THE DEVICE IS AN SMARTPHONE OR AN TABLET RESOLUTION
@@ -444,6 +448,12 @@ define([
       if ((module == 'calendar') || (module == 'chat')) {
         retVal = false;
       }
+    }
+    for (var i = 0; i < Shared.disabledModules.length; i++) {
+      if (module == Shared.disabledModules[i]) {
+        retVal = false;
+      }
+
     }
     return retVal;
     

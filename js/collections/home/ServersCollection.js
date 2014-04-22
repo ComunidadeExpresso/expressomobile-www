@@ -35,7 +35,7 @@ define([
 
       var isPhoneGap = Shared.api.phoneGap();
 
-        var serverURL = "http://expressolivre.org/api/rest/";
+        var serverURL = Shared.ComunityServerURL;
 
           if (isPhoneGap) {
             Shared.api.context(serverURL).crossdomain(serverURL);
