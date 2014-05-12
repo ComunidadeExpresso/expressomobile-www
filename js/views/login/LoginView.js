@@ -29,6 +29,7 @@ define([
 
         var newData = {
           servers: data.models,
+          Shared: Shared,
           _: _
         }
 

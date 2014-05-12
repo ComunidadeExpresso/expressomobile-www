@@ -24,6 +24,7 @@
 </form>
 <div class="login-center" style="width: 245px; margin-top: 20px;">
       <div class="company-logo"></div>
-
-      <div id="helpLink" class="help">? Ajuda/Perguntas Frequentes</div>
+      <% if (Shared.isPhonegap()) { %>
+            <div id="helpLink" class="help">? Ajuda/Perguntas Frequentes</div>
+      <% } %>
 </div>
