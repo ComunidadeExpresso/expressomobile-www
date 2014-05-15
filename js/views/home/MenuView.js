@@ -16,7 +16,6 @@ define([
   var MenuView = Backbone.View.extend({
     el: $("#scrollerMenu"),
 
-    menuOpen: false,
     profile: null,
     context: null,
     folderMenuLV: null,
@@ -175,7 +174,7 @@ define([
     },
 
     toggleMenu: function () {
-      if (this.menuOpen) {
+      if (Shared.menuOpen) {
         this.closeMenu();
       } else {
         this.openMenu();
@@ -186,7 +185,7 @@ define([
 
     openMenu: function()
     {
-      this.menuOpen = true;
+      Shared.menuOpen = true;
       var winWidth = $(window).width();
       var menuButtonWidth = $('.top .menu').width();
       var propWidth = Math.ceil(winWidth * 30 / 100);
@@ -210,7 +209,7 @@ define([
 
     closeMenu: function()
     {
-      this.menuOpen = false;
+      Shared.menuOpen = false;
       $('#menu').removeClass('expanded').removeAttr('style');
       $('#page').removeAttr('style');
       $('#page').css('margin-left', '0');
