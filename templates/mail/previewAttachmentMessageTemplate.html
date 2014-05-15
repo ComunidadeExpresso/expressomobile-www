@@ -1,11 +1,16 @@
 <div id="attach_<%=fileID%>" class="attachment<% if (fileType != 'base64') { %> attachment-arquivo-background <% } %>">
     <div id="preview_<%=fileID%>" class="attachmentPreview">&nbsp;</div>
     <div class="attachmentTitle">
+      <% if (!( (Shared.isIDevice()) && (!Shared.isPhonegap()) &&  (previewType != 'compose')) ) { %>
       <a id="attachLink_<%=fileID%>" href="#" class="<% if (previewType == 'compose') { %>deleteAttachmentLink<% } else { if (Shared.isDesktop()) { %>downloadAttachmentLink<% } else { %>touchDownloadAttachmentLink<% } } %>">
         <div class="<% if (previewType == 'compose') { %>deleteAttachment<% } else { %>downloadAttachment<% } %>"></div>
         <div class="fileSize"><%=Shared.bytesToSize(fileSize,0)%></div>
         <div class="fileName"><%=fileName%></div>
       </a>
+      <% } else { %>
+        <div class="fileSize"><%=Shared.bytesToSize(fileSize,0)%></div>
+        <div class="fileName"><%=fileName%></div>
+      <% } %>
     </div>
     <% if (fileType == "base64") { %>
       <div style="position: relative; overflow: hidden;">
