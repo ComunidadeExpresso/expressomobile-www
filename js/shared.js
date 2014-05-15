@@ -75,6 +75,8 @@ define([
 
   Shared.disabledModules = ["chat"];
 
+  Shared.menuOpen = false;
+
 
   //CHECKS IF THE DEVICE IS AN SMARTPHONE OR AN TABLET RESOLUTION
   Shared.isTabletResolution = function() {
@@ -326,7 +328,15 @@ define([
   Shared.scheduleCheckForNewMessages = function() {
     Shared.checkForNewMessages();
     setInterval(Shared.checkForNewMessages, 70000);
+
+    setInterval(Shared.refreshFolders, 3 * 60000);
   };
+
+  Shared.refreshFolders = function() {
+    if (Shared.userHasModule("mail")) {
+      Shared.menuView.refreshFolders();
+    }
+  }
 
   Shared.checkForNewMessages = function() {
     if (Shared.userHasModule("mail")) {
