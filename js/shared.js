@@ -73,7 +73,7 @@ define([
   Shared.automaticLoginAccounts = { accounts: [] };
   Shared.forceAutomaticLoginInAccountName = false;
 
-  Shared.disabledModules = ["chat"];
+  Shared.disabledModules = [];
 
   Shared.menuOpen = false;
 
