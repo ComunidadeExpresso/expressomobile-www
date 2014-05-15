@@ -203,52 +203,73 @@ define([
         .params({user:userName,password:passwd})
         .done(function(result){
 
-          var expressoValues = {
-            auth: Shared.api.auth(), 
-            "profile":result.profile[0],
-            username: userName, 
-            phoneGap: isPhoneGap,
-            serverAPI: serverURL
-          };
+          if (result.profile[0].contactApps.length != 0) {
 
-          Shared.password = passwd;
+              var expressoValues = {
+                auth: Shared.api.auth(), 
+                "profile":result.profile[0],
+                username: userName, 
+                phoneGap: isPhoneGap,
+                serverAPI: serverURL
+              };
 
-          Shared.profile = expressoValues.profile;
+              Shared.password = passwd;
 
-          Shared.api.setLocalStorageValue("expresso",expressoValues);
+              Shared.profile = expressoValues.profile;
 
-          if ((Shared.isAndroid()) && (Shared.isPhonegap())) {
+              Shared.api.setLocalStorageValue("expresso",expressoValues);
 
-            Shared.service.setConfig(serverURL,Shared.api.auth(),userName,passwd);
-            Shared.service.startService();
+              if ((Shared.isAndroid()) && (Shared.isPhonegap())) {
+
+                Shared.service.setConfig(serverURL,Shared.api.auth(),userName,passwd);
+                Shared.service.startService();
+                setTimeout(function() {
+                  Shared.service.setConfig(serverURL,Shared.api.auth(),userName,passwd);
+                  Shared.service.enableTimer();
+                },10000);
+
+
+                window.plugins.webintent.createAccount({accountName : userName, accountPassword: passwd, accountAuthToken: Shared.api.auth(), accountAPIURL: serverURL}, 
+                 function(result) {
+
+                 }, function(error) {
+                    alert(error);
+                 });
+              }
+              
+              var homeView = new HomeView();
+              homeView.profile = result.profile[0];
+              homeView.render();
+
+              Shared.showMessage({
+                type: "success",
+                icon: 'icon-expresso',
+                title: "Bem vindo ao Expresso!",
+                description: "",
+                timeout: 2000,
+                elementID: "#pageMessage",
+              });
+
+              return false;
+
+          } else {
+
+            Shared.showMessage({
+              type: "error",
+              icon: 'icon-expresso',
+              title: "Este usuário não possui acesso a nenhum módulo neste servidor!",
+              description: "",
+              timeout: 0,
+              elementID: "#pageMessage",
+            });
+
             setTimeout(function() {
-              Shared.service.setConfig(serverURL,Shared.api.auth(),userName,passwd);
-              Shared.service.enableTimer();
-            },10000);
 
+              Shared.router.navigate('',{trigger: true});
 
-            window.plugins.webintent.createAccount({accountName : userName, accountPassword: passwd, accountAuthToken: Shared.api.auth(), accountAPIURL: serverURL}, 
-             function(result) {
-
-             }, function(error) {
-                alert(error);
-             });
+            },2000);
           }
-          
-          var homeView = new HomeView();
-          homeView.profile = result.profile[0];
-          homeView.render();
 
-          Shared.showMessage({
-            type: "success",
-            icon: 'icon-expresso',
-            title: "Bem vindo ao Expresso!",
-            description: "",
-            timeout: 2000,
-            elementID: "#pageMessage",
-          });
-
-          return false;
         })
         .fail(function(result){
 
