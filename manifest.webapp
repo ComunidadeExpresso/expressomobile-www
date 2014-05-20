@@ -3,7 +3,7 @@
   "description": "Expresso Mobile",
   "launch_path": "/index.html",
   "icons": {
-    "128": "/img/app-icons/icon-128.png"
+    "128": "http://mobile.expressolivre.org/img/icon_logo.png"
   },
   "developer": {
     "name": "CELEPAR - Companhia de Tecnologia da Informação e Comunicação do Paraná",
