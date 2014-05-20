@@ -69,29 +69,28 @@ define([
             Shared.api.context(Shared.context).crossdomain(expressoValue.serverAPI);
           }
 
-          if (Shared.userHasModule("chat")) {
+        }
 
-            Shared.api.resource('Services/Chat').params({}).done(function(resultChat){
+        if (Shared.userHasModule("chat")) {
 
-              Shared.im_resource = resultChat.A;
-              Shared.im_url = resultChat.B;
-              Shared.im_domain = resultChat.C;
-              var im_userName = resultChat.D;
-              console.log(im_userName);
-              var im_password = resultChat.E + "==";
 
-              Shared.im.resource("EXPRESSO_MOBILE").url(Shared.im_url).domain(Shared.im_domain);
+          Shared.api.resource('Services/Chat').params({}).done(function(resultChat){
 
-              Shared.im
-              .username(im_userName)
-              .password(im_password)
-              .connect();
+            Shared.im_resource = resultChat.A;
+            Shared.im_url = resultChat.B;
+            Shared.im_domain = resultChat.C;
+            var im_userName = resultChat.D;
+            console.log(im_userName);
+            var im_password = resultChat.E + "==";
 
-            }).execute();
+            Shared.im.resource("EXPRESSO_MOBILE").url(Shared.im_url).domain(Shared.im_domain);
 
-            
-          }
+            Shared.im
+            .username(im_userName)
+            .password(im_password)
+            .connect();
 
+          }).execute();
 
         }
 
