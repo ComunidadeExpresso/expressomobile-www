@@ -80,7 +80,6 @@ define([
             Shared.im_url = resultChat.B;
             Shared.im_domain = resultChat.C;
             var im_userName = resultChat.D;
-            console.log(im_userName);
             var im_password = resultChat.E + "==";
 
             Shared.im.resource("EXPRESSO_MOBILE").url(Shared.im_url).domain(Shared.im_domain);
