@@ -47,6 +47,8 @@ define([
 
       Shared.im.addOnMessageListener(onMessageFunction);
       Shared.im.addOnComposingListener(onComposingFunction);
+      Shared.im.addOnErrorListener(Shared.onIMErrorFunction);
+      Shared.im.addOnDisconnectListener(Shared.onIMDisconnectFunction);
 
       Shared.menuView.setChatBadge(Shared.im.qtdUnreadMessages());
 

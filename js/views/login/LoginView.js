@@ -339,6 +339,8 @@ define([
 
       Shared.scrollMenu = null;
 
+      Shared.stopBlinkWindowTitle();
+
       Shared.api.getLocalStorageValue("expresso",function(expressoValue) {
 
         var isPhoneGap = Shared.api.phoneGap();

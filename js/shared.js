@@ -404,6 +404,76 @@ define([
     }
   };
 
+
+  Shared.windowTitle = "Expresso";
+  Shared.BlinkWindowTitle = function(title) {
+
+    if (Shared.isDesktop()) {
+
+      Shared.stopBlinkWindowTitle();
+      Shared.blinkTitleInterval = window.setInterval(function () {
+
+        var msg = '';
+
+        var qtd_chat = 0;
+        if (Shared.userHasModule("chat")) {
+          qtd_chat = Shared.im.qtdUnreadMessages();
+        }
+
+        var qtd_mail = 0;
+        if (Shared.userHasModule("mail")) {
+          qtd_mail = $("#badge_inbox").html();
+          if (qtd_mail.trim() == '') {
+            qtd_mail = 0;
+          }
+        }
+
+        var qtd_total = qtd_chat + qtd_mail;
+
+        var msg_mail = '';
+        if (qtd_mail != 0) {
+          var msg_mail =  qtd_mail + ' Emails';
+        }
+        if (qtd_mail == 1) {
+          msg_mail = qtd_mail + ' Email';
+        }
+
+        var msg_chat = '';
+
+        if (qtd_chat != 0) { 
+          msg_chat = qtd_chat + ' Msgs';
+        }
+        if (qtd_chat == 1) {
+          msg_chat = qtd_chat + ' Msg';
+        }
+
+        if (msg_mail != '') {
+          msg = msg_mail;
+        }
+        if (msg_chat != '') {
+          if (msg_mail != '') {
+            msg = msg_mail + " - " + msg_chat;
+          } else {
+            msg = msg_chat;
+          }
+          
+        }
+
+        if (qtd_total == 0) {
+          msg = Shared.windowTitle;
+        }
+
+          document.title = document.title === Shared.windowTitle ? msg : Shared.windowTitle;
+      }, 1000);
+
+    }
+  };
+
+  Shared.stopBlinkWindowTitle = function() {
+      window.clearInterval(Shared.blinkTitleInterval);
+      document.title = Shared.windowTitle;
+  };
+
   Shared.setDefaultIMListeners = function() {
 
     Shared.im.clearListeners();
@@ -418,10 +488,14 @@ define([
         title: message.body,
         description: message.jid,
         route: "/Chat/" + message.id,
+        timeout: 3000,
         elementID: "#pageMessage",
       }
 
+      var qtd_chat = Shared.im.qtdUnreadMessages();
+
       Shared.showMessage(message);
+
     };
 
     var onComposingFunction = function (message) { 
@@ -429,6 +503,54 @@ define([
     };
 
     Shared.im.addOnMessageListener(onMessageFunction);
+    Shared.im.addOnErrorListener(Shared.onIMErrorFunction);
+    Shared.im.addOnDisconnectListener(Shared.onIMDisconnectFunction);
+  };
+
+  Shared.onIMErrorFunction = function(error) {
+    console.log("Chat error");
+    console.log(error);
+    //console.log(error);
+    var message = {
+      type: "error",
+      icon: 'icon-jabber',
+      title: "Você foi desconectado do CHAT.",
+      description: "Provavelmente esta conta esteja logada em outro lugar...",
+      route: "",
+      elementID: "#pageMessage",
+    }
+
+    Shared.showMessage(message);
+  };
+
+  Shared.onIMDisconnectFunction = function (error) { 
+    console.log("Chat Disconnect");
+    //console.log(error);
+  };
+
+  Shared.chatReconnect = function() {
+    Shared.api.resource('Services/Chat').params({}).done(function(resultChat){
+
+      Shared.im = expressoIM;
+
+      Shared.im_resource = resultChat.A;
+      Shared.im_url = resultChat.B;
+      Shared.im_domain = resultChat.C;
+      var im_userName = resultChat.D;
+      var im_password = resultChat.E + "==";
+
+      Shared.im.resource("EXPRESSO_MOBILE").url(Shared.im_url).domain(Shared.im_domain);
+
+      var onConnectFunction = function() {
+        Shared.router.navigate("Chat",{ trigger: true });
+      };
+
+      Shared.im
+      .username(im_userName)
+      .password(im_password)
+      .connect(onConnectFunction);
+
+    }).execute();
   };
   
 
@@ -569,6 +691,10 @@ document.addEventListener('deviceready', function () {
 });
 
   var exitFunction = function(){
+
+    if (Shared.userHasModule("chat")) {
+      Shared.im.disconnect();
+    }
 
     window.location.href = "/";
     

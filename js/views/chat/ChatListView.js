@@ -34,12 +34,30 @@ define([
         if (message.id != that.secondViewName) {
           var contact = Shared.im.getContactsByID(message.id);
           that.setChatBadge(message.id,contact.qtdUnread);
+
+          if (message.jid != 'me') {
+
+            var pageMessage = {
+              type: "chat-message",
+              icon: 'icon-jabber',
+              title: message.body,
+              description: message.jid,
+              route: "/Chat/" + message.id,
+              timeout: 3000,
+              elementID: "#pageMessage",
+            }
+
+            Shared.showMessage(pageMessage);
+
+          }
+
         } else {
           that.setChatBadge(that.secondViewName,0);
           Shared.im.setAsSeenAllMessagesFromContact(that.secondViewName);
         }
         
         Shared.menuView.setChatBadge(Shared.im.qtdUnreadMessages());
+
       };
 
       var onPresenceFunction = function (message) { 
@@ -52,6 +70,8 @@ define([
         }, 1000, function() {
 
           element.remove();
+
+          $("#list_title_" + message.status).removeClass("hidden");
 
           $("#list_" + message.status).append(element);
           
@@ -71,8 +91,18 @@ define([
 
       };
 
+      var onErrorFunction = function() {
+
+        that.renderContactList();
+        $(detailElementID).html("");
+        
+      };
+
       Shared.im.addOnMessageListener(onMessageFunction);
       Shared.im.addOnPresenceListener(onPresenceFunction);
+      Shared.im.addOnErrorListener(Shared.onIMErrorFunction);
+      Shared.im.addOnDisconnectListener(Shared.onIMDisconnectFunction);
+      Shared.im.addOnErrorListener(onErrorFunction);
 
       if (this.secondViewName != null) {
 

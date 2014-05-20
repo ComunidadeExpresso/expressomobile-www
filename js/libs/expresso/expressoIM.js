@@ -21,6 +21,8 @@ define([
 
 		var _messages = {};
 
+		var _isConnected = false;
+
 		var _online_contacts = [];
 
 		var _offline_contacts = [];
@@ -66,7 +68,7 @@ define([
 		};
 
 		this.onComposing= function(message) {
-			if (_onComposingDelegate != '') {
+			if (_onComposingDelegate.length > 1) {
 				_onComposingDelegate(message);
 			}
 		};
@@ -140,7 +142,11 @@ define([
 		        if(value == array[i]) return true; 
 		    }
 		    return false; 
-		}; 
+		};
+
+		this.isConnected = function() { 
+			return _isConnected;
+		};
 
 		this.pushIfNotExist = function(array,value) { 
 		    if (!this.inArray(array,value)) {
@@ -182,19 +188,41 @@ define([
 
 
 		this.getAwayContacts = function() {
-			var new_arr = [];
+
+		    var new_arr = [];
 			var _arr = _away_contacts;
+
+			var sort_arr = [];
 			for(var i=0; i < _arr.length; i++) { 
-				new_arr.push(this.getContactsByID(_arr[i]));
+				var contact = this.getContactsByID(_arr[i]);
+				sort_arr[i] = contact.jid + ":" + _arr[i];
+		    }
+		    sort_arr.sort();
+			
+			for(var i=0; i < sort_arr.length; i++) { 
+
+				var splited = sort_arr[i].split(":");
+				new_arr.push(this.getContactsByID(splited[1]));
 		    }
 		    return new_arr;
+
 		};
 
 		this.getOfflineContacts = function() {
 			var new_arr = [];
 			var _arr = _offline_contacts;
+
+			var sort_arr = [];
 			for(var i=0; i < _arr.length; i++) { 
-				new_arr.push(this.getContactsByID(_arr[i]));
+				var contact = this.getContactsByID(_arr[i]);
+				sort_arr[i] = contact.jid + ":" + _arr[i];
+		    }
+		    sort_arr.sort();
+			
+			for(var i=0; i < sort_arr.length; i++) { 
+
+				var splited = sort_arr[i].split(":");
+				new_arr.push(this.getContactsByID(splited[1]));
 		    }
 		    return new_arr;
 		};
@@ -202,8 +230,17 @@ define([
 		this.getOnlineContacts = function() {
 			var new_arr = [];
 			var _arr = _online_contacts;
+
+			var sort_arr = [];
 			for(var i=0; i < _arr.length; i++) { 
-				new_arr.push(this.getContactsByID(_arr[i]));
+				var contact = this.getContactsByID(_arr[i]);
+				sort_arr[i] = contact.jid + ":" + _arr[i];
+		    }
+		    sort_arr.sort();
+
+			for(var i=0; i < sort_arr.length; i++) { 
+				var splited = sort_arr[i].split(":");
+				new_arr.push(this.getContactsByID(splited[1]));
 		    }
 		    return new_arr;
 		};
@@ -228,6 +265,8 @@ define([
 
 			_offline_contacts = this.removeFromArray(_offline_contacts,Pid);
 
+			_busy_contacts = this.removeFromArray(_busy_contacts,Pid);
+
 			_away_contacts = this.removeFromArray(_away_contacts,Pid);
 
 			if (status == "online") {
@@ -238,6 +277,9 @@ define([
 			}
 			if (status == "away") {
 				_away_contacts = this.pushIfNotExist(_away_contacts,Pid);
+			}
+			if (status == "busy") {
+				_busy_contacts = this.pushIfNotExist(_busy_contacts,Pid);
 			}
 		};
 
@@ -341,9 +383,19 @@ define([
 
 		};
 
+		this.disconnect = function() {
+			var callbackFunction = function() {
+
+			};
+
+			if($.xmpp){
+				$.xmpp.disconnect(callbackFunction);
+			}
+		};
 
 
-		this.connect = function() {
+
+		this.connect = function(connectionDelegate) {
 
 			var connection_options = {};
 			if($.xmpp){
@@ -351,18 +403,25 @@ define([
 				connection_options = {
 					"resource":_resource, "username":_username, "password":_password, "url":_url, "domain" : _domain,				
 					onDisconnect:function(){
-						//console.log"onDisconnect");
+						_isConnected = false;
+						that.executeListenersFromArray(_onDisconnectDelegate,[]);
 					},
 					onConnect: function(eas){
-						//console.log("onConnect");
+
+						_isConnected = true;
 						$.xmpp.getRoster();
 						$.xmpp.setPresence(null);
+
+						if (connectionDelegate != null) {
+							connectionDelegate();
+						}
+
 					},
 					onIq: function(iq){
-						//console.log"onIq");
+						//console.log("onIq");
 					},
 					onMessage: function(message){
-						//console.log"onMessage");
+						//console.log("onMessage");
 
 						message.from = message.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
 						var jid = message.from.split("/");
@@ -375,7 +434,7 @@ define([
 
 					},
 					onPresence: function(presence){
-						//console.log"onPresence");
+						//console.log("onPresence");
 
 						presence.from = presence.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
 						var md5_contact = MD5.hexdigest(presence.from);
@@ -394,13 +453,15 @@ define([
 
 					},
 					onError: function(error){
-						//console.log"onError");
-
+						//console.log(error);
+						_isConnected = false;
+						$.xmpp.listening = false;
+						$.xmpp.connected = false;
 						that.executeListenersFromArray(_onErrorDelegate,error);
 					},
 	   				onComposing: function(message)
 	   				{
-	   					//console.log"onComposing");
+	   					//console.log("onComposing");
 
 	   					message.from = message.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
 						var jid = message.from.split("/");

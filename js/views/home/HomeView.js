@@ -76,7 +76,7 @@ define([
               Shared.im_resource = resultChat.A;
               Shared.im_url = resultChat.B;
               Shared.im_domain = resultChat.C;
-              var im_userName = resultChat.D;
+              var im_userName = resultChat.D.toLowerCase();
               var im_password = resultChat.E + "==";
 
               Shared.im.resource("EXPRESSO_MOBILE").url(Shared.im_url).domain(Shared.im_domain);
@@ -108,6 +108,7 @@ define([
           that.menuView.render();
          
           Shared.setDefaultIMListeners();
+          Shared.BlinkWindowTitle();
 
           
            if (Shared.gotoRoute == false) {
@@ -296,6 +297,22 @@ define([
         $('body').height($(window).height() - top);
         $('#wrapper').css('top', top + search);
         $('#wrapperDetail').css('top', top + chat + searchDetail);
+
+        $('#scrollerDetail').css('width', $("#wrapperDetail").width() );
+
+        $.each($("#contentMessageBody img"), function() {
+
+          var max_width = $("#wrapperDetail").width();
+          max_width = max_width - 40;
+          var current_height = $(this).height();
+          var current_width = $(this).width();
+          var new_width = max_width;
+          var new_height = max_width * (current_height / current_width);
+          $("#contentMessageBody").width(max_width);
+          $(this).css("height",new_height);
+          $(this).css("width",new_width);
+
+        });
 
         Shared.scrollerRefresh();
         Shared.refreshDotDotDot();

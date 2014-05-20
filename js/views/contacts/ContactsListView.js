@@ -34,6 +34,8 @@ define([
 			this.$el.html(_.template(primaryContentTemplate));
 			$('#content').empty().append(this.$el);
 
+			Shared.setDefaultIMListeners();
+
 			if (!Shared.isSmartPhoneResolution())
 			{
 				$('#contentDetail').html(_.template(detailContentTemplate));
