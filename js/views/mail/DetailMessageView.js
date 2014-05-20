@@ -72,7 +72,30 @@ define([
 
           Shared.menuView.renderContextMenu('detailMessage',{folderID: that.folderID, msgID: that.msgID, folderType: folderType, qtdMessages: qtdMessages });
 
-          that.loaded();
+
+          setTimeout(function() {
+
+            $.each($("#contentMessageBody img"), function() {
+
+              var max_width = $("#wrapperDetail").width();
+              max_width = max_width - 40;
+              var current_height = $(this).height();
+              var current_width = $(this).width();
+              if (current_width > max_width) {
+                var new_width = max_width;
+                var new_height = max_width * (current_height / current_width);
+                $("#contentMessageBody").width(max_width);
+                $(this).css("max-width",max_width); 
+                $(this).css("height",new_height);
+                $(this).css("width",new_width);
+              }
+
+            });
+
+            that.loaded();
+
+          },500);
+          
 
         }).fail(function(result){
               
