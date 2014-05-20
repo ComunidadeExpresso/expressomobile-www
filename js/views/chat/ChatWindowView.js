@@ -108,7 +108,8 @@ define([
       $("#scrollerDetail").html( compiledMessagesTemplate );
 
       $('.myPicture').each(function() {
-        $(this).attr("src",$("#userPicture").attr("src"));
+        $(this).css("background-image",$("#userPicture").css("background-image"));
+        $(this).css("background-size","46px 61px");
       });
 
       this.scrollToLastMessage();
