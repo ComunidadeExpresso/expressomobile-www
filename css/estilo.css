@@ -94,7 +94,7 @@ body div #menu dl dd ul li a { height: 32px; color: #CCCCCC; text-decoration: no
 body div #menu dl dd ul#mainMenu { background-color: #333333; padding: 10px 0; border: 0px solid #333333; }
 body div #menu dl dd ul#mainMenu li.selected { background: transparent url('../imgs/seta.png') no-repeat right 16px; z-index: 1000; }
 body div #menu dl dd ul#mainMenu li.selected a { color: #EFEFEF; border: 1px solid #444444; background-color: #222222; border-radius: 5px 5px 5px 5px; }
-body div #menu dl dd ul#mainMenu li:hover a { color: #EFEFEF; border: 1px solid #444444; background-color: #444444; border-radius: 5px 5px 5px 5px; }
+body div #menu dl dd ul#mainMenu li:hover a { color: #EFEFEF; border: 0px solid #444444; background-color: #444444; border-radius: 5px 5px 5px 5px; }
 body div #menu dl dd ul#mainMenu li.selected:hover a { color: #EFEFEF; border: 1px solid #444444; background-color: #222222; border-radius: 5px 5px 5px 5px; }
 body div #menu dl dd ul#mainMenu li { border: 1px solid #333333; }
 body div #menu dl dd ul#mainMenu li a span { float: left; margin-left: 55px; height: 32px; line-height: 32px; vertical-align: top; }

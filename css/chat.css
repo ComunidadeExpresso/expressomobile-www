@@ -78,7 +78,7 @@
 ------------------------------------------ */
 
 .triangle-right.left {
-  margin-left:40px;
+  margin-left:20px;
   background:#5A8F00;
   max-width: 70%;
   margin-right: 0%;
@@ -90,7 +90,7 @@
 ------------------------------------------ */
 
 .triangle-right.right {
-  margin-right:40px;
+  margin-right:20px;
   background:#075698;
   max-width: 70%;
   margin-left: 0%;
@@ -132,9 +132,9 @@
 
 .triangle-right.left:after {
   top:16px; 
-  left:-40px; /* value = - border-left-width - border-right-width */
+  left:-20px; /* value = - border-left-width - border-right-width */
   bottom:auto;
-  border-width:15px 40px 0 0; /* vary these values to change the angle of the vertex */
+  border-width:15px 20px 0 0; /* vary these values to change the angle of the vertex */
   border-color:transparent #5A8F00; 
 }
 
@@ -143,10 +143,10 @@
 
 .triangle-right.right:after {
   top:16px; 
-  right:-40px; /* value = - border-left-width - border-right-width */
+  right:-20px; /* value = - border-left-width - border-right-width */
   bottom:auto;
     left:auto;
-  border-width:15px 0 0 40px; /* vary these values to change the angle of the vertex */
+  border-width:15px 0 0 20px; /* vary these values to change the angle of the vertex */
   border-color:transparent #075698 ; 
 }
 

@@ -86,6 +86,7 @@ define([
                 var new_height = max_width * (current_height / current_width);
                 $("#contentMessageBody").width(max_width);
                 $(this).css("max-width",max_width); 
+                $(this).css("max-height",current_height); 
                 $(this).css("height",new_height);
                 $(this).css("width",new_width);
               }
