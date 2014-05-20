@@ -21,8 +21,8 @@
 			<label for="eventDescription">Descri&ccedil;&atilde;o</label>
 			<textarea name="eventDescription" id="eventDescription" placeholder="Descri&ccedil;&atilde;o completa"><%= event.get('eventDescription') %></textarea>
 		</li>
-		<li class="itens">
-			<label for="eventCategoryID">Categoria *</label>
+		<li class="itens" <% if (eventCategories.length == 0) { %>style=" display: none; "<%}%>>
+			<label for="eventCategoryID">Categoria</label>
 
 			<% if (typeof(eventCategories) != 'undefined' && eventCategories.length > 0) 
 			{ 
