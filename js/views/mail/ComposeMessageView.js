@@ -79,13 +79,15 @@ define([
 
           var files = evt.dataTransfer.files; 
 
-          for (var i = 0, f; f = files[i]; i++) {
+          var fileID = Shared.currentDraftMessage.getQtdFiles();
 
-            var fileID = Shared.currentDraftMessage.getQtdFiles();
+          for (var i = 0, f; f = files[i]; i++) {
 
             that.prependAttachmentImage(fileID,f.name,f.size,'binary',files[i]);
 
             Shared.currentDraftMessage.addBinaryFile(fileID,escape(f.name),files[i]);
+
+            fileID = fileID + 1;
 
           }
 
