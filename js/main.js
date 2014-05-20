@@ -17,6 +17,7 @@ require.config({
     autocomplete: 'libs/jquery.backbone.widget/jquery.backbone.widgets',
     moment: 'libs/moment/moment.min',
     json2: 'libs/json/json2',
+    notifyjs: 'libs/notifyjs/notify',
     jqueryui_datepicker_ptBR: 'libs/jquery-ui/development-bundle/ui/i18n/jquery.ui.datepicker-pt-BR',
     templates: '../templates'
   },
@@ -44,7 +45,11 @@ require.config({
       },
       jqueryui_datepicker_ptBR: {
         deps: ['jquery', 'jqueryui']
-      }
+      },
+      notifyjs: {
+          deps: ['jquery'],
+          exports: 'Notify'
+      },
   }
 
 });
