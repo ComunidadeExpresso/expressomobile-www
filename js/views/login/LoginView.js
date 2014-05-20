@@ -124,7 +124,7 @@ define([
     },
 
     login: function(ev) {
-      var userName = $("#username").val();
+      var userName = $("#username").val().toLowerCase();
       var passwd = $("#password").val();
 
       var serverURL = $("#serverURL").val();
