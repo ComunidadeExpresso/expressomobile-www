@@ -243,7 +243,7 @@ define([
 					title: 'Evento excluído com sucesso.',
 					description: '',
 					timeout: 3000,
-					elementID: Shared.isSmartPhoneResolution() ? '#message' : '#messageDetail',
+					elementID: '#pageMessage',
 				});
 			}
 		},

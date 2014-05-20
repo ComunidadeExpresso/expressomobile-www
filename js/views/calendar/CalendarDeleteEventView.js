@@ -27,8 +27,7 @@ define([
 
 			var callbackSuccess = function (data)
 			{
-				self.deleteEvent()
-				Shared.router.navigate('/Calendar/' + this.year + '/' + this.month + '/' + this.day + '/OK', {trigger: true});
+				Shared.router.navigate('/Calendar/' + self.year + '/' + self.month + '/' + self.day + '/OK', {trigger: true});
 			}
 
 			var callbackFail = function (error)
