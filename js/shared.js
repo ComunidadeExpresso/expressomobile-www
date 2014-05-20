@@ -508,9 +508,7 @@ define([
   };
 
   Shared.onIMErrorFunction = function(error) {
-    console.log("Chat error");
-    console.log(error);
-    //console.log(error);
+
     var message = {
       type: "error",
       icon: 'icon-jabber',
@@ -524,8 +522,7 @@ define([
   };
 
   Shared.onIMDisconnectFunction = function (error) { 
-    console.log("Chat Disconnect");
-    //console.log(error);
+
   };
 
   Shared.chatReconnect = function() {

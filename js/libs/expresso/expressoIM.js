@@ -418,10 +418,9 @@ define([
 
 					},
 					onIq: function(iq){
-						//console.log("onIq");
+
 					},
 					onMessage: function(message){
-						//console.log("onMessage");
 
 						message.from = message.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
 						var jid = message.from.split("/");
@@ -434,7 +433,6 @@ define([
 
 					},
 					onPresence: function(presence){
-						//console.log("onPresence");
 
 						presence.from = presence.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
 						var md5_contact = MD5.hexdigest(presence.from);
@@ -453,7 +451,7 @@ define([
 
 					},
 					onError: function(error){
-						//console.log(error);
+
 						_isConnected = false;
 						$.xmpp.listening = false;
 						$.xmpp.connected = false;
@@ -461,7 +459,7 @@ define([
 					},
 	   				onComposing: function(message)
 	   				{
-	   					//console.log("onComposing");
+
 
 	   					message.from = message.from.match(/^[\w\W][^\/]+[^\/]/g)[0];
 						var jid = message.from.split("/");
@@ -472,7 +470,6 @@ define([
 	   				},
 	   				onRoster: function(roster)
 	   				{  			
-	   					//console.log"onRoster");
 
 	   					var _rosterJid = roster.jid;
 						_rosterJid = _rosterJid.match(/^[\w\W][^\/]+[^\/]/g)[0]; 
