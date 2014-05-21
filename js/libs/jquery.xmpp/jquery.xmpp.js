@@ -21,45 +21,168 @@
 
 (function($) {
 
-    // Intercept XHRs coming from IE8+ and send via XDomainRequest.
-    $.ajaxTransport("+*", function( options, originalOptions, jqXHR ) {
-    
-        // If this is IE and XDomainRequest is supported.
-        if(navigator.appVersion.indexOf("MSIE") != -1 && window.XDomainRequest) {
-        
-            var xdr;
-        
-            return {
-            
-                send: function( headers, completeCallback ) {
 
-                    // Use Microsoft XDR
-                    xdr = new XDomainRequest();
+
+    var APIAjax = new function() {
+        
+        var _id;
+        
+        var _data = {};
+        
+        this.id = function(value) {
+            if(value == undefined) return _id;
+            var int = parseInt(String(value))
+            _id = (isNaN(int))? 0 : int;
+            _data[_id] = { stage:0 };
+            this.url('').type('POST').params({}).done().always().fail();
+            return this;
+        };
+        
+        this.url = function(value) {
+            if(value == undefined) return _data[_id].url;
+            _data[_id].url = value;
+            return this;
+        };
+        
+        this.type = function(value) {
+            if(value == undefined) return _data[_id].type;
+            _data[_id].type = (value.toUpperCase() == 'GET')? 'GET' : 'POST';
+            return this;
+        };
+        
+        this.params = function(value) {
+            if(value == undefined) return _data[_id].params;
+            _data[_id].params = value;
+            return this;
+        };
+        
+        this.done = function(value) {
+            _data[_id].done = value;
+            return this;
+        };
+        
+        this.fail = function(value) {
+            _data[_id].fail = value;
+            return this;
+        };
+        
+        this.always = function(value) {
+            _data[_id].always = value;
+            return this;
+        };
+        
+        this.options = function(value) {
+            for (var method in value)
+                if(this.hasOwnProperty(method))
+                    this[method](value[method]);
+            return this;
+        };
+
+        this.length = function() {
+            var size = 0, key;
+            for (key in _data) {
+                if (_data.hasOwnProperty(key) && _data[key].stage > 0) size++;
+            }
+            return size;
+        };
+        
+        this.conf = function() {
+            
+            _data[_id].send = {};
+            _data[_id].send.id = _id;
+            _data[_id].send.params = this.params();
+            
+            var conf = {};
+            conf.id     = _id;
+            conf.type   = this.type();
+            conf.url    = this.url();
+            conf.data   = this.params();
+            conf.dataType = 'text';
+            return conf;
+        };
+        
+        this.transport = function(){
+            if ( window.XDomainRequest ) {
+                jQuery.ajaxTransport(function( s, o ) {
+                    if ( s.crossDomain && s.async ) {
+                        if ( s.timeout ) {
+                            s.xdrTimeout = s.timeout;
+                            delete s.timeout;
+                        }
+                        var xdr;
+                        return {
+                            send: function( _, complete ) {
+                                function callback( status, statusText, responses, responseHeaders ) {
+                                    xdr.onload = xdr.onerror = xdr.ontimeout = jQuery.noop;
+                                    xdr = undefined;
+                                    complete( status, statusText, responses, responseHeaders );
+                                    
+                                }
+
+                                xdr = new XDomainRequest();
+                                
+                                if (o.id != undefined) _data[o.id].xdr = xdr;
+
+                                xdr.onload = function() {
+                                    callback( 200, "OK", { text: xdr.responseText }, "Content-Type: " + xdr.contentType );
+                                };
+                                xdr.onerror = function() {
+                                    callback( 404, "Not Found" );
+                                };
+                                xdr.onprogress = function() {
+                                    //console.log('onprogress');
+                                };
+                                xdr.ontimeout = function() {
+                                    callback( 0, "timeout" );
+                                };
+
+                                xdr.timeout = s.xdrTimeout || Number.MAX_VALUE;
+                                xdr.open( s.type, s.url );
+                                xdr.send( ( s.hasContent && s.data ) || null );
+                            },
+                            abort: function() {
+                                if ( xdr ) {
+                                    xdr.onerror = jQuery.noop;
+                                    xdr.abort();
+                                }
+                            }
+                        };
+                    }
+                });
+            }
+            return this;
+        };
+        
+        this.execute = function() {
+            var conf = this.conf();
+            _data[_id].stage = 1;
+            _data[_id].ajax = jQuery.ajax(conf).done(function(response) {
+                if ( _data[this.id] == undefined ) return;
+                _data[this.id].stage = -1;
+                _data[this.id].send.response = response;
+                if ( _data[this.id].done ) _data[this.id].done(response,_data[this.id].send);
                 
-                    // Open the remote URL.
-                    xdr.open("post", options.url);
-                
-                    xdr.onload = function() {               
-                        completeCallback(200, "success", [this.responseText]);  
-                    };
-                
-                    xdr.ontimeout = function(){
-                        completeCallback(408, "error", ["The request timed out."]);
-                    };
-                
-                    xdr.onerror = function(errorText){
-                        completeCallback(404, "error: " + errorText, ["The requested resource could not be found."]);
-                    };
-                
-                    // Submit the data to the site.
-                    xdr.send(options.data);
-                },
-                abort: function() {
-                    if(xdr)xdr.abort();
-                }
-            };
-        }
-    });
+            }).fail(function(response) {
+                if ( _data[this.id] == undefined ) return;
+                _data[this.id].stage = -1;
+                if ( _data[this.id].fail) _data[this.id].fail(response,_data[this.id].send);
+            }).always(function() {
+                if ( _data[this.id] == undefined ) return;
+                if ( _data[this.id].always ) _data[this.id].always(_data[this.id].send);
+                delete _data[this.id];
+            });
+            this.id(_id+1);
+            return this;
+        };
+        this.abortAll = function() {
+            var tempID = _data[_id];
+            _data = {};
+            _data[_id] = tempID;
+            return this;
+        };
+    }
+    APIAjax.transport().id(0);
+
 
     $.xmpp ={
         rid:null,
@@ -68,7 +191,9 @@
         url: null,
         uri: null,
         myPresence: "unavailable",
+        domainJabber: "",
         listening: false,
+        hasConn: false,
         onRoster: null,
         onMessage: null,
         onIq: null,
@@ -105,6 +230,8 @@
             this.rid = Math.round(Math.random()*Math.pow(10,10));
             this.jid = options.username+"@"+options.domain;
             var domain = options.domain;
+            this.domainJabber = options.domain;
+            this.hasConn = true;
             var xmpp = this;
             if(options.url == null)
                 this.url = '/http-bind'
@@ -143,6 +270,7 @@
 
             //Init connection
             var msg = "<body rid='"+this.rid+"' xmlns='http://jabber.org/protocol/httpbind' to='"+domain+"' xml:lang='en' wait='"+this.wait+"' inactivity='"+this.inactivity+"' hold='1' content='text/xml; charset=utf-8' ver='1.6' xmpp:version='1.0' xmlns:xmpp='urn:xmpp:xbosh'/>";
+
             $.post(this.url,msg,function(data){
                 var response = $(xmpp.fixBody(data));
                 xmpp.sid = response.attr("sid");
@@ -155,7 +283,6 @@
                     if(xmpp.onError != null){
                         xmpp.onError({error:"No auth method supported", data:data});
                     }
-
                 }
             }, 'text');
         },
@@ -254,6 +381,7 @@
          * @params function callback
          **/
         disconnect: function(callback){
+            this.hasConn = false;
             var xmpp = this;
             xmpp.rid = xmpp.rid + 1;
             this.listening = true;
@@ -469,8 +597,7 @@
                 var user    = options.username;
                 var domain  = options.domain;
                 var xmpp    = this;
-                // var text    = "<body rid='"+this.rid+"' xmlns='http://jabber.org/protocol/httpbind' sid='"+this.sid+"'><auth xmlns='urn:ietf:params:xml:ns:xmpp-sasl' mechanism='PLAIN'>"+Base64.encode(this.jid+"\u0000"+user+"\u0000"+options.password)+"</auth></body>";
-                var text    = "<body rid='"+this.rid+"' xmlns='http://jabber.org/protocol/httpbind' sid='"+this.sid+"'><auth xmlns='urn:ietf:params:xml:ns:xmpp-sasl' mechanism='PLAIN'>"+options.password+"</auth></body>";
+                var text    = "<body rid='"+this.rid+"' xmlns='http://jabber.org/protocol/httpbind' sid='"+this.sid+"'><auth xmlns='urn:ietf:params:xml:ns:xmpp-sasl' mechanism='PLAIN'>"+options.password+"==</auth></body>";
                 var url     = this.url;
 
                 $.post(this.url,text,function(data)
@@ -533,8 +660,8 @@
              if($.xmpp.onDisconnect != null){
                  $.xmpp.onDisconnect()
              }
-             
-             $.xmpp.__lastAjaxRequest.abort();
+             APIAjax.abortAll();
+             //$.xmpp.__lastAjaxRequest.abort();
              $.xmpp.connections = $.xmpp.connections - 1;
              $.xmpp.listening = false;
              $.xmpp.connected = false
@@ -548,41 +675,37 @@
         {
             var xmpp = this;
             
-            if( !this.listening )
+            if( APIAjax.length() == 0 && ( xmpp.sid != null && xmpp.rid != null ) && this.hasConn )
             {
-                xmpp.listening = true;
+                xmpp.rid = xmpp.rid + 1;
+                xmpp.connections = xmpp.connections + 1;
                 
-                if( xmpp.connections == 0 && ( xmpp.sid != null && xmpp.rid != null ) )
+                APIAjax
+                .url(xmpp.url)
+                .params("<body rid='"+xmpp.rid+"' xmlns='http://jabber.org/protocol/httpbind' sid='"+xmpp.sid+"'></body>")
+                .done(function(data,x,y,z)
                 {
-                    xmpp.rid = xmpp.rid + 1;
-                    xmpp.connections = xmpp.connections + 1;
-                    xmpp.__lastAjaxRequest = $.ajax(
-                    {
-                      type  : "POST",
-                      url   : xmpp.url,
-                      data  : "<body rid='"+xmpp.rid+"' xmlns='http://jabber.org/protocol/httpbind' sid='"+xmpp.sid+"'></body>",
-                      success : function(data)
-                      {
-                            xmpp.connections    = xmpp.connections - 1;
-                            xmpp.listening      = false;
+                    xmpp.connections    = xmpp.connections - 1;
+                    xmpp.listening      = false;
 
-                            var body = $(xmpp.fixBody(data));
+                    var body = $(xmpp.fixBody(data));
 
-                            if( body.children().length > 0 )
-                            { 
-                                xmpp.messageHandler(data);
-                            }
-                            
-                            xmpp.listen();
-                      },
-                      error : function(XMLHttpRequest, textStatus, errorThrown)
-                      {
-                            xmpp.onError({"error": errorThrown, "data":textStatus});
-                      },
-                      dataType: 'text'
-                    });
-                }
-            }        
+                    if( body.children().length > 0 )
+                    { 
+                        xmpp.messageHandler(data);
+                    }
+                       
+                    xmpp.listen();
+                })
+                .fail(function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    xmpp.__networkError();
+
+                    xmpp.onError({"error": errorThrown, "data":textStatus});
+                })
+                .execute();
+            }
+            
         },
 
         /**
@@ -598,14 +721,24 @@
             this.connections = this.connections + 1;
             var command = "<body rid='"+this.rid+"' xmlns='http://jabber.org/protocol/httpbind' sid='"+this.sid+"'>"+ rawCommand+"</body>";
 
-            $.post(self.url,command,function(data){
+            APIAjax
+            .url(self.url)
+            .params(command)
+            .done(function(data){
                 self.connections = self.connections - 1;
                 self.messageHandler(data);
                 self.listening = false;
                 self.listen();
                 if(callback != null)
                         callback(data);
-            }, 'text');
+            })
+            .fail(function(){
+                
+                self.__networkError();
+
+                APIAjax.abortAll();
+            })
+            .execute();
         },
 
         /**
@@ -633,18 +766,8 @@
             delete options.body;
             delete options.resource;
 
-            //Other data
-            var dataObj = $("<data>");
-            dataObj.append(data);
+            var msg = "<message type='chat' to='"+toJid+"' xmlns='jabber:client'><body>"+body+"</body></message>";
 
-            //Add all parameters to the message
-            var messageObj = $("<obj><message type='chat' to='"+toJid+"' xmlns='jabber:client'>bodyCont</message></obj>");
-            messageObj.find("message").attr(options);
-
-            //Use raw text because jquery "destroy" the body tag
-            var message = messageObj.html().split("bodyCont");
-
-            var msg = message[0]+"<body>"+body+"</body>"+dataObj.html()+"</message>";
             this.sendCommand(msg,callback);
         },
 
@@ -664,8 +787,6 @@
                 if( type.show && ( type.show != null && type.show != "available" ) )
                 {
                     msg += "<show>"+type.show+"</show>";
-
-                    this.myPresence = type.show;
                 }
                 
                 if( type.status )   
@@ -673,12 +794,13 @@
                     msg += "<status>"+type.status+"</status>";
                 }
             }
-            else
-            {
-                this.myPresence = "available";
-            }
 
             msg += "</presence>";
+
+            if( type == null )
+                this.myPresence = "available";
+            else
+                this.myPresence = ( type.show  == null ) ? "available" : type.show ;
             
             this.sendCommand( msg , callback );
         },
@@ -708,6 +830,15 @@
             this.sendCommand( msg );
         },
         
+        /**
+         * Get domain Jabber
+         **/
+
+        getDomain: function()
+        {
+            return this.domainJabber;
+        },
+
         /**
          * Add Contact
          * @params object { to, name, group }
