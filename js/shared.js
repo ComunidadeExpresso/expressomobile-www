@@ -512,9 +512,9 @@ define([
     var message = {
       type: "error",
       icon: 'icon-jabber',
-      title: "Você foi desconectado do CHAT.",
-      description: "Provavelmente esta conta esteja logada em outro lugar...",
-      route: "",
+      title: "Você não está conectado ao CHAT.",
+      description: "Verifique sua conexão com a Internet...",
+      route: "/Chat",
       elementID: "#pageMessage",
     }
 

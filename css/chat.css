@@ -16,6 +16,17 @@
 }
 
 
+/** Ajuda no CHAT  **/
+body div #page .main dl#chatHelp dd { font-size: 14px; color: #777777; padding: 10px; margin-bottom: 5px;  }
+
+.firefox_help { 
+  background: url("../imgs/help_firefox.png") no-repeat scroll 0 0 transparent; 
+  margin: 20px; 
+  background-size: 400px 200px; width: 400px; 
+  min-height: 200px;
+  border-radius: 5px;
+}
+
 .chat-busy {
   background-color: #000099;
   width: 10px;

@@ -297,6 +297,9 @@ define([
       if (menuID == 'support') {
           this.context.collection = contextMenuCollection.getSupportMenu(params);
       }
+      if (menuID == 'chatOffline') {
+          this.context.collection = contextMenuCollection.getChatOfflineMenu(params);
+      }
       this.context.render();
     },
 

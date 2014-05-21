@@ -56,6 +56,7 @@ define([
       'Calendar/:year/:month/:day/:status' : 'calendarListView',
       'Calendar/:year/:month/:day' : 'calendarListView',
       'Calendar' : 'calendarListView',
+      'ChatReconnect' : 'chatReconnectView',
       'Chat' : 'chatListView',
       'Chat/:secondViewName' : 'chatListView',
       'Settings' : 'settingsListView',
@@ -424,12 +425,12 @@ define([
       
         });
 
+        app_router.on('route:chatReconnectView', function () {
 
-    /* 
-        $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
-          options.url = "http://localhost:8888/expresso-www/" + options.url;
+          Shared.chatReconnect();
+      
         });
-    */
+
 
       return app_router;
 

@@ -338,6 +338,17 @@ define([
 
         this.createModelsFromArray(menuItems);
         return this;
+      },
+
+      getChatOfflineMenu: function (params)
+      {
+        var menuItems = [
+            { id: "0", route: "/ChatReconnect", title:"Reconectar", iconClass: '', primary: true },
+            { id: "1", route: "/Settings/Support", title:"Suporte / Sugestões", iconClass: '' }
+          ];
+
+        this.createModelsFromArray(menuItems);
+        return this;
       }
 
   });
