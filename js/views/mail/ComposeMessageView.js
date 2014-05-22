@@ -413,7 +413,7 @@ define([
 
       Shared.currentView = thisView;
 
-      $("#attachment_input").click(); 
+      $("#attachment_input").click();
 
       thisView.renderContextMenu();
 

@@ -105,11 +105,12 @@
 	    	<tr id="msgAttachmentsRow" class="hidden detailRow">
 		        <td class="item detailCol">
 		          Anexos:
+		          <input type="file" id="attachment_input" name="attachment_input_temp" class="hidden">
 		        </td>
 		        <td class="descriptionCompose detailCol">
 		        	
 		        	<div id="msgAttachmentsRecipients">
-		        		<input type="file" id="attachment_input" name="attachment_input_temp" class="hidden">
+		        		
 		        		<% if (isDesktop) { %>
 		        		<div class="clear"></div>
 		        		<div id="add_attachment" class="icon-add-attachment"></div>
