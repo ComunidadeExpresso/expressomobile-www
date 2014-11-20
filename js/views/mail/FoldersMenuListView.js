@@ -72,7 +72,6 @@ define([
           doneCallback();
         } 
         */
-        Shared.refreshDotDotDot();
         Shared.scrollerRefresh();
 
       })

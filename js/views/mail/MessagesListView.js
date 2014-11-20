@@ -205,7 +205,6 @@ define([
                     $('body').height($(window).height() - top);
                     $('#wrapper').css('top', top + search);
 
-                    Shared.refreshDotDotDot();
                     Shared.scrollerRefresh();
 
             })

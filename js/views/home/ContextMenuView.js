@@ -3,12 +3,11 @@ define([
   'underscore',
   'iscroll',
   'jquery_touchwipe',
-  'jquery_dotdotdot',
   'backbone',
   'shared',
   'text!templates/home/contextMenuTemplate.html',
   'collections/home/ContextMenuCollection',
-], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, contextMenuTemplate,ContextMenuCollection){
+], function($, _, iscroll, touchWipe, Backbone, Shared, contextMenuTemplate,ContextMenuCollection){
 
   var ContextMenuView = Backbone.View.extend({
 

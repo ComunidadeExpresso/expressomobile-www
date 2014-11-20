@@ -39,14 +39,18 @@ body div #page .main h2 {
   filter: progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=135, Color='#999999');
 } 
 
+.ellipsis20 .ellipsis50 .ellipsis14 {
+  overflow: auto;
+}
+
 body div #page .main #content { width: 40%; height: 100%; position: relative; border-right: 1px solid #E5E5E5; z-index: 10; }
 /*body div #page .main #content.full { width: 100% }*/
 body div #page .main #content ul { width: 100%; background-color: #FFFFFF; }
 body div #page .main #content ul li { border-bottom: 1px solid #CCCCCC; border-top: 1px solid #FFFFFF; font-size: 14px; height: 60px; color: #000000; text-align: left; }
 body div #page .main #content ul li:hover { background-color: #EFEFEF; }
 body div #page .main #content ul li a { display: block; height: 60px; text-decoration: none; }
-body div #page .main #content ul li a h3 { color: #0088CC; margin-left: 30px; padding-top: 10px; font-size: 16px; }
-body div #page .main #content ul li a span { font-size: 13px; color: #777777; margin: 0 0 0 30px; }
+body div #page .main #content ul li a h3 { color: #0088CC; margin-left: 30px; padding-top: 10px; font-size: 16px; overflow: auto; }
+body div #page .main #content ul li a span { font-size: 13px; color: #777777; margin: 0 0 0 30px; overflow: hidden; }
 body div #page .main #content ul li.selected { background-color: #3960A6; }
 body div #page .main #content ul li.selected h3 { color: #FFFFFF; }
 body div #page .main #content ul li.selected span { color: #FFFFFF; }

@@ -3,7 +3,6 @@ define([
   'underscore',
   'iscroll',
   'jquery_touchwipe',
-  'jquery_dotdotdot',
   'backbone',
   'shared',
   'views/mail/FoldersMenuListView',
@@ -11,7 +10,7 @@ define([
   'views/home/ContextMenuView',
   'collections/home/ContextMenuCollection',
   'collections/home/MenuItemsCollection',
-], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, FoldersMenuListView, menuTemplate,ContextMenuView,ContextMenuCollection,MenuItemsCollection){
+], function($, _, iscroll, touchWipe, Backbone, Shared, FoldersMenuListView, menuTemplate,ContextMenuView,ContextMenuCollection,MenuItemsCollection){
 
   var MenuView = Backbone.View.extend({
     el: $("#scrollerMenu"),

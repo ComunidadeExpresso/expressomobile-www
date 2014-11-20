@@ -100,7 +100,6 @@ define([
 			}
 
 			Shared.scrollerRefresh();
-			Shared.refreshDotDotDot();
 			Shared.menuView.renderContextMenu('detailsContact', { email: pEmail, contactID: pContactID });
 		},
 

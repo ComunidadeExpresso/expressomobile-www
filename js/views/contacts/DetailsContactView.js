@@ -155,7 +155,6 @@ define([
 			$('#contentDetail .searchArea').remove();
 
 			Shared.scrollerRefresh();
-			Shared.refreshDotDotDot();
 			Shared.menuView.renderContextMenu('detailsContact', { email: pEmail, contactID: pContactID, contactType: this.secondViewName });
 		},
 

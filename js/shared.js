@@ -236,27 +236,6 @@ define([
     }
   };
 
-  Shared.refreshDotDotDot = function() {
-    $(".ellipsis20").dotdotdot({
-      ellipsis  : '... ',
-      wrap    : 'word',
-      height    : '20',
-      tolerance : 0,
-    });
-    $(".ellipsis14").dotdotdot({
-      ellipsis  : '... ',
-      wrap    : 'word',
-      height    : '14',
-      tolerance : 0,
-    });
-    $(".ellipsis50").dotdotdot({
-      ellipsis  : '... ',
-      wrap    : 'word',
-      height    : '50',
-      tolerance : 0,
-    });
-  };
-
   Shared.saveSettingsToLocalStorage = function() {
 
     Shared.api.getLocalStorageValue("expresso",function(expressoValue) {

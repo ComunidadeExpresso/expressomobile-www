@@ -192,7 +192,6 @@ define([
 
       Shared.scrollDetail = new iScroll('wrapperDetail',{vScroll:true, hScroll:true, hScrollBar: true, vScrollBar: true, zoom: true });
 
-      Shared.refreshDotDotDot();
       Shared.scrollerRefresh();
 
     }

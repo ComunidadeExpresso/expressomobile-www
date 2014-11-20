@@ -2,7 +2,6 @@ define([
   'jquery',
   'iscroll',
   'jquery_touchwipe',
-  'jquery_dotdotdot',
   'underscore',
   'backbone',
   'shared',
@@ -12,7 +11,7 @@ define([
   'views/mail/DetailMessageView',
   'views/home/MenuView',
   'text!templates/home/homeTemplate.html'
-], function($, _, iscroll, touchWipe, dotdotdot, Backbone, Shared, MessagesCollection, ServersCollection, MessagesListView, DetailMessageView, MenuView, homeTemplate){
+], function($, _, iscroll, touchWipe, Backbone, Shared, MessagesCollection, ServersCollection, MessagesListView, DetailMessageView, MenuView, homeTemplate){
 
   var HomeView = Backbone.View.extend({
 
@@ -314,7 +313,6 @@ define([
         });
 
         Shared.scrollerRefresh();
-        Shared.refreshDotDotDot();
       }
 
       clearTimeout(this.idResize);
@@ -345,7 +343,6 @@ define([
       // Verify screen width to define device type
       Shared.deviceType(Shared.forceSmartPhoneResolution);
 
-      Shared.refreshDotDotDot();
 
       $('body').height($(window).height() - top);
       $('#wrapper').css('top', top + search);

@@ -393,8 +393,7 @@ define([
 
         Shared.currentView = thisView;
 
-        navigator.camera.getPicture(thisView.uploadPicture, thisView.onFailUploadPicture, { quality: 60, 
-          destinationType: Camera.DestinationType.DATA_URL }); 
+        navigator.camera.getPicture(thisView.uploadPicture, thisView.onFailUploadPicture, { quality: 60, destinationType: Camera.DestinationType.DATA_URL }); 
       } else {
 
           Shared.showMessage({
@@ -819,7 +818,6 @@ define([
 
     updateBody: function(e) {
       Shared.scrollerRefresh();
-      //Shared.refreshDotDotDot();
     },
 
     focusRecipientTo: function(e) {

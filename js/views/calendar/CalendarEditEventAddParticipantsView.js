@@ -172,7 +172,6 @@ define([
 			}
 
 			Shared.scrollerRefresh();
-			Shared.refreshDotDotDot();
 
 			var params = {};
 				params.saveCallBack = this.backToEditEvent;
