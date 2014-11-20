@@ -82,7 +82,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	default: break;
 }
 
-$erro = array("code" => "100", "message" => "Check Internet Connection");
+if (curl_errno($curl)) { $error_code =  curl_errno($curl); } 
+
+$erro = array("code" => "100", "message" => "Check Internet Connection - CURL " . $error_code);
 $error = array( "error" => $erro);
 
 echo ($result && !curl_errno($curl))? $result : json_encode($error);// curl_error($curl);
