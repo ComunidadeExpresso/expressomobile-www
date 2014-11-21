@@ -1,0 +1,12 @@
+{
+  "name": "Expresso",
+  "description": "Expresso Mobile",
+  "version": "1.0",
+  "manifest_version": 2,
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "icons": { "16": "imgs/app-icons/icon-16.png", "128": "imgs/app-icons/icon-128.png" }
+}
