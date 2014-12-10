@@ -75,8 +75,7 @@ define([
 			var self = this;
 
 			var eventsData = new EventsListCollection();
-				eventsData.listEvents(pDateStart, pDateEnd)
-				.done(function (data) 
+				eventsData.done(function (data) 
 				{
 					self.data = { events: data.models, _: _ };
 
@@ -89,7 +88,7 @@ define([
 					
 					if (callbackFail)
 						callbackFail(self.data);
-				});
+				}).listEvents(pDateStart, pDateEnd);
 		},
 
 		listDayEvents: function(data)

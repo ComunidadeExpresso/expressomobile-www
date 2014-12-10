@@ -104,6 +104,11 @@ define([
           that.menuView = new MenuView( { el : $("#scrollerMenu") });
           that.menuView.profile = that.profile;
           that.menuView.render();
+
+          if (Shared.isBuiltInExpresso()) {
+            $("#menuButton").hide();
+            that.menuView.openMenu();
+          }
          
           Shared.setDefaultIMListeners();
           Shared.BlinkWindowTitle();

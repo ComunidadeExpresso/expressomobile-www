@@ -81,9 +81,9 @@ define([
               detailMessageView.folderID = that.folderID;
               detailMessageView.msgID = that.msgID;
 
-              detailMessageView.render();
-
               Shared.menuView.renderContextMenu('messageList',{folderID: that.folderID, folderName: that.currentFolder.folderName, folderType: that.currentFolder.get("folderType"), qtdMessages: 0});
+
+              detailMessageView.render();
             }
 
           }
@@ -106,7 +106,7 @@ define([
           var loadingView = new LoadingView({ el: $(this.detailElementID) });
           loadingView.render();
 
-          that.getMessages(that.folderID,that.search,that.page,false,beforeRenderCallback,doneFunction);
+          that.getMessages(that.folderID,that.search,that.page,false,false,beforeRenderCallback,doneFunction);
 
       } else {
 
@@ -151,11 +151,13 @@ define([
       }
     },
 
-    getMessages: function(pFolderID,pSearch,pPage,appendAtEnd,beforeRenderCallback,doneCallback)
+    getMessages: function(pFolderID,pSearch,pPage,appendAtEnd,ignoreCache,beforeRenderCallback,doneCallback)
     {
 
       var messagesData = new MessagesCollection();
       var foldersCollection = new FoldersCollection();
+
+
 
       var that = this;
 
@@ -168,8 +170,16 @@ define([
         that.currentFolder = currentFolder;
         that.parentFolders = parentFolders;
 
+        if (ignoreCache == true) {
+          messagesData.ignoreCache(true);
+        }
+
 
             messagesData.getMessagesInFolder(pFolderID,'',pSearch,pPage).done(function(data){
+
+                    if (appendAtEnd == true) {
+
+                    }
 
                     that.collection = data.models;
 
@@ -239,13 +249,13 @@ define([
     pullDownAction: function () 
     {
       this.page = 1;
-      this.getMessages(this.folderID,this.search,this.page,false);
+      this.getMessages(this.folderID,this.search,this.page,false,true);
     },
 
     pullUpAction : function() 
     {
       this.page = this.page + 1;
-      this.getMessages(this.folderID,this.search,this.page,true);
+      this.getMessages(this.folderID,this.search,this.page,true,false);
     },
 
     loaded: function () 

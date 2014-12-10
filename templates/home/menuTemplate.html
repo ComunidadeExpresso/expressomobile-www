@@ -1,5 +1,5 @@
 <div  class="container">
-  <div class="product-logo-menu"></div>
+  <% if (!Shared.isBuiltInExpresso()) { %><div class="product-logo-menu"></div><% } %>
 
   <div id="personalInfo">
     <div id="userPicture" class="userPicture shadow"></div>
@@ -40,8 +40,9 @@
     </dd>
     <% } %>
 
-    <dt>Menu</dt>
-    <dd>
+    
+    <dt<% if (Shared.isBuiltInExpresso()) { %> style="display: none;"<% } %>>Menu</dt>
+    <dd <% if (Shared.isBuiltInExpresso()) { %> style="display: none;"<% } %>>
       <ul id="mainMenu">
         <% _.each(menuItems, function(menuItem){ %>
           <li class="<%=menuItem.get("menuClass")%>">

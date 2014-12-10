@@ -108,8 +108,7 @@ define([
 			var self = this;
 
 			var eventModel = new EventModel();
-				eventModel.getEvent(pEventID)
-				.done(function (data) 
+				eventModel.done(function (data) 
 				{
 					self.data = { event: data, _: _ };
 
@@ -121,7 +120,7 @@ define([
 					
 					if (callbackFail)
 						callbackFail(self.data);
-				});
+				}).getEvent(pEventID);
 		},
 
 		loaded: function(eventID, isOwner)

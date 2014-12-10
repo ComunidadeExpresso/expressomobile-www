@@ -70,10 +70,10 @@ define([
 			Shared.scroll = new iScroll('wrapper');
 			Shared.scrollerRefresh();
 
-			if (this.secondViewName == 'General')
-				Shared.menuView.renderContextMenu('generalContacts', {});
-			else
-				Shared.menuView.renderContextMenu('personalContacts', {});
+			// if (this.secondViewName == 'General')
+			// 	Shared.menuView.renderContextMenu('generalContacts', {});
+			// else
+			// 	Shared.menuView.renderContextMenu('personalContacts', {});
 		},
 
 		searchPersonalContacts: function (e)
@@ -124,6 +124,11 @@ define([
 			
 			var donePersonalContacts = function (data)
 			{
+				if (self.secondViewName == 'General')
+					Shared.menuView.renderContextMenu('generalContacts', {});
+				else
+					Shared.menuView.renderContextMenu('personalContacts', {});
+
 				if (data.error == undefined) 
 				{
 					if (data.contacts.length > 0) 
@@ -158,6 +163,8 @@ define([
 				self.setElement(self.$el);
 				self.loaded();
 
+
+
 				var pictureImageContactView = new PictureImageContactView({el: $('.picture_image')});
 				pictureImageContactView.render(data);
 			};
@@ -178,6 +185,11 @@ define([
 
 			var doneGeneralContacts = function (data)
 			{
+				if (self.secondViewName == 'General')
+					Shared.menuView.renderContextMenu('generalContacts', {});
+				else
+					Shared.menuView.renderContextMenu('personalContacts', {});
+				
 				if (data.error == undefined) 
 				{
 					$('#message').empty();
@@ -232,8 +244,7 @@ define([
 		listContacts: function (pSearch, ptype, callbackSuccess, callbackFail)
 		{
 			var contactsData = new ContactsListCollection();
-				contactsData.getContacts(pSearch, ptype)
-				.done(function (data) 
+				contactsData.done(function (data) 
 				{
 					this.arrayContacts = { contacts: data.models, search: pSearch, _: _ };
 
@@ -242,7 +253,7 @@ define([
 				.fail(function (data) 
 				{
 					callbackFail({ error: data.error, _: _ });
-				});
+				}).getContacts(pSearch, ptype);
 		},
 
 		viewContact: function(e)

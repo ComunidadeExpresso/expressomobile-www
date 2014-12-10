@@ -1,7 +1,7 @@
 <% if (messages.length != 0) { %>
 <% _.each(messages, function(message){ %>
 <h2 class="ellipsis50"><span class="subtitle-detail-text"><%=message.getTimeAgo()%> (<%=message.getMessageSize()%>)</span><%= message.get("msgSubject") %></h2>
-<article id="wrapperDetail" class="container">
+<article id="wrapperDetail" class="container" style="overflow: auto;">
   <div id="scrollerDetail">
     <table id="messageDetails"> 
       <tr class="detailRow">

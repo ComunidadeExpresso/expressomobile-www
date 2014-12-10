@@ -188,6 +188,9 @@ define([
       var winWidth = $(window).width();
       var menuButtonWidth = $('.top .menu').width();
       var propWidth = Math.ceil(winWidth * 30 / 100);
+      if (Shared.isBuiltInExpresso()) {
+        propWidth = Math.ceil(winWidth * 15 / 100);
+      }
       var width =  280;
 
       if ((winWidth - menuButtonWidth) < width)
@@ -198,7 +201,10 @@ define([
       $('#menu').addClass('expanded').css('width', width);
       $('#page').css('margin-left', width);
 
-
+      if (Shared.isBuiltInExpresso()) {
+        $('#page').css('width',winWidth - width);
+      }
+      
       if (Shared.scrollMenu == null) {
         this.loaded();
       }
@@ -208,11 +214,12 @@ define([
 
     closeMenu: function()
     {
-      Shared.menuOpen = false;
-      $('#menu').removeClass('expanded').removeAttr('style');
-      $('#page').removeAttr('style');
-      $('#page').css('margin-left', '0');
-
+      if (!Shared.isBuiltInExpresso()) {
+        Shared.menuOpen = false;
+        $('#menu').removeClass('expanded').removeAttr('style');
+        $('#page').removeAttr('style');
+        $('#page').css('margin-left', '0');
+      } 
     },
 
     loaded: function () 
@@ -248,6 +255,8 @@ define([
     },
 
     renderContextMenu: function(menuID,params) {
+
+      //console.log("renderContextMenu: " + menuID);
 
       this.context = new ContextMenuView();
       var contextMenuCollection = new ContextMenuCollection();

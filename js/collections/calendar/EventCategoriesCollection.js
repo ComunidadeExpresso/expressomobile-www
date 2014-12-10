@@ -9,16 +9,17 @@ define([
 	{
 		model: EventCategoryModel,
 		_data: {},
+		_functions: {},
 
 		done: function (value)
 		{
-			this._data.done = value;
+			this._functions.done = value;
 	        return this;
 		},
 
 		fail: function (value)
 		{
-			this._data.fail = value;
+			this._functions.fail = value;
 	        return this;
 		},
 
@@ -47,13 +48,13 @@ define([
         			that.add(thisModel);
 	        	}
 
-				if (that._data.done)
-					that._data.done(that);
+				if (that._functions.done)
+					that._functions.done(that);
 	        })
 	        .fail( function (error) 
 	        {
-				if (that._data.fail) 
-					that._data.fail(error); 
+				if (that._functions.fail) 
+					that._functions.fail(error); 
 	        })
 	        .execute();
 

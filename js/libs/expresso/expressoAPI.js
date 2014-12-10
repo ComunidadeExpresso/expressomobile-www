@@ -85,7 +85,7 @@ define([
 
 		var _auth = "";
 
-		var _debug = false;
+		var _debug = true;
 
 		var _dataType = '';
 
@@ -96,6 +96,74 @@ define([
 		var _phoneGap = false;
 
 		var _android = false;
+
+		var _cache = [];
+
+		var _isOffline = false;
+
+		var _ignoreCache = false;
+
+		// var _cachedResources = [
+		// 	"/ExpressoVersion",
+		// 	"/Catalog/ContactPicture",
+		// 	"/Catalog/Contacts"];
+
+		// var _cachedParams = [
+		// "",
+		// "contactID,contactType",
+		// "search,contactType"];
+
+		//SECONDS
+		var timeToLive0 = 0;
+		var timeToLive5Minutes = 300;
+		var timeToLive1Hour = 3600;
+		var timeToLive1Day = 86400;
+		var timeToLive1Week = 604800;
+		var timeToLive1Month = 2419200;
+
+		var DontCache = [
+			"/Login",
+			"/Logout",
+			"/Mail/Send",
+			"/Mail/AddFolder",
+			"/Mail/DelFolder",
+			"/Mail/RenameFolder",
+			"/Mail/DelMessage",
+			"/Mail/CleanTrash",
+			"/Mail/SendSupportFeedback",
+			"/Preferences/ChangePassword",
+			"/Preferences/ChangeUserPreferences",
+			"/Services/Chat",
+			"/Catalog/ContactAdd",
+			"/Catalog/ContactDelete",
+			"/Calendar/AddEvent",
+			"/Calendar/DelEvent",
+		];
+
+		var KeepCacheFor5Minutes = [
+			"/Mail/Messages",
+			"/Mail/Folders",
+			"/Mail/Attachment",
+		];
+
+		var KeepCacheFor1Hour = [
+			"/Preferences/UserPreferences",
+		];
+
+		var KeepCacheFor1Day = [
+			"/Catalog/Contacts",
+			"/Calendar/Events",
+			"/Calendar/EventCategories",
+		];
+
+		var KeepCacheFor1Week = [
+			"/ExpressoVersion",
+			"/Catalog/ContactPicture",
+		];
+
+		var KeepCacheFor1Month = [
+		//	""
+		];
 
 		//USED IN PHONEGAP DATABASE
 		var _db;
@@ -109,11 +177,319 @@ define([
 			_id = (isNaN(int))? 0 : int;
 			_data[_id] = {};
 			this.resource('').type('POST').params({}).done().always().fail(this.defaultErrorCallback);
+			this._isOffline = false;
+			this._ignoreCache = false;
 			return this;
 		};
 
 		this.defaultErrorCallback = function(response) {
 			//if(response && response.error && response.error.message) alert(response.error.message);
+		};
+
+
+
+		// this.isCachedResource = function(request) {
+		// 	var resourceRoute = request.resource;
+		// 	var requestParams = request.params;
+		// 	var retVal = false;
+		// 	for ( var i in _cachedResources ) {
+		// 		if (_cachedResources[i] == resourceRoute) {
+
+		// 			var equal = false;
+		// 			for (var x in requestParams) {
+		// 				if (x != 'auth') {	
+		// 					console.log(x + ":" + requestParams[x]);
+		// 				}
+		// 			}
+		// 			//var cachedParams = _cachedParams[i];
+
+		// 			retVal = true;
+		// 		}
+		// 	}
+		// 	return retVal;
+		// };
+
+		this.getRequest = function(response) {
+			var request = {};
+
+			request.resource = this.resource();
+			request.params = this.params();
+			request.date = Date.now();
+			
+			var paramsKeys = Object.keys(request.params);
+			request.response = response;
+
+			request.timeToLive = 0;
+
+			if (DontCache.indexOf(request.resource) >= 0) { request.timeToLive = timeToLive0; }
+			if (KeepCacheFor5Minutes.indexOf(request.resource) >= 0) { request.timeToLive = timeToLive5Minutes; }
+			if (KeepCacheFor1Hour.indexOf(request.resource) >= 0) { request.timeToLive = timeToLive1Hour; }
+			if (KeepCacheFor1Day.indexOf(request.resource) >= 0) { request.timeToLive = timeToLive1Day; }
+			if (KeepCacheFor1Week.indexOf(request.resource) >= 0) { request.timeToLive = timeToLive1Week; }
+			if (KeepCacheFor1Month.indexOf(request.resource) >= 0) { request.timeToLive = timeToLive1Month; }
+
+			if (request.resource == "/Mail/Messages") {
+				if (request.params.msgID != undefined) {
+					request.timeToLive = timeToLive1Month;
+				}
+			}
+
+			return request;
+
+		};
+
+		this.getCacheResponse = function(request,finishCallBack) {
+
+			var that = this;
+
+			var requestResource = request.resource;
+			var requestParams = request.params;
+			var requestTimeToLive = request.timeToLive * 1000;
+
+			var foundCallBack = function(cacheResponse) {
+				that._cache = cacheResponse;
+
+				var found = false;
+				
+				for (var i in cacheResponse) {
+					if (requestResource == cacheResponse[i].resource) {
+						var equal = true;
+						for (var x in requestParams) {
+							if (x != 'auth') {
+								if (requestParams[x] != cacheResponse[i].params[x]) {
+									equal = false;
+								}
+							}
+						}
+						if (equal) {
+							if (that._isOffline == false) {
+								var rightnow = new Date();
+								if ((requestTimeToLive) > (rightnow - cacheResponse[i].date)) {
+									found = cacheResponse[i];
+								}
+							} else {
+								found = cacheResponse[i];
+							}
+						}
+					}
+				}
+				finishCallBack(found);
+			};
+
+			var erroCB = function() {
+				finishCallBack(false);
+			};
+			
+			this.getLocalStorageValue("expressoCache",foundCallBack,erroCB);
+		};
+
+		this.createRequest = function(Presource,Pparams,PemptyParams) {
+			var request = {};
+			request.params = {};
+			request.resource = Presource;
+			request.params = Pparams;
+			return request;
+		};
+
+		// this.addTrigger = function(resource,filterRequest) { 
+		// 	var trigger = {};
+		// 	trigger.resource = resource;
+		// 	trigger.filter = filterRequest;
+		// 	_triggers.push(trigger);
+		// };
+
+		this.triggerCacheRequest = function(currentCache,currentRequest) {
+
+			var filterRequests = [];
+
+			if ((currentRequest.resource == "/Mail/AddFolder") || 
+				(currentRequest.resource == "/Mail/RenameFolder")  || 
+				(currentRequest.resource == "/Mail/DelFolder")) {
+
+				filterRequests.push(this.createRequest("/Mail/Folders",{}));
+				filterRequests.push(this.createRequest("/Mail/Messages",{folderID: currentRequest.params.folderID}));
+				filterRequests.push(this.createRequest(currentRequest.resource,{}));
+
+			}
+
+			if (currentRequest.resource == "/Mail/DelMessage") {
+
+				filterRequests.push(this.createRequest("/Mail/Messages",{folderID: currentRequest.params.folderID, msgID: ""}));
+				filterRequests.push(this.createRequest("/Mail/Messages",{folderID: currentRequest.params.folderID, msgID: currentRequest.params.msgID}));
+				filterRequests.push(this.createRequest("/Mail/DelMessage",{folderID: currentRequest.params.folderID, msgID: currentRequest.params.msgID}));
+
+			}
+
+			if (currentRequest.resource == "/Preferences/ChangeUserPreferences") {
+				filterRequests.push(this.createRequest("/Preferences/UserPreferences",{}));
+				filterRequests.push(this.createRequest("/Preferences/ChangeUserPreferences",{}));
+			}
+
+		
+			var debug = false;
+			var removeFromCache = [];
+			var newCache = [];
+
+			if (debug) {
+				console.log("request: " + currentRequest.resource + " - " + JSON.stringify(currentRequest.params));
+			}
+
+			
+			if (filterRequests.length != 0) {
+
+				for (var i in filterRequests) {
+
+					if (debug) {
+						console.log("filter: " + filterRequests[i].resource + " - " + JSON.stringify(filterRequests[i].params));
+					}
+
+					for (var x in currentCache) {
+						if (debug) {
+							console.log("Cache " + x + ":" + currentCache[x].resource + " - " + JSON.stringify(currentCache[x].params));
+						}
+
+						//Se o recurso filtrado for igual ao que estiver no cache
+			 			if (currentCache[x].resource == filterRequests[i].resource) {
+
+		 					//console.log("Comparando parâmetros do Recurso: " + currentCache[x].resource)
+		 					var equal = true;
+
+							//COMPARANDO OS PARAMETROS DA INVALIDAÇÃO DE CACHE COM OS PARAMETROS DO CACHE
+							for (var y in filterRequests[i].params) {
+
+								for (var z in currentCache[x].params) {
+
+									if (z == y) {
+
+										if (currentCache[x].params[z] != filterRequests[i].params[y]) {
+											//console.log(y + " - " + z + ":" + currentCache[x].params[z] + "->" + filterRequests[i].params[y]);
+											equal = false;
+										}
+									}
+
+								}
+								
+							}
+
+
+							if (equal) {
+								//console.log("Remove: " + x + ":" + currentCache[x].resource + " - " + JSON.stringify(currentCache[x].params));
+								//if (!$.inArray(x,removeFromCache)) {
+									removeFromCache.push(x);
+								//}
+							}
+
+			 			}
+
+
+					}
+
+
+				}
+
+				if (debug) {
+					console.log("WillRemoveFromCache");
+					console.log(removeFromCache);
+				}
+
+				for (var i in currentCache) {
+
+					//var found = false;
+
+					if (removeFromCache.indexOf(i) < 0) {
+						newCache.push(currentCache[i]);
+					}
+
+					// for (var x in removeFromCache) {
+					// 	if (removeFromCache[x] == i) {
+					// 		found = true;
+					// 	}
+					// }
+
+					// if (!found) {
+					// 	newCache.push(currentCache[i]);
+					// }
+
+				}
+
+			} else {
+				newCache = currentCache;
+			}
+
+			return newCache;
+			
+		};
+
+		this.addToCache = function(request,response) {
+
+			var that = this;
+
+			var saveCache = function(request,response,currentCache) {
+
+				
+				//console.log(currentCache);
+
+				if (currentCache == undefined) {
+					currentCache = [];
+				}
+
+				that._cache = currentCache;
+
+				var requestParams = request.params;
+
+				var found = false;
+				
+				for (var i in that._cache) {
+					if (request.resource == that._cache[i].resource)  {
+
+						var equal = true;
+						for (var x in requestParams) {
+							if (x != 'auth') {
+								if (requestParams[x] != that._cache[i].params[x]) {
+									equal = false;
+								}
+							}
+						}
+						if (equal) {
+							if (response.result) {
+								that._cache[i].date = Date.now();
+								that._cache[i].response = response; 
+								found = request;
+							}
+						}
+
+					}
+				}
+
+				if (!found) {
+					if (response.result) {
+						request.response = response;
+						//if (DontCache.indexOf(request.resource) < 0) { 
+							that._cache.push(request);
+						//}
+					}
+				}
+
+				that._cache = that.triggerCacheRequest(that._cache,request);
+
+				that.setLocalStorageValue("expressoCache",that._cache);
+			};
+
+			var foundCallBack = function(cacheResponse) {
+				saveCache(request,response,cacheResponse);
+			};
+
+			var erroCB = function() {
+				saveCache(request,response,that._cache);
+			};
+			
+			this.getLocalStorageValue("expressoCache",foundCallBack,erroCB);
+		};
+
+		this.ignoreCache = function(value) {
+			if(value == undefined) return _ignoreCache;
+			_ignoreCache = value;
+			return this;
 		};
 
 		this.crossdomain = function(value) {
@@ -265,8 +641,13 @@ define([
 			
 		};
 
+		this.removeLocalStorageValue = function(c_name) {
+			//console.log("removeLocalStorageValue:" + c_name);
+			window.localStorage.removeItem(c_name);
+		}
 
-		this.getLocalStorageValue =  function(name,successCallBack) {
+
+		this.getLocalStorageValue =  function(name,successCallBack,failCallBack) {
 
 			var that = this;
 
@@ -281,6 +662,11 @@ define([
 				var value = window.localStorage.getItem(name);
 				if (value) {
 					successCallBack(JSON.parse(value));
+				} else {
+					if (failCallBack) {
+						failCallBack();
+					}
+					
 				}
 			}
 		  
@@ -422,8 +808,9 @@ define([
 		};
 
 		this.execute = function() {
+
 			var conf = this.conf();
-			
+
 			if (_debug) {
 				console.log('ExpressoAPI - Execute:' + this.resource());
 				console.log(conf);
@@ -447,56 +834,150 @@ define([
 				
 			}
 
+			this._data = _data;
+
+
 			var that = this;
 
 			conf.error = function(x, t, m) {
 		        if(t==="timeout") {
+		        	that._isOffline = true;
 					if (_data[that.id()].fail) _data[that.id()].fail(networkTimeoutError);
-		            //alert("Timeout");
+		            // alert("Timeout");
 		        } else {
+		        	that._isOffline = true;
 		            // alert(t);
 		        }
 		    };
-			
-			jQuery.ajax(conf).done(function(response) {
 
-				if ((!response.result) && (!response.error)) {
-					response = JSON.parse(response);
-				}
+			var CacheRequest = this.getRequest();
 
-				if (response && response.result) {
-					if (_debug) {
-						console.log('ExpressoAPI - DONE callback');
-						console.log(JSON.stringify(response));
-					}
-					if (response.result.auth) that.auth(response.result.auth);
-					if (_data[this.id]) {
-						if (_data[this.id].resource=='/Logout') that.auth("");
-						if (_data[this.id].done) _data[this.id].done(response.result,_data[this.id].send);
-					}
+			//if (this.isCachedResource(CacheRequest)) {
+
+				if ((that._isOffline == false) || (that._isOffline == undefined)) {
+					$("#isOffline").hide();
 				} else {
-					if (_debug) {
-						console.log('ExpressoAPI - ERROR callback');
-						console.log(JSON.stringify(response));
+					$("#isOffline").show();
+				}
+
+
+				var successCallBackCache = function(foundCache) {
+
+
+					if (that.ignoreCache() == true) {
+						foundCache = false;
 					}
-					if (_data[this.id].fail) _data[this.id].fail(response,_data[this.id].send);
-				}
 
-			}).fail(function(response) {
-				if (_debug) {
-					console.log('ExpressoAPI - FAIL callback');
-					console.log(JSON.stringify(response));
-				}
-				if (_data[this.id].fail) _data[this.id].fail(response,_data[this.id].send);
+					if ( (foundCache != false) && ((foundCache.response.result != undefined) && (foundCache.response != undefined)) ) {
+						if ((foundCache.response.result) && (foundCache.response)) {
+							if (that._data[that.id()].done) that._data[that.id()].done(foundCache.response.result,that._data[that.id()].send);
+						} else {
+							if (that._data[that.id()].fail) that._data[that.id()].fail(foundCache.response,that.data[that.id()].send);
+						}
+						
+					} else {
+					//if ( (foundCache == false) || (!that.isCachedResource(CacheRequest)) ) {
 
-			}).always(function() {
-				if (_debug) console.log('ExpressoAPI - ALWAYS callback');
-				if (_data[this.id]) {
-					if (_data[this.id].always) _data[this.id].always(_data[this.id].send);
-					delete _data[this.id];
-				}
-			});
+						if ((that._isOffline == false) || (that._isOffline == undefined)) {
+		    
+							jQuery.ajax(conf).done(function(response) {
+
+								if ((!response.result) && (!response.error)) {
+									response = JSON.parse(response);
+								}
+
+								//if (that.isCachedResource(CacheRequest)) {
+								that.addToCache(CacheRequest,response);
+								//}
+
+								if (response && response.result) {
+
+									if (_debug) {
+										console.log('ExpressoAPI - DONE callback');
+										console.log(JSON.stringify(response));
+									}
+									if (response.result.auth) that.auth(response.result.auth);
+									if (_data[this.id]) {
+										if (_data[this.id].resource=='/Logout') that.auth("");
+										if (_data[this.id].done) _data[this.id].done(response.result,_data[this.id].send);
+									}
+								} else {
+									if (_debug) {
+										console.log('ExpressoAPI - ERROR callback');
+										console.log(JSON.stringify(response));
+									}
+									if (response.error.code == 100) {
+
+										if (_debug) {
+											console.log('ExpressoAPI - OFFLINE ERROR');
+											console.log(JSON.stringify(response));
+										}
+
+
+										$("#isOffline").show();
+										that._isOffline = true;
+
+										var thot = that;
+
+
+										var _tempData = _data;
+										var _tempId = this.id;
+
+										var forceCache = function(forcedCacheResponse) {
+											if (forcedCacheResponse) {
+												if ((forcedCacheResponse.response.result) && (forcedCacheResponse.response)) {
+													if (_tempData[_tempId].done) _tempData[_tempId].done(forcedCacheResponse.response.result,_tempData[_tempId].send);
+												}
+											} else {
+												if (_tempData[_tempId].fail) _tempData[_tempId].fail(response,_tempData[_tempId].send);
+											}
+										};
+
+										that.getCacheResponse(CacheRequest,forceCache);
+
+									} else {
+										if (_data[this.id].fail) _data[this.id].fail(response,_data[this.id].send);
+									}
+									
+								}
+
+								that.ignoreCache(false);
+
+							}).fail(function(response) {
+								if (_debug) {
+
+									console.log('ExpressoAPI - FAIL callback');
+									console.log(JSON.stringify(response));
+								}
+								if (_data[this.id].fail) _data[this.id].fail(response,_data[this.id].send);
+
+								that.ignoreCache(false);
+
+							}).always(function() {
+								if (_debug) console.log('ExpressoAPI - ALWAYS callback');
+								if (_data[this.id]) {
+									if (_data[this.id].always) _data[this.id].always(_data[this.id].send);
+									delete _data[this.id];
+								}
+
+								that.ignoreCache(false);
+							});
+
+						} else {
+							// $("#isOffline").show();
+						}
+					}
+
+				};
+
+			
+			
+
+			this.getCacheResponse(CacheRequest,successCallBackCache);
+
+
 			this.id(_id+1);
+
 			return this;
 		};
 	}

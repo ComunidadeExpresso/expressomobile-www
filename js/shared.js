@@ -77,6 +77,14 @@ define([
 
   Shared.menuOpen = false;
 
+  Shared.isBuiltInExpresso =  function() {
+    if (Shared.isDesktop()) {
+      return false;
+    } else {
+      return false;
+    }
+  }
+
 
   //CHECKS IF THE DEVICE IS AN SMARTPHONE OR AN TABLET RESOLUTION
   Shared.isTabletResolution = function() {
@@ -320,7 +328,7 @@ define([
   Shared.checkForNewMessages = function() {
     if (Shared.userHasModule("mail")) {
 
-      Shared.api.resource('/Mail/Messages').params({folderID: "INBOX", search: ""}).done(function(result){
+      Shared.api.resource('/Mail/Messages').params({folderID: "INBOX", search: "",page:1,resultsPerPage:"25",msgID:""}).ignoreCache(true).done(function(result){
 
         var qtdUnreadMessages = 0;
         var lastMessage = '';
@@ -347,29 +355,29 @@ define([
 
         if (qtdUnreadMessages > 0) {
 
+          var msgRoute = "";
+          var msgTitle = "";
+          var msgDescription = "";
+
           if (qtdUnreadMessages == 1) {
-
-            Shared.showMessage({
-              type: "chat-message",
-              icon: 'icon-expresso',
-              title: lastMessage.msgSubject,
-              description: lastMessage.msgFrom.mailAddress,
-              route: "/Mail/Messages/1/" +  lastMessage.msgID + "/INBOX",
-              timeout: 5000,
-              elementID: "#pageMessage",
-            });
-
+            msgRoute = "/Mail/Messages/1/" +  lastMessage.msgID + "/INBOX";
+            msgTitle = lastMessage.msgSubject;
+            msgDescription = lastMessage.msgFrom.mailAddress;
           } else {
-            Shared.showMessage({
-              type: "chat-message",
-              icon: 'icon-expresso',
-              title: "Você tem " + qtdUnreadMessages + " novas mensagens.",
-              description: "",
-              route: "/Mail/Messages/1/0/INBOX",
-              timeout: 5000,
-              elementID: "#pageMessage",
-            });
+            msgRoute = "/Mail/Messages/1/0/INBOX";
+            msgTitle = "Você tem " + qtdUnreadMessages + " novas mensagens.";
+            msgDescription = "";
           }
+
+          Shared.showMessage({
+            type: "chat-message",
+            icon: 'icon-expresso',
+            title: msgTitle,
+            description: msgDescription,
+            route: msgRoute,
+            timeout: 5000,
+            elementID: "#pageMessage",
+          });
 
           Shared.menuView.setMailBadge(qtdUnreadMessages);
           
@@ -402,8 +410,10 @@ define([
         var qtd_mail = 0;
         if (Shared.userHasModule("mail")) {
           qtd_mail = $("#badge_inbox").html();
-          if (qtd_mail.trim() == '') {
-            qtd_mail = 0;
+          if (qtd_mail != undefined) {
+            if (qtd_mail.trim() == '') {
+              qtd_mail = 0;
+            }
           }
         }
 

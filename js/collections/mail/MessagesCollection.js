@@ -24,6 +24,12 @@ define([
       currentPage: 1,
       currentFolder: '',
       currentSearch: '',
+      _ignoreCache: false,
+
+      ignoreCache: function (value) {
+        this._ignoreCache = value;
+        return this;
+      },
 
       initialize : function(models, options) {
         this.api = Shared.api;
@@ -79,6 +85,11 @@ define([
             that._data.fail(error); 
           }
         });
+
+        if (this._ignoreCache) {
+          console.log("ignoreCache");
+          this.api.ignoreCache(true);
+        }
 
         return that;
 

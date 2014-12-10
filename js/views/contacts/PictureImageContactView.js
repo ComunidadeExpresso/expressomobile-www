@@ -55,15 +55,14 @@
 				pContactType = '1';
 
 			var contactPictureImageModel = new ContactPictureImageModel();
-				contactPictureImageModel.getImagePicture(pContactID, pContactType)
-				.done(function (data) 
+				contactPictureImageModel.done(function (data) 
 				{
 					callbackSuccess({ contact: data, _: _ });
 				})
 				.fail(function (data) 
 				{
 					// callbackFail({ error: data.error, _: _ });
-				});
+				}).getImagePicture(pContactID, pContactType);
 		}
 	});
 

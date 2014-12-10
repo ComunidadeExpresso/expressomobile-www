@@ -161,29 +161,27 @@ define([
 		getPersonalContactDetails: function (pContactID, callbackSuccess, callbackFail)
 		{
 			var detailsContactCollection = new DetailsContactCollection();
-				detailsContactCollection.getPersonalContactDetails(pContactID)
-				.done(function (data) 
+				detailsContactCollection.done(function (data) 
 				{
 					callbackSuccess({ contacts: data.models, _: _ });
 				})
 				.fail(function (data) 
 				{
 					callbackFail({ error: data.error, _: _ });
-				});
+				}).getPersonalContactDetails(pContactID);
 		},
 
 		getGeneralContactDetails: function (pContactID, callbackSuccess, callbackFail)
 		{
 			var detailsContactCollection = new DetailsContactCollection();
-				detailsContactCollection.getGeneralContactDetails(pContactID)
-				.done(function (data) 
+				detailsContactCollection.done(function (data) 
 				{
 					callbackSuccess({ contacts: data.models, _: _ });
 				})
 				.fail(function (data) 
 				{
 					callbackFail({ error: data.error, _: _ });
-				});
+				}).getGeneralContactDetails(pContactID);
 		}
 	});
 

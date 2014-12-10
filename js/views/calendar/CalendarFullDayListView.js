@@ -171,8 +171,7 @@ define([
 			var self = this;
 
 			var eventsData = new EventsListCollection();
-				eventsData.listEvents(pDateStart, pDateEnd)
-				.done(function (data) 
+				eventsData.done(function (data) 
 				{
 					if (callbackSuccess)
 						callbackSuccess({ events: data.models, _: _ });
@@ -182,7 +181,7 @@ define([
 
 					if (callbackFail)
 						callbackFail({ error: data.error, _: _ });
-				});
+				}).listEvents(pDateStart, pDateEnd);
 		}
 		
 	});

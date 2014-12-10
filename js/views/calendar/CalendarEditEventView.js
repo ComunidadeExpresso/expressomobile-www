@@ -232,15 +232,14 @@ define([
 		listEventCategories: function (pCategoryId, callbackSuccess, callbackFail)
 		{
 			var eventCategoriesData = new EventCategoriesCollection();
-				eventCategoriesData.listEventCategories(pCategoryId)
-				.done(function (data) 
+				eventCategoriesData.done(function (data) 
 				{
 					callbackSuccess(data.models);
 				})
 				.fail(function (error) 
 				{
 					callbackFail(data.error);
-				});
+				}).listEventCategories(pCategoryId);
 		},
 
 		addParticipants: function (obj)

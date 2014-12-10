@@ -187,10 +187,10 @@ define([
       var contentDetailWidth = $("#contentDetail").width();
 
       if ((contentBodyWidth + 15) >= contentDetailWidth) {
-        $("#scrollerDetail").width(contentBodyWidth + 10);
+        $("#scrollerDetail").width(contentBodyWidth + 2);
       }
 
-      Shared.scrollDetail = new iScroll('wrapperDetail',{vScroll:true, hScroll:true, hScrollBar: true, vScrollBar: true, zoom: true });
+      //Shared.scrollDetail = new iScroll('wrapperDetail',{vScroll:true, hScroll:true, hScrollBar: true, vScrollBar: true, zoom: true });
 
       Shared.scrollerRefresh();
 
