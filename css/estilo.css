@@ -49,7 +49,7 @@ body div #page .main #content ul { width: 100%; background-color: #FFFFFF; }
 body div #page .main #content ul li { border-bottom: 1px solid #CCCCCC; border-top: 1px solid #FFFFFF; font-size: 14px; height: 60px; color: #000000; text-align: left; }
 body div #page .main #content ul li:hover { background-color: #EFEFEF; }
 body div #page .main #content ul li a { display: block; height: 60px; text-decoration: none; }
-body div #page .main #content ul li a h3 { color: #0088CC; margin-left: 30px; padding-top: 10px; font-size: 16px; overflow: auto; }
+body div #page .main #content ul li a h3 { color: #0088CC; margin-left: 30px; padding-top: 10px; font-size: 16px; overflow: hidden; }
 body div #page .main #content ul li a span { font-size: 13px; color: #777777; margin: 0 0 0 30px; overflow: hidden; }
 body div #page .main #content ul li.selected { background-color: #3960A6; }
 body div #page .main #content ul li.selected h3 { color: #FFFFFF; }
@@ -1079,13 +1079,13 @@ body div #page .main #agenda .ui-datepicker .ui-datepicker-calendar tr td.ui-dat
 
 
 /** Mensagens - Detalhes da Mensagem **/
-body div #page .main table#messageDetails { width: 100%; font-size: 16px; border-spacing: 0; margin-top: 1px; }
+body div #page .main table#messageDetails { width: 99%; font-size: 16px; border-spacing: 0; margin-top: 1px; }
 body div #page .main table#messageDetails tr.detailRow { height: 40px; }
 body div #page .main table#messageDetails tr td.detailCol { border-bottom: 1px solid #CCCCCC; border-top: 1px #FFF solid; min-height: 30px; font-size: 14px; }
-body div #page .main table#messageDetails tr td.item { border-left: 8px solid #3A87AD; color: #3A87AD; width: 50px; font-weight: bold; text-align: left; padding-left: 5px; }
+body div #page .main table#messageDetails tr td.item { border-left: 1px solid #3A87AD; color: #3A87AD; width: 50px; font-weight: bold; text-align: left; padding-left: 5px; }
 body div #page .main table#messageDetails tr td.description { padding: 0px; padding-left: 10px; color: #777777; font-size: 14px;}
 body div #page .main table#messageDetails tr td.descriptionCompose { padding: 0px; color: #777777; font-size: 14px;}
-body div #page .main table#messageDetails tr td.itemBody { border-left: 8px solid #3A87AD; padding-left: 5px; }
+body div #page .main table#messageDetails tr td.itemBody { border-left: 1px solid #3A87AD; padding-left: 5px; }
 
 .badge-attachment {
   padding-left: 10px;
